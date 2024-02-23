@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
@@ -9,94 +12,119 @@ import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
-class LoginUserPage extends StatefulWidget {
+class LoginAdminWithEmailAndPassWordPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginUserPage({super.key, required this.onTap});
+  const LoginAdminWithEmailAndPassWordPage({super.key, required this.onTap});
 
   @override
-  State<LoginUserPage> createState() => _LoginUserPageState();
+  State<LoginAdminWithEmailAndPassWordPage> createState() => _LoginAdminWithEmailAndPassWordPageState();
 }
 
-class _LoginUserPageState extends State<LoginUserPage> {
+class _LoginAdminWithEmailAndPassWordPageState extends State<LoginAdminWithEmailAndPassWordPage> {
+  // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  // FirebaseServices _services = FirebaseServices();
+  //
+  FirebaseFirestore db = FirebaseFirestore.instance;
   final _emailController = TextEditingController();
   final _passWordController = TextEditingController();
-  bool isLoggedIn = false;
   bool isObsecure = false;
-
   //
-  void loginUserEmail() async {
-  String email = _emailController.text.trim();
-  String password = _passWordController.text.trim();
+  void loginAdminEmail() async {
+    String email = _emailController.text.trim();
+    String password = _passWordController.text.trim();
 
-  if (email.isEmpty || password.isEmpty) {
-    // Show an alert if either email or password is empty
-    showEmptyFieldsAlert();
-  } else {
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+    if (email.isEmpty || password.isEmpty) {
+      // Show an alert if either email or password is empty
+      showEmptyFieldsAlert();
+    } else {
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
 
-      // Kiểm tra xem người dùng có quyền Admin không
-      QuerySnapshot users = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
+        // Kiểm tra xem người dùng có quyền Admin không
+        QuerySnapshot admins = await FirebaseFirestore.instance
+            .collection('Admins')
+            .where('email', isEqualTo: email)
+            .limit(1)
+            .get();
 
-      if (users.docs.isNotEmpty) {
-        String userName = users.docs[0]['email']; // Đổi thành tên trường chứa tên email trong Firestore
-        showSuccessAlert("Đăng nhập thành công với email: $userName");
-        // Hoặc chuyển đến trang HomePage ở đây
-        Navigator.pushReplacementNamed(context, '/home_page');
-      } else {
-        // Đăng nhập thông thường
+        if (admins.docs.isNotEmpty) {
+          String adminName = admins.docs[0]
+              ['email']; // Đổi thành tên trường chứa tên email trong Firestore
+          showSuccessAlert("Đăng nhập thành công với email: $adminName");
+          // Hoặc chuyển đến trang AdminPage ở đây
+          Navigator.pushReplacementNamed(context, '/admin_page');
+        } else {
+          // Đăng nhập thông thường
+          showSuccessAlert("Đăng nhập thành công với email: $email");
+        }
         showSuccessAlert("Đăng nhập thành công với email: $email");
+      } on FirebaseAuthException catch (e) {
+        // Handle authentication errors here
+        print("Authentication Error: ${e.message}");
       }
-      showSuccessAlert("Đăng nhập thành công với email: $email");
-    } on FirebaseAuthException catch (e) {
-      // Handle authentication errors here
-      print("Authentication Error: ${e.message}");
     }
   }
-}
 
-  void dispose() {
-    _emailController.text.trim();
-    _passWordController.text.trim();
-
-    super.dispose();
+  void showInvalidCredentialsAlert() {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: TextStyle(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Text("Tài khoản hoặc mật khẩu không khớp"),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("OK", style: TextStyle(color: blue),),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   //
   void showSuccessAlert(String message) {
-  showCupertinoDialog(
-    context: context,
-    builder: (context) {
-      return CupertinoAlertDialog(
-        title: Text(
-          "Thông báo",
-          style: GoogleFonts.arsenal(
-            color: primaryColors,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.arsenal(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
-        ),
-        content: Text(message),
-        actions: [
-          CupertinoDialogAction(
-            child: Text("OK", style: TextStyle(color: blue)),
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Bạn có thể thêm bất kỳ hành động nào sau khi người dùng nhấn OK
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+          content: Text(message),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("OK",style: TextStyle(color: blue)),
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Bạn có thể thêm bất kỳ hành động nào sau khi người dùng nhấn OK
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   //
   void showEmptyFieldsAlert() {
@@ -129,18 +157,18 @@ class _LoginUserPageState extends State<LoginUserPage> {
       backgroundColor: background,
       body: Padding(
         padding: const EdgeInsets.only(
-            left: 18.0, top: 110.0, right: 18.0, bottom: 50),
+            left: 18.0, top: 120.0, right: 18.0, bottom: 60),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //title email
             Text(
-              'Đăng nhập',
+              'Đăng nhập Admin',
               style: GoogleFonts.arsenal(
                   fontSize: 30.0, fontWeight: FontWeight.bold, color: brown),
             ),
             SizedBox(
-              height: 190.0,
+              height: 150.0,
             ),
             //form email
             MyTextFormField(
@@ -152,7 +180,10 @@ class _LoginUserPageState extends State<LoginUserPage> {
                       _emailController.clear();
                     });
                   },
-                  icon: Icon(Icons.clear, color: primaryColors,)),
+                  icon: Icon(
+                    Icons.clear,
+                    color: primaryColors,
+                  )),
               controller: _emailController,
               iconColor: primaryColors,
             ),
@@ -198,7 +229,7 @@ class _LoginUserPageState extends State<LoginUserPage> {
             //button login
             MyButton(
               text: 'Đăng nhập',
-              onTap: loginUserEmail,
+              onTap: loginAdminEmail,
               buttonColor: primaryColors,
             ),
             SizedBox(

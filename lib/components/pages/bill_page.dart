@@ -80,9 +80,9 @@ class _BillPageState extends State<BillPage> {
   // Lấy thông tin người dùng từ InformationForm
   Map<String, dynamic> userInfo = await getUserData('2vPCzLR6LNVRi8uHXPV0');
   // Lấy chỉ các trường cần thiết từ userInfo
-  String userName = userInfo?['userName'] ?? '';
-  int phoneNumber = userInfo?['phoneNumber'] ?? 0;
-  String address = userInfo?['address'] ?? '';
+  String userName = userInfo['userName'] ?? '';
+  int phoneNumber = userInfo['phoneNumber'] ?? 0;
+  String address = userInfo['address'] ?? '';
 
   // Lấy thông tin từ giỏ hàng
   QuerySnapshot<Map<String, dynamic>> cartSnapshot =

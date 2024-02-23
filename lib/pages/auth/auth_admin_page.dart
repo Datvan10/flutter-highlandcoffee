@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/pages/admin/admin_page.dart';
-import 'package:highlandcoffeeapp/pages/login_sign/toggle/login_register_switcher_admin_page.dart';
+import 'package:highlandcoffeeapp/pages/login_and_register/toggle/login_register_switcher_admin_page.dart';
 
 class AuthAdminPage extends StatelessWidget {
   const AuthAdminPage({Key? key}) : super(key: key);

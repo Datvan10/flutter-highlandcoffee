@@ -10,15 +10,15 @@ import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
-class RegisterUserPage extends StatefulWidget {
+class RegisterUserWithEmailAndPasswordPage extends StatefulWidget {
   final Function()? onTap;
-  const RegisterUserPage({super.key, required this.onTap});
+  const RegisterUserWithEmailAndPasswordPage({super.key, required this.onTap});
 
   @override
-  State<RegisterUserPage> createState() => _RegisterUserPageState();
+  State<RegisterUserWithEmailAndPasswordPage> createState() => _RegisterUserWithEmailAndPasswordPageState();
 }
 
-class _RegisterUserPageState extends State<RegisterUserPage> {
+class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithEmailAndPasswordPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();

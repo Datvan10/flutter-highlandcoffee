@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/pages/login_sign/user/login_user_page.dart';
-import 'package:highlandcoffeeapp/pages/login_sign/user/register_user_page.dart.dart';
+import 'package:highlandcoffeeapp/pages/login_and_register/user/login_user_with_email_and_password_page.dart';
+import 'package:highlandcoffeeapp/pages/login_and_register/user/register_user_with_email_and_password_page.dart.dart';
 
 class LoginRegisterSwitcherUserPage extends StatefulWidget {
   const LoginRegisterSwitcherUserPage({super.key});
@@ -21,9 +21,9 @@ class _LoginRegisterSwitcherUserPageState extends State<LoginRegisterSwitcherUse
   @override
   Widget build(BuildContext context) {
     if(showloginPage){
-      return LoginUserPage(onTap: togglePage);
+      return LoginUserWithEmailAndPasswordPage(onTap: togglePage);
     }else{
-      return RegisterUserPage(onTap: togglePage,);
+      return RegisterUserWithEmailAndPasswordPage(onTap: togglePage,);
     }
   }
 }

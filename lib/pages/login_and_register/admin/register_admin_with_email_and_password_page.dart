@@ -8,15 +8,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
-class RegisterAdminPage extends StatefulWidget {
+class RegisterAdminWithEmailAndPasswordPage extends StatefulWidget {
   final Function()? onTap;
-  const RegisterAdminPage({Key? key, required this.onTap}) : super(key: key);
+  const RegisterAdminWithEmailAndPasswordPage({Key? key, required this.onTap}) : super(key: key);
 
   @override
-  _RegisterAdminPageState createState() => _RegisterAdminPageState();
+  _RegisterAdminWithEmailAndPasswordPageState createState() => _RegisterAdminWithEmailAndPasswordPageState();
 }
 
-class _RegisterAdminPageState extends State<RegisterAdminPage> {
+class _RegisterAdminWithEmailAndPasswordPageState extends State<RegisterAdminWithEmailAndPasswordPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 

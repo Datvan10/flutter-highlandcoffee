@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:highlandcoffeeapp/pages/home/home_page.dart';
-import 'package:highlandcoffeeapp/pages/login_sign/toggle/login_register_switcher_user_page.dart';
+import 'package:highlandcoffeeapp/pages/login_and_register/toggle/login_register_switcher_user_page.dart';
 
 class AuthUserPage extends StatelessWidget {
   const AuthUserPage({super.key});
