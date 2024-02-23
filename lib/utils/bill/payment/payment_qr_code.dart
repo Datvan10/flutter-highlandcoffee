@@ -1,6 +1,6 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
@@ -13,6 +13,12 @@ class PaymentQRCode extends StatelessWidget {
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: primaryColors,),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           'Thanh toán mã QR',
           style: GoogleFonts.arsenal(
@@ -29,17 +35,29 @@ class PaymentQRCode extends StatelessWidget {
           padding: const EdgeInsets.all(18.0),
           child: Column(
             children: [
+              // 
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                Text(
+                  'Vui lòng quét mã QR dưới đây để thanh toán',
+                  style: GoogleFonts.arsenal(
+                    fontWeight: FontWeight.bold,
+                    color: grey,
+                    fontSize: 20,
+                  ),
+                ),
+              ],),
+              // Expanded(
+              //     child: Container(
+              //   color: blue,
+              // )),
               Expanded(
-                  child: Container(
-                color: blue,
-              )),
-              Expanded(
-                flex: 4,
-                  child: Icon(Icons.qr_code_2, size: 400,)),
-              Expanded(
-                  child: Container(
-                color: black,
-              )),
+                  child: Icon(Icons.qr_code_2, size: 300,)),
+              // Expanded(
+              //     child: Container(
+              //   color: black,
+              // )),
             ],
           ),
         ),
