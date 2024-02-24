@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 
-class PaymentMoMo extends StatefulWidget {
-  const PaymentMoMo({super.key});
+class PaymentMomo extends StatefulWidget {
+  const PaymentMomo({super.key});
 
   @override
-  State<PaymentMoMo> createState() => _PaymentMoMoState();
+  State<PaymentMomo> createState() => _PaymentMoMoState();
 }
 
-class _PaymentMoMoState extends State<PaymentMoMo> {
+class _PaymentMoMoState extends State<PaymentMomo> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();
