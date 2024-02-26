@@ -7,7 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
-import 'package:highlandcoffeeapp/components/pages/search_result_product_page.dart';
+import 'package:highlandcoffeeapp/components/pages/result_search_product_product_with_keyword_page.dart';
 import 'package:highlandcoffeeapp/widgets/best_sale_product_item.dart';
 import 'package:highlandcoffeeapp/widgets/product_category.dart';
 import 'package:highlandcoffeeapp/widgets/choose_login_type_page%20.dart';
@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchResultPage(searchResults: searchResults, voiceQuery: '',),
+          builder: (context) => ResultSearchProductWithKeyword(searchResults: searchResults, voiceQuery: '',),
         ),
       );
     }).catchError((error) {

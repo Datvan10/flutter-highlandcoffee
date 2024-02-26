@@ -1,7 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/components/pages/search_result_product_page.dart';
+import 'package:highlandcoffeeapp/components/pages/result_search_product_product_with_keyword_page.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/mic/language_translator.dart';
@@ -116,7 +116,7 @@ class _MicFormState extends State<MicForm> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SearchResultPage(
+        builder: (context) => ResultSearchProductWithKeyword(
           searchResults: newSearchResults,
           voiceQuery: query,
         ),

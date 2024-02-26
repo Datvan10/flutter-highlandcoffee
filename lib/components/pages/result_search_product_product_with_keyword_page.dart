@@ -6,17 +6,17 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/product/product_form.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 
-class SearchResultPage extends StatefulWidget {
+class ResultSearchProductWithKeyword extends StatefulWidget {
   final List<Products> searchResults;
   final String voiceQuery;
 
-  const SearchResultPage({required this.searchResults, required this.voiceQuery});
+  const ResultSearchProductWithKeyword({required this.searchResults, required this.voiceQuery});
 
   @override
-  State<SearchResultPage> createState() => _SearchResultPageState();
+  State<ResultSearchProductWithKeyword> createState() => _ResultSearchProductWithKeywordState();
 }
 
-class _SearchResultPageState extends State<SearchResultPage> {
+class _ResultSearchProductWithKeywordState extends State<ResultSearchProductWithKeyword> {
   final _textSearchController = TextEditingController();
   List<Products> searchResults = [];
   //
@@ -80,7 +80,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchResultPage(searchResults: searchResults, voiceQuery: '',),
+          builder: (context) => ResultSearchProductWithKeyword(searchResults: searchResults, voiceQuery: '',),
         ),
       );
 
