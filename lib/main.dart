@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:highlandcoffeeapp/pages/admin/page/feddback_page.dart';
 import 'package:highlandcoffeeapp/widgets/choose_login_type_page%20.dart';
 import 'package:highlandcoffeeapp/components/pages/bill_page.dart';
 import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
@@ -29,7 +30,7 @@ void main() async {
   );
   runApp(
     DevicePreview(
-      builder: (context) => MyApp(),
+      builder: (context) => WelcomePage(),
     ),
   );
 }
