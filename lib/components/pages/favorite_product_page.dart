@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/components/pages/list_product_page.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
@@ -64,7 +66,7 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
           icon: Icon(Icons.arrow_back_ios),
           color: primaryColors,
           onPressed: () {
-            Navigator.of(context).pop();
+            Get.back();
           },
         ),
         actions: [

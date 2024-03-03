@@ -70,7 +70,7 @@ class _BreadPageState extends State<BreadPage> {
           icon: Icon(Icons.arrow_back_ios),
           color: primaryColors,
           onPressed: () {
-            Navigator.of(context).pop();
+            Get.back();
           },
         ),
         actions: [

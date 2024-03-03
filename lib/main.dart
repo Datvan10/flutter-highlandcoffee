@@ -30,7 +30,7 @@ void main() async {
   );
   runApp(
     DevicePreview(
-      builder: (context) => WelcomePage(),
+      builder: (context) => MyApp(),
     ),
   );
 }

@@ -68,7 +68,7 @@ class _SweetCakePageState extends State<SweetCakePage> {
           icon: Icon(Icons.arrow_back_ios),
           color: primaryColors,
           onPressed: () {
-            Navigator.of(context).pop();
+            Get.back();
           },
         ),
         actions: [

@@ -83,7 +83,7 @@ class _CartPageState extends State<CartPage> {
             color: primaryColors,
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Get.back();
           },
         ),
         actions: [

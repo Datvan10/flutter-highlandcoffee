@@ -230,7 +230,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                   onPressed: () {
                     // Xử lý khi nhấn nút quay lại
-                    Navigator.of(context).pop();
+                    Get.back();
                   },
                 ),
               ),

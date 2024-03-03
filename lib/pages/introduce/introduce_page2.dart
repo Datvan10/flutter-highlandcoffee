@@ -44,13 +44,19 @@ class IntroducePage2 extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: (){
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'BACK',
-                    style: GoogleFonts.arsenal(color: primaryColors, fontSize: 16, fontWeight: FontWeight.bold),
+                // ButtonNext(text: 'BACK', onTap: () {
+                //   Get.back();
+                // }),
+                Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: GestureDetector(
+                    onTap: (){
+                      Get.back();
+                    },
+                    child: Text(
+                      'BACK',
+                      style: GoogleFonts.arsenal(color: primaryColors, fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 ButtonNext(text: 'NEXT', onTap: () {

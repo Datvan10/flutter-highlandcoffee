@@ -435,7 +435,7 @@ class _BillPageState extends State<BillPage> {
         elevation: 0,
         leading: IconButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Get.back();
             },
             icon: Icon(
               Icons.arrow_back_ios,
