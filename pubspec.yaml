@@ -60,6 +60,7 @@ dependencies:
   pay: ^1.1.2
   upi_payment_qrcode_generator: ^1.4.0
   qr_flutter: ^4.1.0
+  mobile_scanner: ^4.0.1
 
 dev_dependencies:
   flutter_test:

@@ -6,7 +6,7 @@ import 'package:highlandcoffeeapp/pages/admin/page/add_product_page.dart';
 import 'package:highlandcoffeeapp/pages/admin/page/dashboard_page.dart';
 import 'package:highlandcoffeeapp/pages/admin/page/delete_product_page.dart';
 import 'package:highlandcoffeeapp/pages/admin/page/feddback_page.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/list_order_page.dart';
+import 'package:highlandcoffeeapp/pages/admin/page/order_list_page.dart';
 import 'package:highlandcoffeeapp/pages/admin/page/most_sold_product_page.dart';
 import 'package:highlandcoffeeapp/pages/admin/page/revenue_page.dart';
 import 'package:highlandcoffeeapp/pages/admin/page/update_product_page.dart';

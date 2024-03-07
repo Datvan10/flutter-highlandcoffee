@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:highlandcoffeeapp/components/pages/payment_result_page.dart';
 import 'package:highlandcoffeeapp/widgets/choose_login_type_page%20.dart';
 import 'package:highlandcoffeeapp/components/pages/bill_page.dart';
 import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
 
-      home: PaymentQRCode(),
+      home: PaymentResultPage(),
       getPages: [
         GetPage(name: '/welcome_page', page: () => const WelcomePage()),
         GetPage(name: '/introduce_page1', page: () => const IntroducePage1()),
