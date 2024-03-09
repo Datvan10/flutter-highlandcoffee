@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/components/pages/not_found_404_page.dart';
 import 'package:highlandcoffeeapp/pages/login_and_register/admin/login_admin_with_email_and_password_page.dart';
-import 'package:highlandcoffeeapp/pages/login_and_register/user/login_user_with_email_and_password_page.dart';
 import 'package:highlandcoffeeapp/widgets/choose_login_type_page%20.dart';
 import 'package:highlandcoffeeapp/components/pages/bill_page.dart';
 import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
