@@ -14,10 +14,12 @@ class LoginUserWithEmailAndPasswordPage extends StatefulWidget {
   const LoginUserWithEmailAndPasswordPage({super.key, required this.onTap});
 
   @override
-  State<LoginUserWithEmailAndPasswordPage> createState() => _LoginUserWithEmailAndPasswordPageState();
+  State<LoginUserWithEmailAndPasswordPage> createState() =>
+      _LoginUserWithEmailAndPasswordPageState();
 }
 
-class _LoginUserWithEmailAndPasswordPageState extends State<LoginUserWithEmailAndPasswordPage> {
+class _LoginUserWithEmailAndPasswordPageState
+    extends State<LoginUserWithEmailAndPasswordPage> {
   final _emailController = TextEditingController();
   final _passWordController = TextEditingController();
   bool isLoggedIn = false;
@@ -25,42 +27,44 @@ class _LoginUserWithEmailAndPasswordPageState extends State<LoginUserWithEmailAn
 
   //
   void loginUserEmail() async {
-  String email = _emailController.text.trim();
-  String password = _passWordController.text.trim();
+    String email = _emailController.text.trim();
+    String password = _passWordController.text.trim();
 
-  if (email.isEmpty || password.isEmpty) {
-    // Show an alert if either email or password is empty
-    showEmptyFieldsAlert();
-  } else {
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+    if (email.isEmpty || password.isEmpty) {
+      // Show an alert if either email or password is empty
+      showEmptyFieldsAlert();
+    } else {
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
 
-      // Kiểm tra xem người dùng có quyền Admin không
-      QuerySnapshot users = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
+        // Kiểm tra xem người dùng có quyền Admin không
+        QuerySnapshot users = await FirebaseFirestore.instance
+            .collection('Users')
+            .where('email', isEqualTo: email)
+            .limit(1)
+            .get();
 
-      if (users.docs.isNotEmpty) {
-        String userName = users.docs[0]['email']; // Đổi thành tên trường chứa tên email trong Firestore
-        showSuccessAlert("Đăng nhập thành công với email: $userName");
-        // Hoặc chuyển đến trang HomePage ở đây
-        Navigator.pushReplacementNamed(context, '/home_page');
-      } else {
-        // Đăng nhập thông thường
+        if (users.docs.isNotEmpty) {
+          String userName = users.docs[0]
+              ['email']; // Đổi thành tên trường chứa tên email trong Firestore
+          showSuccessAlert("Đăng nhập thành công với email: $userName");
+          // Hoặc chuyển đến trang HomePage ở đây
+          Navigator.pushReplacementNamed(context, '/home_page');
+        } else {
+          // Đăng nhập thông thường
+          showSuccessAlert("Đăng nhập thành công với email: $email");
+        }
         showSuccessAlert("Đăng nhập thành công với email: $email");
+      } on FirebaseAuthException catch (e) {
+        // Handle authentication errors here
+        print("Authentication Error: ${e.message}");
       }
-      showSuccessAlert("Đăng nhập thành công với email: $email");
-    } on FirebaseAuthException catch (e) {
-      // Handle authentication errors here
-      print("Authentication Error: ${e.message}");
     }
   }
-}
 
   void dispose() {
     _emailController.text.trim();
@@ -71,32 +75,32 @@ class _LoginUserWithEmailAndPasswordPageState extends State<LoginUserWithEmailAn
 
   //
   void showSuccessAlert(String message) {
-  showCupertinoDialog(
-    context: context,
-    builder: (context) {
-      return CupertinoAlertDialog(
-        title: Text(
-          "Thông báo",
-          style: GoogleFonts.arsenal(
-            color: primaryColors,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.arsenal(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
-        ),
-        content: Text(message),
-        actions: [
-          CupertinoDialogAction(
-            child: Text("OK", style: TextStyle(color: blue)),
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Bạn có thể thêm bất kỳ hành động nào sau khi người dùng nhấn OK
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+          content: Text(message),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("OK", style: TextStyle(color: blue)),
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Bạn có thể thêm bất kỳ hành động nào sau khi người dùng nhấn OK
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   //
   void showEmptyFieldsAlert() {
@@ -152,7 +156,10 @@ class _LoginUserWithEmailAndPasswordPageState extends State<LoginUserWithEmailAn
                       _emailController.clear();
                     });
                   },
-                  icon: Icon(Icons.clear, color: primaryColors,)),
+                  icon: Icon(
+                    Icons.clear,
+                    color: primaryColors,
+                  )),
               controller: _emailController,
               iconColor: primaryColors,
             ),
@@ -163,21 +170,38 @@ class _LoginUserWithEmailAndPasswordPageState extends State<LoginUserWithEmailAn
             MyTextFormField(
               hintText: 'Nhập mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isObsecure ? Icons.visibility : Icons.visibility_off,
-                  color: primaryColors,
-                ),
-                onPressed: () {
-                  setState(() {
-                    isObsecure = !isObsecure;
-                  });
-                },
+              suffixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Icon button to show or hide password
+                  IconButton(
+                    icon: Icon(
+                      isObsecure ? Icons.visibility : Icons.visibility_off,
+                      color: primaryColors,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isObsecure = !isObsecure;
+                      });
+                    },
+                  ),
+                  // Icon button to show or hide fingerprint
+                  IconButton(
+                    icon: Icon(
+                      Icons.fingerprint,
+                      color: primaryColors,
+                    ),
+                    onPressed: () {
+                      //TODO: Add fingerprint authentication
+                    },
+                  ),
+                ],
               ),
               controller: _passWordController,
               iconColor: primaryColors,
               obscureText: !isObsecure,
             ),
+
             SizedBox(
               height: 20.0,
             ),

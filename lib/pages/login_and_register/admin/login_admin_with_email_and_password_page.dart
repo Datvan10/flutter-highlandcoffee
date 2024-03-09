@@ -17,10 +17,12 @@ class LoginAdminWithEmailAndPassWordPage extends StatefulWidget {
   const LoginAdminWithEmailAndPassWordPage({super.key, required this.onTap});
 
   @override
-  State<LoginAdminWithEmailAndPassWordPage> createState() => _LoginAdminWithEmailAndPassWordPageState();
+  State<LoginAdminWithEmailAndPassWordPage> createState() =>
+      _LoginAdminWithEmailAndPassWordPageState();
 }
 
-class _LoginAdminWithEmailAndPassWordPageState extends State<LoginAdminWithEmailAndPassWordPage> {
+class _LoginAdminWithEmailAndPassWordPageState
+    extends State<LoginAdminWithEmailAndPassWordPage> {
   // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   // FirebaseServices _services = FirebaseServices();
@@ -86,7 +88,10 @@ class _LoginAdminWithEmailAndPassWordPageState extends State<LoginAdminWithEmail
           content: Text("Tài khoản hoặc mật khẩu không khớp"),
           actions: [
             CupertinoDialogAction(
-              child: Text("OK", style: TextStyle(color: blue),),
+              child: Text(
+                "OK",
+                style: TextStyle(color: blue),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -114,7 +119,7 @@ class _LoginAdminWithEmailAndPassWordPageState extends State<LoginAdminWithEmail
           content: Text(message),
           actions: [
             CupertinoDialogAction(
-              child: Text("OK",style: TextStyle(color: blue)),
+              child: Text("OK", style: TextStyle(color: blue)),
               onPressed: () {
                 Navigator.of(context).pop();
                 // Bạn có thể thêm bất kỳ hành động nào sau khi người dùng nhấn OK
@@ -194,16 +199,32 @@ class _LoginAdminWithEmailAndPassWordPageState extends State<LoginAdminWithEmail
             MyTextFormField(
               hintText: 'Nhập mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isObsecure ? Icons.visibility : Icons.visibility_off,
-                  color: primaryColors,
-                ),
-                onPressed: () {
-                  setState(() {
-                    isObsecure = !isObsecure;
-                  });
-                },
+              suffixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Icon button to show or hide password
+                  IconButton(
+                    icon: Icon(
+                      isObsecure ? Icons.visibility : Icons.visibility_off,
+                      color: primaryColors,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isObsecure = !isObsecure;
+                      });
+                    },
+                  ),
+                  // Icon button to show or hide fingerprint
+                  IconButton(
+                    icon: Icon(
+                      Icons.fingerprint,
+                      color: primaryColors,
+                    ),
+                    onPressed: () {
+                      //TODO: Add fingerprint authentication
+                    },
+                  ),
+                ],
               ),
               controller: _passWordController,
               iconColor: primaryColors,
