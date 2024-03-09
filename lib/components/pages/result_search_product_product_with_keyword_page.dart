@@ -9,13 +9,16 @@ class ResultSearchProductWithKeyword extends StatefulWidget {
   final List<Products> searchResults;
   final String voiceQuery;
 
-  const ResultSearchProductWithKeyword({required this.searchResults, required this.voiceQuery});
+  const ResultSearchProductWithKeyword(
+      {required this.searchResults, required this.voiceQuery});
 
   @override
-  State<ResultSearchProductWithKeyword> createState() => _ResultSearchProductWithKeywordState();
+  State<ResultSearchProductWithKeyword> createState() =>
+      _ResultSearchProductWithKeywordState();
 }
 
-class _ResultSearchProductWithKeywordState extends State<ResultSearchProductWithKeyword> {
+class _ResultSearchProductWithKeywordState
+    extends State<ResultSearchProductWithKeyword> {
   final _textSearchController = TextEditingController();
   List<Products> searchResults = [];
   //
@@ -79,7 +82,10 @@ class _ResultSearchProductWithKeywordState extends State<ResultSearchProductWith
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ResultSearchProductWithKeyword(searchResults: searchResults, voiceQuery: '',),
+          builder: (context) => ResultSearchProductWithKeyword(
+            searchResults: searchResults,
+            voiceQuery: '',
+          ),
         ),
       );
 
@@ -200,83 +206,117 @@ class _ResultSearchProductWithKeywordState extends State<ResultSearchProductWith
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 18.0, top: 18.0, right: 18.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 18.0,
-            mainAxisSpacing: 18.0,
-            childAspectRatio: 0.64,
-          ),
-          itemCount: widget.searchResults.length,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () => _navigateToProductDetails(index, widget.searchResults),
-            child: Container(
-              padding: EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.only(left: 18.0, top: 18.0, right: 18.0),
+        child: Column(
+          children: [
+            // Count search results
+            Text.rich(
+              TextSpan(
                 children: [
-                  Image.network(widget.searchResults[index].imagePath),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.searchResults[index].name,
-                        style: GoogleFonts.arsenal(
-                            color: black,
-                            fontSize: 19,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                  TextSpan(
+                    text:
+                        'Tìm thấy ${widget.searchResults.length} kết quả phù hợp với ',
+                    style: TextStyle(fontSize: 18, color: grey),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.searchResults[index].oldPrice
-                                    .toStringAsFixed(3) +
-                                'đ',
-                            style: GoogleFonts.roboto(
-                                color: grey,
-                                fontSize: 15,
-                                decoration: TextDecoration.lineThrough),
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Text(
-                            widget.searchResults[index].newPrice
-                                    .toStringAsFixed(3) +
-                                'đ',
-                            style: GoogleFonts.roboto(
-                                color: primaryColors,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        // padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: primaryColors, shape: BoxShape.circle),
-                        child: Icon(
-                          Icons.add,
-                          color: white,
-                        ),
-                      )
-                    ],
+                  TextSpan(
+                    text: '"${widget.voiceQuery}"',
+                    style: TextStyle(
+                      color: grey,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
+
+            // Search results
+            SizedBox(
+              height: 500,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 18.0,
+                    mainAxisSpacing: 18.0,
+                    childAspectRatio: 0.64,
+                  ),
+                  itemCount: widget.searchResults.length,
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () =>
+                        _navigateToProductDetails(index, widget.searchResults),
+                    child: Container(
+                      padding: EdgeInsets.all(15.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.network(widget.searchResults[index].imagePath),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.searchResults[index].name,
+                                style: GoogleFonts.arsenal(
+                                    color: black,
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.searchResults[index].oldPrice
+                                            .toStringAsFixed(3) +
+                                        'đ',
+                                    style: GoogleFonts.roboto(
+                                        color: grey,
+                                        fontSize: 15,
+                                        decoration: TextDecoration.lineThrough),
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text(
+                                    widget.searchResults[index].newPrice
+                                            .toStringAsFixed(3) +
+                                        'đ',
+                                    style: GoogleFonts.roboto(
+                                        color: primaryColors,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                // padding: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                    color: primaryColors,
+                                    shape: BoxShape.circle),
+                                child: Icon(
+                                  Icons.add,
+                                  color: white,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

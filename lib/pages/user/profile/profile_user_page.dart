@@ -220,7 +220,9 @@ class _ProfileUserPageState extends State<ProfileUserPage> {
             ProfileMenuUser(
                 title: 'Cài đặt',
                 startIcon: LineAwesomeIcons.cog,
-                onPress: () {},
+                onPress: () {
+                  
+                },
                 textColor: grey),
             ProfileMenuUser(
                 title: 'Đơn hàng',

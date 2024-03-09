@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/components/pages/not_found_404_page.dart';
+import 'package:highlandcoffeeapp/components/pages/result_search_product_with_not_found_404_page.dart';
 import 'package:highlandcoffeeapp/pages/login_and_register/admin/login_admin_with_email_and_password_page.dart';
 import 'package:highlandcoffeeapp/widgets/choose_login_type_page%20.dart';
 import 'package:highlandcoffeeapp/components/pages/bill_page.dart';
@@ -64,7 +65,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
 
-      home: LoginAdminWithEmailAndPassWordPage(onTap: () {  },),
+      home: WelcomePage(),
       getPages: [
         GetPage(name: '/welcome_page', page: () => const WelcomePage()),
         GetPage(name: '/introduce_page1', page: () => const IntroducePage1()),

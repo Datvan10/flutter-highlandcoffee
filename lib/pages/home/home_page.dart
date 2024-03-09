@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ResultSearchProductWithKeyword(searchResults: searchResults, voiceQuery: '',),
+          builder: (context) => ResultSearchProductWithKeyword(searchResults: searchResults, voiceQuery: query,),
         ),
       );
     }).catchError((error) {
