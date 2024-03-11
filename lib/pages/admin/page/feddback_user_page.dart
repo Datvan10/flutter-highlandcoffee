@@ -12,9 +12,10 @@ class _FeddBackUserPageState extends State<FeddBackUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: background,
+        backgroundColor: Colors.transparent,
         title: Text('FeddBack User Page'),
       ),
       body: Column(

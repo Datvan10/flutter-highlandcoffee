@@ -6,6 +6,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/components/pages/list_product_page.dart';
+import 'package:highlandcoffeeapp/pages/admin/page/feddback_user_page.dart';
 import 'package:highlandcoffeeapp/widgets/profile_menu_user.dart';
 import 'package:highlandcoffeeapp/pages/cart/cart_page.dart';
 import 'package:highlandcoffeeapp/pages/home/home_page.dart';
@@ -220,9 +221,7 @@ class _ProfileUserPageState extends State<ProfileUserPage> {
             ProfileMenuUser(
                 title: 'Cài đặt',
                 startIcon: LineAwesomeIcons.cog,
-                onPress: () {
-                  
-                },
+                onPress: () {},
                 textColor: grey),
             ProfileMenuUser(
                 title: 'Đơn hàng',
@@ -231,8 +230,7 @@ class _ProfileUserPageState extends State<ProfileUserPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          MyOrderPage(),
+                      builder: (context) => MyOrderPage(),
                     ),
                   );
                 },
@@ -240,7 +238,14 @@ class _ProfileUserPageState extends State<ProfileUserPage> {
             ProfileMenuUser(
                 title: 'Phản hồi',
                 startIcon: Icons.mark_email_unread,
-                onPress: () {},
+                onPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FeddBackUserPage(),
+                    ),
+                  );
+                },
                 textColor: grey),
             ProfileMenuUser(
                 title: 'Phương thức thanh toán',
@@ -249,8 +254,7 @@ class _ProfileUserPageState extends State<ProfileUserPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          PaymentMethodPage(),
+                      builder: (context) => PaymentMethodPage(),
                     ),
                   );
                 },
