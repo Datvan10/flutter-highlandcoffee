@@ -442,7 +442,7 @@ class _BillPageState extends State<BillPage> {
               color: primaryColors,
             )),
         title: Text(
-          'Hóa đơn',
+          'Đặt hàng',
           style: GoogleFonts.arsenal(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,

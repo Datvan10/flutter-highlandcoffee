@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:highlandcoffeeapp/components/pages/bill_page.dart';
+import 'package:highlandcoffeeapp/components/pages/order_page.dart';
 import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/components/pages/list_product_page.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
