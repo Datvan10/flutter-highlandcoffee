@@ -287,9 +287,10 @@ class _BillPageState extends State<BillPage> {
                   ),
                   //
                   MyButton(
-                    text: 'Đặt hàng',
+                    text: 'Thanh toán',
                     onTap: () {
                       _placeOrder();
+                      Navigator.pushNamed(context, 'payment_result_page');
                     },
                     buttonColor: primaryColors,
                   )
@@ -417,7 +418,7 @@ class _BillPageState extends State<BillPage> {
               },
               child: Text(
                 'OK',
-                style: TextStyle(color: blue),
+                style: TextStyle(color: light_blue),
               ),
             ),
           ],
@@ -442,7 +443,7 @@ class _BillPageState extends State<BillPage> {
               color: primaryColors,
             )),
         title: Text(
-          'Đặt hàng',
+          'Hóa đơn',
           style: GoogleFonts.arsenal(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
@@ -463,9 +464,14 @@ class _BillPageState extends State<BillPage> {
                     color: primaryColors,
                     fontWeight: FontWeight.bold),
               ),
-              Text(
-                'Thay đổi',
-                style: GoogleFonts.arsenal(color: blue, fontSize: 15),
+              GestureDetector(
+                onTap: () {
+                  // Change information user
+                },
+                child: Text(
+                  'Thay đổi',
+                  style: GoogleFonts.arsenal(color: light_blue, fontSize: 15),
+                ),
               )
             ],
           ),
@@ -519,7 +525,7 @@ class _BillPageState extends State<BillPage> {
                 },
                 child: Text(
                   'Chọn khuyến mãi',
-                  style: GoogleFonts.arsenal(color: blue, fontSize: 15),
+                  style: GoogleFonts.arsenal(color: light_blue, fontSize: 15),
                 ),
               )
             ],

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/components/pages/not_found_404_page.dart';
+import 'package:highlandcoffeeapp/components/pages/payment_result_page.dart';
 import 'package:highlandcoffeeapp/components/pages/result_search_product_with_not_found_404_page.dart';
 import 'package:highlandcoffeeapp/pages/login_and_register/admin/login_admin_with_email_and_password_page.dart';
 import 'package:highlandcoffeeapp/widgets/choose_login_type_page%20.dart';
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
 
-      home: WelcomePage(),
+      home: PaymentResultPage(),
       getPages: [
         GetPage(name: '/welcome_page', page: () => const WelcomePage()),
         GetPage(name: '/introduce_page1', page: () => const IntroducePage1()),
@@ -81,6 +82,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/admin_page', page:() => const AdminPage()),
         GetPage(name: '/update_user_profile_page', page:() => const UpdateUserProfilePage()),
         GetPage(name: '/my_order_page', page:() => const MyOrderPage()),
+        GetPage(name: '/payment_result_page', page:() => const PaymentResultPage()),
       ],
       theme: ThemeData(
         primaryColor: primaryColors,

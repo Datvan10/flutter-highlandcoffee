@@ -8,6 +8,7 @@ Color brown = Color(0xFFB57628);
 Color light_brown = Color.fromARGB(255, 190, 180, 167);
 Color light_yellow = Color(0xFFFFD685);
 Color blue = Color(0xFF4286C5);
+Color light_blue = Color.fromARGB(255, 32, 136, 233);
 Color green = Color(0xFF42A342);
 Color grey =  Color(0xFF817F7F);
 Color light_grey = Color(0xFFC4C4C4);
