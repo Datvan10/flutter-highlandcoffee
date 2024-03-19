@@ -94,7 +94,7 @@ class _BillPageState extends State<BillPage> {
 
   // Kiểm tra nếu giỏ hàng không có sản phẩm
   if (products.isEmpty) {
-    _showAlert('Lỗi', 'Đơn hàng không có sản phẩm để đặt hàng.');
+    _showAlert('Lỗi', 'Đơn hàng không có sản phẩm để đặt hàng.', (){});
     return;
   }
 
@@ -116,7 +116,7 @@ class _BillPageState extends State<BillPage> {
     'Thời gian đặt hàng': FieldValue.serverTimestamp(),
     // Thêm các trường khác cần thiết
   });
-  _showAlert('Thông báo', 'Đơn hàng được đặt thành công.');
+  _showAlert('Thông báo', 'Đơn hàng được đặt thành công.', (){Get.toNamed('/payment_result_page');});
 
   // Xóa giỏ hàng sau khi đặt hàng thành công
   await FirebaseFirestore.instance.collection('Giỏ hàng').get().then(
@@ -290,7 +290,7 @@ class _BillPageState extends State<BillPage> {
                     text: 'Thanh toán',
                     onTap: () {
                       _placeOrder();
-                      Navigator.pushNamed(context, 'payment_result_page');
+                      
                     },
                     buttonColor: primaryColors,
                   )
@@ -400,32 +400,34 @@ class _BillPageState extends State<BillPage> {
 
   //
   //
-  void _showAlert(String title, String content) {
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: GoogleFonts.arsenal(color: primaryColors),
-          ),
-          content: Text(content),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.pop(context);
-                Get.toNamed('/home_page');
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(color: light_blue),
-              ),
+  void _showAlert(String title, String content, Function onPressed) {
+  showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text(
+          title,
+          style: GoogleFonts.arsenal(color: primaryColors),
+        ),
+        content: Text(content),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.pop(context);
+              if (onPressed != null) {
+                onPressed();
+              }
+            },
+            child: Text(
+              'OK',
+              style: TextStyle(color: light_blue),
             ),
-          ],
-        );
-      },
-    );
-  }
+          ),
+        ],
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {

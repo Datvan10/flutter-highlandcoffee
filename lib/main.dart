@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
 
-      home: PaymentResultPage(),
+      home: WelcomePage(),
       getPages: [
         GetPage(name: '/welcome_page', page: () => const WelcomePage()),
         GetPage(name: '/introduce_page1', page: () => const IntroducePage1()),
