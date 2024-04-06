@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/models/tickets.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
@@ -433,24 +434,9 @@ class _BillPageState extends State<BillPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: primaryColors,
-            )),
-        title: Text(
-          'Hóa đơn',
-          style: GoogleFonts.arsenal(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-              color: primaryColors),
-        ),
+      appBar: CustomAppBar(
+        title: 'Hóa đơn',
+        actions: null,
       ),
       body: Padding(
         padding: const EdgeInsets.all(18.0),

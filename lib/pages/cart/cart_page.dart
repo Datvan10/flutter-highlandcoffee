@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/components/pages/order_page.dart';
 import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/components/pages/list_product_page.dart';
+import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
+import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/pages/detail/product_detail_page.dart';
 import 'package:highlandcoffeeapp/pages/home/home_page.dart';
@@ -67,34 +69,18 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Center(
-          child: Text('Giỏ hàng',
-              style: GoogleFonts.arsenal(
-                  color: primaryColors,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold)),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: primaryColors,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+      appBar: CustomAppBar(
+        title: 'Giỏ hàng',
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BillPage()),
-                );
-              },
-              icon: Icon(Icons.shopping_cart_checkout, color: primaryColors))
+          AppBarAction(
+            icon: Icons.shopping_cart_checkout,
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => BillPage(),
+              ));
+            },
+          ),
+          // Add more actions here if needed
         ],
       ),
       body: Padding(
@@ -145,82 +131,10 @@ class _CartPageState extends State<CartPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          // backgroundColor: Colors.transparent,
-          elevation: 0,
-          selectedItemColor: primaryColors,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _selectedIndexBottomBar,
-          onTap: _selectedBottomBar,
-          items: [
-            BottomNavigationBarItem(
-              icon: GestureDetector(
-                onTap: (){
-                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
-                },
-                child: Icon(Icons.home)),
-              label: 'Trang chủ',
-            ),
-            BottomNavigationBarItem(
-              icon: GestureDetector(
-                onTap: () {
-                  // Điều hướng đến trang mới ở đây
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ListProductPage(),
-                    ),
-                  );
-                },
-                child: Icon(Icons.local_dining),
-              ),
-              label: 'Sản phẩm',
-            ),
-            BottomNavigationBarItem(
-              icon: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FavoriteProductPage(),
-                      ),
-                    );
-                  },
-                  child: Icon(Icons.favorite)),
-              label: 'Yêu thích',
-            ),
-            BottomNavigationBarItem(
-              icon: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CartPage(),
-                      ),
-                    );
-                  },
-                  child: Icon(Icons.shopping_cart)),
-              label: 'Giỏ hàng',
-            ),
-            BottomNavigationBarItem(
-              icon: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfileUserPage(),
-                      ),
-                    );
-                  },
-                  child: Icon(Icons.person)),
-              label: 'Hồ sơ',
-            ),
-          ]),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndexBottomBar,
+        onTap: _selectedBottomBar,
+      ),
     );
   }
 }
