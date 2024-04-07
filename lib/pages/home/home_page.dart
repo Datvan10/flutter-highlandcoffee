@@ -1,34 +1,17 @@
-import 'dart:math';
 
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/components/pages/result_search_product_product_with_keyword_page.dart';
 import 'package:highlandcoffeeapp/widgets/best_sale_product_item.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/product_category.dart';
-import 'package:highlandcoffeeapp/widgets/choose_login_type_page%20.dart';
-import 'package:highlandcoffeeapp/components/pages/coffee_page.dart';
-import 'package:highlandcoffeeapp/components/pages/freeze_page.dart';
-import 'package:highlandcoffeeapp/components/pages/list_product_page.dart';
-import 'package:highlandcoffeeapp/components/pages/other_page.dart';
-import 'package:highlandcoffeeapp/components/pages/product_popular_page.dart';
-import 'package:highlandcoffeeapp/components/pages/sweet_cake_page.dart';
-import 'package:highlandcoffeeapp/components/pages/tea_page.dart';
 import 'package:highlandcoffeeapp/widgets/product_popular_item.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
-import 'package:highlandcoffeeapp/pages/auth/auth_user_page.dart';
-import 'package:highlandcoffeeapp/pages/cart/cart_page.dart';
-import 'package:highlandcoffeeapp/pages/detail/product_detail_page.dart';
-import 'package:highlandcoffeeapp/pages/user/profile/profile_user_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/mic/mic_form.dart';
-import 'package:highlandcoffeeapp/utils/product/product_form.dart';
-import 'package:highlandcoffeeapp/utils/product/product_category_form.dart';
 import 'package:highlandcoffeeapp/widgets/slide_image.dart';
 import 'package:permission_handler/permission_handler.dart';
 

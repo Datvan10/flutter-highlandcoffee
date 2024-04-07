@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
-import 'package:highlandcoffeeapp/components/pages/list_product_page.dart';
 import 'package:highlandcoffeeapp/pages/cart/cart_page.dart';
-import 'package:highlandcoffeeapp/pages/home/home_page.dart';
-import 'package:highlandcoffeeapp/pages/user/profile/profile_user_page.dart';
 import 'package:highlandcoffeeapp/utils/product/product_form.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/pages/detail/product_detail_page.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
