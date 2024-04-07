@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
-import 'package:highlandcoffeeapp/components/pages/list_product_page.dart';
+import 'package:highlandcoffeeapp/screens/favorite_product_page.dart';
+import 'package:highlandcoffeeapp/screens/list_product_page.dart';
 import 'package:highlandcoffeeapp/pages/cart/cart_page.dart';
 import 'package:highlandcoffeeapp/pages/home/home_page.dart';
 import 'package:highlandcoffeeapp/pages/user/profile/profile_user_page.dart';

@@ -1,10 +1,10 @@
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:highlandcoffeeapp/components/pages/payment_result_page.dart';
+import 'package:highlandcoffeeapp/screens/payment_result_page.dart';
 import 'package:highlandcoffeeapp/widgets/choose_login_type_page%20.dart';
-import 'package:highlandcoffeeapp/components/pages/order_page.dart';
-import 'package:highlandcoffeeapp/components/pages/favorite_product_page.dart';
-import 'package:highlandcoffeeapp/components/pages/list_product_page.dart';
-import 'package:highlandcoffeeapp/components/pages/product_popular_page.dart';
+import 'package:highlandcoffeeapp/screens/order_page.dart';
+import 'package:highlandcoffeeapp/screens/favorite_product_page.dart';
+import 'package:highlandcoffeeapp/screens/list_product_page.dart';
+import 'package:highlandcoffeeapp/screens/product_popular_page.dart';
 import 'package:highlandcoffeeapp/pages/admin/admin_page.dart';
 import 'package:highlandcoffeeapp/pages/auth/auth_user_page.dart';
 import 'package:highlandcoffeeapp/pages/cart/cart_page.dart';
