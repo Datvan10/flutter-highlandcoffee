@@ -3,7 +3,6 @@ import 'package:highlandcoffeeapp/screens/bread_page.dart';
 import 'package:highlandcoffeeapp/screens/coffee_page.dart';
 import 'package:highlandcoffeeapp/screens/freeze_page.dart';
 import 'package:highlandcoffeeapp/screens/other_page.dart';
-import 'package:highlandcoffeeapp/screens/sweet_cake_page.dart';
 import 'package:highlandcoffeeapp/screens/tea_page.dart';
 import 'package:highlandcoffeeapp/utils/product/product_category_form.dart';
 

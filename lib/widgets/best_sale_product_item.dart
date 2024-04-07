@@ -1,8 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/pages/detail/product_detail_page.dart';
 import 'package:highlandcoffeeapp/utils/product/product_form.dart';
