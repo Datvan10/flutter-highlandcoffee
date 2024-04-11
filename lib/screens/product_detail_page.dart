@@ -10,6 +10,7 @@ import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/pages/cart/cart_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/product/size_product.dart';
+import 'package:highlandcoffeeapp/widgets/notification.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Products product;
@@ -71,34 +72,64 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   //
+  // void _showConfirmationDialog() {
+  //   showCupertinoDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return CupertinoAlertDialog(
+  //         title: Text("Thêm vào danh sách sản phẩm yêu thích?"),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //             child: Text("Hủy", style: TextStyle(color: red),),
+  //           ),
+  //           TextButton(
+  //             onPressed: () {
+  //               _addToFavorites();
+  //               setState(() {
+  //                 isFavorite = !isFavorite;
+  //               });
+  //               Navigator.pop(context);
+  //             },
+  //             child: Text("Đồng ý", style: TextStyle(color: blue),),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
   void _showConfirmationDialog() {
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text("Thêm vào danh sách sản phẩm yêu thích?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Hủy", style: TextStyle(color: red),),
-            ),
-            TextButton(
-              onPressed: () {
-                _addToFavorites();
-                setState(() {
-                  isFavorite = !isFavorite;
-                });
-                Navigator.pop(context);
-              },
-              child: Text("Đồng ý", style: TextStyle(color: blue),),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  notificationDialog(
+    context: context,
+    title: "Thêm vào danh sách sản phẩm yêu thích?",
+    onConfirm: () {
+      _addToFavorites();
+      setState(() {
+        isFavorite = !isFavorite;
+      });
+    },
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text("Hủy", style: TextStyle(color: Colors.red)),
+      ),
+      TextButton(
+        onPressed: () {
+          _addToFavorites();
+          setState(() {
+            isFavorite = !isFavorite;
+          });
+          Navigator.pop(context);
+        },
+        child: Text("Đồng ý", style: TextStyle(color: Colors.blue)),
+      ),
+    ],
+  );
+}
 
   //
   void _addToFavorites() async {

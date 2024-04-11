@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:highlandcoffeeapp/pages/cart/cart_page.dart';
 import 'package:highlandcoffeeapp/utils/product/product_form.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
-import 'package:highlandcoffeeapp/pages/detail/product_detail_page.dart';
+import 'package:highlandcoffeeapp/screens/product_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
