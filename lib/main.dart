@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/routes/route.dart';
 import 'package:highlandcoffeeapp/firebase_options.dart';
-import 'package:highlandcoffeeapp/pages/welcome/welcome_page.dart';
+import 'package:highlandcoffeeapp/screens/welcome_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 

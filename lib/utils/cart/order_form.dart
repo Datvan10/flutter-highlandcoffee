@@ -5,7 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:highlandcoffeeapp/pages/cart/cart_page.dart';
+import 'package:highlandcoffeeapp/screens/cart_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class OrderForm extends StatefulWidget {
