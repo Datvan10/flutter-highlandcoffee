@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:highlandcoffeeapp/pages/introduce/introduce_page1.dart';
+import 'package:highlandcoffeeapp/screens/introduce_page1.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class WelcomePage extends StatefulWidget {

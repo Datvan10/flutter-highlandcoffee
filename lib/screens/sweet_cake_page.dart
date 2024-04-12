@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
-import 'package:highlandcoffeeapp/pages/cart/cart_page.dart';
+import 'package:highlandcoffeeapp/screens/cart_page.dart';
 import 'package:highlandcoffeeapp/screens/product_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/product/product_form.dart';
