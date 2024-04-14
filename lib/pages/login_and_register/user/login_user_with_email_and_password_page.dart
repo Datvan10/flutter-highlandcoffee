@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
-import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
+import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
 class LoginUserWithEmailAndPasswordPage extends StatefulWidget {
   final Function()? onTap;
@@ -132,7 +133,7 @@ class _LoginUserWithEmailAndPasswordPageState
       backgroundColor: background,
       body: Padding(
         padding: const EdgeInsets.only(
-            left: 18.0, top: 110.0, right: 18.0, bottom: 50),
+            left: 18.0, top: 100.0, right: 18.0, bottom: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -146,7 +147,7 @@ class _LoginUserWithEmailAndPasswordPageState
               height: 190.0,
             ),
             //form email
-            MyTextFormField(
+            TextFormFieldEmail(
               hintText: 'Email',
               prefixIconData: Icons.email,
               suffixIcon: IconButton(
@@ -166,35 +167,19 @@ class _LoginUserWithEmailAndPasswordPageState
               height: 20.0,
             ),
             //form password
-            MyTextFormField(
+            TextFormFieldPassword(
               hintText: 'Nhập mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
-              suffixIcon: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Icon button to show or hide password
-                  IconButton(
-                    icon: Icon(
-                      isObsecure ? Icons.visibility : Icons.visibility_off,
-                      color: primaryColors,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isObsecure = !isObsecure;
-                      });
-                    },
-                  ),
-                  // Icon button to show or hide fingerprint
-                  IconButton(
-                    icon: Icon(
-                      Icons.fingerprint,
-                      color: primaryColors,
-                    ),
-                    onPressed: () {
-                      //TODO: Add fingerprint authentication
-                    },
-                  ),
-                ],
+              suffixIcon: IconButton(
+                icon: Icon(
+                  isObsecure ? Icons.visibility : Icons.visibility_off,
+                  color: primaryColors,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isObsecure = !isObsecure;
+                  });
+                },
               ),
               controller: _passWordController,
               iconColor: primaryColors,
@@ -208,10 +193,13 @@ class _LoginUserWithEmailAndPasswordPageState
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  'Quên mật khẩu?',
-                  style: GoogleFonts.roboto(
-                      color: blue, decoration: TextDecoration.underline),
+                GestureDetector(
+                  onTap: (){},
+                  child: Text(
+                    'Quên mật khẩu?',
+                    style: GoogleFonts.roboto(
+                        color: blue, decoration: TextDecoration.underline),
+                  ),
                 )
               ],
             ),
@@ -225,7 +213,7 @@ class _LoginUserWithEmailAndPasswordPageState
               buttonColor: primaryColors,
             ),
             SizedBox(
-              height: 50.0,
+              height: 40.0,
             ),
             //or continue with
             Row(
@@ -249,7 +237,7 @@ class _LoginUserWithEmailAndPasswordPageState
               ],
             ),
             SizedBox(
-              height: 50.0,
+              height: 40.0,
             ),
             //or login with facebook, email, google,...
             Center(
@@ -261,13 +249,13 @@ class _LoginUserWithEmailAndPasswordPageState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                LoginWithMore(imagePath: 'assets/icons/facebook.png'),
-                LoginWithMore(imagePath: 'assets/icons/google.png'),
-                LoginWithMore(imagePath: 'assets/icons/apple.png'),
+                LoginWithMore(imagePath: 'assets/icons/facebook.png', onTap: () {  },),
+                LoginWithMore(imagePath: 'assets/icons/google.png', onTap: () {  },),
+                LoginWithMore(imagePath: 'assets/icons/apple.png', onTap: () {  },),
               ],
             ),
             SizedBox(
-              height: 50,
+              height: 40,
             ),
             //text tip
             Row(

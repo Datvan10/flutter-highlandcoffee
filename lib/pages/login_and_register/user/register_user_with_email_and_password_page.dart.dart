@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
+import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class RegisterUserWithEmailAndPasswordPage extends StatefulWidget {
@@ -214,7 +215,7 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
               height: 30.0,
             ),
             //form email
-            MyTextFormField(
+            TextFormFieldEmail(
               hintText: 'Email',
               prefixIconData: Icons.email,
               suffixIcon: IconButton(
@@ -338,7 +339,7 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
               buttonColor: primaryColors,
             ),
             SizedBox(
-              height: 30.0,
+              height: 20.0,
             ),
             //or continue with
             Row(
@@ -374,13 +375,13 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                LoginWithMore(imagePath: 'assets/icons/facebook.png'),
-                LoginWithMore(imagePath: 'assets/icons/google.png'),
-                LoginWithMore(imagePath: 'assets/icons/apple.png'),
+                LoginWithMore(imagePath: 'assets/icons/facebook.png', onTap: () {  },),
+                LoginWithMore(imagePath: 'assets/icons/google.png', onTap: () {  },),
+                LoginWithMore(imagePath: 'assets/icons/apple.png', onTap: () {  },),
               ],
             ),
             SizedBox(
-              height: 30,
+              height: 20,
             ),
             //text tip
             Row(
