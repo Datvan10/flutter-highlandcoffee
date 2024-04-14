@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
-import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
+import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
 class RegisterAdminWithEmailAndPasswordPage extends StatefulWidget {
   final Function()? onTap;
@@ -131,7 +132,7 @@ void registerAdmin() async {
             SizedBox(
               height: 150.0,
             ),
-            MyTextFormField(
+            TextFormFieldEmail(
               hintText: 'Email',
               prefixIconData: Icons.email,
               suffixIcon: IconButton(
@@ -148,7 +149,7 @@ void registerAdmin() async {
               iconColor: primaryColors,
             ),
             SizedBox(height: 20.0),
-            MyTextFormField(
+            TextFormFieldPassword(
               hintText: 'Nhập mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
               suffixIcon: IconButton(
@@ -173,7 +174,7 @@ void registerAdmin() async {
               buttonColor: primaryColors,
             ),
             SizedBox(
-              height: 50.0,
+              height: 40.0,
             ),
             //or continue with
             Row(
@@ -197,7 +198,7 @@ void registerAdmin() async {
               ],
             ),
             SizedBox(
-              height: 50.0,
+              height: 40.0,
             ),
             //or login with
             Center(
@@ -209,9 +210,9 @@ void registerAdmin() async {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                LoginWithMore(imagePath: 'assets/icons/facebook.png'),
-                LoginWithMore(imagePath: 'assets/icons/google.png'),
-                LoginWithMore(imagePath: 'assets/icons/apple.png'),
+                LoginWithMore(imagePath: 'assets/icons/facebook.png', onTap: () {  },),
+                LoginWithMore(imagePath: 'assets/icons/google.png', onTap: () {  },),
+                LoginWithMore(imagePath: 'assets/icons/apple.png', onTap: () {  },),
               ],
             ),
             SizedBox(
