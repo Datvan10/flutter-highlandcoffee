@@ -48,7 +48,7 @@ class IntroducePage1 extends StatelessWidget {
                 //   style: GoogleFonts.arsenal(color: primaryColors, fontSize: 16, fontWeight: FontWeight.bold),
                 // ),
                 ButtonNext(
-                    text: 'NEXT',
+                    text: 'TIẾP',
                     onTap: () {
                       Get.toNamed('/introduce_page2');
                     })

@@ -54,12 +54,12 @@ class IntroducePage2 extends StatelessWidget {
                       Get.back();
                     },
                     child: Text(
-                      'BACK',
+                      'QUAY LẠI',
                       style: GoogleFonts.arsenal(color: primaryColors, fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-                ButtonNext(text: 'NEXT', onTap: () {
+                ButtonNext(text: 'TIẾP', onTap: () {
                   Get.toNamed('/choose_login_type_page');
                 })
               ],

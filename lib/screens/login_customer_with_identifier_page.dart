@@ -3,78 +3,57 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
+import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
-class LoginUserWithEmailAndPasswordPage extends StatefulWidget {
+class LoginCustomerWithIdentifierPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginUserWithEmailAndPasswordPage({super.key, required this.onTap});
+  const LoginCustomerWithIdentifierPage({super.key, required this.onTap});
 
   @override
-  State<LoginUserWithEmailAndPasswordPage> createState() =>
-      _LoginUserWithEmailAndPasswordPageState();
+  State<LoginCustomerWithIdentifierPage> createState() =>
+      _LoginCustomerWithIdentifierPageState();
 }
 
-class _LoginUserWithEmailAndPasswordPageState
-    extends State<LoginUserWithEmailAndPasswordPage> {
-  final _emailController = TextEditingController();
-  final _passWordController = TextEditingController();
+class _LoginCustomerWithIdentifierPageState
+    extends State<LoginCustomerWithIdentifierPage> {
+  final CustomerApi api = CustomerApi();
+  final identifierController = TextEditingController();
+  final passWordController = TextEditingController();
   bool isLoggedIn = false;
   bool isObsecure = false;
 
-  //
-  void loginUserEmail() async {
-    String email = _emailController.text.trim();
-    String password = _passWordController.text.trim();
+  // Function login customer with indentifier and password
+  void loginCustomerWithIndentifierAndPassword() async {
+    String identifier = identifierController.text.trim();
+    String password = passWordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      // Show an alert if either email or password is empty
-      showEmptyFieldsAlert();
+    if (identifier.isEmpty || password.isEmpty) {
+      showNotification('Vui lòng nhập đầy đủ thông tin đăng nhập');
     } else {
       try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
+        bool isAuthenticated =
+            await api.authenticateCustomer(identifier, password);
 
-        // Kiểm tra xem người dùng có quyền Admin không
-        QuerySnapshot users = await FirebaseFirestore.instance
-            .collection('Users')
-            .where('email', isEqualTo: email)
-            .limit(1)
-            .get();
-
-        if (users.docs.isNotEmpty) {
-          String userName = users.docs[0]
-              ['email']; // Đổi thành tên trường chứa tên email trong Firestore
-          showSuccessAlert("Đăng nhập thành công với email: $userName");
-          // Hoặc chuyển đến trang HomePage ở đây
+        if (isAuthenticated) {
           Navigator.pushReplacementNamed(context, '/home_page');
+          showNotification('Đăng nhập thành công');
         } else {
-          // Đăng nhập thông thường
-          showSuccessAlert("Đăng nhập thành công với email: $email");
+          showNotification('Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
         }
-        showSuccessAlert("Đăng nhập thành công với email: $email");
-      } on FirebaseAuthException catch (e) {
-        // Handle authentication errors here
-        print("Authentication Error: ${e.message}");
+      } catch (e) {
+        print("Authentication Error: $e");
+        showNotification('Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
       }
     }
   }
-
-  void dispose() {
-    _emailController.text.trim();
-    _passWordController.text.trim();
-
-    super.dispose();
-  }
-
-  //
-  void showSuccessAlert(String message) {
+  // Show notification dialog
+  void showNotification(String message) {
     showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -93,32 +72,6 @@ class _LoginUserWithEmailAndPasswordPageState
               child: Text("OK", style: TextStyle(color: blue)),
               onPressed: () {
                 Navigator.of(context).pop();
-                // Bạn có thể thêm bất kỳ hành động nào sau khi người dùng nhấn OK
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  //
-  void showEmptyFieldsAlert() {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text("Thông báo",
-              style: GoogleFonts.arsenal(
-                  color: primaryColors,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18)),
-          content: Text("Đăng nhập không hợp lệ, vui lòng thử lại"),
-          actions: [
-            CupertinoDialogAction(
-              child: Text("OK", style: TextStyle(color: blue)),
-              onPressed: () {
-                Navigator.of(context).pop();
               },
             ),
           ],
@@ -132,8 +85,7 @@ class _LoginUserWithEmailAndPasswordPageState
     return Scaffold(
       backgroundColor: background,
       body: Padding(
-        padding: const EdgeInsets.only(
-            left: 18.0, top: 100.0, right: 18.0),
+        padding: const EdgeInsets.only(left: 18.0, top: 100.0, right: 18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -147,20 +99,20 @@ class _LoginUserWithEmailAndPasswordPageState
               height: 190.0,
             ),
             //form email
-            TextFormFieldEmail(
-              hintText: 'Email',
-              prefixIconData: Icons.email,
+            MyTextFormField(
+              hintText: 'Nhập email hoặc số điện thoại',
+              prefixIconData: Icons.person,
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _emailController.clear();
+                      identifierController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: _emailController,
+              controller: identifierController,
               iconColor: primaryColors,
             ),
             SizedBox(
@@ -181,7 +133,7 @@ class _LoginUserWithEmailAndPasswordPageState
                   });
                 },
               ),
-              controller: _passWordController,
+              controller: passWordController,
               iconColor: primaryColors,
               obscureText: !isObsecure,
             ),
@@ -194,7 +146,7 @@ class _LoginUserWithEmailAndPasswordPageState
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: (){},
+                  onTap: () {},
                   child: Text(
                     'Quên mật khẩu?',
                     style: GoogleFonts.roboto(
@@ -209,7 +161,7 @@ class _LoginUserWithEmailAndPasswordPageState
             //button login
             MyButton(
               text: 'Đăng nhập',
-              onTap: loginUserEmail,
+              onTap: loginCustomerWithIndentifierAndPassword,
               buttonColor: primaryColors,
             ),
             SizedBox(
@@ -249,9 +201,18 @@ class _LoginUserWithEmailAndPasswordPageState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                LoginWithMore(imagePath: 'assets/icons/facebook.png', onTap: () {  },),
-                LoginWithMore(imagePath: 'assets/icons/google.png', onTap: () {  },),
-                LoginWithMore(imagePath: 'assets/icons/apple.png', onTap: () {  },),
+                LoginWithMore(
+                  imagePath: 'assets/icons/facebook.png',
+                  onTap: () {},
+                ),
+                LoginWithMore(
+                  imagePath: 'assets/icons/google.png',
+                  onTap: () {},
+                ),
+                LoginWithMore(
+                  imagePath: 'assets/icons/apple.png',
+                  onTap: () {},
+                ),
               ],
             ),
             SizedBox(

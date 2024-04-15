@@ -4,7 +4,7 @@ import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:http/http.dart' as http;
 
 // Admin API
-class AdminApi{
+class AdminApi {
   final String adminUrl = "http://localhost:5194/api/admins";
   // Read data from API
   Future<List<Admin>> getAdmins() async {
@@ -73,10 +73,37 @@ class AdminApi{
     }
   }
 
+  // Authenticate admin
+  Future<bool> authenticateAdmin(String email, String password) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$adminUrl?email=$email&password=$password'),
+      );
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+
+        for (var adminData in jsonResponse) {
+          Admin admin = Admin.fromJson(adminData);
+          if (admin.email == email) {
+            if (admin.password == password) {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        }
+        return false;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 // Customer API
-class CustomerApi{
+class CustomerApi {
   final String customerUrl = "http://localhost:5194/api/customers";
   // Read data from API
   Future<List<Customer>> getCustomers() async {
@@ -144,10 +171,56 @@ class CustomerApi{
       throw Exception('Failed to delete customer');
     }
   }
+
+  // Remove leading zeros from input
+  String removeLeadingZeros(String input) {
+    if (input.startsWith('0')) {
+      return input.replaceFirst(RegExp('^0+'), '');
+    }
+    return input;
+  }
+
+  // Authenticate customer
+  Future<bool> authenticateCustomer(String identifier, String password) async {
+     String url;
+
+    identifier = removeLeadingZeros(identifier);
+
+    if (RegExp(r'^[0-9]+$').hasMatch(identifier)) {
+        url = '$customerUrl?phone_number=$identifier&password=$password';
+    } else {
+        url = '$customerUrl?email=$identifier&password=$password';
+    }
+    try {
+      final response = await http.get(
+        Uri.parse('$customerUrl?identifier=$identifier&password=$password'),
+      );
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+
+        for (var adminData in jsonResponse) {
+          Customer customer = Customer.fromJson(adminData);
+          if (customer.email == identifier ||
+              customer.phone_number.toString() == identifier) {
+            if (customer.password == password) {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        }
+        return false;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 // Product API
-class ProductApi{
+class ProductApi {
   final String productUrl = "http://localhost:5194/api/products";
   // Read data from API
   Future<List<Product>> getProducts() async {

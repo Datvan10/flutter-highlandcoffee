@@ -7,7 +7,7 @@ import 'package:highlandcoffeeapp/screens/other_page.dart';
 import 'package:highlandcoffeeapp/screens/payment_result_page.dart';
 import 'package:highlandcoffeeapp/screens/tea_page.dart';
 import 'package:highlandcoffeeapp/widgets/best_sale_product_item.dart';
-import 'package:highlandcoffeeapp/widgets/choose_login_type_page%20.dart';
+import 'package:highlandcoffeeapp/screens/choose_login_type_page%20.dart';
 import 'package:highlandcoffeeapp/screens/order_page.dart';
 import 'package:highlandcoffeeapp/screens/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/screens/list_product_page.dart';

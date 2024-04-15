@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/pages/login_and_register/admin/login_admin_with_email_and_password_page.dart';
-import 'package:highlandcoffeeapp/pages/login_and_register/admin/register_admin_with_email_and_password_page.dart';
+import 'package:highlandcoffeeapp/screens/login_admin_with_email_and_password_page.dart';
+import 'package:highlandcoffeeapp/screens/register_admin_with_email_and_password_page.dart';
 
 class LoginRegisterSwitcherAdminPage extends StatefulWidget {
   const LoginRegisterSwitcherAdminPage({Key? key}) : super(key: key);

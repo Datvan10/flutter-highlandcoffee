@@ -1,12 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
@@ -24,87 +19,37 @@ class LoginAdminWithEmailAndPassWordPage extends StatefulWidget {
 
 class _LoginAdminWithEmailAndPassWordPageState
     extends State<LoginAdminWithEmailAndPassWordPage> {
-  // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
-  // FirebaseServices _services = FirebaseServices();
-  //
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  final _emailController = TextEditingController();
-  final _passWordController = TextEditingController();
+  final AdminApi api = AdminApi();
+  final emailController = TextEditingController();
+  final passWordController = TextEditingController();
   bool isObsecure = false;
-  //
-  void loginAdminEmail() async {
-    String email = _emailController.text.trim();
-    String password = _passWordController.text.trim();
+
+  // Function login admin with email and password
+  void loginAdminWithEmailAndPassword() async {
+    String email = emailController.text.trim();
+    String password = passWordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      // Show an alert if either email or password is empty
-      showEmptyFieldsAlert();
+      showNotification('Vui lòng nhập đầy đủ thông tin đăng nhập');
     } else {
       try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
+        bool isAuthenticated =
+            await api.authenticateAdmin(email, password);
 
-        // Kiểm tra xem người dùng có quyền Admin không
-        QuerySnapshot admins = await FirebaseFirestore.instance
-            .collection('Admins')
-            .where('email', isEqualTo: email)
-            .limit(1)
-            .get();
-
-        if (admins.docs.isNotEmpty) {
-          String adminName = admins.docs[0]
-              ['email']; // Đổi thành tên trường chứa tên email trong Firestore
-          showSuccessAlert("Đăng nhập thành công với email: $adminName");
-          // Hoặc chuyển đến trang AdminPage ở đây
+        if (isAuthenticated) {
           Navigator.pushReplacementNamed(context, '/admin_page');
+          showNotification('Đăng nhập thành công');
         } else {
-          // Đăng nhập thông thường
-          showSuccessAlert("Đăng nhập thành công với email: $email");
+          showNotification('Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
         }
-        showSuccessAlert("Đăng nhập thành công với email: $email");
-      } on FirebaseAuthException catch (e) {
-        // Handle authentication errors here
-        print("Authentication Error: ${e.message}");
+      } catch (e) {
+        print("Authentication Error: $e");
+        showNotification('Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
       }
     }
   }
-
-  void showInvalidCredentialsAlert() {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            "Thông báo",
-            style: TextStyle(
-              color: primaryColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: Text("Tài khoản hoặc mật khẩu không khớp"),
-          actions: [
-            CupertinoDialogAction(
-              child: Text(
-                "OK",
-                style: TextStyle(color: blue),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  //
-  void showSuccessAlert(String message) {
+  // Show notification dialog
+  void showNotification(String message) {
     showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -118,32 +63,6 @@ class _LoginAdminWithEmailAndPassWordPageState
             ),
           ),
           content: Text(message),
-          actions: [
-            CupertinoDialogAction(
-              child: Text("OK", style: TextStyle(color: blue)),
-              onPressed: () {
-                Navigator.of(context).pop();
-                // Bạn có thể thêm bất kỳ hành động nào sau khi người dùng nhấn OK
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  //
-  void showEmptyFieldsAlert() {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text("Thông báo",
-              style: GoogleFonts.arsenal(
-                  color: primaryColors,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18)),
-          content: Text("Đăng nhập không hợp lệ, vui lòng thử lại"),
           actions: [
             CupertinoDialogAction(
               child: Text("OK", style: TextStyle(color: blue)),
@@ -178,19 +97,19 @@ class _LoginAdminWithEmailAndPassWordPageState
             ),
             //form email
             TextFormFieldEmail(
-              hintText: 'Email',
+              hintText: 'Nhập email',
               prefixIconData: Icons.email,
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _emailController.clear();
+                      emailController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: _emailController,
+              controller: emailController,
               iconColor: primaryColors,
             ),
             SizedBox(
@@ -211,7 +130,7 @@ class _LoginAdminWithEmailAndPassWordPageState
                   });
                 },
               ),
-              controller: _passWordController,
+              controller: passWordController,
               iconColor: primaryColors,
               obscureText: !isObsecure,
             ),
@@ -235,7 +154,7 @@ class _LoginAdminWithEmailAndPassWordPageState
             //button login
             MyButton(
               text: 'Đăng nhập',
-              onTap: loginAdminEmail,
+              onTap: loginAdminWithEmailAndPassword,
               buttonColor: primaryColors,
             ),
             SizedBox(
@@ -275,9 +194,16 @@ class _LoginAdminWithEmailAndPassWordPageState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                LoginWithMore(imagePath: 'assets/icons/facebook.png', onTap: () {}),
-                LoginWithMore(imagePath: 'assets/icons/google.png', onTap: () {  },),
-                LoginWithMore(imagePath: 'assets/icons/apple.png', onTap: () {  },),
+                LoginWithMore(
+                    imagePath: 'assets/icons/facebook.png', onTap: () {}),
+                LoginWithMore(
+                  imagePath: 'assets/icons/google.png',
+                  onTap: () {},
+                ),
+                LoginWithMore(
+                  imagePath: 'assets/icons/apple.png',
+                  onTap: () {},
+                ),
               ],
             ),
             SizedBox(

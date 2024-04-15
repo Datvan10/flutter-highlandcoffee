@@ -47,7 +47,7 @@ class _RegisterAdminWithEmailAndPasswordPageState
       );
       // Call API to register admin
       await api.addAdmin(newAdmin);
-
+      Navigator.pushReplacementNamed(context, '/admin_page');
       // Show success alert
       showNotification('Đăng ký thành công!');
       // Clear input fields
@@ -107,7 +107,7 @@ class _RegisterAdminWithEmailAndPasswordPageState
               height: 150.0,
             ),
             TextFormFieldEmail(
-              hintText: 'Email',
+              hintText: 'Nhập email',
               prefixIconData: Icons.email,
               suffixIcon: IconButton(
                   onPressed: () {

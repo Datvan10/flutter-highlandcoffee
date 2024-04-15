@@ -10,17 +10,17 @@ import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
-class RegisterUserWithEmailAndPasswordPage extends StatefulWidget {
+class RegisterCustomerWithIdentifierPage extends StatefulWidget {
   final Function()? onTap;
-  const RegisterUserWithEmailAndPasswordPage({super.key, required this.onTap});
+  const RegisterCustomerWithIdentifierPage({super.key, required this.onTap});
 
   @override
-  State<RegisterUserWithEmailAndPasswordPage> createState() =>
-      _RegisterUserWithEmailAndPasswordPageState();
+  State<RegisterCustomerWithIdentifierPage> createState() =>
+      _RegisterCustomerWithIdentifierPageState();
 }
 
-class _RegisterUserWithEmailAndPasswordPageState
-    extends State<RegisterUserWithEmailAndPasswordPage> {
+class _RegisterCustomerWithIdentifierPageState
+    extends State<RegisterCustomerWithIdentifierPage> {
   final CustomerApi api = CustomerApi();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phone_numberController = TextEditingController();
@@ -51,7 +51,7 @@ class _RegisterUserWithEmailAndPasswordPageState
         password.isEmpty ||
         confirm_password.isEmpty) {
       // Show alert for empty fields
-      showNotification('Đăng ký không thành công, vui lòng thử lại');
+      showNotification('Vui lòng nhập đầy đủ thông tin đăng ký');
       return;
     }
 
@@ -74,7 +74,7 @@ class _RegisterUserWithEmailAndPasswordPageState
       );
       // Call API to register user
       await api.addCustomer(newCustomer);
-
+      Navigator.pushReplacementNamed(context, '/home_page');
       // Show success alert
       showNotification('Đăng ký thành công!');
       // Clear input fields

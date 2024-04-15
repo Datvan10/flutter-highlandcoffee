@@ -50,7 +50,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                     children: [
                       Icon(Icons.login, color: blue,),
                       SizedBox(width: 100,),
-                      Text('Đăng nhập User', style: TextStyle(color: black),),
+                      Text('Đăng nhập khách hàng', style: TextStyle(color: black),),
                     ],
                   )),
               ),
@@ -83,7 +83,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                       Navigator.of(context).pop();
                     },
                     child: Container(
-                      child: Text('BACK', textAlign: TextAlign.center, style: TextStyle(color: black))),
+                      child: Text('Quay lại', textAlign: TextAlign.center, style: TextStyle(color: black))),
                   ),
                 ],
               ),
