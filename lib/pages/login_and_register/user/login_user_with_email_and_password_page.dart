@@ -133,7 +133,7 @@ class _LoginUserWithEmailAndPasswordPageState
       backgroundColor: background,
       body: Padding(
         padding: const EdgeInsets.only(
-            left: 18.0, top: 100.0, right: 18.0, bottom: 50),
+            left: 18.0, top: 100.0, right: 18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -255,7 +255,7 @@ class _LoginUserWithEmailAndPasswordPageState
               ],
             ),
             SizedBox(
-              height: 40,
+              height: 50,
             ),
             //text tip
             Row(

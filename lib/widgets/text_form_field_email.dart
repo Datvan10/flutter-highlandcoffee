@@ -11,7 +11,7 @@ class TextFormFieldEmail extends StatefulWidget {
   final Color iconColor;
   final TextEditingController controller;
   final bool obscureText;
-  final List<TextInputFormatter>? inputFormatters; // Thêm tham số inputFormatters
+  final List<TextInputFormatter>? inputFormatters;
 
   const TextFormFieldEmail({
     Key? key,
@@ -21,7 +21,7 @@ class TextFormFieldEmail extends StatefulWidget {
     required this.controller,
     required this.iconColor,
     this.obscureText = false,
-    this.inputFormatters, // Thêm inputFormatters vào constructor
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class _TextFormFieldEmailState extends State<TextFormFieldEmail> {
         TextFormField(
           controller: widget.controller,
           obscureText: widget.obscureText,
-          inputFormatters: widget.inputFormatters, // Sử dụng inputFormatters từ widget cha
+          inputFormatters: widget.inputFormatters,
           onChanged: (text) {
             setState(() {
               _isValid = _validateEmail(text);

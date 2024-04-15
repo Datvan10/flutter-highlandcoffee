@@ -1,106 +1,80 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
 class RegisterAdminWithEmailAndPasswordPage extends StatefulWidget {
   final Function()? onTap;
-  const RegisterAdminWithEmailAndPasswordPage({Key? key, required this.onTap}) : super(key: key);
+  const RegisterAdminWithEmailAndPasswordPage({Key? key, required this.onTap})
+      : super(key: key);
 
   @override
-  _RegisterAdminWithEmailAndPasswordPageState createState() => _RegisterAdminWithEmailAndPasswordPageState();
+  _RegisterAdminWithEmailAndPasswordPageState createState() =>
+      _RegisterAdminWithEmailAndPasswordPageState();
 }
 
-class _RegisterAdminWithEmailAndPasswordPageState extends State<RegisterAdminWithEmailAndPasswordPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+class _RegisterAdminWithEmailAndPasswordPageState
+    extends State<RegisterAdminWithEmailAndPasswordPage> {
+      final AdminApi api = AdminApi();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   bool isObsecure = false;
 
-  //
-void registerAdmin() async {
-  String email = _emailController.text.trim();
-  String password = _passwordController.text.trim();
+  // Register admin
+  Future<void> registerAdmin() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
 
-  // Kiểm tra nếu có trường nào bị trống
-  if (email.isEmpty || password.isEmpty) {
-    showEmptyFieldsAlert();
-    return;
-  }
-
-  try {
-    UserCredential userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password);
-
-    if (userCredential.user != null) {
-      // Lưu thông tin admin vào Firestore
-      await FirebaseFirestore.instance
-          .collection('Admins')
-          .doc(userCredential.user!.uid)
-          .set({
-        'email': email,
-        'passWord': password,
-      });
-
-      showSuccessAlert("Đăng ký thành công với email: $email");
-
-      // Chuyển đến trang AdminPage
-      Navigator.pushReplacementNamed(context, '/admin_page');
+    // Validate input fields
+    if (email.isEmpty || password.isEmpty) {
+      // Show alert for empty fields
+      showNotification('Đăng ký không thành công, vui lòng thử lại');
+      return;
     }
-    showSuccessAlert("Đăng ký thành công với email: $email");
-  } catch (e) {
-    print("Error creating admin account: $e");
-    // Xử lý lỗi đăng ký ở đây (hiển thị thông báo lỗi, v.v.)
-  }
-}
 
-  //
-  void showSuccessAlert(String message) {
-  showCupertinoDialog(
-    context: context,
-    builder: (context) {
-      return CupertinoAlertDialog(
-        title: Text(
-          "Thông báo",
-          style: GoogleFonts.arsenal(
-            color: primaryColors,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        content: Text(message),
-        actions: [
-          CupertinoDialogAction(
-            child: Text("OK", style: TextStyle(color: blue)),
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Bạn có thể thêm bất kỳ hành động nào sau khi người dùng nhấn OK
-            },
-          ),
-        ],
+    try {
+      // Create new customer object
+      Admin newAdmin = Admin(
+        email: email,
+        password: password,
       );
-    },
-  );
-}
+      // Call API to register admin
+      await api.addAdmin(newAdmin);
 
-  //
-  void showEmptyFieldsAlert() {
+      // Show success alert
+      showNotification('Đăng ký thành công!');
+      // Clear input fields
+      emailController.clear();
+      passwordController.clear();
+    } catch (e) {
+      // print("Error adding admin: $e");
+      // Show alert for error
+      showNotification('Email đã tồn tại vui lòng thử lại!');
+    }
+  }
+
+  // Show notification dialog
+  void showNotification(String message) {
     showCupertinoDialog(
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: Text("Thông báo",
-              style: GoogleFonts.arsenal(
-                  color: primaryColors,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18)),
-          content: Text("Đăng ký không hợp lệ, vui lòng thử lại"),
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.arsenal(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Text(message),
           actions: [
             CupertinoDialogAction(
               child: Text("OK", style: TextStyle(color: blue)),
@@ -138,14 +112,14 @@ void registerAdmin() async {
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _emailController.clear();
+                      emailController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: _emailController,
+              controller: emailController,
               iconColor: primaryColors,
             ),
             SizedBox(height: 20.0),
@@ -163,7 +137,7 @@ void registerAdmin() async {
                   });
                 },
               ),
-              controller: _passwordController,
+              controller: passwordController,
               iconColor: primaryColors,
               obscureText: !isObsecure,
             ),
@@ -210,9 +184,18 @@ void registerAdmin() async {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                LoginWithMore(imagePath: 'assets/icons/facebook.png', onTap: () {  },),
-                LoginWithMore(imagePath: 'assets/icons/google.png', onTap: () {  },),
-                LoginWithMore(imagePath: 'assets/icons/apple.png', onTap: () {  },),
+                LoginWithMore(
+                  imagePath: 'assets/icons/facebook.png',
+                  onTap: () {},
+                ),
+                LoginWithMore(
+                  imagePath: 'assets/icons/google.png',
+                  onTap: () {},
+                ),
+                LoginWithMore(
+                  imagePath: 'assets/icons/apple.png',
+                  onTap: () {},
+                ),
               ],
             ),
             SizedBox(

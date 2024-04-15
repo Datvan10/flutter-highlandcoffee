@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
@@ -16,160 +15,84 @@ class RegisterUserWithEmailAndPasswordPage extends StatefulWidget {
   const RegisterUserWithEmailAndPasswordPage({super.key, required this.onTap});
 
   @override
-  State<RegisterUserWithEmailAndPasswordPage> createState() => _RegisterUserWithEmailAndPasswordPageState();
+  State<RegisterUserWithEmailAndPasswordPage> createState() =>
+      _RegisterUserWithEmailAndPasswordPageState();
 }
 
-class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithEmailAndPasswordPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _userNameController = TextEditingController();
-  final TextEditingController _passWordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
+class _RegisterUserWithEmailAndPasswordPageState
+    extends State<RegisterUserWithEmailAndPasswordPage> {
+  final CustomerApi api = CustomerApi();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phone_numberController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirm_passwordController =
       TextEditingController();
 
   bool isObsecureName = false;
   bool isObsecurePassword = false;
   bool isObsecureConfirmPassword = false;
 
-  //
- Future registerUser() async {
-  String email = _emailController.text.trim();
-  int phoneNumber = int.tryParse(_phoneNumberController.text.trim()) ?? 0;
-  String address = _addressController.text.trim();
-  String userName = _userNameController.text.trim();
-  String password = _passWordController.text.trim();
-  String confirmPassword = _confirmPasswordController.text.trim();
+  // Register user
+  Future<void> registerUser() async {
+    String email = emailController.text.trim();
+    String phone_number = phone_numberController.text.trim();
+    String address = addressController.text.trim();
+    String name = nameController.text.trim();
+    String password = passwordController.text.trim();
+    String confirm_password = confirm_passwordController.text.trim();
 
-  if (email.isEmpty ||
-      phoneNumber == 0 ||
-      address.isEmpty ||
-      userName.isEmpty ||
-      password.isEmpty ||
-      confirmPassword.isEmpty) {
-    // Hiển thị cảnh báo nếu có trường nào đó trống
-    showEmptyFieldsAlert();
-    return;
-  }
-
-  if (!passWordConfirmed()) {
-    // Hiển thị cảnh báo nếu mật khẩu không khớp
-    showPasswordMismatchAlert();
-    return;
-  }
-
-  try {
-    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-
-    if (userCredential.user != null) {
-      // Sau khi xác thực thành công, thêm chi tiết người dùng
-      addUserDetail(email, phoneNumber, address, userName, password, confirmPassword);
-
-      showSuccessAlert("Đăng ký thành công với email: $email");
+    // Validate input fields
+    if (email.isEmpty ||
+        phone_number.isEmpty ||
+        address.isEmpty ||
+        name.isEmpty ||
+        password.isEmpty ||
+        confirm_password.isEmpty) {
+      // Show alert for empty fields
+      showNotification('Đăng ký không thành công, vui lòng thử lại');
+      return;
     }
-    showSuccessAlert("Đăng ký thành công với email: $email");
-  } on FirebaseAuthException catch (e) {
-    // Xử lý lỗi xác thực ở đây
-    print("Lỗi xác thực: ${e.message}");
-  }
-}
 
-  //
-  void dispose() {
-    _emailController.dispose();
-    _phoneNumberController.dispose();
-    _addressController.dispose();
-    _userNameController.dispose();
-    _passWordController.dispose();
-    _confirmPasswordController.dispose();
-
-    super.dispose();
-  }
-
-  //
-  Future addUserDetail(String email, int phoneNumber, String address,
-      String userName, String passWord, String confirmPassword) async {
-    await FirebaseFirestore.instance.collection('Users').add({
-      'email': email,
-      'phoneNumber': phoneNumber,
-      'address': address,
-      'userName': userName,
-      'passWord': passWord,
-      'confirmPasword': confirmPassword
-    });
-  }
-
-  //
-  bool passWordConfirmed() {
-    if (_passWordController.text.trim() ==
-        _confirmPasswordController.text.trim()) {
-      return true;
-    } else {
-      return false;
+    // Check if password matches confirm password
+    if (password != confirm_password) {
+      // Show alert for password mismatch
+      showNotification('Mật khẩu không khớp, vui lòng thử lại');
+      return;
     }
-  }
 
-  //
- void showSuccessAlert(String message) {
-  showCupertinoDialog(
-    context: context,
-    builder: (context) {
-      return CupertinoAlertDialog(
-        title: Text(
-          "Thông báo",
-          style: GoogleFonts.arsenal(
-            color: primaryColors,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        content: Text(message),
-        actions: [
-          CupertinoDialogAction(
-            child: Text("OK", style: TextStyle(color: blue)),
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Bạn có thể thêm bất kỳ hành động nào sau khi người dùng nhấn OK
-            },
-          ),
-        ],
+    try {
+      // Create new customer object
+      Customer newCustomer = Customer(
+        name: name,
+        email: email,
+        password: password,
+        confirm_password: confirm_password,
+        phone_number: int.parse(phone_number),
+        address: address,
       );
-    },
-  );
-}
+      // Call API to register user
+      await api.addCustomer(newCustomer);
 
-  // Function to show Cupertino alert for empty fields
-  void showEmptyFieldsAlert() {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text("Thông báo",
-              style: GoogleFonts.arsenal(
-                  color: primaryColors,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold)),
-          content: Text(
-            "Đăng ký không thành công, vui lòng thử lại",
-          ),
-          actions: [
-            CupertinoDialogAction(
-              child: Text("OK", style: TextStyle(color: blue)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+      // Show success alert
+      showNotification('Đăng ký thành công!');
+      // Clear input fields
+      nameController.clear();
+      emailController.clear();
+      phone_numberController.clear();
+      addressController.clear();
+      passwordController.clear();
+      confirm_passwordController.clear();
+    } catch (e) {
+      // print("Error adding customer: $e");
+      // Show alert for error
+      showNotification('Email hoặc số điện thoại đã tồn tại vui lòng thử lại!');
+    }
   }
 
-  // Function to show Cupertino alert for password mismatch
-  void showPasswordMismatchAlert() {
+  // Show notification dialog
+  void showNotification(String message) {
     showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -177,11 +100,12 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
           title: Text(
             "Thông báo",
             style: GoogleFonts.arsenal(
-                color: primaryColors,
-                fontWeight: FontWeight.bold,
-                fontSize: 18),
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
-          content: Text("Mật khẩu không khớp, vui lòng thử lại"),
+          content: Text(message),
           actions: [
             CupertinoDialogAction(
               child: Text("OK", style: TextStyle(color: blue)),
@@ -221,11 +145,14 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _emailController.clear();
+                      emailController.clear();
                     });
                   },
-                  icon: Icon(Icons.clear, color: primaryColors,)),
-              controller: _emailController,
+                  icon: Icon(
+                    Icons.clear,
+                    color: primaryColors,
+                  )),
+              controller: emailController,
               iconColor: primaryColors,
             ),
             SizedBox(
@@ -238,11 +165,14 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _addressController.clear();
+                      phone_numberController.clear();
                     });
                   },
-                  icon: Icon(Icons.clear, color: primaryColors,)),
-              controller: _phoneNumberController,
+                  icon: Icon(
+                    Icons.clear,
+                    color: primaryColors,
+                  )),
+              controller: phone_numberController,
               iconColor: primaryColors,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -259,11 +189,14 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _addressController.clear();
+                      addressController.clear();
                     });
                   },
-                  icon: Icon(Icons.clear, color: primaryColors,)),
-              controller: _addressController,
+                  icon: Icon(
+                    Icons.clear,
+                    color: primaryColors,
+                  )),
+              controller: addressController,
               iconColor: primaryColors,
             ),
             SizedBox(
@@ -276,11 +209,14 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _userNameController.clear();
+                      nameController.clear();
                     });
                   },
-                  icon: Icon(Icons.clear, color: primaryColors,)),
-              controller: _userNameController,
+                  icon: Icon(
+                    Icons.clear,
+                    color: primaryColors,
+                  )),
+              controller: nameController,
               iconColor: primaryColors,
             ),
             SizedBox(
@@ -301,7 +237,7 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
                   });
                 },
               ),
-              controller: _passWordController,
+              controller: passwordController,
               iconColor: primaryColors,
               obscureText: !isObsecurePassword,
             ),
@@ -325,7 +261,7 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
                   });
                 },
               ),
-              controller: _confirmPasswordController,
+              controller: confirm_passwordController,
               iconColor: primaryColors,
               obscureText: !isObsecureConfirmPassword,
             ),
@@ -375,9 +311,18 @@ class _RegisterUserWithEmailAndPasswordPageState extends State<RegisterUserWithE
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                LoginWithMore(imagePath: 'assets/icons/facebook.png', onTap: () {  },),
-                LoginWithMore(imagePath: 'assets/icons/google.png', onTap: () {  },),
-                LoginWithMore(imagePath: 'assets/icons/apple.png', onTap: () {  },),
+                LoginWithMore(
+                  imagePath: 'assets/icons/facebook.png',
+                  onTap: () {},
+                ),
+                LoginWithMore(
+                  imagePath: 'assets/icons/google.png',
+                  onTap: () {},
+                ),
+                LoginWithMore(
+                  imagePath: 'assets/icons/apple.png',
+                  onTap: () {},
+                ),
               ],
             ),
             SizedBox(
