@@ -21,7 +21,7 @@ class TextFormFieldPassword extends StatefulWidget {
     required this.controller,
     required this.iconColor,
     this.obscureText = false,
-    this.inputFormatters, // Thêm inputFormatters vào constructor
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -39,10 +39,10 @@ class _TextFormFieldPasswordState extends State<TextFormFieldPassword> {
         TextFormField(
           controller: widget.controller,
           obscureText: widget.obscureText,
-          inputFormatters: widget.inputFormatters, // Sử dụng inputFormatters từ widget cha
+          inputFormatters: widget.inputFormatters,
           onChanged: (text) {
             setState(() {
-              _isValid = text.length >= 6; // Kiểm tra độ dài của password
+              _isValid = text.length >= 6;
             });
           },
           decoration: InputDecoration(

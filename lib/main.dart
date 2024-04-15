@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:highlandcoffeeapp/pages/auth/auth_user_page.dart';
 import 'package:highlandcoffeeapp/pages/login_and_register/admin/login_admin_with_email_and_password_page.dart';
 import 'package:highlandcoffeeapp/pages/login_and_register/admin/register_admin_with_email_and_password_page.dart';
 import 'package:highlandcoffeeapp/pages/login_and_register/user/login_user_with_email_and_password_page.dart';
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
 
-      home: RegisterAdminWithEmailAndPasswordPage(onTap: () {  },),
+      home: WelcomePage(),
       getPages: getPages,
       theme: ThemeData(
         primaryColor: primaryColors,

@@ -1,41 +1,23 @@
-class Admin{
-  final int id;
-  final String admin_name;
-  final String password;
-  final String confirm_password;
+import 'dart:typed_data';
+
+class Admin {
   final String email;
-  final String address;
-  final int phone;
+  final String password;
 
-  Admin(
-      {required this.id,
-      required this.admin_name,
-      required this.password,
-      required this.confirm_password,
-      required this.email,
-      required this.address,
-      required this.phone});
+  Admin({
+    required this.password,
+    required this.email,
+  });
 
-      factory Admin.fromJson(Map<String, dynamic> json) => Admin(
-        id: json['id'],
-        admin_name: json['admin_name'],
+  factory Admin.fromJson(Map<String, dynamic> json) => Admin(
         password: json['password'],
-        confirm_password: json['confirm_password'],
         email: json['email'],
-        address: json['address'],
-        phone: json['phone']
       );
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'admin_name': admin_name,
+  Map<String, dynamic> toJson() => {
         'password': password,
-        'confirm_password': confirm_password,
         'email': email,
-        'address': address,
-        'phone': phone
       };
-
 }
 
 class Staff {
@@ -56,17 +38,16 @@ class Staff {
       required this.address,
       required this.phone});
 
-      factory Staff.fromJson(Map<String, dynamic> json) => Staff(
-        id: json['id'],
-        staff_name: json['staff_name'],
-        password: json['password'],
-        confirm_password: json['confirm_password'],
-        email: json['email'],
-        address: json['address'],
-        phone: json['phone']
-      );
+  factory Staff.fromJson(Map<String, dynamic> json) => Staff(
+      id: json['id'],
+      staff_name: json['staff_name'],
+      password: json['password'],
+      confirm_password: json['confirm_password'],
+      email: json['email'],
+      address: json['address'],
+      phone: json['phone']);
 
-      Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'staff_name': staff_name,
         'password': password,
@@ -75,45 +56,45 @@ class Staff {
         'address': address,
         'phone': phone
       };
-
 }
 
 class Customer {
-  final int id;
-  final String customer_name;
+  final String name;
+  final String email;
   final String password;
   final String confirm_password;
-  final String email;
+  Uint8List? image;
+  final int phone_number;
   final String address;
-  final int phone;
 
-  Customer(
-      {required this.id,
-      required this.customer_name,
-      required this.password,
-      required this.confirm_password,
-      required this.email,
-      required this.address,
-      required this.phone});
+  Customer({
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.confirm_password,
+    this.image,
+    required this.phone_number,
+    required this.address,
+  });
 
-      factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-        id: json['id'],
-        customer_name: json['customer_name'],
+  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+        name: json['name'],
+        email: json['email'],
         password: json['password'],
         confirm_password: json['confirm_password'],
-        email: json['email'],
+        image: json['image'],
+        phone_number: json['phone_number'],
         address: json['address'],
-        phone: json['phone']
       );
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'customer_name': customer_name,
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'email': email,
         'password': password,
         'confirm_password': confirm_password,
-        'email': email,
+        'image': image,
+        'phone_number': phone_number,
         'address': address,
-        'phone': phone
       };
 }
 
@@ -131,15 +112,14 @@ class Product {
       required this.price,
       required this.image});
 
-      factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json['id'],
-        product_name: json['product_name'],
-        description: json['description'],
-        price: json['price'],
-        image: json['image']
-      );
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+      id: json['id'],
+      product_name: json['product_name'],
+      description: json['description'],
+      price: json['price'],
+      image: json['image']);
 
-      Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'product_name': product_name,
         'description': description,
@@ -164,16 +144,15 @@ class Order {
       required this.total_price,
       required this.status});
 
-      factory Order.fromJson(Map<String, dynamic> json) => Order(
-        id: json['id'],
-        customer_id: json['customer_id'],
-        product_name: json['product_name'],
-        quantity: json['quantity'],
-        total_price: json['total_price'],
-        status: json['status']
-      );
+  factory Order.fromJson(Map<String, dynamic> json) => Order(
+      id: json['id'],
+      customer_id: json['customer_id'],
+      product_name: json['product_name'],
+      quantity: json['quantity'],
+      total_price: json['total_price'],
+      status: json['status']);
 
-      Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'customer_id': customer_id,
         'product_name': product_name,
@@ -197,15 +176,14 @@ class Cart {
       required this.quantity,
       required this.total_price});
 
-      factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-        id: json['id'],
-        customer_id: json['customer_id'],
-        product_name: json['product_name'],
-        quantity: json['quantity'],
-        total_price: json['total_price']
-      );
+  factory Cart.fromJson(Map<String, dynamic> json) => Cart(
+      id: json['id'],
+      customer_id: json['customer_id'],
+      product_name: json['product_name'],
+      quantity: json['quantity'],
+      total_price: json['total_price']);
 
-      Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'customer_id': customer_id,
         'product_name': product_name,
@@ -226,19 +204,14 @@ class Coffee {
       required this.image,
       required this.price});
 
-      factory Coffee.fromJson(Map<String, dynamic> json) => Coffee(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        price: json['price']
-      );
+  factory Coffee.fromJson(Map<String, dynamic> json) => Coffee(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      price: json['price']);
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'image': image,
-        'price': price
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'image': image, 'price': price};
 }
 
 class Tea {
@@ -253,19 +226,14 @@ class Tea {
       required this.image,
       required this.price});
 
-      factory Tea.fromJson(Map<String, dynamic> json) => Tea(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        price: json['price']
-      );
+  factory Tea.fromJson(Map<String, dynamic> json) => Tea(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      price: json['price']);
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'image': image,
-        'price': price
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'image': image, 'price': price};
 }
 
 class Cake {
@@ -280,19 +248,14 @@ class Cake {
       required this.image,
       required this.price});
 
-      factory Cake.fromJson(Map<String, dynamic> json) => Cake(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        price: json['price']
-      );
+  factory Cake.fromJson(Map<String, dynamic> json) => Cake(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      price: json['price']);
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'image': image,
-        'price': price
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'image': image, 'price': price};
 }
 
 class Bread {
@@ -307,19 +270,14 @@ class Bread {
       required this.image,
       required this.price});
 
-      factory Bread.fromJson(Map<String, dynamic> json) => Bread(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        price: json['price']
-      );
+  factory Bread.fromJson(Map<String, dynamic> json) => Bread(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      price: json['price']);
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'image': image,
-        'price': price
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'image': image, 'price': price};
 }
 
 class Freeze {
@@ -334,19 +292,14 @@ class Freeze {
       required this.image,
       required this.price});
 
-      factory Freeze.fromJson(Map<String, dynamic> json) => Freeze(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        price: json['price']
-      );
+  factory Freeze.fromJson(Map<String, dynamic> json) => Freeze(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      price: json['price']);
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'image': image,
-        'price': price
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'image': image, 'price': price};
 }
 
 class Other {
@@ -361,19 +314,14 @@ class Other {
       required this.image,
       required this.price});
 
-      factory Other.fromJson(Map<String, dynamic> json) => Other(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        price: json['price']
-      );
+  factory Other.fromJson(Map<String, dynamic> json) => Other(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      price: json['price']);
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'image': image,
-        'price': price
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'image': image, 'price': price};
 }
 
 class Popular {
@@ -388,19 +336,14 @@ class Popular {
       required this.image,
       required this.price});
 
-      factory Popular.fromJson(Map<String, dynamic> json) => Popular(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        price: json['price']
-      );
+  factory Popular.fromJson(Map<String, dynamic> json) => Popular(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      price: json['price']);
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'image': image,
-        'price': price
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'image': image, 'price': price};
 }
 
 class Favorite {
@@ -415,17 +358,12 @@ class Favorite {
       required this.image,
       required this.price});
 
-      factory Favorite.fromJson(Map<String, dynamic> json) => Favorite(
-        id: json['id'],
-        name: json['name'],
-        image: json['image'],
-        price: json['price']
-      );
+  factory Favorite.fromJson(Map<String, dynamic> json) => Favorite(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      price: json['price']);
 
-      Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'image': image,
-        'price': price
-      };
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'image': image, 'price': price};
 }
