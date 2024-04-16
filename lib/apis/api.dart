@@ -73,6 +73,44 @@ class AdminApi {
     }
   }
 
+  ///////////////// Chua xu ly phan nay
+  // Update admin password
+  Future<bool> updateAdminPassword(String email, String newPassword) async {
+    try {
+      final response = await http.get(Uri.parse(adminUrl));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+
+        for (var adminData in jsonResponse) {
+          Admin admin = Admin.fromJson(adminData);
+          if (admin.email == email) {
+            try {
+              final updateResponse = await http.put(
+                Uri.parse('$adminUrl'),
+                headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: jsonEncode({'password': newPassword}),
+              );
+              if (updateResponse.statusCode == 200) {
+                return true;
+              } else {
+                return false;
+              }
+            } catch (e) {
+              return false;
+            }
+          }
+        }
+        return false;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
   // Authenticate admin
   Future<bool> authenticateAdmin(String email, String password) async {
     try {
@@ -179,6 +217,59 @@ class CustomerApi {
     }
     return input;
   }
+
+  ///////////////// Chua xu ly phan nay
+  // Update customer password
+  Future<bool> updateCustomerPassword(String identifier, String newPassword) async {
+  // Loại bỏ các ký tự không cần thiết trong số điện thoại
+  identifier = removeLeadingZeros(identifier);
+
+  try {
+    // Gửi yêu cầu API để lấy danh sách khách hàng
+    final response = await http.get(Uri.parse(customerUrl));
+
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+
+      for (var customerData in jsonResponse) {
+        Customer customer = Customer.fromJson(customerData);
+        // Kiểm tra nếu email hoặc số điện thoại trùng khớp
+        if (customer.email == identifier || customer.phone_number.toString() == identifier) {
+          try {
+            // Gửi yêu cầu API để cập nhật mật khẩu với id của khách hàng tương ứng
+            final updateResponse = await http.put(
+              Uri.parse('$customerUrl/${customer.id}'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+              body: jsonEncode({'password': newPassword}),
+            );
+            print(updateResponse.statusCode);
+            print(customer.id);
+
+            if (updateResponse.statusCode == 200) {
+              return true; // Trả về true nếu cập nhật thành công
+            } else {
+              return false; // Trả về false nếu cập nhật không thành công
+            }
+          } catch (e) {
+            print("Error updating password: $e"); // In ra lỗi nếu có lỗi xảy ra
+            return false; // Trả về false nếu có lỗi xảy ra
+          }
+        }
+      }
+      // Trả về false nếu không tìm thấy khách hàng với email hoặc số điện thoại tương ứng
+      return false;
+    } else {
+      // Trả về false nếu không thể lấy được danh sách khách hàng từ API
+      return false;
+    }
+  } catch (e) {
+    print("Error fetching customer data: $e"); // In ra lỗi nếu có lỗi xảy ra khi gửi yêu cầu API
+    return false; // Trả về false nếu có lỗi xảy ra khi gửi yêu cầu API
+  }
+}
+
 
   // Authenticate customer
   Future<bool> authenticateCustomer(String identifier, String password) async {

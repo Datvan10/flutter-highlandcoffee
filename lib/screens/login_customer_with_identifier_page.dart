@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
@@ -48,7 +49,7 @@ class _LoginCustomerWithIdentifierPageState
         }
       } catch (e) {
         print("Authentication Error: $e");
-        showNotification('Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
+        showNotification('Không thể xác thực tài khoản, vui lòng thử lại');
       }
     }
   }
@@ -146,7 +147,9 @@ class _LoginCustomerWithIdentifierPageState
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed('/forgot_password_customer_page');
+                  },
                   child: Text(
                     'Quên mật khẩu?',
                     style: GoogleFonts.roboto(

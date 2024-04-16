@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-
+// Model admin
 class Admin {
   final String email;
   final String password;
@@ -20,6 +20,7 @@ class Admin {
       };
 }
 
+// Model staff
 class Staff {
   final int id;
   final String staff_name;
@@ -58,16 +59,19 @@ class Staff {
       };
 }
 
+// Model customer
 class Customer {
+  int? id;
   final String name;
   final String email;
-  final String password;
+  String password;
   final String confirm_password;
   Uint8List? image;
   final int phone_number;
   final String address;
 
   Customer({
+    this.id,
     required this.name,
     required this.email,
     required this.password,
@@ -78,6 +82,7 @@ class Customer {
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+        id: json['id'],
         name: json['name'],
         email: json['email'],
         password: json['password'],
