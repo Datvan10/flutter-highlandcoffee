@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
@@ -141,10 +142,15 @@ class _LoginAdminWithEmailAndPassWordPageState
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  'Quên mật khẩu?',
-                  style: GoogleFonts.roboto(
-                      color: blue, decoration: TextDecoration.underline),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed('/forgot_password_admin_page');
+                  },
+                  child: Text(
+                    'Quên mật khẩu?',
+                    style: GoogleFonts.roboto(
+                        color: blue, decoration: TextDecoration.underline),
+                  ),
                 )
               ],
             ),

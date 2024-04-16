@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/pages/auth/auth_admin_page.dart';
-import 'package:highlandcoffeeapp/pages/auth/auth_user_page.dart';
+import 'package:highlandcoffeeapp/pages/auth/auth_customer_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class ChooseLoginTypePage extends StatefulWidget {
@@ -41,7 +41,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                   // Di chuyển đến trang đăng nhập User
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AuthUserPage()),
+                    MaterialPageRoute(builder: (context) => AuthCustomerPage()),
                   );
                 },
                 child: Container(

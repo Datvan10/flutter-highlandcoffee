@@ -2,6 +2,8 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/pages/user/profile_user_page.dart';
 import 'package:highlandcoffeeapp/screens/bread_page.dart';
 import 'package:highlandcoffeeapp/screens/coffee_page.dart';
+import 'package:highlandcoffeeapp/screens/forgot_password_admin_page.dart';
+import 'package:highlandcoffeeapp/screens/forgot_password_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/freeze_page.dart';
 import 'package:highlandcoffeeapp/screens/other_page.dart';
 import 'package:highlandcoffeeapp/screens/payment_result_page.dart';
@@ -13,7 +15,7 @@ import 'package:highlandcoffeeapp/screens/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/screens/list_product_page.dart';
 import 'package:highlandcoffeeapp/screens/product_popular_page.dart';
 import 'package:highlandcoffeeapp/pages/admin/admin_page.dart';
-import 'package:highlandcoffeeapp/pages/auth/auth_user_page.dart';
+import 'package:highlandcoffeeapp/pages/auth/auth_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/cart_page.dart';
 import 'package:highlandcoffeeapp/screens/home_page.dart';
 import 'package:highlandcoffeeapp/screens/introduce_page1.dart';
@@ -27,7 +29,7 @@ List<GetPage> getPages = [
   GetPage(name: '/introduce_page1', page: () => const IntroducePage1()),
   GetPage(name: '/introduce_page2', page: () => const IntroducePage2()),
   GetPage(name: '/choose_login_type_page', page: () => ChooseLoginTypePage()),
-  GetPage(name: '/auth_page', page: () => const AuthUserPage()),
+  GetPage(name: '/auth_customer_page', page: () => const AuthCustomerPage()),
   GetPage(name:  '/admin_page', page: () => const AdminPage()),
   GetPage(name: '/home_page', page: () => const HomePage()),
   GetPage(name: '/list_product_page', page:() => const ListProductPage()),
@@ -45,6 +47,8 @@ List<GetPage> getPages = [
   GetPage(name: '/cart_page', page:() => const CartPage()),
   GetPage(name: '/bill_page', page:() => const BillPage()),
   GetPage(name: '/admin_page', page:() => const AdminPage()),
+  GetPage(name: '/forgot_password_admin_page', page:() => const ForgotPasswordAdminPage()),
+  GetPage(name: '/forgot_password_customer_page', page:() => const ForgotPasswordCustomerPage()),
   GetPage(name: '/profile_user_page', page:() => ProfileUserPage()),
   GetPage(name: '/update_user_profile_page', page:() => const UpdateUserProfilePage()),
   GetPage(name: '/my_order_page', page:() => const MyOrderPage()),
