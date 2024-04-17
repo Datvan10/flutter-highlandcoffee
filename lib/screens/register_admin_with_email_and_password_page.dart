@@ -101,7 +101,7 @@ class _RegisterAdminWithEmailAndPasswordPageState
             Text(
               'Đăng ký Admin',
               style: GoogleFonts.arsenal(
-                  fontSize: 30.0, fontWeight: FontWeight.bold, color: brown),
+                  fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
             SizedBox(
               height: 150.0,

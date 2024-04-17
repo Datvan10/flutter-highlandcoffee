@@ -133,7 +133,7 @@ class _RegisterCustomerWithIdentifierPageState
             Text(
               'Đăng ký',
               style: GoogleFonts.arsenal(
-                  fontSize: 30.0, fontWeight: FontWeight.bold, color: brown),
+                  fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
             SizedBox(
               height: 30.0,

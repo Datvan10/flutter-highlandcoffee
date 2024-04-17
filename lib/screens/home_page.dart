@@ -199,64 +199,67 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor: primaryColors,
-        title: Container(
-          height: 40,
-          child: TextField(
-            controller: _textSearchController,
-            onSubmitted: (String query) {
-              performSearch(query);
-            },
-            decoration: InputDecoration(
-                hintText: 'Tìm kiếm đồ uống của bạn...',
-                contentPadding: EdgeInsets.symmetric(),
-                alignLabelWithHint: true,
-                filled: true,
-                fillColor: white,
-                prefixIcon: const Icon(
-                  Icons.search,
-                  size: 20,
-                ),
-                //icon search with microphone
-                suffixIcon: IconButton(
-                  icon: const Icon(
-                    Icons.mic,
+        title: Padding(
+          padding: const EdgeInsets.only(bottom: 15.0),
+          child: SizedBox(
+            height: 40,
+            child: TextField(
+              controller: _textSearchController,
+              onSubmitted: (String query) {
+                performSearch(query);
+              },
+              decoration: InputDecoration(
+                  hintText: 'Tìm kiếm đồ uống của bạn...',
+                  contentPadding: EdgeInsets.symmetric(),
+                  alignLabelWithHint: true,
+                  filled: true,
+                  fillColor: white,
+                  prefixIcon: const Icon(
+                    Icons.search,
                     size: 20,
                   ),
-                  focusColor: primaryColors,
-                  onPressed: _startListening,
-                  // onPressed: () {
-                  //   setState(() {
-                  //     _isMicFormVisible = !_isMicFormVisible;
-                  //   });
-                  // },
-                ),
-                //icon clear
-                // suffixIcon: Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: Container(
-                //     width: 20,
-                //     height: 20,
-                //     decoration: BoxDecoration(
-                //         color: background, shape: BoxShape.circle),
-                //     child: Center(
-                //       child: IconButton(
-                //         icon: const Icon(
-                //           Icons.clear,
-                //           size: 10,
-                //         ),
-                //         onPressed: () {
-                //           _textSearchController.clear();
-                //         },100
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color: Colors.white)),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color: Colors.white))),
+                  //icon search with microphone
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.mic,
+                      size: 20,
+                    ),
+                    focusColor: primaryColors,
+                    onPressed: _startListening,
+                    // onPressed: () {
+                    //   setState(() {
+                    //     _isMicFormVisible = !_isMicFormVisible;
+                    //   });
+                    // },
+                  ),
+                  //icon clear
+                  // suffixIcon: Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Container(
+                  //     width: 20,
+                  //     height: 20,
+                  //     decoration: BoxDecoration(
+                  //         color: background, shape: BoxShape.circle),
+                  //     child: Center(
+                  //       child: IconButton(
+                  //         icon: const Icon(
+                  //           Icons.clear,
+                  //           size: 10,
+                  //         ),
+                  //         onPressed: () {
+                  //           _textSearchController.clear();
+                  //         },100
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: BorderSide(color: Colors.white)),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: BorderSide(color: Colors.white))),
+            ),
           ),
         ),
       ),
