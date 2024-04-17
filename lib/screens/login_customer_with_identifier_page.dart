@@ -94,7 +94,7 @@ class _LoginCustomerWithIdentifierPageState
             Text(
               'Đăng nhập',
               style: GoogleFonts.arsenal(
-                  fontSize: 30.0, fontWeight: FontWeight.bold, color: brown),
+                  fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
             SizedBox(
               height: 190.0,
@@ -199,7 +199,7 @@ class _LoginCustomerWithIdentifierPageState
                 child: Text('ĐĂNG NHẬP BẰNG',
                     style: GoogleFonts.roboto(color: grey))),
             SizedBox(
-              height: 20.0,
+              height: 25.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
