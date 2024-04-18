@@ -13,12 +13,11 @@ class ProductPopularItem extends StatefulWidget {
 
 class _ProductPopularItemState extends State<ProductPopularItem> {
   final PopularApi api = PopularApi();
-  late Future<List<Product>> productsFuture; // Thay đổi từ Stream sang Future
+  late Future<List<Product>> productsFuture;
 
   @override
   void initState() {
     super.initState();
-    // Gọi phương thức để lấy dữ liệu từ API trong hàm initState
     productsFuture = api.getPopulars();
   }
 
