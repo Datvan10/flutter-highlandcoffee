@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:http/http.dart' as http;
 
@@ -377,6 +379,171 @@ class ProductApi {
       }
     } catch (e) {
       throw Exception('Failed to delete product');
+    }
+  }
+}
+
+// API for popular products
+class PopularApi {
+  final String popularUrl = "http://localhost:5194/api/populars";
+  // Read data from API
+  Future<List<Product>> getPopulars() async {
+    try {
+      final response = await http.get(Uri.parse(popularUrl));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Product> populars = [];
+        for (var item in jsonData) {
+          Product popular = Product.fromJson(item);
+          // Decode image and image detail
+          Uint8List decodedImage = base64Decode(popular.image);
+          Uint8List decodedImageDetail = base64Decode(popular.image_detail);
+          final image = MemoryImage(decodedImage);
+          final image_detail = MemoryImage(decodedImageDetail);
+
+          populars.add(popular);
+        }
+        return populars;
+      } else {
+        throw Exception('Failed to load popular products');
+      }
+    } catch (e) {
+      throw Exception('Failed to load popular products');
+    }
+  }
+
+
+  // Add data to API
+  Future<void> addPopular(Product popular) async {
+    final uri = Uri.parse(popularUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(popular.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Popular product added successfully');
+      } else {
+        throw Exception('Failed to add popular product: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add popular product: $e');
+    }
+  }
+
+  // Update data to API
+  Future<Product> updatePopular(Product popular) async {
+    try {
+      final response = await http.put(Uri.parse('$popularUrl/${popular}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(popular.toJson()));
+      if (response.statusCode == 200) {
+        return Product.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to update popular product');
+      }
+    } catch (e) {
+      throw Exception('Failed to update popular product');
+    }
+  }
+
+  // Delete data from API
+  Future<void> deletePopular(int id) async {
+    try {
+      final response = await http.delete(Uri.parse('$popularUrl/$id'));
+      if (response.statusCode != 204) {
+        throw Exception('Failed to delete popular product');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete popular product');
+    }
+  }
+}
+// API for favorite products
+class FavoriteApi {
+  final String favoriteUrl = "http://localhost:5194/api/favorites";
+  // Read data from API
+  Future<List<Product>> getFavorites() async {
+    try {
+      final response = await http.get(Uri.parse(favoriteUrl));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Product> favorites = [];
+        for (var item in jsonData) {
+          Product favorite = Product.fromJson(item);
+          // Decode image and image detail
+          Uint8List decodedImage = base64Decode(favorite.image);
+          Uint8List decodedImageDetail = base64Decode(favorite.image_detail);
+          final image = MemoryImage(decodedImage);
+          final image_detail = MemoryImage(decodedImageDetail);
+
+          favorites.add(favorite);
+        }
+        return favorites;
+      } else {
+        throw Exception('Failed to load popular products');
+      }
+    } catch (e) {
+      throw Exception('Failed to load popular products');
+    }
+  }
+
+
+  // Add data to API
+  Future<void> addFavorite(Product popular) async {
+    final uri = Uri.parse(favoriteUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(popular.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Popular product added successfully');
+      } else {
+        throw Exception('Failed to add popular product: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add popular product: $e');
+    }
+  }
+
+  // Update data to API
+  Future<Product> updateFavorite(Product popular) async {
+    try {
+      final response = await http.put(Uri.parse('$favoriteUrl/${popular}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(popular.toJson()));
+      if (response.statusCode == 200) {
+        return Product.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to update popular product');
+      }
+    } catch (e) {
+      throw Exception('Failed to update popular product');
+    }
+  }
+
+  // Delete data from API
+  Future<void> deleteFavorite(int id) async {
+    try {
+      final response = await http.delete(Uri.parse('$favoriteUrl/$id'));
+      if (response.statusCode != 204) {
+        throw Exception('Failed to delete popular product');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete popular product');
     }
   }
 }

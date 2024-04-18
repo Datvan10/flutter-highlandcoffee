@@ -103,58 +103,6 @@ class Customer {
         'address': address,
       };
 }
-
-// Model product
-class Product {
-  final String category_name;
-  final String product_name;
-  final String description;
-  final int size_s_price;
-  final int size_m_price;
-  final int size_l_price;
-  final int unit;
-  Uint8List image;
-  Uint8List image_detail;
-  final int quantity;
-
-  Product(
-      {required this.category_name,
-      required this.product_name,
-      required this.description,
-      required this.size_s_price,
-      required this.size_m_price,
-      required this.size_l_price,
-      required this.unit,
-      required this.image,
-      required this.image_detail,
-      required this.quantity});
-
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-      category_name: json['category_name'],
-      product_name: json['product_name'],
-      description: json['description'],
-      size_s_price: json['size_s_price'],
-      size_m_price: json['size_m_price'],
-      size_l_price: json['size_l_price'],
-      unit: json['unit'],
-      image: json['image'],
-      image_detail: json['image_detail'],
-      quantity: json['quantity']);
-
-  Map<String, dynamic> toJson() => {
-        'category_name': category_name,
-        'product_name': product_name,
-        'description': description,
-        'size_s_price': size_s_price,
-        'size_m_price': size_m_price,
-        'size_l_price': size_l_price,
-        'unit': unit,
-        'image': image,
-        'image_detail': image_detail,
-        'quantity': quantity
-      };
-}
-
 // Model order
 class Order {
   final int id;
@@ -220,33 +168,37 @@ class Cart {
         'total_price': total_price
       };
 }
-
-// Model coffee
-class Coffee {
+// Model product
+class Product {
+  final int id;
   final String category_name;
   final String product_name;
   final String description;
   final int size_s_price;
   final int size_m_price;
   final int size_l_price;
-  final int unit;
-  Uint8List image;
-  Uint8List image_detail;
+  final String unit;
+  String image;
+  String image_detail;
   final int quantity;
 
-  Coffee(
-      {required this.category_name,
-      required this.product_name,
-      required this.description,
-      required this.size_s_price,
-      required this.size_m_price,
-      required this.size_l_price,
-      required this.unit,
-      required this.image,
-      required this.image_detail,
-      required this.quantity});
+  Product({
+    required this.id,
+    required this.category_name,
+    required this.product_name,
+    required this.description,
+    required this.size_s_price,
+    required this.size_m_price,
+    required this.size_l_price,
+    required this.unit,
+    required this.image,
+    required this.image_detail,
+    required this.quantity,
+  });
 
-  factory Coffee.fromJson(Map<String, dynamic> json) => Coffee(
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'],
       category_name: json['category_name'],
       product_name: json['product_name'],
       description: json['description'],
@@ -256,7 +208,9 @@ class Coffee {
       unit: json['unit'],
       image: json['image'],
       image_detail: json['image_detail'],
-      quantity: json['quantity']);
+      quantity: json['quantity'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'category_name': category_name,
@@ -272,353 +226,3 @@ class Coffee {
       };
 }
 
-// Model tea
-class Tea {
-  final String category_name;
-  final String product_name;
-  final String description;
-  final int size_s_price;
-  final int size_m_price;
-  final int size_l_price;
-  final int unit;
-  Uint8List image;
-  Uint8List image_detail;
-  final int quantity;
-
-  Tea(
-      {required this.category_name,
-      required this.product_name,
-      required this.description,
-      required this.size_s_price,
-      required this.size_m_price,
-      required this.size_l_price,
-      required this.unit,
-      required this.image,
-      required this.image_detail,
-      required this.quantity});
-
-  factory Tea.fromJson(Map<String, dynamic> json) => Tea(
-      category_name: json['category_name'],
-      product_name: json['product_name'],
-      description: json['description'],
-      size_s_price: json['size_s_price'],
-      size_m_price: json['size_m_price'],
-      size_l_price: json['size_l_price'],
-      unit: json['unit'],
-      image: json['image'],
-      image_detail: json['image_detail'],
-      quantity: json['quantity']);
-
-  Map<String, dynamic> toJson() => {
-        'category_name': category_name,
-        'product_name': product_name,
-        'description': description,
-        'size_s_price': size_s_price,
-        'size_m_price': size_m_price,
-        'size_l_price': size_l_price,
-        'unit': unit,
-        'image': image,
-        'image_detail': image_detail,
-        'quantity': quantity
-      };
-}
-
-class Cake {
-  final String category_name;
-  final String product_name;
-  final String description;
-  final int size_s_price;
-  final int size_m_price;
-  final int size_l_price;
-  final int unit;
-  Uint8List image;
-  Uint8List image_detail;
-  final int quantity;
-
-  Cake(
-      {required this.category_name,
-      required this.product_name,
-      required this.description,
-      required this.size_s_price,
-      required this.size_m_price,
-      required this.size_l_price,
-      required this.unit,
-      required this.image,
-      required this.image_detail,
-      required this.quantity});
-
-  factory Cake.fromJson(Map<String, dynamic> json) => Cake(
-      category_name: json['category_name'],
-      product_name: json['product_name'],
-      description: json['description'],
-      size_s_price: json['size_s_price'],
-      size_m_price: json['size_m_price'],
-      size_l_price: json['size_l_price'],
-      unit: json['unit'],
-      image: json['image'],
-      image_detail: json['image_detail'],
-      quantity: json['quantity']);
-
-  Map<String, dynamic> toJson() => {
-        'category_name': category_name,
-        'product_name': product_name,
-        'description': description,
-        'size_s_price': size_s_price,
-        'size_m_price': size_m_price,
-        'size_l_price': size_l_price,
-        'unit': unit,
-        'image': image,
-        'image_detail': image_detail,
-        'quantity': quantity
-      };
-}
-
-class Bread {
-  final String category_name;
-  final String product_name;
-  final String description;
-  final int size_s_price;
-  final int size_m_price;
-  final int size_l_price;
-  final int unit;
-  Uint8List image;
-  Uint8List image_detail;
-  final int quantity;
-
-  Bread(
-      {required this.category_name,
-      required this.product_name,
-      required this.description,
-      required this.size_s_price,
-      required this.size_m_price,
-      required this.size_l_price,
-      required this.unit,
-      required this.image,
-      required this.image_detail,
-      required this.quantity});
-
-  factory Bread.fromJson(Map<String, dynamic> json) => Bread(
-      category_name: json['category_name'],
-      product_name: json['product_name'],
-      description: json['description'],
-      size_s_price: json['size_s_price'],
-      size_m_price: json['size_m_price'],
-      size_l_price: json['size_l_price'],
-      unit: json['unit'],
-      image: json['image'],
-      image_detail: json['image_detail'],
-      quantity: json['quantity']);
-
-  Map<String, dynamic> toJson() => {
-        'category_name': category_name,
-        'product_name': product_name,
-        'description': description,
-        'size_s_price': size_s_price,
-        'size_m_price': size_m_price,
-        'size_l_price': size_l_price,
-        'unit': unit,
-        'image': image,
-        'image_detail': image_detail,
-        'quantity': quantity
-      };
-}
-
-class Freeze {
-  final String category_name;
-  final String product_name;
-  final String description;
-  final int size_s_price;
-  final int size_m_price;
-  final int size_l_price;
-  final int unit;
-  Uint8List image;
-  Uint8List image_detail;
-  final int quantity;
-
-  Freeze(
-      {required this.category_name,
-      required this.product_name,
-      required this.description,
-      required this.size_s_price,
-      required this.size_m_price,
-      required this.size_l_price,
-      required this.unit,
-      required this.image,
-      required this.image_detail,
-      required this.quantity});
-
-  factory Freeze.fromJson(Map<String, dynamic> json) => Freeze(
-      category_name: json['category_name'],
-      product_name: json['product_name'],
-      description: json['description'],
-      size_s_price: json['size_s_price'],
-      size_m_price: json['size_m_price'],
-      size_l_price: json['size_l_price'],
-      unit: json['unit'],
-      image: json['image'],
-      image_detail: json['image_detail'],
-      quantity: json['quantity']);
-
-  Map<String, dynamic> toJson() => {
-        'category_name': category_name,
-        'product_name': product_name,
-        'description': description,
-        'size_s_price': size_s_price,
-        'size_m_price': size_m_price,
-        'size_l_price': size_l_price,
-        'unit': unit,
-        'image': image,
-        'image_detail': image_detail,
-        'quantity': quantity
-      };
-}
-
-class Other {
-  final String category_name;
-  final String product_name;
-  final String description;
-  final int size_s_price;
-  final int size_m_price;
-  final int size_l_price;
-  final int unit;
-  Uint8List image;
-  Uint8List image_detail;
-  final int quantity;
-
-  Other(
-      {required this.category_name,
-      required this.product_name,
-      required this.description,
-      required this.size_s_price,
-      required this.size_m_price,
-      required this.size_l_price,
-      required this.unit,
-      required this.image,
-      required this.image_detail,
-      required this.quantity});
-
-  factory Other.fromJson(Map<String, dynamic> json) => Other(
-      category_name: json['category_name'],
-      product_name: json['product_name'],
-      description: json['description'],
-      size_s_price: json['size_s_price'],
-      size_m_price: json['size_m_price'],
-      size_l_price: json['size_l_price'],
-      unit: json['unit'],
-      image: json['image'],
-      image_detail: json['image_detail'],
-      quantity: json['quantity']);
-
-  Map<String, dynamic> toJson() => {
-        'category_name': category_name,
-        'product_name': product_name,
-        'description': description,
-        'size_s_price': size_s_price,
-        'size_m_price': size_m_price,
-        'size_l_price': size_l_price,
-        'unit': unit,
-        'image': image,
-        'image_detail': image_detail,
-        'quantity': quantity
-      };
-}
-
-class Popular {
-  final String category_name;
-  final String product_name;
-  final String description;
-  final int size_s_price;
-  final int size_m_price;
-  final int size_l_price;
-  final int unit;
-  Uint8List image;
-  Uint8List image_detail;
-  final int quantity;
-
-  Popular(
-      {required this.category_name,
-      required this.product_name,
-      required this.description,
-      required this.size_s_price,
-      required this.size_m_price,
-      required this.size_l_price,
-      required this.unit,
-      required this.image,
-      required this.image_detail,
-      required this.quantity});
-
-  factory Popular.fromJson(Map<String, dynamic> json) => Popular(
-      category_name: json['category_name'],
-      product_name: json['product_name'],
-      description: json['description'],
-      size_s_price: json['size_s_price'],
-      size_m_price: json['size_m_price'],
-      size_l_price: json['size_l_price'],
-      unit: json['unit'],
-      image: json['image'],
-      image_detail: json['image_detail'],
-      quantity: json['quantity']);
-
-  Map<String, dynamic> toJson() => {
-        'category_name': category_name,
-        'product_name': product_name,
-        'description': description,
-        'size_s_price': size_s_price,
-        'size_m_price': size_m_price,
-        'size_l_price': size_l_price,
-        'unit': unit,
-        'image': image,
-        'image_detail': image_detail,
-        'quantity': quantity
-      };
-}
-
-class Favorite {
-  final String category_name;
-  final String product_name;
-  final String description;
-  final int size_s_price;
-  final int size_m_price;
-  final int size_l_price;
-  final int unit;
-  Uint8List image;
-  Uint8List image_detail;
-  final int quantity;
-
-  Favorite(
-      {required this.category_name,
-      required this.product_name,
-      required this.description,
-      required this.size_s_price,
-      required this.size_m_price,
-      required this.size_l_price,
-      required this.unit,
-      required this.image,
-      required this.image_detail,
-      required this.quantity});
-
-  factory Favorite.fromJson(Map<String, dynamic> json) => Favorite(
-      category_name: json['category_name'],
-      product_name: json['product_name'],
-      description: json['description'],
-      size_s_price: json['size_s_price'],
-      size_m_price: json['size_m_price'],
-      size_l_price: json['size_l_price'],
-      unit: json['unit'],
-      image: json['image'],
-      image_detail: json['image_detail'],
-      quantity: json['quantity']);
-
-  Map<String, dynamic> toJson() => {
-        'category_name': category_name,
-        'product_name': product_name,
-        'description': description,
-        'size_s_price': size_s_price,
-        'size_m_price': size_m_price,
-        'size_l_price': size_l_price,
-        'unit': unit,
-        'image': image,
-        'image_detail': image_detail,
-        'quantity': quantity
-      };
-}

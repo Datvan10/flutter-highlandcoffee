@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/screens/home_page.dart';
 import 'package:highlandcoffeeapp/screens/product_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
@@ -146,7 +147,7 @@ class _ResultSearchProductWithKeywordState
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ProductDetailPage(product: products[index]),
+          builder: (context) => HomePage(),
         ),
       );
     }

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/screens/cart_page.dart';
 import 'package:highlandcoffeeapp/screens/product_detail_page.dart';
@@ -17,7 +19,7 @@ class SweetCakePage extends StatefulWidget {
 
 class _SweetCakePageState extends State<SweetCakePage> {
   int _selectedIndexBottomBar = 1;
-  late Stream<List<Products>> productsStream;
+  late Future<List<Product>> productsFuture; // Thay đổi từ Stream sang Future
   //SelectedBottomBar
   void _selectedBottomBar(int index) {
     setState(() {
@@ -28,15 +30,11 @@ class _SweetCakePageState extends State<SweetCakePage> {
   @override
   void initState() {
     super.initState();
-    // Set up the stream to listen for changes in the "Cake" collection
-    productsStream = FirebaseFirestore.instance
-        .collection('Cake')
-        .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Products.fromDocument(doc)).toList());
+    // Gọi phương thức để lấy dữ liệu từ API trong hàm initState
+    productsFuture = PopularApi().getPopulars();
   }
 
-  void _navigateToProductDetails(int index, List<Products> products) {
+  void _navigateToProductDetails(int index, List<Product> products) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -47,23 +45,10 @@ class _SweetCakePageState extends State<SweetCakePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: background,
-      appBar: CustomAppBar(
-        title: 'BÁNH NGỌT',
-        actions: [
-          AppBarAction(
-            icon: Icons.shopping_cart,
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CartPage(),
-              ));
-            },
-          ),
-        ],
-      ),
-      body: StreamBuilder<List<Products>>(
-        stream: productsStream,
+    return Container(
+      height: 300, // Set a fixed height for GridView
+      child: FutureBuilder<List<Product>>(
+        future: productsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -74,32 +59,21 @@ class _SweetCakePageState extends State<SweetCakePage> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            List<Products> products = snapshot.data ?? [];
-            return Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(18.0),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 18.0,
-                    mainAxisSpacing: 18.0,
-                    childAspectRatio: 0.64,
-                  ),
-                  itemCount: products.length,
-                  itemBuilder: (context, index) => ProductForm(
-                    product: products[index],
-                    onTap: () => _navigateToProductDetails(index, products),
-                  ),
-                ),
+            List<Product> productPopular = snapshot.data ?? [];
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 18.0,
+                childAspectRatio: 0.64,
+              ),
+              itemCount: productPopular.length,
+              itemBuilder: (context, index) => ProductForm(
+                product: productPopular[index],
+                onTap: () => _navigateToProductDetails(index, productPopular),
               ),
             );
           }
         },
-      ),
-      //bottom bar
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndexBottomBar,
-        onTap: _selectedBottomBar,
       ),
     );
   }

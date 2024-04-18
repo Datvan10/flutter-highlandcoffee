@@ -9,6 +9,7 @@ import 'package:highlandcoffeeapp/screens/login_customer_with_identifier_page.da
 import 'package:highlandcoffeeapp/screens/register_customer_with_identifier_page.dart.dart';
 import 'package:highlandcoffeeapp/routes/route.dart';
 import 'package:highlandcoffeeapp/firebase_options.dart';
+import 'package:highlandcoffeeapp/screens/test.dart';
 import 'package:highlandcoffeeapp/screens/welcome_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
