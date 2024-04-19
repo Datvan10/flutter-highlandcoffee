@@ -19,9 +19,11 @@ class ListProductPage extends StatefulWidget {
 
 class _ListProductPageState extends State<ListProductPage> {
   int _selectedIndexBottomBar = 1;
-final PopularApi api = PopularApi();
-  late Future<List<Product>> productsFuture; // Thay đổi từ Stream sang Future/ Thay đổi từ Stream sang Future
-//SelectedBottomBar
+ Future<List<Product>>? productsFuture;
+
+  final ProductApi api = ProductApi();
+
+  //SelectedBottomBar
   void _selectedBottomBar(int index) {
     setState(() {
       _selectedIndexBottomBar = index;
@@ -31,8 +33,7 @@ final PopularApi api = PopularApi();
   @override
   void initState() {
     super.initState();
-    // Gọi phương thức để lấy dữ liệu từ API trong hàm initState
-    productsFuture = api.getPopulars();
+    productsFuture = api.getProducts();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) {
@@ -46,9 +47,22 @@ final PopularApi api = PopularApi();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300, // Set a fixed height for GridView
-      child: FutureBuilder<List<Product>>(
+    return Scaffold(
+      backgroundColor: background,
+      appBar: CustomAppBar(
+        title: 'DANH SÁCH SẢN PHẨM',
+        actions: [
+          AppBarAction(
+            icon: Icons.shopping_cart,
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => CartPage(),
+              ));
+            },
+          ),
+        ],
+      ),
+      body: FutureBuilder<List<Product>>(
         future: productsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -60,21 +74,31 @@ final PopularApi api = PopularApi();
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            List<Product> productPopular = snapshot.data ?? [];
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 18.0,
-                childAspectRatio: 0.64,
-              ),
-              itemCount: productPopular.length,
-              itemBuilder: (context, index) => ProductForm(
-                product: productPopular[index],
-                onTap: () => _navigateToProductDetails(index, productPopular),
+            List<Product> products = snapshot.data ?? [];
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 18.0, top: 18.0, right: 18.0),
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 18.0,
+                    mainAxisSpacing: 18.0,
+                    childAspectRatio: 0.64,
+                  ),
+                  itemCount: products.length,
+                  itemBuilder: (context, index) => ProductForm(
+                    product: products[index],
+                    onTap: () => _navigateToProductDetails(index, products),
+                  ),
+                ),
               ),
             );
           }
         },
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndexBottomBar,
+        onTap: _selectedBottomBar,
       ),
     );
   }
