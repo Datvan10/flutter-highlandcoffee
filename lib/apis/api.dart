@@ -317,18 +317,45 @@ class ProductApi {
   final String productUrl = "http://localhost:5194/api/products";
   // Read data from API
   Future<List<Product>> getProducts() async {
-    try {
-      final response = await http.get(Uri.parse(productUrl));
+  try {
+    final List<String> apiUrlList = [
+      'http://localhost:5194/api/coffees',
+      'http://localhost:5194/api/teas',
+      'http://localhost:5194/api/freezes',
+      'http://localhost:5194/api/breads',
+      'http://localhost:5194/api/others',
+    ];
+
+    final List<http.Response> responses = await Future.wait(apiUrlList.map((String apiUrl) {
+      return http.get(Uri.parse(apiUrl));
+    }));
+
+    List<Product> products = [];
+
+    for (final response in responses) {
       if (response.statusCode == 200) {
-        List jsonResponse = json.decode(response.body);
-        return jsonResponse.map((data) => new Product.fromJson(data)).toList();
+        final List<dynamic> jsonData = json.decode(response.body);
+        for (var item in jsonData) {
+          Product product = Product.fromJson(item);
+          // Decode image and image detail
+          Uint8List decodedImage = base64Decode(product.image);
+          Uint8List decodedImageDetail = base64Decode(product.image_detail);
+          final image = MemoryImage(decodedImage);
+          final image_detail = MemoryImage(decodedImageDetail);
+
+          products.add(product);
+        }
       } else {
         throw Exception('Failed to load products');
       }
-    } catch (e) {
-      throw Exception('Failed to load products');
     }
+
+    return products;
+  } catch (e) {
+    throw Exception('Failed to load products');
   }
+}
+
 
   // Add data to API
   Future<void> addProduct(Product product) async {
@@ -487,10 +514,10 @@ class FavoriteApi {
         }
         return favorites;
       } else {
-        throw Exception('Failed to load popular products');
+        throw Exception('Failed to load favorite products');
       }
     } catch (e) {
-      throw Exception('Failed to load popular products');
+      throw Exception('Failed to load favorite products');
     }
   }
 
@@ -570,10 +597,10 @@ class CoffeeApi {
         }
         return coffees;
       } else {
-        throw Exception('Failed to load popular products');
+        throw Exception('Failed to load coffee products');
       }
     } catch (e) {
-      throw Exception('Failed to load popular products');
+      throw Exception('Failed to load coffee products');
     }
   }
 
@@ -652,10 +679,10 @@ class FreezeApi{
         }
         return freezes;
       } else {
-        throw Exception('Failed to load popular products');
+        throw Exception('Failed to load freeze products');
       }
     } catch (e) {
-      throw Exception('Failed to load popular products');
+      throw Exception('Failed to load freeze products');
     }
   }
 
@@ -734,10 +761,10 @@ class TeaApi{
         }
         return teas;
       } else {
-        throw Exception('Failed to load popular products');
+        throw Exception('Failed to load tea products');
       }
     } catch (e) {
-      throw Exception('Failed to load popular products');
+      throw Exception('Failed to load tea products');
     }
   }
 
@@ -816,10 +843,10 @@ class BreadApi{
         }
         return breads;
       } else {
-        throw Exception('Failed to load popular products');
+        throw Exception('Failed to load bread products');
       }
     } catch (e) {
-      throw Exception('Failed to load popular products');
+      throw Exception('Failed to load bread products');
     }
   }
 
@@ -898,10 +925,10 @@ class OtherApi{
         }
         return others;
       } else {
-        throw Exception('Failed to load popular products');
+        throw Exception('Failed to load other products');
       }
     } catch (e) {
-      throw Exception('Failed to load popular products');
+      throw Exception('Failed to load other products');
     }
   }
 
