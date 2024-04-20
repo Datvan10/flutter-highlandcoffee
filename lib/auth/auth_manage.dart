@@ -12,7 +12,13 @@ class AuthManager {
 
   Customer? loggedInCustomer;
 
-  void setLoggedInCustomer(Customer user) {
-    loggedInCustomer = user;
+  // Get the logged in customer
+  void setLoggedInCustomer(Customer customer) {
+    loggedInCustomer = customer;
+  }
+
+  // Delete the logged in customer
+  void logout() {
+    loggedInCustomer = null;
   }
 }

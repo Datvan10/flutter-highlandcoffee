@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/edit_text_form_field.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class UpdateUserProfilePage extends StatefulWidget {
@@ -17,12 +19,23 @@ class UpdateUserProfilePage extends StatefulWidget {
 }
 
 class _UpdateUserProfilePageState extends State<UpdateUserProfilePage> {
+  // Get information of the logged in
+  Customer? loggedInUser = AuthManager().loggedInCustomer;
   //
   final _editEmailController = TextEditingController();
   final _editPhoneNumberController = TextEditingController();
   final _editUserNameController = TextEditingController();
   final _editAdressController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  //
+  initState() {
+    super.initState();
+    _editEmailController.text = loggedInUser!.email;
+    _editPhoneNumberController.text = loggedInUser!.phone_number.toString();
+    _editUserNameController.text = loggedInUser!.name;
+    _editAdressController.text = loggedInUser!.address;
+  }
   //
   void _showCameraModal(BuildContext context) {
     showCupertinoModalPopup(
@@ -75,7 +88,7 @@ class _UpdateUserProfilePageState extends State<UpdateUserProfilePage> {
             onPressed: () {
               Get.back();
             },
-            icon: Icon(Icons.arrow_back_ios)),
+            icon: Icon(Icons.arrow_back_ios, color: primaryColors,)),
         actions: [
           Container(
               margin: EdgeInsets.only(right: 8),
@@ -83,7 +96,7 @@ class _UpdateUserProfilePageState extends State<UpdateUserProfilePage> {
                 onPressed: () {
                   Get.toNamed('/home_page');
                 },
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.home, color : primaryColors, ),
               ))
         ],
         title: Text('Chỉnh sửa hồ sơ',
@@ -150,42 +163,52 @@ class _UpdateUserProfilePageState extends State<UpdateUserProfilePage> {
                   child: Column(
                 children: [
                   //email
-                  EditTextFormField(
-                      hintText: 'Email',
-                      prefixIconData: Icons.email,
-                      suffixIconData: Icons.clear,
-                      controller: _editEmailController,
-                      iconColor: blue),
+                  TextFormFieldEmail(
+              hintText: 'Nhập email mới',
+              prefixIconData: Icons.email,
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _editEmailController.clear();
+                    });
+                  },
+                  icon: Icon(
+                    Icons.clear,
+                    color: primaryColors,
+                  )),
+              controller: _editEmailController,
+              iconColor: primaryColors,
+            ),
                   SizedBox(
                     height: 20,
                   ),
                   //phonenumber
                   EditTextFormField(
-                      hintText: 'Số điện thoại',
+                      hintText: 'Nhập số điện thoại mới',
                       prefixIconData: Icons.phone,
                       suffixIconData: Icons.clear,
                       controller: _editPhoneNumberController,
-                      iconColor: blue),
+                      iconColor: primaryColors),
                   SizedBox(
                     height: 20,
                   ),
                   //
                   EditTextFormField(
-                      hintText: 'Tên hiển thị',
+                      hintText: 'Nhập tên hiển thị mới',
                       prefixIconData: Icons.person,
                       suffixIconData: Icons.clear,
                       controller: _editUserNameController,
-                      iconColor: blue),
+                      iconColor: primaryColors),
                   SizedBox(
                     height: 20,
                   ),
                   //adress
                   EditTextFormField(
-                      hintText: 'Địa chỉ',
+                      hintText: 'Nhập địa chỉ mới',
                       prefixIconData: Icons.location_on,
                       suffixIconData: Icons.clear,
                       controller: _editAdressController,
-                      iconColor: blue),
+                      iconColor: primaryColors),
                   SizedBox(
                     height: 20,
                   ),
@@ -201,7 +224,7 @@ class _UpdateUserProfilePageState extends State<UpdateUserProfilePage> {
                   ),
                 ],
               )),
-              MyButton(text: 'Cập nhật hồ sơ', onTap: () {}, buttonColor: blue)
+              MyButton(text: 'Cập nhật hồ sơ', onTap: () {}, buttonColor: green)
             ],
           ),
         ),

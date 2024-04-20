@@ -5,14 +5,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/screens/app/favorite_product_page.dart';
-import 'package:highlandcoffeeapp/screens/app/list_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/feddback_user_page.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
+import 'package:highlandcoffeeapp/widgets/notification.dart';
 import 'package:highlandcoffeeapp/widgets/profile_menu_user.dart';
-import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
-import 'package:highlandcoffeeapp/screens/app/home_page.dart';
 import 'package:highlandcoffeeapp/screens/customer/my_order_page.dart';
 import 'package:highlandcoffeeapp/screens/customer/payment_method_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
@@ -28,7 +25,7 @@ class ProfileCustomerPage extends StatefulWidget {
 class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
   int _selectedIndexBottomBar = 4;
   // Lấy thông tin người dùng từ AuthManager
-    Customer? loggedInUser = AuthManager().loggedInCustomer;
+  Customer? loggedInUser = AuthManager().loggedInCustomer;
   //
   void _selectedBottomBar(int index) {
     setState(() {
@@ -104,6 +101,30 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
           ),
         );
       },
+    );
+  }
+
+  //
+  void _showConfirmExit() {
+    notificationDialog(
+      context: context,
+      title: "Đăng xuất khỏi tài khoản của bạn?",
+      onConfirm: () {},
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("Hủy", style: TextStyle(color: Colors.red)),
+        ),
+        TextButton(
+          onPressed: () {
+            AuthManager().logout();
+            Navigator.pushReplacementNamed(context, '/auth_customer_page');
+          },
+          child: Text("Đồng ý", style: TextStyle(color: Colors.blue)),
+        ),
+      ],
     );
   }
 
@@ -212,7 +233,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
                     )
                   ],
                 ),
-                style: ElevatedButton.styleFrom(backgroundColor: blue),
+                style: ElevatedButton.styleFrom(backgroundColor: primaryColors),
               ),
             ),
             //
@@ -277,7 +298,9 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
             ProfileMenuUser(
                 title: 'Đăng xuất',
                 startIcon: Icons.logout,
-                onPress: () {},
+                onPress: () {
+                  _showConfirmExit();
+                },
                 endIcon: false,
                 textColor: grey)
           ]),
