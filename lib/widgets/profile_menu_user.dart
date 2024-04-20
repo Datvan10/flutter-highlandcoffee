@@ -31,7 +31,7 @@ class ProfileMenuUser extends StatelessWidget {
         ),
         child: Icon(
           startIcon,
-          color: blue,
+          color: primaryColors,
         ),
       ),
       title: Text(title),
