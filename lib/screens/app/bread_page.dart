@@ -1,29 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/models/products.dart';
-import 'package:highlandcoffeeapp/screens/cart_page.dart';
-import 'package:highlandcoffeeapp/screens/product_detail_page.dart';
-import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
 import 'package:highlandcoffeeapp/utils/product/product_form.dart';
-import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
-import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 
-class FavoriteProductPage extends StatefulWidget {
-  const FavoriteProductPage({super.key});
+class BreadPage extends StatefulWidget {
+  const BreadPage({super.key});
 
   @override
-  State<FavoriteProductPage> createState() => _FavoriteProductPageState();
+  State<BreadPage> createState() => _BreadPageState();
 }
 
-class _FavoriteProductPageState extends State<FavoriteProductPage> {
-  int _selectedIndexBottomBar = 2;
+class _BreadPageState extends State<BreadPage> {
+  int _selectedIndexBottomBar = 1;
   late Future<List<Product>> productsFuture; // Thay đổi từ Stream sang Future
+
+  //SelectedBottomBar
   void _selectedBottomBar(int index) {
     setState(() {
-      _selectedIndexBottomBar = index;
-    });
+        _selectedIndexBottomBar = index;
+      });
   }
 
   @override

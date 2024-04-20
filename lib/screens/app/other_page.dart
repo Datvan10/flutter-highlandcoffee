@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/apis/api.dart'; 
+import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/screens/cart_page.dart';
-import 'package:highlandcoffeeapp/utils/product/product_form.dart';
-import 'package:highlandcoffeeapp/screens/product_detail_page.dart';
+import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
+import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/utils/product/product_form.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 
-class CoffeePage extends StatefulWidget {
-  const CoffeePage({Key? key}) : super(key: key);
+class OtherPage extends StatefulWidget {
+  const OtherPage({super.key});
 
   @override
-  State<CoffeePage> createState() => _CoffeePageState();
+  State<OtherPage> createState() => _OtherPageState();
 }
 
-class _CoffeePageState extends State<CoffeePage> {
+class _OtherPageState extends State<OtherPage> {
   int _selectedIndexBottomBar = 1;
-  Future<List<Product>>? productsFuture;
+  Future<List<Product>>? productsFuture; // Cập nhật loại biến
 
-  final CoffeeApi api = CoffeeApi();
+  final OtherApi api = OtherApi();
 
   //SelectedBottomBar
   void _selectedBottomBar(int index) {
@@ -31,7 +31,7 @@ class _CoffeePageState extends State<CoffeePage> {
   @override
   void initState() {
     super.initState();
-    productsFuture = api.getCoffees();
+    productsFuture = api.getOthers();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) {
@@ -48,7 +48,7 @@ class _CoffeePageState extends State<CoffeePage> {
     return Scaffold(
       backgroundColor: background,
       appBar: CustomAppBar(
-        title: 'COFFEE',
+        title: 'SẢN PHẨM KHÁC',
         actions: [
           AppBarAction(
             icon: Icons.shopping_cart,

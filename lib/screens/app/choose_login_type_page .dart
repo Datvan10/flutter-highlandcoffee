@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:highlandcoffeeapp/pages/auth/auth_admin_page.dart';
-import 'package:highlandcoffeeapp/pages/auth/auth_customer_page.dart';
+import 'package:highlandcoffeeapp/auth/auth_admin_page.dart';
+import 'package:highlandcoffeeapp/auth/auth_customer_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class ChooseLoginTypePage extends StatefulWidget {

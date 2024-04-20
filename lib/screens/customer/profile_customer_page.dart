@@ -4,27 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:highlandcoffeeapp/screens/favorite_product_page.dart';
-import 'package:highlandcoffeeapp/screens/list_product_page.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/feddback_user_page.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
+import 'package:highlandcoffeeapp/screens/app/favorite_product_page.dart';
+import 'package:highlandcoffeeapp/screens/app/list_product_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/feddback_user_page.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/profile_menu_user.dart';
-import 'package:highlandcoffeeapp/screens/cart_page.dart';
-import 'package:highlandcoffeeapp/screens/home_page.dart';
-import 'package:highlandcoffeeapp/pages/user/page/my_order_page.dart';
-import 'package:highlandcoffeeapp/pages/user/page/payment_method_page.dart';
+import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
+import 'package:highlandcoffeeapp/screens/app/home_page.dart';
+import 'package:highlandcoffeeapp/screens/customer/my_order_page.dart';
+import 'package:highlandcoffeeapp/screens/customer/payment_method_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class ProfileUserPage extends StatefulWidget {
-  ProfileUserPage({super.key});
+class ProfileCustomerPage extends StatefulWidget {
+  ProfileCustomerPage({super.key});
 
   @override
-  State<ProfileUserPage> createState() => _ProfileUserPageState();
+  State<ProfileCustomerPage> createState() => _ProfileCustomerPageState();
 }
 
-class _ProfileUserPageState extends State<ProfileUserPage> {
+class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
   int _selectedIndexBottomBar = 4;
+  // Lấy thông tin người dùng từ AuthManager
+    Customer? loggedInUser = AuthManager().loggedInCustomer;
   //
   void _selectedBottomBar(int index) {
     setState(() {
@@ -176,14 +180,14 @@ class _ProfileUserPageState extends State<ProfileUserPage> {
             ),
             //name
             Text(
-              'Van Dat',
+              loggedInUser?.name ?? '',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(
               height: 10.0,
             ),
             //email
-            Text('20050068@student.bdu.edu.vn'),
+            Text(loggedInUser?.email ?? ''),
             SizedBox(
               height: 20.0,
             ),

@@ -1,27 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/models/products.dart';
-import 'package:highlandcoffeeapp/screens/cart_page.dart';
-import 'package:highlandcoffeeapp/screens/product_detail_page.dart';
+import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
+import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/product/product_form.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 
-class OtherPage extends StatefulWidget {
-  const OtherPage({super.key});
+class ListProductPage extends StatefulWidget {
+  const ListProductPage({super.key});
 
   @override
-  State<OtherPage> createState() => _OtherPageState();
+  State<ListProductPage> createState() => _ListProductPageState();
 }
 
-class _OtherPageState extends State<OtherPage> {
+class _ListProductPageState extends State<ListProductPage> {
   int _selectedIndexBottomBar = 1;
-  Future<List<Product>>? productsFuture; // Cập nhật loại biến
+ Future<List<Product>>? productsFuture;
 
-  final OtherApi api = OtherApi();
+  final ProductApi api = ProductApi();
 
   //SelectedBottomBar
   void _selectedBottomBar(int index) {
@@ -33,7 +31,7 @@ class _OtherPageState extends State<OtherPage> {
   @override
   void initState() {
     super.initState();
-    productsFuture = api.getOthers();
+    productsFuture = api.getProducts();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) {
@@ -50,7 +48,7 @@ class _OtherPageState extends State<OtherPage> {
     return Scaffold(
       backgroundColor: background,
       appBar: CustomAppBar(
-        title: 'SẢN PHẨM KHÁC',
+        title: 'DANH SÁCH SẢN PHẨM',
         actions: [
           AppBarAction(
             icon: Icons.shopping_cart,

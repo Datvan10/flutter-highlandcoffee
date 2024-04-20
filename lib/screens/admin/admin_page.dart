@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/add_product_page.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/dashboard_page.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/delete_product_page.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/feddback_page.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/order_list_page.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/most_sold_product_page.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/revenue_page.dart';
-import 'package:highlandcoffeeapp/pages/admin/page/update_product_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/add_product_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/dashboard_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/delete_product_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/feddback_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/order_list_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/most_sold_product_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/revenue_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class AdminPage extends StatefulWidget {

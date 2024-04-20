@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
@@ -39,10 +41,13 @@ class _LoginCustomerWithIdentifierPageState
             await api.authenticateCustomer(identifier, password);
 
         if (isAuthenticated) {
+          Customer loggedInCustomer = await api.getCustomerByIdentifier(identifier);
+          AuthManager().setLoggedInCustomer(loggedInCustomer);
           Navigator.pushReplacementNamed(context, '/home_page');
           showNotification('Đăng nhập thành công');
         } else {
-          showNotification('Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
+          showNotification(
+              'Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
         }
       } catch (e) {
         print("Authentication Error: $e");
@@ -50,6 +55,7 @@ class _LoginCustomerWithIdentifierPageState
       }
     }
   }
+
   // Show notification dialog
   void showNotification(String message) {
     showCupertinoDialog(
