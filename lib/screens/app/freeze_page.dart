@@ -1,27 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/models/products.dart';
-import 'package:highlandcoffeeapp/screens/cart_page.dart';
-import 'package:highlandcoffeeapp/screens/product_detail_page.dart';
+import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
+import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/product/product_form.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 
-class ProductPopularPage extends StatefulWidget {
-  const ProductPopularPage({super.key});
+class FreezePage extends StatefulWidget {
+  const FreezePage({super.key});
 
   @override
-  State<ProductPopularPage> createState() => _ProductPopularPageState();
+  State<FreezePage> createState() => _FreezePageState();
 }
 
-class _ProductPopularPageState extends State<ProductPopularPage> {
+class _FreezePageState extends State<FreezePage> {
   int _selectedIndexBottomBar = 1;
-  Future<List<Product>>? productsFuture;
+  Future<List<Product>>? productsFuture; // Cập nhật loại biến
 
-  final PopularApi api = PopularApi();
+  final FreezeApi api = FreezeApi();
 
   //SelectedBottomBar
   void _selectedBottomBar(int index) {
@@ -33,7 +31,7 @@ class _ProductPopularPageState extends State<ProductPopularPage> {
   @override
   void initState() {
     super.initState();
-    productsFuture = api.getPopulars();
+    productsFuture = api.getFreezes();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) {
@@ -50,7 +48,7 @@ class _ProductPopularPageState extends State<ProductPopularPage> {
     return Scaffold(
       backgroundColor: background,
       appBar: CustomAppBar(
-        title: 'SẢN PHẨM PHỔ BIẾN',
+        title: 'FREEZE',
         actions: [
           AppBarAction(
             icon: Icons.shopping_cart,

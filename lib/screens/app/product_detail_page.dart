@@ -10,7 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/button_add_to_cart.dart';
 import 'package:highlandcoffeeapp/widgets/button_buy_now.dart';
-import 'package:highlandcoffeeapp/screens/cart_page.dart';
+import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/product/size_product.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';

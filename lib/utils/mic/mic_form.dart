@@ -1,7 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/screens/result_search_product_product_with_keyword_page.dart';
+import 'package:highlandcoffeeapp/screens/app/result_search_product_product_with_keyword_page.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/mic/language_translator.dart';

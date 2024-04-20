@@ -2,15 +2,9 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:highlandcoffeeapp/pages/auth/auth_customer_page.dart';
-import 'package:highlandcoffeeapp/screens/login_admin_with_email_and_password_page.dart';
-import 'package:highlandcoffeeapp/screens/register_admin_with_email_and_password_page.dart';
-import 'package:highlandcoffeeapp/screens/login_customer_with_identifier_page.dart';
-import 'package:highlandcoffeeapp/screens/register_customer_with_identifier_page.dart.dart';
 import 'package:highlandcoffeeapp/routes/route.dart';
 import 'package:highlandcoffeeapp/firebase_options.dart';
-import 'package:highlandcoffeeapp/screens/test.dart';
-import 'package:highlandcoffeeapp/screens/welcome_page.dart';
+import 'package:highlandcoffeeapp/screens/app/welcome_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 
