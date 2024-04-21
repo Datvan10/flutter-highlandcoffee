@@ -70,6 +70,7 @@ class Customer {
   Uint8List? image;
   final int phone_number;
   final String address;
+  final int point;
 
   Customer({
     this.id,
@@ -80,6 +81,7 @@ class Customer {
     this.image,
     required this.phone_number,
     required this.address,
+    this.point = 0,
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
@@ -91,6 +93,7 @@ class Customer {
         image: json['image'],
         phone_number: json['phone_number'],
         address: json['address'],
+        point: json['point'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -101,6 +104,7 @@ class Customer {
         'image': image,
         'phone_number': phone_number,
         'address': address,
+        'point': point
       };
 }
 // Model order
