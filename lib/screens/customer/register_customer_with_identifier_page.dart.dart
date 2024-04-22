@@ -9,6 +9,7 @@ import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
 class RegisterCustomerWithIdentifierPage extends StatefulWidget {
   final Function()? onTap;
@@ -156,7 +157,7 @@ class _RegisterCustomerWithIdentifierPageState
               iconColor: primaryColors,
             ),
             SizedBox(
-              height: 20.0,
+              height: 15.0,
             ),
             //form phone number
             MyTextFormField(
@@ -180,7 +181,7 @@ class _RegisterCustomerWithIdentifierPageState
             ),
 
             SizedBox(
-              height: 20.0,
+              height: 15.0,
             ),
             //form address
             MyTextFormField(
@@ -200,7 +201,7 @@ class _RegisterCustomerWithIdentifierPageState
               iconColor: primaryColors,
             ),
             SizedBox(
-              height: 20.0,
+              height: 15.0,
             ),
             //form name
             MyTextFormField(
@@ -220,10 +221,10 @@ class _RegisterCustomerWithIdentifierPageState
               iconColor: primaryColors,
             ),
             SizedBox(
-              height: 20.0,
+              height: 15.0,
             ),
             //form password
-            MyTextFormField(
+            TextFormFieldPassword(
               hintText: 'Mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
               suffixIcon: IconButton(
@@ -242,7 +243,7 @@ class _RegisterCustomerWithIdentifierPageState
               obscureText: !isObsecurePassword,
             ),
             SizedBox(
-              height: 20.0,
+              height: 15.0,
             ),
             //form confirm password
             MyTextFormField(
@@ -275,7 +276,7 @@ class _RegisterCustomerWithIdentifierPageState
               buttonColor: primaryColors,
             ),
             SizedBox(
-              height: 20.0,
+              height: 30.0,
             ),
             //or continue with
             Row(
@@ -299,14 +300,14 @@ class _RegisterCustomerWithIdentifierPageState
               ],
             ),
             SizedBox(
-              height: 20.0,
+              height: 25.0,
             ),
             //or login with
             Center(
                 child: Text('ĐĂNG NHẬP BẰNG',
                     style: GoogleFonts.roboto(color: grey))),
             SizedBox(
-              height: 20.0,
+              height: 25.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
