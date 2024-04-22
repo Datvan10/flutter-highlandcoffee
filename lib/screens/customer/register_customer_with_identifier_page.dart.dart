@@ -75,9 +75,9 @@ class _RegisterCustomerWithIdentifierPageState
       );
       // Call API to register user
       await api.addCustomer(newCustomer);
-      Navigator.pushReplacementNamed(context, '/home_page');
+      Navigator.pushReplacementNamed(context, '/auth_customer_page');
       // Show success alert
-      showNotification('Đăng ký thành công!');
+      showNotification('Đăng ký thành công, vui lòng quay lại màn hình đăng nhập để thực hiện đăng nhập');
       // Clear input fields
       nameController.clear();
       emailController.clear();
