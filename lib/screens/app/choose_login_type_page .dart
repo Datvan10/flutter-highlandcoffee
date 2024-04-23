@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:highlandcoffeeapp/auth/auth_admin_page.dart';
-import 'package:highlandcoffeeapp/auth/auth_customer_page.dart';
+import 'package:highlandcoffeeapp/auth/login_register_switcher_admin_page.dart';
+import 'package:highlandcoffeeapp/auth/login_register_switcher_customer_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class ChooseLoginTypePage extends StatefulWidget {
@@ -41,7 +41,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                   // Di chuyển đến trang đăng nhập User
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AuthCustomerPage()),
+                    MaterialPageRoute(builder: (context) => LoginRegisterSwitcherCustomerPage()),
                   );
                 },
                 child: Container(
@@ -60,7 +60,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                   // Di chuyển đến trang đăng nhập Admin
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AuthAdminPage()),
+                    MaterialPageRoute(builder: (context) => LoginRegisterSwitcherAdminPage()),
                   );
                 },
                 child: Container(
