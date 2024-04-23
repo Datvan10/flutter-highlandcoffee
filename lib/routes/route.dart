@@ -15,7 +15,6 @@ import 'package:highlandcoffeeapp/screens/app/order_page.dart';
 import 'package:highlandcoffeeapp/screens/app/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/screens/app/product_popular_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/admin_page.dart';
-import 'package:highlandcoffeeapp/auth/auth_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/screens/app/home_page.dart';
 import 'package:highlandcoffeeapp/screens/app/introduce_page1.dart';
@@ -29,7 +28,6 @@ List<GetPage> getPages = [
   GetPage(name: '/introduce_page1', page: () => const IntroducePage1()),
   GetPage(name: '/introduce_page2', page: () => const IntroducePage2()),
   GetPage(name: '/choose_login_type_page', page: () => ChooseLoginTypePage()),
-  GetPage(name: '/auth_customer_page', page: () => const AuthCustomerPage()),
   GetPage(name:  '/admin_page', page: () => const AdminPage()),
   GetPage(name: '/home_page', page: () => const HomePage()),
   GetPage(name: '/list_product_page', page:() => const ListProductPage()),
