@@ -4,47 +4,48 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class SizeProducts extends StatefulWidget {
   final String titleSize;
+  final bool isSelected;
   final Function(String) onSizeSelected;
-  const SizeProducts(
-      {super.key, required this.titleSize, required this.onSizeSelected});
+
+  const SizeProducts({
+    Key? key,
+    required this.titleSize,
+    required this.isSelected,
+    required this.onSizeSelected,
+  }) : super(key: key);
 
   @override
-  State<SizeProducts> createState() => _SizeProductsState();
+  _SizeProductsState createState() => _SizeProductsState();
 }
 
 class _SizeProductsState extends State<SizeProducts> {
-  bool isPressed = false;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          isPressed = !isPressed;
-          // Gọi callback để truyền kích thước đã chọn về ProductDetailPage
-          widget.onSizeSelected(widget.titleSize);
-        });
+        widget.onSizeSelected(widget.titleSize);
       },
       child: Container(
         height: 25,
         width: 60,
         decoration: BoxDecoration(
-          color: isPressed ? primaryColors : white,
+          color: widget.isSelected ? primaryColors : white,
           borderRadius: BorderRadius.circular(18.0),
-          border: isPressed
-              ? null
-              : Border.all(
+          border: !widget.isSelected
+              ? Border.all(
                   color: primaryColors,
                   width: 1,
-                ),
+                )
+              : null,
         ),
         child: Center(
           child: Text(
             widget.titleSize,
             style: GoogleFonts.arsenal(
-                color: isPressed ? white : primaryColors,
-                fontSize: 17,
-                fontWeight: FontWeight.bold),
+              color: widget.isSelected ? white : primaryColors,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
