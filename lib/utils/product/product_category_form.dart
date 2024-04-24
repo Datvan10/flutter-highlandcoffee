@@ -7,21 +7,28 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 class ProductCategoryForm extends StatefulWidget {
   final String titleProduct;
   final Widget destinationPage;
+  final bool isSelected;
+  final Function onTap;
 
-  const ProductCategoryForm({super.key, required this.titleProduct, required this.destinationPage});
+  const ProductCategoryForm({
+    Key? key,
+    required this.titleProduct,
+    required this.destinationPage,
+    required this.isSelected,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   State<ProductCategoryForm> createState() => _ProductCategoryFormState();
 }
 
 class _ProductCategoryFormState extends State<ProductCategoryForm> {
-  bool isPressed = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         setState(() {
-          isPressed = !isPressed;
+          widget.onTap();
         });
         Get.to(widget.destinationPage);
       },
@@ -29,17 +36,22 @@ class _ProductCategoryFormState extends State<ProductCategoryForm> {
         height: 25,
         width: 70,
         decoration: BoxDecoration(
-          color: isPressed ? primaryColors : white,
+          color: widget.isSelected ? primaryColors : white,
           borderRadius: BorderRadius.circular(18.0),
-          border: isPressed ? null : Border.all(color: primaryColors ,width: 1,),
+          border: !widget.isSelected
+              ? Border.all(
+                  color: primaryColors,
+                  width: 1,
+                )
+              : null,
         ),
         child: Center(
           child: Text(
             widget.titleProduct,
             style: GoogleFonts.arsenal(
-              color: isPressed ? white : primaryColors,
+              color: widget.isSelected ? white : primaryColors,
               fontWeight: FontWeight.bold,
-              fontSize: 14
+              fontSize: 14,
             ),
           ),
         ),

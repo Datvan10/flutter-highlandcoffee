@@ -14,32 +14,64 @@ class ProductCategory extends StatefulWidget {
 }
 
 class _ProductCategoryState extends State<ProductCategory> {
+  String selectedCategory = '';
+
   @override
   Widget build(BuildContext context) {
     return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ProductCategoryForm(
-                  titleProduct: 'Cà phê',
-                  destinationPage: CoffeePage(),
-                ),
-                ProductCategoryForm(
-                  titleProduct: 'Freeze',
-                  destinationPage: FreezePage(),
-                ),
-                ProductCategoryForm(
-                  titleProduct: 'Trà',
-                  destinationPage: TeaPage(),
-                ),
-                ProductCategoryForm(
-                  titleProduct: 'Bánh mì',
-                  destinationPage: BreadPage(),
-                ),
-                ProductCategoryForm(
-                  titleProduct: 'Khác',
-                  destinationPage: OtherPage(),
-                )
-              ],
-            );
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ProductCategoryForm(
+          titleProduct: 'Cà phê',
+          isSelected: selectedCategory == 'Cà phê',
+          onTap: () {
+            setState(() {
+              selectedCategory = 'Cà phê';
+            });
+          },
+          destinationPage: CoffeePage(),
+        ),
+        ProductCategoryForm(
+          titleProduct: 'Freeze',
+          isSelected: selectedCategory == 'Freeze',
+          onTap: () {
+            setState(() {
+              selectedCategory = 'Freeze';
+            });
+          },
+          destinationPage: FreezePage(),
+        ),
+        ProductCategoryForm(
+          titleProduct: 'Trà',
+          isSelected: selectedCategory == 'Trà',
+          onTap: () {
+            setState(() {
+              selectedCategory = 'Trà';
+            });
+          },
+          destinationPage: TeaPage(),
+        ),
+        ProductCategoryForm(
+          titleProduct: 'Bánh mì',
+          isSelected: selectedCategory == 'Bánh mì',
+          onTap: () {
+            setState(() {
+              selectedCategory = 'Bánh mì';
+            });
+          },
+          destinationPage: BreadPage(),
+        ),
+        ProductCategoryForm(
+          titleProduct: 'Khác',
+          isSelected: selectedCategory == 'Khác',
+          onTap: () {
+            setState(() {
+              selectedCategory = 'Khác';
+            });
+          },
+          destinationPage: OtherPage(),
+        )
+      ],
+    );
   }
 }
