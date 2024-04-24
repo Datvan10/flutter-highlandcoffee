@@ -20,10 +20,12 @@ class _LoginRegisterSwitcherCustomerPageState extends State<LoginRegisterSwitche
   }
   @override
   Widget build(BuildContext context) {
-    if(showloginPage){
-      return LoginCustomerWithIdentifierPage(onTap: togglePage);
-    }else{
-      return RegisterCustomerWithIdentifierPage(onTap: togglePage,);
-    }
+    return Scaffold(
+      body: Center(
+        child: showloginPage
+            ? LoginCustomerWithIdentifierPage(onTap: togglePage)
+            : RegisterCustomerWithIdentifierPage(onTap: togglePage),
+      ),
+    );
   }
 }
