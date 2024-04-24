@@ -1042,3 +1042,74 @@ class OtherApi{
     }
   }
 }
+
+// API for Cart
+class CartApi {
+  final String cartUrl = "http://localhost:5194/api/carts";
+  // Read data from API
+  Future<List<Cart>> getCarts() async {
+    try {
+      final response = await http.get(Uri.parse(cartUrl));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => new Cart.fromJson(data)).toList();
+      } else {
+        throw Exception('Failed to load carts');
+      }
+    } catch (e) {
+      throw Exception('Failed to load carts');
+    }
+  }
+
+  // Add data to API
+  Future<void> addCart(Cart cart) async {
+    final uri = Uri.parse(cartUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(cart.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Cart added successfully');
+      } else {
+        throw Exception('Failed to add cart: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add cart: $e');
+    }
+  }
+
+  // Update data to API
+  Future<Cart> updateCart(Cart cart) async {
+    try {
+      final response = await http.put(Uri.parse('$cartUrl/${cart}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(cart.toJson()));
+      if (response.statusCode == 200) {
+        return Cart.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to update cart');
+      }
+    } catch (e) {
+      throw Exception('Failed to update cart');
+    }
+  }
+
+  // Delete data from API
+  Future<void> deleteCart(int id) async {
+    try {
+      final response = await http.delete(Uri.parse('$cartUrl/$id'));
+      if (response.statusCode != 204) {
+        throw Exception('Failed to delete cart');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete cart');
+    }
+  }
+}

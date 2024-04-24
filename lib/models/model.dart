@@ -103,6 +103,7 @@ class Customer {
         'address': address,
       };
 }
+
 // Model order
 class Order {
   final int id;
@@ -140,34 +141,46 @@ class Order {
 
 // Model cart
 class Cart {
-  final int id;
+  String? id;
   final int customer_id;
-  final String product_name;
+  final int product_id;
   final int quantity;
-  final double total_price;
+  String product_image;
+  final String product_name;
+  final int selected_price;
+  final String selected_size;
 
   Cart(
-      {required this.id,
+      {this.id,
       required this.customer_id,
-      required this.product_name,
+      required this.product_id,
       required this.quantity,
-      required this.total_price});
+      required this.product_image,
+      required this.product_name,
+      required this.selected_price,
+      required this.selected_size});
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
       id: json['id'],
       customer_id: json['customer_id'],
-      product_name: json['product_name'],
+      product_id: json['product_id'],
       quantity: json['quantity'],
-      total_price: json['total_price']);
+      product_image: json['product_image'],
+      product_name: json['product_name'],
+      selected_price: json['selected_price'],
+      selected_size: json['selected_size']);
 
   Map<String, dynamic> toJson() => {
-        'id': id,
         'customer_id': customer_id,
-        'product_name': product_name,
+        'product_id': product_id,
         'quantity': quantity,
-        'total_price': total_price
+        'product_image': product_image,
+        'product_name': product_name,
+        'selected_price': selected_price,
+        'selected_size': selected_size
       };
 }
+
 // Model product
 class Product {
   final int id;
@@ -225,4 +238,3 @@ class Product {
         'quantity': quantity
       };
 }
-
