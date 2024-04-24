@@ -67,11 +67,46 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   // // initialization variable total price
   // double totalPrice = 0.0;
 
+  // void updateTotalPrice() {
+  //   setState(() {
+  //     int productPrice = widget.product.size_s_price;
+  //     totalPrice = productPrice * quantityCount;
+  //   });
+  // }
+
   void updateTotalPrice() {
     setState(() {
-      int productPrice = widget.product.size_s_price;
+      int productPrice;
+      switch (selectedSize) {
+        case 'S':
+          productPrice = widget.product.size_s_price;
+          break;
+        case 'M':
+          productPrice = widget.product.size_m_price;
+          break;
+        case 'L':
+          productPrice = widget.product.size_l_price;
+          break;
+        default:
+          productPrice = 0;
+      }
       totalPrice = productPrice * quantityCount;
     });
+  }
+
+  //
+  int getPriceForSelectedSize() {
+    // Dựa vào kích thước đã chọn, trả về giá tương ứng
+    switch (selectedSize) {
+      case 'S':
+        return widget.product.size_s_price;
+      case 'M':
+        return widget.product.size_m_price;
+      case 'L':
+        return widget.product.size_l_price;
+      default:
+        return 0;
+    }
   }
 
   //
@@ -353,25 +388,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       SizeProducts(
                         titleSize: 'S',
-                        onSizeSelected: (selectedSize) {
+                        isSelected: selectedSize == 'S',
+                        onSizeSelected: (size) {
                           setState(() {
-                            this.selectedSize = selectedSize;
+                            selectedSize = size;
+                            updateTotalPrice();
                           });
                         },
                       ),
                       SizeProducts(
                         titleSize: 'M',
-                        onSizeSelected: (selectedSize) {
+                        isSelected: selectedSize == 'M',
+                        onSizeSelected: (size) {
                           setState(() {
-                            this.selectedSize = selectedSize;
+                            selectedSize = size;
+                            updateTotalPrice();
                           });
                         },
                       ),
                       SizeProducts(
                         titleSize: 'L',
-                        onSizeSelected: (selectedSize) {
+                        isSelected: selectedSize == 'L',
+                        onSizeSelected: (size) {
                           setState(() {
-                            this.selectedSize = selectedSize;
+                            selectedSize = size;
+                            updateTotalPrice();
                           });
                         },
                       ),
