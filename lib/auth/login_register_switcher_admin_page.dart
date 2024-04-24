@@ -25,7 +25,7 @@ class _LoginRegisterSwitcherPageAdminState extends State<LoginRegisterSwitcherAd
       body: Center(
         child: showLoginPage
             ? LoginAdminWithEmailAndPassWordPage(onTap: togglePage)
-            : RegisterAdminWithEmailAndPasswordPage(onTap: togglePage),
+            : LoginAdminWithEmailAndPassWordPage(onTap: togglePage),
       ),
     );
   }
