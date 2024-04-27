@@ -41,11 +41,9 @@ class _CartPageState extends State<CartPage> {
   // Hàm kiểm tra xem một chuỗi có đúng định dạng base64 hay không
   bool isValidBase64(String value) {
     try {
-      // Thử giải mã chuỗi base64, nếu không có lỗi thì chuỗi là base64 hợp lệ
       base64.decode(value);
       return true;
     } catch (e) {
-      // Nếu có lỗi, chuỗi không phải là base64 hợp lệ
       return false;
     }
   }
@@ -57,25 +55,32 @@ class _CartPageState extends State<CartPage> {
           await http.get(Uri.parse('http://localhost:5194/api/carts'));
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
-        List<CartItem> items = jsonResponse.map((data) {
+        List<dynamic> items = jsonResponse.map((data) {
           // if(isValidBase64(data['product_image'])) {
           //   print('Du lieu base64 hợp lệ');
           // }
-          return CartItem(
-            data['id'],
-            data['customer_id'],
-            data['category_name'],
-            data['product_id'],
-            data['quantity'],
-            data['product_image'],
-            data['product_name'],
-            data['selected_price'],
-            data['selected_size'],
-          );
+          if (data['customer_id'] == loggedInUser?.id) {
+            return CartItem(
+              data['id'],
+              data['customer_id'],
+              data['category_name'],
+              data['product_id'],
+              data['quantity'],
+              data['product_image'],
+              data['product_name'],
+              data['selected_price'],
+              data['selected_size'],
+            );
+          }
         }).toList();
 
+        bool hasItems = items.any((item) => item != null);
+        if (!hasItems) {
+          items = [];
+        }
+
         setState(() {
-          cartItems = items;
+          cartItems = items.where((item) => item != null).cast<CartItem>().toList();
         });
       } else {
         throw Exception('Failed to load carts');
