@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/screens/app/order_page.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
+import 'package:highlandcoffeeapp/screens/app/bill_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/cart/order_form.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http; // Import thư viện http để gọi API
 
 class CartPage extends StatefulWidget {
   const CartPage();
@@ -16,6 +21,9 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   int _selectedIndexBottomBar = 3;
   late List<CartItem> cartItems = [];
+  CartApi api = CartApi();
+  Customer? loggedInUser = AuthManager().loggedInCustomer;
+
   void _selectedBottomBar(int index) {
     setState(() {
       _selectedIndexBottomBar = index;
@@ -25,38 +33,59 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
-    // Gọi hàm lấy dữ liệu từ Firebase
+    // Gọi hàm lấy dữ liệu từ API
     fetchCartItems();
   }
 
-  // Hàm để lấy dữ liệu từ cơ sở dữ liệu Firebase
-  // Trong _CartPageState
+  //
+  // Hàm kiểm tra xem một chuỗi có đúng định dạng base64 hay không
+  bool isValidBase64(String value) {
+    try {
+      // Thử giải mã chuỗi base64, nếu không có lỗi thì chuỗi là base64 hợp lệ
+      base64.decode(value);
+      return true;
+    } catch (e) {
+      // Nếu có lỗi, chuỗi không phải là base64 hợp lệ
+      return false;
+    }
+  }
+
+  // Hàm để gọi API lấy dữ liệu giỏ hàng
   Future<void> fetchCartItems() async {
     try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance.collection('Giỏ hàng').get();
+      final response =
+          await http.get(Uri.parse('http://localhost:5194/api/carts'));
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+        List<CartItem> items = jsonResponse.map((data) {
+          // if(isValidBase64(data['product_image'])) {
+          //   print('Du lieu base64 hợp lệ');
+          // }
+          return CartItem(
+            data['id'],
+            data['customer_id'],
+            data['category_name'],
+            data['product_id'],
+            data['quantity'],
+            data['product_image'],
+            data['product_name'],
+            data['selected_price'],
+            data['selected_size'],
+          );
+        }).toList();
 
-      List<CartItem> items = querySnapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return CartItem(
-          doc.id, // Lấy ID của sản phẩm
-          data['productImage'],
-          data['productName'],
-          data['newPrice'].toDouble(),
-          data['totalPrice'].toDouble(),
-          data['quantity'],
-          data['selectedSize'],
-        );
-      }).toList();
-
-      setState(() {
-        cartItems = items;
-      });
+        setState(() {
+          cartItems = items;
+        });
+      } else {
+        throw Exception('Failed to load carts');
+      }
     } catch (e) {
       print('Error fetching cart items: $e');
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
@@ -91,14 +120,16 @@ class _CartPageState extends State<CartPage> {
             // Kiểm tra xem giỏ hàng có trống hay không
             cartItems.isEmpty
                 ? Column(
-                  children: [
-                    SizedBox(height: 300,),
-                    Text(
-                      'Giỏ hàng trống, mua sắm ngay',
-                      style: TextStyle(color: black, fontSize: 18),
-                    ),
-                  ],
-                )
+                    children: [
+                      SizedBox(
+                        height: 300,
+                      ),
+                      Text(
+                        'Giỏ hàng trống, mua sắm ngay',
+                        style: TextStyle(color: black, fontSize: 18),
+                      ),
+                    ],
+                  )
                 : Column(
                     children: [
                       // Truyền danh sách sản phẩm vào OrderForm
@@ -132,14 +163,24 @@ class _CartPageState extends State<CartPage> {
 
 // Trong class CartItem, thêm trường productId
 class CartItem {
-  String productId;
-  final String productImage;
-  final String productName;
-  final double newPrice;
-  final double totalPrice;
+  final int id;
+  final int customer_id;
+  final String category_name;
+  final int product_id;
   final int quantity;
-  final String selectedSize;
+  String product_image;
+  final String product_name;
+  final int selected_price;
+  final String selected_size;
 
-  CartItem(this.productId, this.productImage, this.productName, this.newPrice,
-      this.totalPrice, this.quantity, this.selectedSize);
+  CartItem(
+      this.id,
+      this.customer_id,
+      this.category_name,
+      this.product_id,
+      this.quantity,
+      this.product_image,
+      this.product_name,
+      this.selected_price,
+      this.selected_size);
 }

@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/models/tickets.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/bill/discount_code_form.dart';
-import 'package:highlandcoffeeapp/utils/bill/information_form.dart';
+import 'package:highlandcoffeeapp/utils/bill/information_customer_form.dart';
 import 'package:highlandcoffeeapp/utils/bill/payment_method_form.dart';
 
 class BillPage extends StatefulWidget {
@@ -25,6 +27,7 @@ class _BillPageState extends State<BillPage> {
   late Map<String, dynamic> userData = {};
   int totalQuantity = 0;
   late double totalPrice = 0.0;
+  Customer? loggedCustomer = AuthManager().loggedInCustomer;
   String selectedPaymentMethod = '';
   //
   final _textDiscountCodeController = TextEditingController();
@@ -468,7 +471,7 @@ class _BillPageState extends State<BillPage> {
           ),
           //
           // Trong BillPage, tại nơi sử dụng InformationForm
-          InformationForm(userId: '2vPCzLR6LNVRi8uHXPV0'),
+          InformationCustomerForm(loggedInUser: loggedCustomer),
 
           SizedBox(
             height: 15,

@@ -217,7 +217,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
               width: 160,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.toNamed('/update_user_profile_page');
+                  Get.toNamed('/update_customer_profile_page');
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

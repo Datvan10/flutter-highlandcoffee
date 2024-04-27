@@ -11,14 +11,14 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class UpdateUserProfilePage extends StatefulWidget {
-  const UpdateUserProfilePage({super.key});
+class UpdateCustomerProfilePage extends StatefulWidget {
+  const UpdateCustomerProfilePage({super.key});
 
   @override
-  State<UpdateUserProfilePage> createState() => _UpdateUserProfilePageState();
+  State<UpdateCustomerProfilePage> createState() => _UpdateCustomerProfilePageState();
 }
 
-class _UpdateUserProfilePageState extends State<UpdateUserProfilePage> {
+class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
   // Get information of the logged in
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   //

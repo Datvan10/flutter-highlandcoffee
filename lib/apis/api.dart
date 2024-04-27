@@ -592,30 +592,30 @@ class FavoriteApi {
         body: jsonEncode(popular.toJson()),
       );
       if (response.statusCode == 200) {
-        print('Popular product added successfully');
+        print('Favorite product added successfully');
       } else {
-        throw Exception('Failed to add popular product: ${response.body}');
+        throw Exception('Failed to add favorite product: ${response.body}');
       }
     } catch (e) {
-      throw Exception('Failed to add popular product: $e');
+      throw Exception('Failed to add favorite product: $e');
     }
   }
 
   // Update data to API
-  Future<Product> updateFavorite(Product popular) async {
+  Future<Product> updateFavorite(Product favorite) async {
     try {
-      final response = await http.put(Uri.parse('$favoriteUrl/${popular}'),
+      final response = await http.put(Uri.parse('$favoriteUrl/${favorite}'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: jsonEncode(popular.toJson()));
+          body: jsonEncode(favorite.toJson()));
       if (response.statusCode == 200) {
         return Product.fromJson(json.decode(response.body));
       } else {
-        throw Exception('Failed to update popular product');
+        throw Exception('Failed to update favorite product');
       }
     } catch (e) {
-      throw Exception('Failed to update popular product');
+      throw Exception('Failed to update favorite product');
     }
   }
 
@@ -624,10 +624,10 @@ class FavoriteApi {
     try {
       final response = await http.delete(Uri.parse('$favoriteUrl/$id'));
       if (response.statusCode != 204) {
-        throw Exception('Failed to delete popular product');
+        throw Exception('Failed to delete favorite product');
       }
     } catch (e) {
-      throw Exception('Failed to delete popular product');
+      throw Exception('Failed to delete favorite product');
     }
   }
 }
@@ -1051,8 +1051,17 @@ class CartApi {
     try {
       final response = await http.get(Uri.parse(cartUrl));
       if (response.statusCode == 200) {
-        List jsonResponse = json.decode(response.body);
-        return jsonResponse.map((data) => new Cart.fromJson(data)).toList();
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Cart> carts = [];
+        for (var item in jsonData) {
+          Cart cart = Cart.fromJson(item);
+          // Decode product_image
+          Uint8List decodedImage = base64Decode(cart.product_image);
+          final product_image = MemoryImage(decodedImage);
+
+          carts.add(cart);
+        }
+        return carts;
       } else {
         throw Exception('Failed to load carts');
       }
@@ -1073,6 +1082,7 @@ class CartApi {
         },
         body: jsonEncode(cart.toJson()),
       );
+      print(response.statusCode);
       if (response.statusCode == 200) {
         print('Cart added successfully');
       } else {
