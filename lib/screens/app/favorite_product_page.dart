@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
-import 'package:highlandcoffeeapp/utils/product/product_form.dart';
+import 'package:highlandcoffeeapp/widgets/product_form.dart';
 
 class FavoriteProductPage extends StatefulWidget {
   const FavoriteProductPage({super.key});
