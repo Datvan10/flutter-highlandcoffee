@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +10,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
-class OrderForm extends StatefulWidget {
+class CartProductForm extends StatefulWidget {
   final List<CartItem> cartItems;
-  const OrderForm({Key? key, required this.cartItems}) : super(key: key);
+  const CartProductForm({Key? key, required this.cartItems}) : super(key: key);
 
   @override
-  State<OrderForm> createState() => _OrderFormState();
+  State<CartProductForm> createState() => _CartProductFormState();
 }
 
-class _OrderFormState extends State<OrderForm> {
+class _CartProductFormState extends State<CartProductForm> {
   // Hàm để xóa sản phẩm từ giỏ hàng
   void deleteProductFromCart(int index) async {
   showCupertinoDialog(
@@ -175,16 +177,17 @@ void _showAlert(String title, String content) {
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Image.network(
-                          item.productImage,
-                          height: 70.0,
-                          width: 70.0,
-                        ),
+                        // Image.memory(
+                        //   base64Decode(item.product_image),
+                        //   height: 70.0,
+                        //   width: 70.0,
+                        //   fit : BoxFit.cover,
+                        // ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item.productName,
+                              item.product_name,
                               style: GoogleFonts.arsenal(
                                   fontSize: 18,
                                   color: primaryColors,
@@ -194,7 +197,7 @@ void _showAlert(String title, String content) {
                               height: 5,
                             ),
                             Text(
-                              item.totalPrice.toStringAsFixed(3) + 'đ',
+                              item.selected_price.toStringAsFixed(3) + 'đ',
                               style: GoogleFonts.roboto(
                                 color: primaryColors,
                                 fontSize: 16,
@@ -269,7 +272,7 @@ void _showAlert(String title, String content) {
                               ),
                               child: Center(
                                 child: Text(
-                                  item.selectedSize,
+                                  item.selected_size,
                                   style: GoogleFonts.arsenal(
                                       color: primaryColors,
                                       fontSize: 15,

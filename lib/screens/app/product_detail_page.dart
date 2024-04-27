@@ -7,12 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:http/http.dart' as http;
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/button_add_to_cart.dart';
 import 'package:highlandcoffeeapp/widgets/button_buy_now.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/utils/product/size_product.dart';
+import 'package:highlandcoffeeapp/widgets/size_product.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -27,9 +30,6 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class CartPageArguments {
-  final List<CartItem> cartItems;
-
-  CartPageArguments(this.cartItems);
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
@@ -37,7 +37,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int totalPrice = 0; // total price
   bool isFavorite = false;
   String selectedSize = 'S';
-  List<CartItem> cartItems = [];
+  Customer? loggedInUser = AuthManager().loggedInCustomer;
+  final CartApi api = CartApi();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
@@ -200,54 +201,33 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   // Function to add item to the cart collection
-  // Trong _ProductDetailPageState
-  Future<void> addToCartFirestore(CartItem item) async {
+  Future<void> addToCart() async {
     try {
-      DocumentReference docRef = await _firestore.collection('Giỏ hàng').add({
-        'orderId': item.productId,
-        'productImage': item.productImage,
-        'productName': item.productName,
-        'newPrice': item.newPrice,
-        'totalPrice': item.totalPrice,
-        'quantity': item.quantity,
-        'selectedSize': item.selectedSize,
-      });
+      // Chuyển đổi hình ảnh từ chuỗi sang mảng byte
+      List<int> imageBytes = utf8.encode(widget.product.image);
+      // Mã hóa mảng byte sang chuỗi base64
+      String base64Image = base64Encode(imageBytes);
+      Cart cart = Cart(
+          customer_id: loggedInUser!.id!,
+          category_name: widget.product.category_name,
+          product_id: widget.product.id,
+          quantity: quantityCount,
+          product_image: base64Image,
+          product_name: widget.product.product_name,
+          selected_price: totalPrice,
+          selected_size: selectedSize);
+      // print(cart.toJson());
 
-      // Lấy ID của sản phẩm vừa được thêm vào Firestore và cập nhật lại cho item
-      item.productId = docRef.id;
-
-      print('Item added to cart collection successfully with ID: ${docRef.id}');
-      _showAlert('Thông báo', 'Thêm sản phẩm vào giỏ hàng thành công.');
+      await api.addCart(cart);
+      showNotification('Thành công', 'Đã thêm sản phẩm vào giỏ hàng');
     } catch (e) {
-      print('Error adding item to cart collection: $e');
+      print(e);
+      showNotification('Lỗi', 'Không thể thêm sản phẩm vào giỏ hàng');
     }
   }
 
-// Trong _ProductDetailPageState
-  void addToCart(String productId, String productImage, String productName,
-      double newPrice, double totalPrice, int quantity, String selectedSize) {
-    CartItem item = CartItem(
-      productId,
-      productImage,
-      productName,
-      newPrice,
-      totalPrice,
-      quantity,
-      selectedSize,
-    );
-
-    setState(() {
-      cartItems.add(item);
-    });
-
-    // Add item to the 'Giỏ hàng' collection
-    addToCartFirestore(item);
-
-    // Show a snackbar or some other UI feedback to indicate success
-  }
-
   //
-  void _showAlert(String title, String content) {
+  void showNotification(String title, String content) {
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) {
@@ -544,15 +524,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ButtonAddToCart(
                           text: 'Thêm vào giỏ',
                           onTap: () {
-                            addToCart(
-                              widget.product.category_name as String,
-                              widget.product.category_name as String,
-                              widget.product.category_name,
-                              widget.product.size_s_price.toDouble(),
-                              totalPrice.toDouble(),
-                              quantityCount,
-                              selectedSize,
-                            );
+                            addToCart();
                           },
                         ),
                         VerticalDivider(

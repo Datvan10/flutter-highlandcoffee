@@ -4,7 +4,7 @@ import 'package:highlandcoffeeapp/screens/app/coffee_page.dart';
 import 'package:highlandcoffeeapp/screens/app/freeze_page.dart';
 import 'package:highlandcoffeeapp/screens/app/other_page.dart';
 import 'package:highlandcoffeeapp/screens/app/tea_page.dart';
-import 'package:highlandcoffeeapp/utils/product/product_category_form.dart';
+import 'package:highlandcoffeeapp/widgets/product_category_form.dart';
 
 class ProductCategory extends StatefulWidget {
   const ProductCategory({super.key});

@@ -141,18 +141,19 @@ class Order {
 
 // Model cart
 class Cart {
-  String? id;
-  final int customer_id;
-  final int product_id;
-  final int quantity;
+   int customer_id;
+   String category_name;
+   int product_id;
+   int quantity;
   String product_image;
-  final String product_name;
-  final int selected_price;
-  final String selected_size;
+   String product_name;
+   int selected_price;
+   String selected_size;
 
   Cart(
-      {this.id,
+      {
       required this.customer_id,
+      required this.category_name,
       required this.product_id,
       required this.quantity,
       required this.product_image,
@@ -161,8 +162,8 @@ class Cart {
       required this.selected_size});
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-      id: json['id'],
       customer_id: json['customer_id'],
+      category_name: json['category_name'],
       product_id: json['product_id'],
       quantity: json['quantity'],
       product_image: json['product_image'],
@@ -172,6 +173,7 @@ class Cart {
 
   Map<String, dynamic> toJson() => {
         'customer_id': customer_id,
+        'category_name': category_name,
         'product_id': product_id,
         'quantity': quantity,
         'product_image': product_image,
