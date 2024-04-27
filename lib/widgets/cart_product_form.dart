@@ -10,15 +10,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
-class OrderForm extends StatefulWidget {
+class CartProductForm extends StatefulWidget {
   final List<CartItem> cartItems;
-  const OrderForm({Key? key, required this.cartItems}) : super(key: key);
+  const CartProductForm({Key? key, required this.cartItems}) : super(key: key);
 
   @override
-  State<OrderForm> createState() => _OrderFormState();
+  State<CartProductForm> createState() => _CartProductFormState();
 }
 
-class _OrderFormState extends State<OrderForm> {
+class _CartProductFormState extends State<CartProductForm> {
   // Hàm để xóa sản phẩm từ giỏ hàng
   void deleteProductFromCart(int index) async {
   showCupertinoDialog(

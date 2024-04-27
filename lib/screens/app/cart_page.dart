@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
@@ -8,7 +9,7 @@ import 'package:highlandcoffeeapp/screens/app/bill_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/utils/cart/order_form.dart';
+import 'package:highlandcoffeeapp/widgets/cart_product_form.dart';
 import 'package:http/http.dart' as http; // Import thư viện http để gọi API
 
 class CartPage extends StatefulWidget {
@@ -80,7 +81,8 @@ class _CartPageState extends State<CartPage> {
         }
 
         setState(() {
-          cartItems = items.where((item) => item != null).cast<CartItem>().toList();
+          cartItems =
+              items.where((item) => item != null).cast<CartItem>().toList();
         });
       } else {
         throw Exception('Failed to load carts');
@@ -129,16 +131,29 @@ class _CartPageState extends State<CartPage> {
                       SizedBox(
                         height: 300,
                       ),
-                      Text(
-                        'Giỏ hàng trống, mua sắm ngay',
-                        style: TextStyle(color: black, fontSize: 18),
-                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Giỏ hàng trống, mua sắm ngay',
+                            style: GoogleFonts.arsenal(color: black, fontSize: 18),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Icon(
+                            Icons.production_quantity_limits,
+                            color: primaryColors,
+                            size: 25,
+                          )
+                        ],
+                      )
                     ],
                   )
                 : Column(
                     children: [
                       // Truyền danh sách sản phẩm vào OrderForm
-                      OrderForm(cartItems: cartItems),
+                      CartProductForm(cartItems: cartItems),
                       // button order now
                       // SizedBox(
                       //   height: 10,
