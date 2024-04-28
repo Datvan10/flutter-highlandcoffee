@@ -21,87 +21,88 @@ class CartProductForm extends StatefulWidget {
 class _CartProductFormState extends State<CartProductForm> {
   // Hàm để xóa sản phẩm từ giỏ hàng
   void deleteProductFromCart(int index) async {
-  showCupertinoDialog(
-    context: context,
-    builder: (context) {
-      return CupertinoAlertDialog(
-        title: Text(
-          "Thông báo",
-          style: GoogleFonts.arsenal(
-            color: primaryColors,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        content: Text("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?"),
-        actions: [
-          CupertinoDialogAction(
-            isDestructiveAction: true,
-            child: Text("Xóa"),
-            onPressed: () async {
-              // Thực hiện xóa sản phẩm từ cả giỏ hàng và Firestore
-              setState(() {
-                widget.cartItems.removeAt(index);
-              });
-
-              await removeFromFirestore(index);
-
-              Navigator.pop(context);
-              _showAlert('Thông báo', 'Xóa sản phẩm khỏi giỏ hàng thành công.');
-            },
-          ),
-          CupertinoDialogAction(
-            child: Text(
-              "Hủy",
-              style: TextStyle(color: blue),
+    showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.arsenal(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
             ),
-            onPressed: () {
-              Navigator.pop(context); // Đóng hộp thoại
-            },
           ),
-        ],
-      );
-    },
-  );
-}
+          content:
+              Text("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?"),
+          actions: [
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text("Xóa"),
+              onPressed: () async {
+                // Thực hiện xóa sản phẩm từ cả giỏ hàng và Firestore
+                setState(() {
+                  widget.cartItems.removeAt(index);
+                });
+
+                await removeFromFirestore(index);
+
+                Navigator.pop(context);
+                _showAlert(
+                    'Thông báo', 'Xóa sản phẩm khỏi giỏ hàng thành công.');
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(
+                "Hủy",
+                style: TextStyle(color: blue),
+              ),
+              onPressed: () {
+                Navigator.pop(context); // Đóng hộp thoại
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 // Hàm để xóa sản phẩm từ cơ sở dữ liệu Firestore
-Future<void> removeFromFirestore(int index) async {
-  try {
-    // Lấy ID của sản phẩm trong Firestore
-    String productId = await getProductId(index);
+  Future<void> removeFromFirestore(int index) async {
+    try {
+      // Lấy ID của sản phẩm trong Firestore
+      String productId = await getProductId(index);
 
-    // Thực hiện xóa sản phẩm từ Firestore
-    await FirebaseFirestore.instance
-        .collection('Giỏ hàng')
-        .doc(productId)
-        .delete();
+      // Thực hiện xóa sản phẩm từ Firestore
+      await FirebaseFirestore.instance
+          .collection('Giỏ hàng')
+          .doc(productId)
+          .delete();
 
-    print('Product removed from Firestore successfully!');
-    
-  } catch (e) {
-    print('Error removing product from Firestore: $e');
+      print('Product removed from Firestore successfully!');
+    } catch (e) {
+      print('Error removing product from Firestore: $e');
+    }
   }
-}
 
 // Hàm để lấy ID của sản phẩm từ Firestore dựa trên index
-Future<String> getProductId(int index) async {
-  try {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await FirebaseFirestore.instance.collection('Giỏ hàng').get();
+  Future<String> getProductId(int index) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance.collection('Giỏ hàng').get();
 
-    // Lấy ID của sản phẩm trong Firestore
-    String productId = querySnapshot.docs[index].id;
+      // Lấy ID của sản phẩm trong Firestore
+      String productId = querySnapshot.docs[index].id;
 
-    return productId;
-  } catch (e) {
-    print('Error getting product ID from Firestore: $e');
-    return '';
+      return productId;
+    } catch (e) {
+      print('Error getting product ID from Firestore: $e');
+      return '';
+    }
   }
-}
 
 //
-void _showAlert(String title, String content) {
+  void _showAlert(String title, String content) {
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) {
@@ -125,6 +126,18 @@ void _showAlert(String title, String content) {
         );
       },
     );
+  }
+
+  // Hàm kiểm tra xem một chuỗi có đúng định dạng base64 hay không
+  bool isValidBase64(String value) {
+    try {
+      base64.decode(value);
+      print('Decoding base64 is successful!');
+      return true;
+    } catch (e) {
+      print('Error decoding base64: $e');
+      return false;
+    }
   }
 
   @override
@@ -176,12 +189,13 @@ void _showAlert(String title, String content) {
                     child: Row(
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        // if(isValidBase64(item.product_image))
                         // Image.memory(
                         //   base64Decode(item.product_image),
                         //   height: 70.0,
                         //   width: 70.0,
-                        //   fit : BoxFit.cover,
                         // ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

@@ -11,7 +11,6 @@ import 'package:highlandcoffeeapp/screens/app/other_page.dart';
 import 'package:highlandcoffeeapp/screens/app/payment_result_page.dart';
 import 'package:highlandcoffeeapp/screens/app/tea_page.dart';
 import 'package:highlandcoffeeapp/widgets/best_sale_product_item.dart';
-import 'package:highlandcoffeeapp/screens/app/bill_page.dart';
 import 'package:highlandcoffeeapp/screens/app/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/screens/app/product_popular_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/admin_page.dart';
@@ -42,7 +41,6 @@ List<GetPage> getPages = [
   GetPage(name: '/best_sale_product_item', page:() => const BestSaleProductItem()),
   GetPage(name: '/favorite_product_page', page: () => const FavoriteProductPage()),
   GetPage(name: '/cart_page', page:() => const CartPage()),
-  GetPage(name: '/bill_page', page:() => const BillPage()),
   GetPage(name: '/admin_page', page:() => const AdminPage()),
   GetPage(name: '/forgot_password_admin_page', page:() => const ForgotPasswordAdminPage()),
   GetPage(name: '/forgot_password_customer_page', page:() => const ForgotPasswordCustomerPage()),

@@ -61,6 +61,8 @@ class _CartPageState extends State<CartPage> {
           //   print('Du lieu base64 hợp lệ');
           // }
           if (data['customer_id'] == loggedInUser?.id) {
+            // List<int> imageBytes = base64Decode(data['product_image']);
+            // String productImageBase64 = base64Encode(imageBytes);
             return CartItem(
               data['id'],
               data['customer_id'],
@@ -103,7 +105,7 @@ class _CartPageState extends State<CartPage> {
             icon: Icons.shopping_cart_checkout,
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BillPage(),
+                builder: (context) => BillPage(cartItems: cartItems,),
               ));
             },
           ),
