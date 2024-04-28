@@ -38,7 +38,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   bool isFavorite = false;
   String selectedSize = 'S';
   Customer? loggedInUser = AuthManager().loggedInCustomer;
-  final CartApi api = CartApi();
+  final CartApi cartApi = CartApi();
+  final FavoriteApi favoriteApi = FavoriteApi();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
@@ -172,32 +173,30 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   //
   void _addToFavorites() async {
-    // Lấy thông tin từ đối tượng product
-    // String id = widget.product.id;
-    String category = widget.product.category_name;
-    String imagePath = widget.product.image;
-    String imageDetailPath = widget.product.image_detail;
-    String name = widget.product.product_name;
-    String description = widget.product.description;
-    int oldPrice = widget.product.size_m_price;
-    int newPrice = widget.product.size_s_price;
-    // String rating = widget.product.rating;
+    // try{
+    //   List<int> image = utf8.encode(widget.product.image);
+    //   List<int> imageDetail = utf8.encode(widget.product.image_detail);
+    //   String base64Image = base64Encode(image);
+    //   String base64ImageDetail = base64Encode(imageDetail);
 
-    // Thêm sản phẩm vào collection "Sản phẩm yêu thích" trên Firestore
-    await FirebaseFirestore.instance.collection('Sản phẩm yêu thích').add({
-      // 'id': id,
-      'category': category,
-      'imagePath': imagePath,
-      'imageDetailPath': imageDetailPath,
-      'name': name,
-      'description': description,
-      'oldPrice': oldPrice,
-      'newPrice': newPrice,
-      // 'rating': rating
-      // Thêm các trường khác cần thiết
-    });
+    //   Favorite favorite = Favorite(
+    //     customer_id: loggedInUser!.id!,
+    //     category_name: widget.product.category_name,
+    //     product_id: widget.product.id,
+    //     product_name: widget.product.product_name,
+    //     description: widget.product.description,
+    //     size_s_price: widget.product.size_s_price,
+    //     size_m_price: widget.product.size_m_price,
+    //     size_l_price: widget.product.size_l_price,
+    //     unit: widget.product.unit,
+    //     image: base64Image,
+    //     image_detail: base64ImageDetail,
+    //   );
 
-    // Hiển thị thông báo hoặc cập nhật UI theo yêu cầu
+    //   await favoriteApi.addFavorite(favorite);
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
   // Function to add item to the cart collection
@@ -218,7 +217,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           selected_size: selectedSize);
       // print(cart.toJson());
 
-      await api.addCart(cart);
+      await cartApi.addCart(cart);
       showNotification('Thành công', 'Đã thêm sản phẩm vào giỏ hàng');
     } catch (e) {
       print(e);

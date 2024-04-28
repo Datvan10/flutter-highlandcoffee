@@ -632,6 +632,35 @@ class FavoriteApi {
   }
 }
 
+// API fo best sale
+class BestSaleApi{
+  final String bestSaleUrl = "http://localhost:5194/api/bestsales";
+  // Read data from API
+  Future<List<Product>> getBestSales() async {
+    try {
+      final response = await http.get(Uri.parse(bestSaleUrl));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Product> bestSales = [];
+        for (var item in jsonData) {
+          Product bestSale = Product.fromJson(item);
+          // Decode image and image detail
+          Uint8List decodedImage = base64Decode(bestSale.image);
+          Uint8List decodedImageDetail = base64Decode(bestSale.image_detail);
+          final image = MemoryImage(decodedImage);
+          final image_detail = MemoryImage(decodedImageDetail);
+
+          bestSales.add(bestSale);
+        }
+        return bestSales;
+      } else {
+        throw Exception('Failed to load best sale products');
+      }
+    } catch (e) {
+      throw Exception('Failed to load best sale products');
+    }
+  }
+}
 // API for Coffee
 class CoffeeApi {
   final String coffeeUrl = "http://localhost:5194/api/coffees";
