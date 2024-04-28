@@ -317,7 +317,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         color: primaryColors),
                   ),
                   const SizedBox(
-                    width: 15,
+                    width: 10,
                   ),
                   IconButton(
                       onPressed: () {
