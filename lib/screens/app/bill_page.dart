@@ -8,6 +8,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
+import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/models/tickets.dart';
@@ -17,16 +18,16 @@ import 'package:highlandcoffeeapp/utils/bill/information_customer_form.dart';
 import 'package:highlandcoffeeapp/utils/bill/payment_method_form.dart';
 
 class BillPage extends StatefulWidget {
-  const BillPage({super.key});
+  final List<CartItem> cartItems;
+  const BillPage({super.key, required this.cartItems});
 
   @override
   State<BillPage> createState() => _BillPageState();
 }
 
 class _BillPageState extends State<BillPage> {
-  late Map<String, dynamic> userData = {};
   int totalQuantity = 0;
-  late double totalPrice = 0.0;
+  late int totalPrice = 0;
   Customer? loggedCustomer = AuthManager().loggedInCustomer;
   String selectedPaymentMethod = '';
   //
@@ -41,35 +42,32 @@ class _BillPageState extends State<BillPage> {
 
   //
   Future<void> getTotalQuantity() async {
-    QuerySnapshot<Map<String, dynamic>> cartSnapshot =
-        await FirebaseFirestore.instance.collection('Giỏ hàng').get();
+  int total = 0;
 
-    int total = cartSnapshot.docs.fold(0, (total, doc) {
-      return total + (doc.data()['quantity'] as int);
-    });
+  // Loop through each cart item and sum up the total quantity
+  widget.cartItems.forEach((CartItem cartItem) {
+    total += cartItem.quantity;
+  });
 
-    setState(() {
-      totalQuantity = total;
-    });
-  }
+  setState(() {
+    totalQuantity = total;
+  });
+}
 
   //
   Future<void> fetchTotalPrice() async {
-    // Fetch the cart items from the Firestore collection
-    QuerySnapshot<Map<String, dynamic>> cartSnapshot =
-        await FirebaseFirestore.instance
-            .collection('Giỏ hàng') // Change to your collection name
-            .get();
+  int total = 0;
 
-    // Calculate the total price from the cart items
-    double total = cartSnapshot.docs.fold(0.0, (total, doc) {
-      return total + (doc.data()['totalPrice'] as double);
-    });
+  // Loop through each cart item and sum up the total price
+  widget.cartItems.forEach((CartItem cartItem) {
+    total += cartItem.selected_price;
+  });
 
-    setState(() {
-      totalPrice = total;
-    });
-  }
+  setState(() {
+    totalPrice = total;
+  });
+}
+
 
   // Hàm để tạo mã đơn hàng
   String generateOrderId() {
