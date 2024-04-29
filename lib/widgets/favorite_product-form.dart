@@ -25,9 +25,9 @@ class FavoriteProductForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //////////////////////////////// Chưa fix lỗi hình ảnh chỗ này
-            Image.memory(
-              base64Decode(favorite.image),
-            ),
+            // Image.memory(
+            //   base64Decode(favorite.image),
+            // ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

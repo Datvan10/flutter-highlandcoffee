@@ -162,8 +162,8 @@ class _CartProductFormState extends State<CartProductForm> {
                     borderRadius: BorderRadius.circular(18.0),
                     backgroundColor: Colors.transparent,
                     foregroundColor: blue,
-                    label: 'Trang chủ',
-                    icon: Icons.home,
+                    label: 'Thêm',
+                    icon: Icons.add_shopping_cart,
                   )
                 ]),
                 endActionPane: ActionPane(motion: StretchMotion(), children: [
@@ -176,7 +176,7 @@ class _CartProductFormState extends State<CartProductForm> {
                     backgroundColor: Colors.transparent,
                     foregroundColor: red,
                     label: 'Xóa',
-                    icon: Icons.delete,
+                    icon: Icons.remove_shopping_cart,
                   ),
                 ]),
                 child: Container(
@@ -195,11 +195,11 @@ class _CartProductFormState extends State<CartProductForm> {
                       children: [
                         // if(isValidBase64(item.product_image))
                         ///////////////////////////////////////////////////////////// Chưa fix lỗi hình ảnh chỗ này
-                        Image.memory(
-                          _imageBytesDecoded,
-                          height: 70.0,
-                          width: 70.0,
-                        ),
+                        // Image.memory(
+                        //   _imageBytesDecoded,
+                        //   height: 70.0,
+                        //   width: 70.0,
+                        // ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
