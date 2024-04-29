@@ -12,14 +12,14 @@ class BestSaleProductItem extends StatefulWidget {
 }
 
 class _BestSaleProductItemState extends State<BestSaleProductItem> {
-  final FavoriteApi api = FavoriteApi();
+  final BestSaleApi bestSaleApi = BestSaleApi();
   late Future<List<Product>> productsFuture; // Thay đổi từ Stream sang Future
 
   @override
   void initState() {
     super.initState();
     // Gọi phương thức để lấy dữ liệu từ API trong hàm initState
-    productsFuture = api.getFavorites();
+    productsFuture = bestSaleApi.getBestSales();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) {
