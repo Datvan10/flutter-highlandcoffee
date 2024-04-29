@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:http/http.dart' as http;
 
@@ -222,151 +223,152 @@ class CustomerApi {
 
   ///////////////// Chua xu ly phan nay
   // Update customer password
-  Future<bool> updateCustomerPassword(String identifier, String newPassword) async {
-  // Loại bỏ các ký tự không cần thiết trong số điện thoại
-  identifier = removeLeadingZeros(identifier);
+  Future<bool> updateCustomerPassword(
+      String identifier, String newPassword) async {
+    // Loại bỏ các ký tự không cần thiết trong số điện thoại
+    identifier = removeLeadingZeros(identifier);
 
-  try {
-    // Gửi yêu cầu API để lấy danh sách khách hàng
-    final response = await http.get(Uri.parse(customerUrl));
+    try {
+      // Gửi yêu cầu API để lấy danh sách khách hàng
+      final response = await http.get(Uri.parse(customerUrl));
 
-    if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
 
-      for (var customerData in jsonResponse) {
-        Customer customer = Customer.fromJson(customerData);
-        // Kiểm tra nếu email hoặc số điện thoại trùng khớp
-        if (customer.email == identifier || customer.phone_number.toString() == identifier) {
-          try {
-            // Gửi yêu cầu API để cập nhật mật khẩu với id của khách hàng tương ứng
-            final updateResponse = await http.put(
-              Uri.parse('$customerUrl/${customer.id}'),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: jsonEncode({'password': newPassword}),
-            );
-            print(updateResponse.statusCode);
-            print(customer.id);
+        for (var customerData in jsonResponse) {
+          Customer customer = Customer.fromJson(customerData);
+          // Kiểm tra nếu email hoặc số điện thoại trùng khớp
+          if (customer.email == identifier ||
+              customer.phone_number.toString() == identifier) {
+            try {
+              // Gửi yêu cầu API để cập nhật mật khẩu với id của khách hàng tương ứng
+              final updateResponse = await http.put(
+                Uri.parse('$customerUrl/${customer.id}'),
+                headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: jsonEncode({'password': newPassword}),
+              );
+              print(updateResponse.statusCode);
+              print(customer.id);
 
-            if (updateResponse.statusCode == 200) {
-              return true; // Trả về true nếu cập nhật thành công
-            } else {
-              return false; // Trả về false nếu cập nhật không thành công
+              if (updateResponse.statusCode == 200) {
+                return true; // Trả về true nếu cập nhật thành công
+              } else {
+                return false; // Trả về false nếu cập nhật không thành công
+              }
+            } catch (e) {
+              print(
+                  "Error updating password: $e"); // In ra lỗi nếu có lỗi xảy ra
+              return false; // Trả về false nếu có lỗi xảy ra
             }
-          } catch (e) {
-            print("Error updating password: $e"); // In ra lỗi nếu có lỗi xảy ra
-            return false; // Trả về false nếu có lỗi xảy ra
           }
         }
+        // Trả về false nếu không tìm thấy khách hàng với email hoặc số điện thoại tương ứng
+        return false;
+      } else {
+        // Trả về false nếu không thể lấy được danh sách khách hàng từ API
+        return false;
       }
-      // Trả về false nếu không tìm thấy khách hàng với email hoặc số điện thoại tương ứng
-      return false;
-    } else {
-      // Trả về false nếu không thể lấy được danh sách khách hàng từ API
-      return false;
+    } catch (e) {
+      print(
+          "Error fetching customer data: $e"); // In ra lỗi nếu có lỗi xảy ra khi gửi yêu cầu API
+      return false; // Trả về false nếu có lỗi xảy ra khi gửi yêu cầu API
     }
-  } catch (e) {
-    print("Error fetching customer data: $e"); // In ra lỗi nếu có lỗi xảy ra khi gửi yêu cầu API
-    return false; // Trả về false nếu có lỗi xảy ra khi gửi yêu cầu API
   }
-}
-
 
   // Authenticate customer
   Future<bool> authenticateCustomer(String identifier, String password) async {
-  String url;
-
-  identifier = removeLeadingZeros(identifier);
-
-  // Kiểm tra nếu identifier có định dạng email
-  if (RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(identifier)) {
-    url = '$customerUrl?email=$identifier&password=$password';
-  } else {
-    // Kiểm tra nếu identifier có định dạng số điện thoại
-    if (RegExp(r'^[0-9]+$').hasMatch(identifier)) {
-      url = '$customerUrl?phone_number=$identifier&password=$password';
-    } else {
-      // Nếu không phải email hoặc số điện thoại, coi identifier là email
-      url = '$customerUrl?email=$identifier&password=$password';
-    }
-  }
-
-  try {
-    final response = await http.get(
-      Uri.parse(url),
-    );
-    if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-
-      for (var adminData in jsonResponse) {
-        Customer customer = Customer.fromJson(adminData);
-        // Kiểm tra cả email và số điện thoại
-        if (customer.email == identifier || customer.phone_number.toString() == identifier) {
-          if (customer.password == password) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }
-      return false;
-    } else {
-      return false;
-    }
-  } catch (e) {
-    return false;
-  }
-}
-
-
-  //
-   Future<Customer> getCustomerByIdentifier(String identifier) async {
     String url;
+
     identifier = removeLeadingZeros(identifier);
-  try {
 
     // Kiểm tra nếu identifier có định dạng email
     if (RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(identifier)) {
-      url = '$customerUrl?email=$identifier';
+      url = '$customerUrl?email=$identifier&password=$password';
     } else {
       // Kiểm tra nếu identifier có định dạng số điện thoại
       if (RegExp(r'^[0-9]+$').hasMatch(identifier)) {
-        url = '$customerUrl?phone_number=$identifier';
+        url = '$customerUrl?phone_number=$identifier&password=$password';
       } else {
-        // Nếu không phải email hoặc số điện thoại, không thực hiện truy vấn và ném ra ngoại lệ
-        throw Exception('Invalid identifier format');
+        // Nếu không phải email hoặc số điện thoại, coi identifier là email
+        url = '$customerUrl?email=$identifier&password=$password';
       }
     }
 
-    final response = await http.get(
-      Uri.parse(url),
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+      );
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
 
-    if (response.statusCode == 200) {
-      List<dynamic> responseData = json.decode(response.body);
+        for (var adminData in jsonResponse) {
+          Customer customer = Customer.fromJson(adminData);
+          // Kiểm tra cả email và số điện thoại
+          if (customer.email == identifier ||
+              customer.phone_number.toString() == identifier) {
+            if (customer.password == password) {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        }
+        return false;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 
-      for (var userData in responseData) {
-        Customer customer = Customer.fromJson(userData);
-        // Kiểm tra cả email và số điện thoại
-        if (customer.email == identifier || customer.phone_number.toString() == identifier) {
-          return customer;
+  //
+  Future<Customer> getCustomerByIdentifier(String identifier) async {
+    String url;
+    identifier = removeLeadingZeros(identifier);
+    try {
+      // Kiểm tra nếu identifier có định dạng email
+      if (RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(identifier)) {
+        url = '$customerUrl?email=$identifier';
+      } else {
+        // Kiểm tra nếu identifier có định dạng số điện thoại
+        if (RegExp(r'^[0-9]+$').hasMatch(identifier)) {
+          url = '$customerUrl?phone_number=$identifier';
+        } else {
+          // Nếu không phải email hoặc số điện thoại, không thực hiện truy vấn và ném ra ngoại lệ
+          throw Exception('Invalid identifier format');
         }
       }
 
-      // Nếu không tìm thấy người dùng có thông tin email hoặc số điện thoại trùng khớp, ném ra một ngoại lệ
-      throw Exception('Customer data not found for identifier: $identifier');
-    } else {
-      // Nếu không thành công, ném ra một ngoại lệ
-      throw Exception('Failed to load customer data');
+      final response = await http.get(
+        Uri.parse(url),
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> responseData = json.decode(response.body);
+
+        for (var userData in responseData) {
+          Customer customer = Customer.fromJson(userData);
+          // Kiểm tra cả email và số điện thoại
+          if (customer.email == identifier ||
+              customer.phone_number.toString() == identifier) {
+            return customer;
+          }
+        }
+
+        // Nếu không tìm thấy người dùng có thông tin email hoặc số điện thoại trùng khớp, ném ra một ngoại lệ
+        throw Exception('Customer data not found for identifier: $identifier');
+      } else {
+        // Nếu không thành công, ném ra một ngoại lệ
+        throw Exception('Failed to load customer data');
+      }
+    } catch (e) {
+      // Nếu có lỗi xảy ra trong quá trình xử lý, ném ra một ngoại lệ
+      throw Exception('Error fetching customer data: $e');
     }
-  } catch (e) {
-    // Nếu có lỗi xảy ra trong quá trình xử lý, ném ra một ngoại lệ
-    throw Exception('Error fetching customer data: $e');
   }
-}
-
-
 }
 
 // Product API
@@ -374,45 +376,45 @@ class ProductApi {
   final String productUrl = "http://localhost:5194/api/products";
   // Read data from API
   Future<List<Product>> getProducts() async {
-  try {
-    final List<String> apiUrlList = [
-      'http://localhost:5194/api/coffees',
-      'http://localhost:5194/api/teas',
-      'http://localhost:5194/api/freezes',
-      'http://localhost:5194/api/breads',
-      'http://localhost:5194/api/others',
-    ];
+    try {
+      final List<String> apiUrlList = [
+        'http://localhost:5194/api/coffees',
+        'http://localhost:5194/api/teas',
+        'http://localhost:5194/api/freezes',
+        'http://localhost:5194/api/breads',
+        'http://localhost:5194/api/others',
+      ];
 
-    final List<http.Response> responses = await Future.wait(apiUrlList.map((String apiUrl) {
-      return http.get(Uri.parse(apiUrl));
-    }));
+      final List<http.Response> responses =
+          await Future.wait(apiUrlList.map((String apiUrl) {
+        return http.get(Uri.parse(apiUrl));
+      }));
 
-    List<Product> products = [];
+      List<Product> products = [];
 
-    for (final response in responses) {
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        for (var item in jsonData) {
-          Product product = Product.fromJson(item);
-          // Decode image and image detail
-          Uint8List decodedImage = base64Decode(product.image);
-          Uint8List decodedImageDetail = base64Decode(product.image_detail);
-          final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+      for (final response in responses) {
+        if (response.statusCode == 200) {
+          final List<dynamic> jsonData = json.decode(response.body);
+          for (var item in jsonData) {
+            Product product = Product.fromJson(item);
+            // Decode image and image detail
+            Uint8List decodedImage = base64Decode(product.image);
+            Uint8List decodedImageDetail = base64Decode(product.image_detail);
+            final image = MemoryImage(decodedImage);
+            final image_detail = MemoryImage(decodedImageDetail);
 
-          products.add(product);
+            products.add(product);
+          }
+        } else {
+          throw Exception('Failed to load products');
         }
-      } else {
-        throw Exception('Failed to load products');
       }
+
+      return products;
+    } catch (e) {
+      throw Exception('Failed to load products');
     }
-
-    return products;
-  } catch (e) {
-    throw Exception('Failed to load products');
   }
-}
-
 
   // Add data to API
   Future<void> addProduct(Product product) async {
@@ -496,7 +498,6 @@ class PopularApi {
     }
   }
 
-
   // Add data to API
   Future<void> addPopular(Product popular) async {
     final uri = Uri.parse(popularUrl);
@@ -549,18 +550,22 @@ class PopularApi {
     }
   }
 }
+
 // API for favorite products
 class FavoriteApi {
   final String favoriteUrl = "http://localhost:5194/api/favorites";
+  Customer? loggedInUser = AuthManager().loggedInCustomer;
   // Read data from API
-  Future<List<Product>> getFavorites() async {
-    try {
-      final response = await http.get(Uri.parse(favoriteUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        List<Product> favorites = [];
-        for (var item in jsonData) {
-          Product favorite = Product.fromJson(item);
+  Future<List<Favorite>> getFavorites() async {
+  try {
+    final response = await http.get(Uri.parse('$favoriteUrl'));
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonResponse = json.decode(response.body);
+      List<Favorite> favorites = [];
+
+      for (var item in jsonResponse) {
+        if (item['customer_id'] == loggedInUser?.id) {
+          Favorite favorite = Favorite.fromJson(item);
           // Decode image and image detail
           Uint8List decodedImage = base64Decode(favorite.image);
           Uint8List decodedImageDetail = base64Decode(favorite.image_detail);
@@ -568,19 +573,23 @@ class FavoriteApi {
           final image_detail = MemoryImage(decodedImageDetail);
 
           favorites.add(favorite);
+        }else{
+          item = [];
         }
-        return favorites;
-      } else {
-        throw Exception('Failed to load favorite products');
       }
-    } catch (e) {
+
+      return favorites;
+    } else {
       throw Exception('Failed to load favorite products');
     }
+  } catch (e) {
+    throw Exception('Failed to load favorite products');
   }
+}
 
 
   // Add data to API
-  Future<void> addFavorite(Product popular) async {
+  Future<void> addFavorite(Favorite favorite) async {
     final uri = Uri.parse(favoriteUrl);
 
     try {
@@ -589,7 +598,7 @@ class FavoriteApi {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(popular.toJson()),
+        body: jsonEncode(favorite.toJson()),
       );
       if (response.statusCode == 200) {
         print('Favorite product added successfully');
@@ -633,7 +642,7 @@ class FavoriteApi {
 }
 
 // API fo best sale
-class BestSaleApi{
+class BestSaleApi {
   final String bestSaleUrl = "http://localhost:5194/api/bestsales";
   // Read data from API
   Future<List<Product>> getBestSales() async {
@@ -661,6 +670,7 @@ class BestSaleApi{
     }
   }
 }
+
 // API for Coffee
 class CoffeeApi {
   final String coffeeUrl = "http://localhost:5194/api/coffees";
@@ -744,7 +754,7 @@ class CoffeeApi {
 }
 
 // API for Freeze
-class FreezeApi{
+class FreezeApi {
   final String freezeUrl = "http://localhost:5194/api/freezes";
   // Read data from API
   Future<List<Product>> getFreezes() async {
@@ -826,7 +836,7 @@ class FreezeApi{
 }
 
 // API for Tea
-class TeaApi{
+class TeaApi {
   final String teaUrl = "http://localhost:5194/api/teas";
   // Read data from API
   Future<List<Product>> getTeas() async {
@@ -908,7 +918,7 @@ class TeaApi{
 }
 
 // API for bread
-class BreadApi{
+class BreadApi {
   final String breadUrl = "http://localhost:5194/api/breads";
   // Read data from API
   Future<List<Product>> getBreads() async {
@@ -990,7 +1000,7 @@ class BreadApi{
 }
 
 // API for Other
-class OtherApi{
+class OtherApi {
   final String otherUrl = "http://localhost:5194/api/others";
   // Read data from API
   Future<List<Product>> getOthers() async {
@@ -1062,8 +1072,7 @@ class OtherApi{
   Future<void> deleteOther(int id) async {
     try {
       final response = await http.delete(Uri.parse('$otherUrl/$id'));
-      if (response.statusCode !=
-          204) {
+      if (response.statusCode != 204) {
         throw Exception('Failed to delete other');
       }
     } catch (e) {

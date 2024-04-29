@@ -141,18 +141,17 @@ class Order {
 
 // Model cart
 class Cart {
-   int customer_id;
-   String category_name;
-   int product_id;
-   int quantity;
+  int customer_id;
+  String category_name;
+  int product_id;
+  int quantity;
   String product_image;
-   String product_name;
-   int selected_price;
-   String selected_size;
+  String product_name;
+  int selected_price;
+  String selected_size;
 
   Cart(
-      {
-      required this.customer_id,
+      {required this.customer_id,
       required this.category_name,
       required this.product_id,
       required this.quantity,
@@ -180,6 +179,63 @@ class Cart {
         'product_name': product_name,
         'selected_price': selected_price,
         'selected_size': selected_size
+      };
+}
+
+// Model favorite
+class Favorite {
+  int customer_id;
+  String category_name;
+  int product_id;
+  String product_name;
+  String description;
+  int size_s_price;
+  int size_m_price;
+  int size_l_price;
+  String unit;
+  String image;
+  String image_detail;
+
+  Favorite(
+      {required this.customer_id,
+      required this.category_name,
+      required this.product_id,
+      required this.product_name,
+      required this.description,
+      required this.size_s_price,
+      required this.size_m_price,
+      required this.size_l_price,
+      required this.unit,
+      required this.image,
+      required this.image_detail,
+      });
+
+  factory Favorite.fromJson(Map<String, dynamic> json) => Favorite(
+      customer_id: json['customer_id'],
+      category_name: json['category_name'],
+      product_id: json['product_id'],
+      product_name: json['product_name'],
+      description: json['description'],
+      size_s_price: json['size_s_price'],
+      size_m_price: json['size_m_price'],
+      size_l_price: json['size_l_price'],
+      unit: json['unit'],
+      image: json['image'],
+      image_detail: json['image_detail']
+      );
+
+  Map<String, dynamic> toJson() => {
+        'customer_id': customer_id,
+        'category_name': category_name,
+        'product_id': product_id,
+        'product_name': product_name,
+        'description': description,
+        'size_s_price': size_s_price,
+        'size_m_price': size_m_price,
+        'size_l_price': size_l_price,
+        'unit': unit,
+        'image': image,
+        'image_detail': image_detail
       };
 }
 

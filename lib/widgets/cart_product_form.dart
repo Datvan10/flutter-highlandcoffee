@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -151,6 +152,7 @@ class _CartProductFormState extends State<CartProductForm> {
             itemCount: widget.cartItems.length,
             itemBuilder: (context, index) {
               var item = widget.cartItems[index];
+              Uint8List _imageBytesDecoded = base64.decode(item.product_image);
               return Slidable(
                 startActionPane: ActionPane(motion: StretchMotion(), children: [
                   SlidableAction(
@@ -192,11 +194,12 @@ class _CartProductFormState extends State<CartProductForm> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // if(isValidBase64(item.product_image))
-                        // Image.memory(
-                        //   base64Decode(item.product_image),
-                        //   height: 70.0,
-                        //   width: 70.0,
-                        // ),
+                        ///////////////////////////////////////////////////////////// Chưa fix lỗi hình ảnh chỗ này
+                        Image.memory(
+                          _imageBytesDecoded,
+                          height: 70.0,
+                          width: 70.0,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

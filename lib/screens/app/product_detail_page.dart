@@ -173,30 +173,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   //
   void _addToFavorites() async {
-    // try{
-    //   List<int> image = utf8.encode(widget.product.image);
-    //   List<int> imageDetail = utf8.encode(widget.product.image_detail);
-    //   String base64Image = base64Encode(image);
-    //   String base64ImageDetail = base64Encode(imageDetail);
+    try{
+      List<int> image = utf8.encode(widget.product.image);
+      List<int> imageDetail = utf8.encode(widget.product.image_detail);
+      String base64Image = base64Encode(image);
+      String base64ImageDetail = base64Encode(imageDetail);
 
-    //   Favorite favorite = Favorite(
-    //     customer_id: loggedInUser!.id!,
-    //     category_name: widget.product.category_name,
-    //     product_id: widget.product.id,
-    //     product_name: widget.product.product_name,
-    //     description: widget.product.description,
-    //     size_s_price: widget.product.size_s_price,
-    //     size_m_price: widget.product.size_m_price,
-    //     size_l_price: widget.product.size_l_price,
-    //     unit: widget.product.unit,
-    //     image: base64Image,
-    //     image_detail: base64ImageDetail,
-    //   );
+      Favorite favorite = Favorite(
+        customer_id: loggedInUser!.id!,
+        category_name: widget.product.category_name,
+        product_id: widget.product.id,
+        product_name: widget.product.product_name,
+        description: widget.product.description,
+        size_s_price: widget.product.size_s_price,
+        size_m_price: widget.product.size_m_price,
+        size_l_price: widget.product.size_l_price,
+        unit: widget.product.unit,
+        image: base64Image,
+        image_detail: base64ImageDetail,
+      );
 
-    //   await favoriteApi.addFavorite(favorite);
-    // } catch (e) {
-    //   print(e);
-    // }
+      await favoriteApi.addFavorite(favorite);
+      showNotification('Thành công', 'Đã thêm sản phẩm vào danh sách yêu thích');
+    } catch (e) {
+      print(e);
+      showNotification('Lỗi', 'Không thể thêm sản phẩm vào danh sách yêu thích');
+    }
   }
 
   // Function to add item to the cart collection
