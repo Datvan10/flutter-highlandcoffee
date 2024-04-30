@@ -1120,9 +1120,9 @@ class CartApi {
         },
         body: jsonEncode(cart.toJson()),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
-        print('Cart added successfully');
+        // print('Cart added successfully');
       } else {
         throw Exception('Failed to add cart: ${response.body}');
       }
@@ -1150,14 +1150,20 @@ class CartApi {
   }
 
   // Delete data from API
-  Future<void> deleteCart(int id) async {
+  Future<void> deleteCart(int cartId) async {
     try {
-      final response = await http.delete(Uri.parse('$cartUrl/$id'));
-      if (response.statusCode != 204) {
-        throw Exception('Failed to delete cart');
+      // print(cartId);
+      final response = await http.delete(
+        Uri.parse('$cartUrl/$cartId'),
+      );
+      // print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Product removed successfully!');
+      } else {
+        throw Exception('Product removal failed!');
       }
     } catch (e) {
-      throw Exception('Failed to delete cart');
+      print('Product removal failed: $e');
     }
   }
 }
