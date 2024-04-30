@@ -1,27 +1,31 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class CartProductForm extends StatefulWidget {
   final List<CartItem> cartItems;
-  const CartProductForm({Key? key, required this.cartItems}) : super(key: key);
+  final VoidCallback onDelete;
+  const CartProductForm(
+      {Key? key, required this.cartItems, required this.onDelete})
+      : super(key: key);
 
   @override
   State<CartProductForm> createState() => _CartProductFormState();
 }
 
 class _CartProductFormState extends State<CartProductForm> {
-  // Hàm để xóa sản phẩm từ giỏ hàng
-  void deleteProductFromCart(int index) async {
+  CartApi cartApi = CartApi();
+  // Hàm show notification xóa sản phẩm từ giỏ hàng
+  void deleteProductFromCart(int id) async {
     showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -41,16 +45,11 @@ class _CartProductFormState extends State<CartProductForm> {
               isDestructiveAction: true,
               child: Text("Xóa"),
               onPressed: () async {
-                // Thực hiện xóa sản phẩm từ cả giỏ hàng và Firestore
-                setState(() {
-                  widget.cartItems.removeAt(index);
-                });
-
-                await removeFromFirestore(index);
-
+                await cartApi.deleteCart(id);
                 Navigator.pop(context);
                 _showAlert(
                     'Thông báo', 'Xóa sản phẩm khỏi giỏ hàng thành công.');
+                widget.onDelete();
               },
             ),
             CupertinoDialogAction(
@@ -59,7 +58,7 @@ class _CartProductFormState extends State<CartProductForm> {
                 style: TextStyle(color: blue),
               ),
               onPressed: () {
-                Navigator.pop(context); // Đóng hộp thoại
+                Navigator.pop(context);
               },
             ),
           ],
@@ -68,39 +67,27 @@ class _CartProductFormState extends State<CartProductForm> {
     );
   }
 
-// Hàm để xóa sản phẩm từ cơ sở dữ liệu Firestore
-  Future<void> removeFromFirestore(int index) async {
-    try {
-      // Lấy ID của sản phẩm trong Firestore
-      String productId = await getProductId(index);
+  // Future<void> removeCart(int cartId) async {
+  //   try {
+  //     print(cartId);
+  //     // Thực hiện xóa sản phẩm từ cơ sở dữ liệu thông qua API
+  //     final response = await http.delete(
+  //       Uri.parse('http://localhost:5194/api/carts/$cartId'),
+  //     );
+  //     print(response.statusCode);
+  //     if (response.statusCode == 200) {
+  //       print('Product removed successfully!');
+  //     } else {
+  //       throw Exception('Product removal failed!');
+  //     }
+  //   } catch (e) {
+  //     print('Product removal failed: $e');
+  //   }
+  // }
 
-      // Thực hiện xóa sản phẩm từ Firestore
-      await FirebaseFirestore.instance
-          .collection('Giỏ hàng')
-          .doc(productId)
-          .delete();
-
-      print('Product removed from Firestore successfully!');
-    } catch (e) {
-      print('Error removing product from Firestore: $e');
-    }
-  }
-
-// Hàm để lấy ID của sản phẩm từ Firestore dựa trên index
-  Future<String> getProductId(int index) async {
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance.collection('Giỏ hàng').get();
-
-      // Lấy ID của sản phẩm trong Firestore
-      String productId = querySnapshot.docs[index].id;
-
-      return productId;
-    } catch (e) {
-      print('Error getting product ID from Firestore: $e');
-      return '';
-    }
-  }
+  // Future<int> getCartId(CartItem item) async {
+  //   return item.id;
+  // }
 
 //
   void _showAlert(String title, String content) {
@@ -148,7 +135,7 @@ class _CartProductFormState extends State<CartProductForm> {
         Container(
           height: 650,
           child: ListView.builder(
-            scrollDirection: Axis.vertical, // Để cho phép cuộn theo chiều ngang
+            scrollDirection: Axis.vertical,
             itemCount: widget.cartItems.length,
             itemBuilder: (context, index) {
               var item = widget.cartItems[index];
@@ -170,7 +157,7 @@ class _CartProductFormState extends State<CartProductForm> {
                   SlidableAction(
                     onPressed: ((context) {
                       //comand delete
-                      deleteProductFromCart(index);
+                      deleteProductFromCart(item.id);
                     }),
                     borderRadius: BorderRadius.circular(18.0),
                     backgroundColor: Colors.transparent,
@@ -181,7 +168,7 @@ class _CartProductFormState extends State<CartProductForm> {
                 ]),
                 child: Container(
                   margin: EdgeInsets.symmetric(
-                      vertical: 10), // Khoảng cách giữa các Container
+                      vertical: 10),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18.0),

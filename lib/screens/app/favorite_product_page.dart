@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
-import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
-import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/favorite_product-form.dart';
-import 'package:highlandcoffeeapp/widgets/product_form.dart';
 
 class FavoriteProductPage extends StatefulWidget {
   const FavoriteProductPage({super.key});
