@@ -92,6 +92,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/langs/
     - assets/images/icons/
     - assets/images/welcome/
     - assets/images/slide/
