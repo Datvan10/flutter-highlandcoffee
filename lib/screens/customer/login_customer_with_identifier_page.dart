@@ -27,6 +27,14 @@ class _LoginCustomerWithIdentifierPageState
   final passWordController = TextEditingController();
   bool isLoggedIn = false;
   bool isObsecure = false;
+  bool _isVietnamSelected = true; // Ban đầu chọn hình ảnh Việt Nam
+
+  void _toggleImage() {
+    setState(() {
+      _isVietnamSelected =
+          !_isVietnamSelected; // Đảo ngược trạng thái của biến boolean
+    });
+  }
 
   // Function login customer with indentifier and password
   void loginCustomerWithIndentifierAndPassword() async {
@@ -41,7 +49,8 @@ class _LoginCustomerWithIdentifierPageState
             await api.authenticateCustomer(identifier, password);
 
         if (isAuthenticated) {
-          Customer loggedInCustomer = await api.getCustomerByIdentifier(identifier);
+          Customer loggedInCustomer =
+              await api.getCustomerByIdentifier(identifier);
           AuthManager().setLoggedInCustomer(loggedInCustomer);
           Navigator.pushReplacementNamed(context, '/home_page');
           showNotification('Đăng nhập thành công');
@@ -89,10 +98,57 @@ class _LoginCustomerWithIdentifierPageState
     return Scaffold(
       backgroundColor: background,
       body: Padding(
-        padding: const EdgeInsets.only(left: 18.0, top: 100.0, right: 18.0),
+        padding: const EdgeInsets.only(left: 18.0, top: 50.0, right: 18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Chose language
+            GestureDetector(
+              onTap: _toggleImage,
+              child: _isVietnamSelected
+                  ? Image.asset(
+                      'assets/langs/vn.png',
+                      width: 40,
+                      height: 40,
+                    )
+                  : Image.asset(
+                      'assets/langs/en.png',
+                      width: 40,
+                      height: 40,
+                    ),
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   children: [
+            //     DropdownButton(
+            //       onChanged: (String? value) {
+            //         if (value == 'vi') {
+            //           Get.updateLocale(Locale('vi', 'VN'));
+            //         } else {
+            //           Get.updateLocale(Locale('en', 'US'));
+            //         }
+            //       },
+            //       underline: SizedBox(),
+            //       icon: Icon(
+            //         Icons.language,
+            //         color: primaryColors,
+            //       ),
+            //       items: [
+            //         DropdownMenuItem(
+            //           value: 'vi',
+            //           child: Text('Tiếng Việt'),
+            //         ),
+            //         DropdownMenuItem(
+            //           value: 'en',
+            //           child: Text('English'),
+            //         ),
+            //       ],
+            //     ),
+            //   ],
+            // ),
+            SizedBox(
+              height: 10.0,
+            ),
             //title email
             Text(
               'Đăng nhập',

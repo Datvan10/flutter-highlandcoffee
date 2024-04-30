@@ -155,7 +155,7 @@ class _CartPageState extends State<CartPage> {
                 : Column(
                     children: [
                       // Truyền danh sách sản phẩm vào OrderForm
-                      CartProductForm(cartItems: cartItems),
+                      CartProductForm(cartItems: cartItems, onDelete: ()=> fetchCartItems()),
                       // button order now
                       // SizedBox(
                       //   height: 10,
