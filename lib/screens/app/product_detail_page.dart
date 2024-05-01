@@ -9,7 +9,6 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
-import 'package:http/http.dart' as http;
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/button_add_to_cart.dart';
 import 'package:highlandcoffeeapp/widgets/button_buy_now.dart';

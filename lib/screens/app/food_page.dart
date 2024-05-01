@@ -4,22 +4,22 @@ import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/widgets/product_form.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
+import 'package:highlandcoffeeapp/widgets/product_form.dart';
 
-class ListProductPage extends StatefulWidget {
-  const ListProductPage({super.key});
+class FoodPage extends StatefulWidget {
+  const FoodPage({super.key});
 
   @override
-  State<ListProductPage> createState() => _ListProductPageState();
+  State<FoodPage> createState() => _FoodPageState();
 }
 
-class _ListProductPageState extends State<ListProductPage> {
-  int _selectedIndexBottomBar = 1;
- Future<List<Product>>? productsFuture;
+class _FoodPageState extends State<FoodPage> {
+ int _selectedIndexBottomBar = 1;
+  Future<List<Product>>? productsFuture; // Cập nhật loại biến
 
-  final ProductApi api = ProductApi();
+  final FoodApi foodApi = FoodApi();
 
   //SelectedBottomBar
   void _selectedBottomBar(int index) {
@@ -31,7 +31,7 @@ class _ListProductPageState extends State<ListProductPage> {
   @override
   void initState() {
     super.initState();
-    productsFuture = api.getListProducts();
+    productsFuture = foodApi.getFoods();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) {
@@ -48,7 +48,7 @@ class _ListProductPageState extends State<ListProductPage> {
     return Scaffold(
       backgroundColor: background,
       appBar: CustomAppBar(
-        title: 'DANH SÁCH SẢN PHẨM',
+        title: 'CÁC LOẠI BÁNH',
         actions: [
           AppBarAction(
             icon: Icons.shopping_cart,

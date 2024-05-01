@@ -141,6 +141,55 @@ class AdminApi {
       return false;
     }
   }
+
+  // Add product for admin
+  Future<void> addProduct(Product product, String selectedCategory) async {
+    // List of API URLs for each category
+    String getCategoryApiUrl(String selectedCategory) {
+      switch (selectedCategory) {
+        case 'Coffee':
+          return 'http://localhost:5194/api/coffees';
+        case 'Freeze':
+          return 'http://localhost:5194/api/freezes';
+        case 'Trà':
+          return 'http://localhost:5194/api/teas';
+        case 'Đồ ăn':
+          return 'http://localhost:5194/api/foods';
+        case 'Danh sách sản phẩm':
+          return 'http://localhost:5194/api/products';
+        case 'Sản phẩm phổ biến':
+          return 'http://localhost:5194/api/populars';
+        case 'Sản phẩm bán chạy nhất':
+          return 'http://localhost:5194/api/bestsales';
+        case 'Danh sách sản phẩm phổ biến':
+          return 'http://localhost:5194/api/populars';
+        case 'Khác':
+          return 'http://localhost:5194/api/others';
+        default:
+          throw Exception('Invalid category');
+      }
+    }
+
+    final apiUrl = getCategoryApiUrl(selectedCategory);
+    final uri = Uri.parse(apiUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(product.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Product added successfully');
+      } else {
+        throw Exception('Failed to add product: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add product: $e');
+    }
+  }
 }
 
 // Customer API
@@ -375,14 +424,14 @@ class CustomerApi {
 class ProductApi {
   final String productUrl = "http://localhost:5194/api/products";
   // Read data from API
-  Future<List<Product>> getProducts() async {
+  Future<List<Product>> getListProducts() async {
     try {
       final List<String> apiUrlList = [
         'http://localhost:5194/api/coffees',
         'http://localhost:5194/api/teas',
         'http://localhost:5194/api/freezes',
         'http://localhost:5194/api/breads',
-        'http://localhost:5194/api/others',
+        'http://localhost:5194/api/foods',
       ];
 
       final List<http.Response> responses =
@@ -557,36 +606,35 @@ class FavoriteApi {
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   // Read data from API
   Future<List<Favorite>> getFavorites() async {
-  try {
-    final response = await http.get(Uri.parse('$favoriteUrl'));
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonResponse = json.decode(response.body);
-      List<Favorite> favorites = [];
+    try {
+      final response = await http.get(Uri.parse('$favoriteUrl'));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonResponse = json.decode(response.body);
+        List<Favorite> favorites = [];
 
-      for (var item in jsonResponse) {
-        if (item['customer_id'] == loggedInUser?.id) {
-          Favorite favorite = Favorite.fromJson(item);
-          // Decode image and image detail
-          Uint8List decodedImage = base64Decode(favorite.image);
-          Uint8List decodedImageDetail = base64Decode(favorite.image_detail);
-          final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+        for (var item in jsonResponse) {
+          if (item['customer_id'] == loggedInUser?.id) {
+            Favorite favorite = Favorite.fromJson(item);
+            // Decode image and image detail
+            Uint8List decodedImage = base64Decode(favorite.image);
+            Uint8List decodedImageDetail = base64Decode(favorite.image_detail);
+            final image = MemoryImage(decodedImage);
+            final image_detail = MemoryImage(decodedImageDetail);
 
-          favorites.add(favorite);
-        }else{
-          item = [];
+            favorites.add(favorite);
+          } else {
+            item = [];
+          }
         }
-      }
 
-      return favorites;
-    } else {
+        return favorites;
+      } else {
+        throw Exception('Failed to load favorite products');
+      }
+    } catch (e) {
       throw Exception('Failed to load favorite products');
     }
-  } catch (e) {
-    throw Exception('Failed to load favorite products');
   }
-}
-
 
   // Add data to API
   Future<void> addFavorite(Favorite favorite) async {
@@ -995,6 +1043,88 @@ class BreadApi {
       }
     } catch (e) {
       throw Exception('Failed to delete bread');
+    }
+  }
+}
+
+// API for food
+class FoodApi {
+  final String foodUrl = "http://localhost:5194/api/foods";
+  // Read data from API
+  Future<List<Product>> getFoods() async {
+    try {
+      final response = await http.get(Uri.parse(foodUrl));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Product> foods = [];
+        for (var item in jsonData) {
+          Product food = Product.fromJson(item);
+          // Decode image and image detail
+          Uint8List decodedImage = base64Decode(food.image);
+          Uint8List decodedImageDetail = base64Decode(food.image_detail);
+          final image = MemoryImage(decodedImage);
+          final image_detail = MemoryImage(decodedImageDetail);
+
+          foods.add(food);
+        }
+        return foods;
+      } else {
+        throw Exception('Failed to load food products');
+      }
+    } catch (e) {
+      throw Exception('Failed to load food products');
+    }
+  }
+
+  // Add data to API
+  Future<void> addFoods(Product food) async {
+    final uri = Uri.parse(foodUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(food.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('food added successfully');
+      } else {
+        throw Exception('Failed to add food: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add food: $e');
+    }
+  }
+
+  // Update data to API
+  Future<Product> updateFoods(Product food) async {
+    try {
+      final response = await http.put(Uri.parse('$foodUrl/${food}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(food.toJson()));
+      if (response.statusCode == 200) {
+        return Product.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to update food');
+      }
+    } catch (e) {
+      throw Exception('Failed to update food');
+    }
+  }
+
+  // Delete data from API
+  Future<void> deleteFoods(int id) async {
+    try {
+      final response = await http.delete(Uri.parse('$foodUrl/$id'));
+      if (response.statusCode != 204) {
+        throw Exception('Failed to delete food');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete food');
     }
   }
 }

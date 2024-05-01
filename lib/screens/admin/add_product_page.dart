@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -17,12 +19,14 @@ class AddProductPage extends StatefulWidget {
 }
 
 class _AddProductPageState extends State<AddProductPage> {
+  late final Product product;
+  final AdminApi adminApi = AdminApi();
   String _selectedCategory = 'Coffee';
   List<String> _categories = [
     'Coffee',
     'Freeze',
     'Trà',
-    'Bánh mì',
+    'Đồ ăn',
     'Danh sách sản phẩm',
     'Sản phẩm phổ biến',
     'Sản phẩm bán chạy nhất',
@@ -30,17 +34,18 @@ class _AddProductPageState extends State<AddProductPage> {
     'Khác',
   ];
 
-  TextEditingController _idController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
+  // TextEditingController _idController = TextEditingController();
+  TextEditingController _productNameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _oldPriceController = TextEditingController();
-  TextEditingController _newPriceController = TextEditingController();
-  TextEditingController _ratingController = TextEditingController();
+  TextEditingController _sizeSPriceController = TextEditingController();
+  TextEditingController _sizeMPriceController = TextEditingController();
+  TextEditingController _sizeLPriceController = TextEditingController();
+  TextEditingController _unitController = TextEditingController();
 
   File? _imagePath;
   File? _imageDetailPath;
 
-  //
+  // Function to pick an image from the gallery
   Future<void> _pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -51,7 +56,7 @@ class _AddProductPageState extends State<AddProductPage> {
     }
   }
 
-  //
+  // Function to pick an image detail from the gallery
   Future<void> _pickImageDetail() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -85,60 +90,102 @@ class _AddProductPageState extends State<AddProductPage> {
     return completer.future;
   }
 
-  Future<void> addProductToFirestore(
-    String categoryCollection,
-    String id,
-    String name,
-    String description,
-    double oldPrice,
-    double newPrice,
-    String rating,
-    String imagePath,
-    String imageDetailPath,
-  ) async {
-    // Kiểm tra xem có thông tin bắt buộc nào chưa được nhập không
-  if (id.isEmpty ||
-      name.isEmpty ||
-      description.isEmpty ||
-      oldPrice <= 0 ||
-      newPrice <= 0 ||
-      rating.isEmpty ||
-      imagePath.isEmpty ||
-      imageDetailPath.isEmpty) {
-    _showAlert('Thông báo', 'Thêm sản phẩm không thành công, vui lòng thử lại.');
-    return;
-  }
-    try {
-      await FirebaseFirestore.instance.collection(categoryCollection).add({
-        'id': id,
-        'category' : categoryCollection,
-        'name': name,
-        'description': description,
-        'oldPrice': oldPrice,
-        'newPrice': newPrice,
-        'rating': rating,
-        'imagePath': imagePath,
-        'imageDetailPath': imageDetailPath,
-      });
+  // Function to add a product to database
+  Future<void> addProducts() async{
+    try{
+      final bytesImage = _imagePath!.readAsBytesSync();
+      final bytesImageDetail = _imageDetailPath!.readAsBytesSync();
+      final String base64Image = base64Encode(bytesImage);
+      final String base64ImageDetail = base64Encode(bytesImageDetail);
+      Product newProduct = Product(
+        id : 0,
+        category_name: _selectedCategory,
+        product_name: _productNameController.text,
+        description: _descriptionController.text,
+        size_s_price: int.tryParse(_sizeSPriceController.text) ?? 0,
+        size_m_price: int.tryParse(_sizeMPriceController.text) ?? 0,
+        size_l_price: int.tryParse(_sizeLPriceController.text) ?? 0,
+        unit: _unitController.text,
+        image: base64Image,
+        image_detail: base64ImageDetail,
+      );
+
+      await adminApi.addProduct(newProduct, _selectedCategory);
       print('Product added to Firestore successfully');
       _showAlert('Thông báo', 'Thêm sản phẩm vào cơ sở dữ liệu thành công.');
       // Reset text controllers
-      _idController.clear();
-      _nameController.clear();
+      _productNameController.clear();
       _descriptionController.clear();
-      _oldPriceController.clear();
-      _newPriceController.clear();
-      _ratingController.clear();
-      //
+      _sizeSPriceController.clear();
+      _sizeMPriceController.clear();
+      _sizeLPriceController.clear();
+      _unitController.clear();
       setState(() {
         _imagePath = null;
         _imageDetailPath = null;
       });
-    } catch (e) {
+    }catch(e){
       print('Error adding product to Firestore: $e');
       _showAlert('Thông báo', 'Thêm sản phẩm thất bại, vui lòng thử lại.');
     }
   }
+
+  // Future<void> addProducts(
+  //   String category_name,
+  //   String product_name,
+  //   String description,
+  //   int size_s_price,
+  //   int size_m_price,
+  //   int size_l_price,
+  //   String unit,
+  //   String imagePath,
+  //   String imageDetailPath,
+  // ) async {
+  //   // Kiểm tra xem có thông tin bắt buộc nào chưa được nhập không
+  //   if (product_name.isEmpty ||
+  //       description.isEmpty ||
+  //       size_s_price <= 0 ||
+  //       size_m_price <= 0 ||
+  //       size_l_price <= 0 ||
+  //       unit.isEmpty ||
+  //       imagePath.isEmpty ||
+  //       imageDetailPath.isEmpty) {
+  //     _showAlert(
+  //         'Thông báo', 'Thêm sản phẩm không thành công, vui lòng thử lại.');
+  //     return;
+  //   }
+  //   try {
+  //     await FirebaseFirestore.instance.collection(category_name).add({
+  //       'category': category_name,
+  //       'product_name': product_name,
+  //       'description': description,
+  //       'size_s_price': size_s_price,
+  //       'size_m_price': size_m_price,
+  //       'size_l_price': size_l_price,
+  //       'unit': unit,
+  //       'imagePath': imagePath,
+  //       'imageDetailPath': imageDetailPath,
+  //     });
+  //     print('Product added to Firestore successfully');
+  //     _showAlert('Thông báo', 'Thêm sản phẩm vào cơ sở dữ liệu thành công.');
+  //     // Reset text controllers
+  //     // _idController.clear();
+  //     _productNameController.clear();
+  //     _descriptionController.clear();
+  //     _sizeSPriceController.clear();
+  //     _sizeMPriceController.clear();
+  //     _sizeLPriceController.clear();
+  //     _unitController.clear();
+  //     //
+  //     setState(() {
+  //       _imagePath = null;
+  //       _imageDetailPath = null;
+  //     });
+  //   } catch (e) {
+  //     print('Error adding product to Firestore: $e');
+  //     _showAlert('Thông báo', 'Thêm sản phẩm thất bại, vui lòng thử lại.');
+  //   }
+  // }
 
   void _showAlert(String title, String content) {
     showCupertinoDialog(
@@ -181,15 +228,17 @@ class _AddProductPageState extends State<AddProductPage> {
                     fontSize: 30, fontWeight: FontWeight.bold, color: brown),
               ),
             ),
-            buildTextFieldWithLabel('ID sản phẩm', _idController),
-            buildTextFieldWithLabel('Tên sản phẩm', _nameController),
+            // buildTextFieldWithLabel('ID sản phẩm', _idController),
             buildCategoryDropdown(),
+            buildTextFieldWithLabel('Tên sản phẩm', _productNameController),
             buildTextFieldWithLabel('Mô tả sản phẩm', _descriptionController),
             buildTextFieldWithLabel(
-                'Giá cũ', _oldPriceController, TextInputType.number),
+                'Giá size S', _sizeSPriceController, TextInputType.number),
             buildTextFieldWithLabel(
-                'Giá mới', _newPriceController, TextInputType.number),
-            buildTextFieldWithLabel('Xếp hạng', _ratingController),
+                'Giá size M', _sizeMPriceController, TextInputType.number),
+            buildTextFieldWithLabel(
+                'Giá size L', _sizeLPriceController, TextInputType.number),
+            buildTextFieldWithLabel('Đơn vị tính', _unitController),
             SizedBox(height: 10),
             buildImagePicker(),
             SizedBox(height: 15),
@@ -197,40 +246,45 @@ class _AddProductPageState extends State<AddProductPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: () async {
-                    // Xử lý khi nhấn nút "Thêm sản phẩm"
-                    String id = _idController.text;
-                    String name = _nameController.text;
-                    String categoryCollection = _selectedCategory;
-                    String description = _descriptionController.text;
-                    double oldPrice =
-                        double.tryParse(_oldPriceController.text) ?? 0;
-                    double newPrice =
-                        double.tryParse(_newPriceController.text) ?? 0;
-                    String rating = _ratingController.text;
-
-                    // Upload images to Firebase Storage and get download URLs
-                    String imagePath = await uploadImage(_imagePath);
-                    String imageDetailPath =
-                        await uploadImage(_imageDetailPath);
-
-                    // Thêm sản phẩm vào cơ sở dữ liệu
-                    await addProductToFirestore(
-                      categoryCollection,
-                      id,
-                      name,
-                      description,
-                      oldPrice,
-                      newPrice,
-                      rating,
-                      imagePath,
-                      imageDetailPath,
-                    );
-                    // Thực hiện thêm sản phẩm vào cơ sở dữ liệu hoặc xử lý tùy
-                    // Sau khi thêm sản phẩm, bạn có thể chuyển người dùng đến trang khác
-                    // hoặc thực hiện hành động tùy ý
-                    // Navigator.pop(context); // Đóng trang thêm sản phẩm sau khi thêm thành công
+                  onPressed: (){
+                    addProducts();
                   },
+                  // onPressed: () async {
+                  //   // Xử lý khi nhấn nút "Thêm sản phẩm"
+                  //   // String id = _idController.text;
+                  //   String product_name = _productNameController.text;
+                  //   String category_name = _selectedCategory;
+                  //   String description = _descriptionController.text;
+                  //   int size_s_price =
+                  //       int.tryParse(_sizeSPriceController.text) ?? 0;
+                  //   int size_m_price =
+                  //       int.tryParse(_sizeLPriceController.text) ?? 0;
+                  //   int size_l_price =
+                  //       int.tryParse(_sizeLPriceController.text) ?? 0;
+                  //   String unit = _unitController.text;
+
+                  //   // Upload images to Firebase Storage and get download URLs
+                  //   String imagePath = await uploadImage(_imagePath);
+                  //   String imageDetailPath =
+                  //       await uploadImage(_imageDetailPath);
+
+                  //   // Thêm sản phẩm vào cơ sở dữ liệu
+                  //   await addProducts(
+                  //     // category_name,
+                  //     // product_name,
+                  //     // description,
+                  //     // size_s_price,
+                  //     // size_m_price,
+                  //     // size_l_price,
+                  //     // unit,
+                  //     // imagePath,
+                  //     // imageDetailPath,
+                  //   );
+                  //   // Thực hiện thêm sản phẩm vào cơ sở dữ liệu hoặc xử lý tùy
+                  //   // Sau khi thêm sản phẩm, bạn có thể chuyển người dùng đến trang khác
+                  //   // hoặc thực hiện hành động tùy ý
+                  //   // Navigator.pop(context); // Đóng trang thêm sản phẩm sau khi thêm thành công
+                  // },
                   style: ElevatedButton.styleFrom(backgroundColor: green),
                   child: Text(
                     'Thêm sản phẩm',
@@ -270,9 +324,9 @@ class _AddProductPageState extends State<AddProductPage> {
                     value: category,
                     child: Tooltip(
                       message:
-                          category, // Hiển thị thông báo nếu nội dung quá dài
+                          category,
                       child: Container(
-                        width: 120, // Giới hạn chiều dài của mục
+                        width: 120,
                         child: Text(
                           category,
                           overflow: TextOverflow.ellipsis,
