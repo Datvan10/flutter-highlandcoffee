@@ -141,6 +141,55 @@ class AdminApi {
       return false;
     }
   }
+
+  // Add product for admin
+  Future<void> addProduct(Product product, String selectedCategory) async {
+    // List of API URLs for each category
+    String getCategoryApiUrl(String selectedCategory) {
+      switch (selectedCategory) {
+        case 'Coffee':
+          return 'http://localhost:5194/api/coffees';
+        case 'Freeze':
+          return 'http://localhost:5194/api/freezes';
+        case 'Trà':
+          return 'http://localhost:5194/api/teas';
+        case 'Bánh mì':
+          return 'http://localhost:5194/api/breads';
+        case 'Danh sách sản phẩm':
+          return 'http://localhost:5194/api/products';
+        case 'Sản phẩm phổ biến':
+          return 'http://localhost:5194/api/populars';
+        case 'Sản phẩm bán chạy nhất':
+          return 'http://localhost:5194/api/bestsales';
+        case 'Danh sách sản phẩm phổ biến':
+          return 'http://localhost:5194/api/populars';
+        case 'Khác':
+          return 'http://localhost:5194/api/others';
+        default:
+          throw Exception('Invalid category');
+      }
+    }
+
+    final apiUrl = getCategoryApiUrl(selectedCategory);
+    final uri = Uri.parse(apiUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(product.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Product added successfully');
+      } else {
+        throw Exception('Failed to add product: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add product: $e');
+    }
+  }
 }
 
 // Customer API
@@ -375,7 +424,7 @@ class CustomerApi {
 class ProductApi {
   final String productUrl = "http://localhost:5194/api/products";
   // Read data from API
-  Future<List<Product>> getProducts() async {
+  Future<List<Product>> getListProducts() async {
     try {
       final List<String> apiUrlList = [
         'http://localhost:5194/api/coffees',
@@ -557,36 +606,35 @@ class FavoriteApi {
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   // Read data from API
   Future<List<Favorite>> getFavorites() async {
-  try {
-    final response = await http.get(Uri.parse('$favoriteUrl'));
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonResponse = json.decode(response.body);
-      List<Favorite> favorites = [];
+    try {
+      final response = await http.get(Uri.parse('$favoriteUrl'));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonResponse = json.decode(response.body);
+        List<Favorite> favorites = [];
 
-      for (var item in jsonResponse) {
-        if (item['customer_id'] == loggedInUser?.id) {
-          Favorite favorite = Favorite.fromJson(item);
-          // Decode image and image detail
-          Uint8List decodedImage = base64Decode(favorite.image);
-          Uint8List decodedImageDetail = base64Decode(favorite.image_detail);
-          final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+        for (var item in jsonResponse) {
+          if (item['customer_id'] == loggedInUser?.id) {
+            Favorite favorite = Favorite.fromJson(item);
+            // Decode image and image detail
+            Uint8List decodedImage = base64Decode(favorite.image);
+            Uint8List decodedImageDetail = base64Decode(favorite.image_detail);
+            final image = MemoryImage(decodedImage);
+            final image_detail = MemoryImage(decodedImageDetail);
 
-          favorites.add(favorite);
-        }else{
-          item = [];
+            favorites.add(favorite);
+          } else {
+            item = [];
+          }
         }
-      }
 
-      return favorites;
-    } else {
+        return favorites;
+      } else {
+        throw Exception('Failed to load favorite products');
+      }
+    } catch (e) {
       throw Exception('Failed to load favorite products');
     }
-  } catch (e) {
-    throw Exception('Failed to load favorite products');
   }
-}
-
 
   // Add data to API
   Future<void> addFavorite(Favorite favorite) async {

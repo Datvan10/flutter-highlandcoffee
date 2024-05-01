@@ -31,7 +31,7 @@ class _ListProductPageState extends State<ListProductPage> {
   @override
   void initState() {
     super.initState();
-    productsFuture = api.getProducts();
+    productsFuture = api.getListProducts();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) {
