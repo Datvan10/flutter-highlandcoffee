@@ -153,8 +153,8 @@ class AdminApi {
           return 'http://localhost:5194/api/freezes';
         case 'Trà':
           return 'http://localhost:5194/api/teas';
-        case 'Bánh mì':
-          return 'http://localhost:5194/api/breads';
+        case 'Đồ ăn':
+          return 'http://localhost:5194/api/foods';
         case 'Danh sách sản phẩm':
           return 'http://localhost:5194/api/products';
         case 'Sản phẩm phổ biến':
@@ -431,7 +431,7 @@ class ProductApi {
         'http://localhost:5194/api/teas',
         'http://localhost:5194/api/freezes',
         'http://localhost:5194/api/breads',
-        'http://localhost:5194/api/others',
+        'http://localhost:5194/api/foods',
       ];
 
       final List<http.Response> responses =
@@ -1043,6 +1043,88 @@ class BreadApi {
       }
     } catch (e) {
       throw Exception('Failed to delete bread');
+    }
+  }
+}
+
+// API for food
+class FoodApi {
+  final String foodUrl = "http://localhost:5194/api/foods";
+  // Read data from API
+  Future<List<Product>> getFoods() async {
+    try {
+      final response = await http.get(Uri.parse(foodUrl));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Product> foods = [];
+        for (var item in jsonData) {
+          Product food = Product.fromJson(item);
+          // Decode image and image detail
+          Uint8List decodedImage = base64Decode(food.image);
+          Uint8List decodedImageDetail = base64Decode(food.image_detail);
+          final image = MemoryImage(decodedImage);
+          final image_detail = MemoryImage(decodedImageDetail);
+
+          foods.add(food);
+        }
+        return foods;
+      } else {
+        throw Exception('Failed to load food products');
+      }
+    } catch (e) {
+      throw Exception('Failed to load food products');
+    }
+  }
+
+  // Add data to API
+  Future<void> addFoods(Product food) async {
+    final uri = Uri.parse(foodUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(food.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('food added successfully');
+      } else {
+        throw Exception('Failed to add food: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add food: $e');
+    }
+  }
+
+  // Update data to API
+  Future<Product> updateFoods(Product food) async {
+    try {
+      final response = await http.put(Uri.parse('$foodUrl/${food}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(food.toJson()));
+      if (response.statusCode == 200) {
+        return Product.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to update food');
+      }
+    } catch (e) {
+      throw Exception('Failed to update food');
+    }
+  }
+
+  // Delete data from API
+  Future<void> deleteFoods(int id) async {
+    try {
+      final response = await http.delete(Uri.parse('$foodUrl/$id'));
+      if (response.statusCode != 204) {
+        throw Exception('Failed to delete food');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete food');
     }
   }
 }

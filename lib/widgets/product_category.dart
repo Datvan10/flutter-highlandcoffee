@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/screens/app/bread_page.dart';
 import 'package:highlandcoffeeapp/screens/app/coffee_page.dart';
 import 'package:highlandcoffeeapp/screens/app/freeze_page.dart';
 import 'package:highlandcoffeeapp/screens/app/other_page.dart';
+import 'package:highlandcoffeeapp/screens/app/food_page.dart';
 import 'package:highlandcoffeeapp/screens/app/tea_page.dart';
 import 'package:highlandcoffeeapp/widgets/product_category_form.dart';
 
@@ -52,14 +52,14 @@ class _ProductCategoryState extends State<ProductCategory> {
           destinationPage: TeaPage(),
         ),
         ProductCategoryForm(
-          titleProduct: 'Bánh mì',
-          isSelected: selectedCategory == 'Bánh mì',
+          titleProduct: 'Đồ ăn',
+          isSelected: selectedCategory == 'Đồ ăn',
           onTap: () {
             setState(() {
-              selectedCategory = 'Bánh mì';
+              selectedCategory = 'Đồ ăn';
             });
           },
-          destinationPage: BreadPage(),
+          destinationPage: FoodPage(),
         ),
         ProductCategoryForm(
           titleProduct: 'Khác',
