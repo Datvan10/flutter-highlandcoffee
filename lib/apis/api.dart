@@ -190,6 +190,62 @@ class AdminApi {
       throw Exception('Failed to add product: $e');
     }
   }
+
+  // Get product for admin
+  Future<List<Product>> getProduct(String selectedCategory) async {
+    // List of API URLs for each category
+    String getCategoryApiUrl(String selectedCategory) {
+      switch (selectedCategory) {
+        case 'Coffee':
+          return 'http://localhost:5194/api/coffees';
+        case 'Freeze':
+          return 'http://localhost:5194/api/freezes';
+        case 'Trà':
+          return 'http://localhost:5194/api/teas';
+        case 'Đồ ăn':
+          return 'http://localhost:5194/api/foods';
+        case 'Danh sách sản phẩm':
+          return 'http://localhost:5194/api/products';
+        case 'Sản phẩm phổ biến':
+          return 'http://localhost:5194/api/populars';
+        case 'Sản phẩm bán chạy nhất':
+          return 'http://localhost:5194/api/bestsales';
+        case 'Danh sách sản phẩm phổ biến':
+          return 'http://localhost:5194/api/populars';
+        case 'Khác':
+          return 'http://localhost:5194/api/others';
+        default:
+          throw Exception('Invalid category');
+      }
+    }
+
+    final apiUrl = getCategoryApiUrl(selectedCategory);
+    final uri = Uri.parse(apiUrl);
+
+    try {
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Product> products = [];
+        for (var item in jsonData) {
+          Product product = Product.fromJson(item);
+          // Decode image and image detail
+          Uint8List decodedImage = base64Decode(product.image);
+          Uint8List decodedImageDetail = base64Decode(product.image_detail);
+          final image = MemoryImage(decodedImage);
+          final image_detail = MemoryImage(decodedImageDetail);
+
+          products.add(product);
+        }
+        return products;
+      } else {
+        throw Exception('Failed to load coffee products');
+      }
+
+    } catch (e) {
+      throw Exception('Failed to add product: $e');
+    }
+  }
 }
 
 // Customer API
