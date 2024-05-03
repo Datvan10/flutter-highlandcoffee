@@ -110,7 +110,7 @@ class _AddProductPageState extends State<AddProductPage> {
         image_detail: base64ImageDetail,
       );
 
-      await adminApi.addProduct(newProduct, _selectedCategory);
+      await adminApi.addProducts(newProduct, _selectedCategory);
       print('Product added to Firestore successfully');
       _showAlert('Thông báo', 'Thêm sản phẩm vào cơ sở dữ liệu thành công.');
       // Reset text controllers

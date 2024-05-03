@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
@@ -16,57 +21,57 @@ class DeleteProductPage extends StatefulWidget {
 
 class _DeleteProductPageState extends State<DeleteProductPage> {
   final _textSearchProductController = TextEditingController();
+  final AdminApi adminApi = AdminApi();
   List<String> collectionNames = [
-    'Bánh mì',
-    'Bánh ngọt',
     'Coffee',
+    'Trà',
+    'Freeze',
+    'Đồ ăn',
+    'Khác',
+    'Bánh mì',
     'Danh sách sản phẩm',
     'Danh sách sản phẩm phổ biến',
-    'Freeze',
     'Sản phẩm bán chạy nhất',
     'Sản phẩm phổ biến',
-    'Trà',
   ];
 
-  Map<String, List<Products>> productsMap = {};
+  Map<String, List<Product>> productsMap = {};
   String selectedCategory = '';
 
   @override
   void initState() {
     super.initState();
+    selectedCategory = collectionNames.first;
     loadData();
   }
 
   void loadData() async {
     for (String collectionName in collectionNames) {
-      List<Products> products = await getProductsFromCollection(collectionName);
+      List<Product> products = await getProductsFromApi(collectionName);
       productsMap[collectionName] = products;
     }
     setState(() {});
   }
 
-  Future<List<Products>> getProductsFromCollection(
-      String collectionName) async {
+  Future<List<Product>> getProductsFromApi(String selectedCategory) async {
     try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection(collectionName).get();
-
-      return querySnapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return Products(
-          id: data['id'],
-          name: data['name'],
-          description: data['description'],
-          imagePath: data['imagePath'],
-          imageDetailPath: data['imageDetailPath'],
-          oldPrice: data['oldPrice'].toDouble(),
-          newPrice: data['newPrice'].toDouble(),
-          rating: data['rating'],
-          category: collectionName,
+      List<Product> products = await adminApi.getProducts(selectedCategory);
+      return products.map((product) {
+        return Product(
+          id: product.id,
+          category_name: product.category_name,
+          product_name: product.product_name,
+          description: product.description,
+          size_s_price: product.size_s_price,
+          size_m_price: product.size_m_price,
+          size_l_price: product.size_l_price,
+          unit: product.unit,
+          image: product.image,
+          image_detail: product.image_detail,
         );
       }).toList();
     } catch (e) {
-      print('Error getting products from $collectionName: $e');
+      print('Error getting products from API for $selectedCategory: $e');
       return [];
     }
   }
@@ -77,23 +82,81 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
     });
   }
 
-  Future<void> deleteProduct(Products productToDelete) async {
-    try {
-      // Bước 1: Xóa sản phẩm khỏi danh sách local
-      setState(() {
-        productsMap[selectedCategory]?.remove(productToDelete);
-      });
+  Future<void> deleteProduct(Product productToDelete) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.arsenal(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content:
+              Text("Bạn có chắc muốn xóa sản phẩm này không?"),
+          actions: [
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text("Xóa"),
+              onPressed: () async {
+                try {
+                  await adminApi.deleteProducts(
+                      productToDelete.id, selectedCategory);
+                  Navigator.pop(context);
+                  _showAlert(
+                      'Thông báo', 'Xóa sản phẩm thành công.');
+                  // Gọi hàm loadData() để cập nhật danh sách sản phẩm sau khi xóa
+                  loadData();
+                } catch (e) {
+                  print('Error deleting product: $e');
+                  Navigator.pop(context);
+                  _showAlert('Lỗi', 'Đã xảy ra lỗi khi xóa sản phẩm.');
+                }
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(
+                "Hủy",
+                style: TextStyle(color: blue),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-      // Bước 2: Xóa sản phẩm khỏi Firestore
-      await FirebaseFirestore.instance
-          .collection(productToDelete.category)
-          .doc(productToDelete.id)
-          .delete();
-
-      print('Product deleted successfully from ${productToDelete.category}');
-    } catch (e) {
-      print('Error deleting product from ${productToDelete.category}: $e');
-    }
+  void _showAlert(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            title,
+            style: GoogleFonts.arsenal(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Text(message),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget build(BuildContext context) {
@@ -178,19 +241,26 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: collectionNames
-                        .map(
-                          (category) => Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                updateSelectedProducts(category);
-                              },
-                              child: Text(category),
+                    children: collectionNames.map((category) {
+                      final bool isSelected = category == selectedCategory;
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            updateSelectedProducts(category);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: isSelected ? primaryColors : white,
+                          ),
+                          child: Text(
+                            category,
+                            style: TextStyle(
+                              color: isSelected ? white : black,
                             ),
                           ),
-                        )
-                        .toList(),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
               ],
@@ -208,8 +278,9 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
               itemCount: 1,
               itemBuilder: (context, index) {
                 // Lọc danh sách sản phẩm dựa trên danh mục được chọn
-                List<Products> products =
-                    selectedCategory.isNotEmpty ? productsMap[selectedCategory] ?? [] : [];
+                List<Product> products = selectedCategory.isNotEmpty
+                    ? productsMap[selectedCategory] ?? []
+                    : [];
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,8 +312,8 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                           children: [
                             Expanded(
                               flex: 1,
-                              child: Image.network(
-                                product.imagePath,
+                              child: Image.memory(
+                                base64Decode(product.image),
                                 height: 80,
                                 width: 80,
                               ),
@@ -256,7 +327,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    product.name,
+                                    product.product_name,
                                     style: GoogleFonts.arsenal(
                                       fontSize: 18,
                                       color: primaryColors,
@@ -264,7 +335,8 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                                     ),
                                   ),
                                   Text(
-                                    product.newPrice.toStringAsFixed(3) + 'đ',
+                                    product.size_m_price.toStringAsFixed(3) +
+                                        'đ',
                                     style: GoogleFonts.roboto(
                                       color: primaryColors,
                                       fontSize: 16,
@@ -304,13 +376,28 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                                   Icons.delete,
                                   color: red,
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (selectedCategory.isNotEmpty) {
                                     // Lấy thông tin sản phẩm cần xóa
-                                    Products productToDelete = product;
+                                    Product productToDelete = product;
 
                                     // Gọi hàm xóa sản phẩm
                                     deleteProduct(productToDelete);
+                                    // try {
+                                    //   // Gọi hàm xóa sản phẩm
+                                    //   await adminApi.deleteProducts(
+                                    //       productToDelete.id, selectedCategory);
+
+                                    //   // Sau khi xóa thành công, cập nhật lại danh sách sản phẩm
+                                    //   setState(() {
+                                    //     productsMap[selectedCategory]
+                                    //         ?.remove(productToDelete);
+                                    //   });
+
+                                    //   print('Product deleted successfully');
+                                    // } catch (e) {
+                                    //   print('Error deleting product: $e');
+                                    // }
                                   }
                                 },
                               ),
@@ -327,8 +414,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
         ),
         // Nút hoàn thành
         Padding(
-          padding:
-              const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 18.0),
+          padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 18.0),
           child: MyButton(
             text: 'Hoàn thành',
             onTap: () {},
