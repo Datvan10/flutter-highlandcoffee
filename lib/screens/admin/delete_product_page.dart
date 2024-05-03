@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
@@ -45,36 +46,35 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
   }
 
   void loadData() async {
-  for (String collectionName in collectionNames) {
-    List<Product> products = await getProductsFromApi(collectionName);
-    productsMap[collectionName] = products;
+    for (String collectionName in collectionNames) {
+      List<Product> products = await getProductsFromApi(collectionName);
+      productsMap[collectionName] = products;
+    }
+    setState(() {});
   }
-  setState(() {});
-}
 
-Future<List<Product>> getProductsFromApi(String selectedCategory) async {
-  try {
-    List<Product> products = await adminApi.getProduct(selectedCategory);
-    return products.map((product) {
-      return Product(
-        id: product.id,
-        category_name: product.category_name,
-        product_name: product.product_name,
-        description: product.description,
-        size_s_price: product.size_s_price,
-        size_m_price: product.size_m_price,
-        size_l_price: product.size_l_price,
-        unit: product.unit,
-        image: product.image,
-        image_detail: product.image_detail,
-      );
-    }).toList();
-  } catch (e) {
-    print('Error getting products from API for $selectedCategory: $e');
-    return [];
+  Future<List<Product>> getProductsFromApi(String selectedCategory) async {
+    try {
+      List<Product> products = await adminApi.getProducts(selectedCategory);
+      return products.map((product) {
+        return Product(
+          id: product.id,
+          category_name: product.category_name,
+          product_name: product.product_name,
+          description: product.description,
+          size_s_price: product.size_s_price,
+          size_m_price: product.size_m_price,
+          size_l_price: product.size_l_price,
+          unit: product.unit,
+          image: product.image,
+          image_detail: product.image_detail,
+        );
+      }).toList();
+    } catch (e) {
+      print('Error getting products from API for $selectedCategory: $e');
+      return [];
+    }
   }
-}
-
 
   void updateSelectedProducts(String selectedCollection) {
     setState(() {
@@ -82,24 +82,82 @@ Future<List<Product>> getProductsFromApi(String selectedCategory) async {
     });
   }
 
-  // Future<void> deleteProduct(Product productToDelete) async {
-  //   try {
-  //     // Bước 1: Xóa sản phẩm khỏi danh sách local
-  //     setState(() {
-  //       productsMap[selectedCategory]?.remove(productToDelete);
-  //     });
+  Future<void> deleteProduct(Product productToDelete) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.arsenal(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content:
+              Text("Bạn có chắc muốn xóa sản phẩm này không?"),
+          actions: [
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text("Xóa"),
+              onPressed: () async {
+                try {
+                  await adminApi.deleteProducts(
+                      productToDelete.id, selectedCategory);
+                  Navigator.pop(context);
+                  _showAlert(
+                      'Thông báo', 'Xóa sản phẩm thành công.');
+                  // Gọi hàm loadData() để cập nhật danh sách sản phẩm sau khi xóa
+                  loadData();
+                } catch (e) {
+                  print('Error deleting product: $e');
+                  Navigator.pop(context);
+                  _showAlert('Lỗi', 'Đã xảy ra lỗi khi xóa sản phẩm.');
+                }
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(
+                "Hủy",
+                style: TextStyle(color: blue),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-  //     // Bước 2: Xóa sản phẩm khỏi Firestore
-  //     await FirebaseFirestore.instance
-  //         .collection(productToDelete.category)
-  //         .doc(productToDelete.id)
-  //         .delete();
-
-  //     print('Product deleted successfully from ${productToDelete.category}');
-  //   } catch (e) {
-  //     print('Error deleting product from ${productToDelete.category}: $e');
-  //   }
-  // }
+  void _showAlert(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            title,
+            style: GoogleFonts.arsenal(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Text(message),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget build(BuildContext context) {
     return Column(
@@ -277,7 +335,8 @@ Future<List<Product>> getProductsFromApi(String selectedCategory) async {
                                     ),
                                   ),
                                   Text(
-                                    product.size_m_price.toStringAsFixed(3) + 'đ',
+                                    product.size_m_price.toStringAsFixed(3) +
+                                        'đ',
                                     style: GoogleFonts.roboto(
                                       color: primaryColors,
                                       fontSize: 16,
@@ -317,13 +376,28 @@ Future<List<Product>> getProductsFromApi(String selectedCategory) async {
                                   Icons.delete,
                                   color: red,
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (selectedCategory.isNotEmpty) {
                                     // Lấy thông tin sản phẩm cần xóa
                                     Product productToDelete = product;
 
                                     // Gọi hàm xóa sản phẩm
-                                    // deleteProduct(productToDelete);
+                                    deleteProduct(productToDelete);
+                                    // try {
+                                    //   // Gọi hàm xóa sản phẩm
+                                    //   await adminApi.deleteProducts(
+                                    //       productToDelete.id, selectedCategory);
+
+                                    //   // Sau khi xóa thành công, cập nhật lại danh sách sản phẩm
+                                    //   setState(() {
+                                    //     productsMap[selectedCategory]
+                                    //         ?.remove(productToDelete);
+                                    //   });
+
+                                    //   print('Product deleted successfully');
+                                    // } catch (e) {
+                                    //   print('Error deleting product: $e');
+                                    // }
                                   }
                                 },
                               ),

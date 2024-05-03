@@ -9,6 +9,34 @@ import 'package:http/http.dart' as http;
 // Admin API
 class AdminApi {
   final String adminUrl = "http://localhost:5194/api/admins";
+
+  // List of API URLs for each category
+  static const String baseUrl = 'http://localhost:5194/api';
+  String getCategoryApiUrl(String selectedCategory) {
+    switch (selectedCategory) {
+      case 'Coffee':
+        return '$baseUrl/coffees';
+      case 'Freeze':
+        return '$baseUrl/freezes';
+      case 'Trà':
+        return '$baseUrl/teas';
+      case 'Đồ ăn':
+        return '$baseUrl/foods';
+      case 'Danh sách sản phẩm':
+        return '$baseUrl/products';
+      case 'Sản phẩm phổ biến':
+        return '$baseUrl/populars';
+      case 'Sản phẩm bán chạy nhất':
+        return '$baseUrl/bestsales';
+      case 'Danh sách sản phẩm phổ biến':
+        return '$baseUrl/populars';
+      case 'Khác':
+        return '$baseUrl/others';
+      default:
+        throw Exception('Invalid category');
+    }
+  }
+
   // Read data from API
   Future<List<Admin>> getAdmins() async {
     try {
@@ -143,39 +171,12 @@ class AdminApi {
   }
 
   // Add product for admin
-  Future<void> addProduct(Product product, String selectedCategory) async {
-    // List of API URLs for each category
-    String getCategoryApiUrl(String selectedCategory) {
-      switch (selectedCategory) {
-        case 'Coffee':
-          return 'http://localhost:5194/api/coffees';
-        case 'Freeze':
-          return 'http://localhost:5194/api/freezes';
-        case 'Trà':
-          return 'http://localhost:5194/api/teas';
-        case 'Đồ ăn':
-          return 'http://localhost:5194/api/foods';
-        case 'Danh sách sản phẩm':
-          return 'http://localhost:5194/api/products';
-        case 'Sản phẩm phổ biến':
-          return 'http://localhost:5194/api/populars';
-        case 'Sản phẩm bán chạy nhất':
-          return 'http://localhost:5194/api/bestsales';
-        case 'Danh sách sản phẩm phổ biến':
-          return 'http://localhost:5194/api/populars';
-        case 'Khác':
-          return 'http://localhost:5194/api/others';
-        default:
-          throw Exception('Invalid category');
-      }
-    }
-
+  Future<void> addProducts(Product product, String selectedCategory) async {
     final apiUrl = getCategoryApiUrl(selectedCategory);
-    final uri = Uri.parse(apiUrl);
 
     try {
       final response = await http.post(
-        uri,
+        Uri.parse(apiUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -192,38 +193,11 @@ class AdminApi {
   }
 
   // Get product for admin
-  Future<List<Product>> getProduct(String selectedCategory) async {
-    // List of API URLs for each category
-    String getCategoryApiUrl(String selectedCategory) {
-      switch (selectedCategory) {
-        case 'Coffee':
-          return 'http://localhost:5194/api/coffees';
-        case 'Freeze':
-          return 'http://localhost:5194/api/freezes';
-        case 'Trà':
-          return 'http://localhost:5194/api/teas';
-        case 'Đồ ăn':
-          return 'http://localhost:5194/api/foods';
-        case 'Danh sách sản phẩm':
-          return 'http://localhost:5194/api/products';
-        case 'Sản phẩm phổ biến':
-          return 'http://localhost:5194/api/populars';
-        case 'Sản phẩm bán chạy nhất':
-          return 'http://localhost:5194/api/bestsales';
-        case 'Danh sách sản phẩm phổ biến':
-          return 'http://localhost:5194/api/populars';
-        case 'Khác':
-          return 'http://localhost:5194/api/others';
-        default:
-          throw Exception('Invalid category');
-      }
-    }
-
+  Future<List<Product>> getProducts(String selectedCategory) async {
     final apiUrl = getCategoryApiUrl(selectedCategory);
-    final uri = Uri.parse(apiUrl);
 
     try {
-      final response = await http.get(uri);
+      final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         List<Product> products = [];
@@ -239,11 +213,27 @@ class AdminApi {
         }
         return products;
       } else {
-        throw Exception('Failed to load coffee products');
+        throw Exception('Failed to load products');
       }
-
     } catch (e) {
-      throw Exception('Failed to add product: $e');
+      throw Exception('Failed to load products: $e');
+    }
+  }
+
+  // Delete product for admin
+  Future<void> deleteProducts(int id, String selectedCategory) async {
+    final apiUrl = getCategoryApiUrl(selectedCategory);
+    final uri = Uri.parse('$apiUrl/$id');
+
+    try {
+      final response = await http.delete(uri);
+      if (response.statusCode == 200) {
+        print('Product deleted successfully');
+      } else {
+        throw Exception('Failed to delete product: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete product: $e');
     }
   }
 }
