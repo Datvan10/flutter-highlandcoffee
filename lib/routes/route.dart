@@ -1,4 +1,6 @@
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:highlandcoffeeapp/auth/login_register_switcher_admin_page.dart';
+import 'package:highlandcoffeeapp/auth/login_register_switcher_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/customer/profile_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/app/bread_page.dart';
 import 'package:highlandcoffeeapp/screens/app/choose_login_type_page%20.dart';
@@ -27,6 +29,8 @@ List<GetPage> getPages = [
   GetPage(name: '/introduce_page1', page: () => const IntroducePage1()),
   GetPage(name: '/introduce_page2', page: () => const IntroducePage2()),
   GetPage(name: '/choose_login_type_page', page: () => ChooseLoginTypePage()),
+  GetPage(name: '/login_register_switcher_customer_page', page: () => LoginRegisterSwitcherCustomerPage()),
+  GetPage(name: '/login_register_switcher_admin_page', page: () => const LoginRegisterSwitcherAdminPage()),
   GetPage(name:  '/admin_page', page: () => const AdminPage()),
   GetPage(name: '/home_page', page: () => const HomePage()),
   GetPage(name: '/list_product_page', page:() => const ListProductPage()),
