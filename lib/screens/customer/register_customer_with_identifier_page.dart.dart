@@ -66,6 +66,7 @@ class _RegisterCustomerWithIdentifierPageState
     try {
       // Create new customer object
       Customer newCustomer = Customer(
+        id: 0,
         name: name,
         email: email,
         password: password,
@@ -75,9 +76,9 @@ class _RegisterCustomerWithIdentifierPageState
       );
       // Call API to register user
       await api.addCustomer(newCustomer);
-      Navigator.pushReplacementNamed(context, '/auth_customer_page');
+      Navigator.pushReplacementNamed(context, '/login_register_switcher_customer_page');
       // Show success alert
-      showNotification('Đăng ký thành công, vui lòng quay lại màn hình đăng nhập để thực hiện đăng nhập');
+      showNotification('Đăng ký thành công, đăng nhập ngay!');
       // Clear input fields
       nameController.clear();
       emailController.clear();

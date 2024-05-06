@@ -268,6 +268,7 @@ class CustomerApi {
         },
         body: jsonEncode(customer.toJson()),
       );
+      print(response.statusCode);
       if (response.statusCode == 200) {
         print('Customer added successfully');
       } else {
