@@ -31,8 +31,8 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
   //
   initState() {
     super.initState();
-    _editEmailController.text = loggedInUser!.email;
-    _editPhoneNumberController.text = loggedInUser!.phone_number.toString();
+    // _editEmailController.text = loggedInUser!.email;
+    _editPhoneNumberController.text = loggedInUser!.phonenumber.toString();
     _editUserNameController.text = loggedInUser!.name;
     _editAdressController.text = loggedInUser!.address;
   }

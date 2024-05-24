@@ -23,13 +23,13 @@ class RegisterCustomerWithIdentifierPage extends StatefulWidget {
 class _RegisterCustomerWithIdentifierPageState
     extends State<RegisterCustomerWithIdentifierPage> {
   final CustomerApi api = CustomerApi();
-  final TextEditingController emailController = TextEditingController();
+  // final TextEditingController emailController = TextEditingController();
   final TextEditingController phone_numberController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirm_passwordController =
-      TextEditingController();
+  // final TextEditingController confirm_passwordController =
+  //     TextEditingController();
 
   bool isObsecureName = false;
   bool isObsecurePassword = false;
@@ -37,42 +37,38 @@ class _RegisterCustomerWithIdentifierPageState
 
   // Register user
   Future<void> registerUser() async {
-    String email = emailController.text.trim();
-    String phone_number = phone_numberController.text.trim();
+    // String email = emailController.text.trim();
+    String phonenumber = phone_numberController.text.trim();
     String address = addressController.text.trim();
     String name = nameController.text.trim();
     String password = passwordController.text.trim();
-    String confirm_password = confirm_passwordController.text.trim();
+    // String confirm_password = confirm_passwordController.text.trim();
 
     // Validate input fields
-    if (email.isEmpty ||
-        phone_number.isEmpty ||
+    if (phonenumber.isEmpty ||
         address.isEmpty ||
-        name.isEmpty ||
-        password.isEmpty ||
-        confirm_password.isEmpty) {
+        name.isEmpty) {
       // Show alert for empty fields
       showNotification('Vui lòng nhập đầy đủ thông tin đăng ký');
       return;
     }
 
     // Check if password matches confirm password
-    if (password != confirm_password) {
-      // Show alert for password mismatch
-      showNotification('Mật khẩu không khớp, vui lòng thử lại');
-      return;
-    }
+    // if (password != confirm_password) {
+    //   // Show alert for password mismatch
+    //   showNotification('Mật khẩu không khớp, vui lòng thử lại');
+    //   return;
+    // }
 
     try {
       // Create new customer object
       Customer newCustomer = Customer(
-        id: 0,
+        id: '',
         name: name,
-        email: email,
         password: password,
-        confirm_password: confirm_password,
-        phone_number: int.parse(phone_number),
+        phonenumber: phonenumber,
         address: address,
+        point: 0,
       );
       // Call API to register user
       await api.addCustomer(newCustomer);
@@ -81,11 +77,11 @@ class _RegisterCustomerWithIdentifierPageState
       showNotification('Đăng ký thành công, đăng nhập ngay!');
       // Clear input fields
       nameController.clear();
-      emailController.clear();
+      // emailController.clear();
       phone_numberController.clear();
       addressController.clear();
       passwordController.clear();
-      confirm_passwordController.clear();
+      // confirm_passwordController.clear();
     } catch (e) {
       // print("Error adding customer: $e");
       // Show alert for error
@@ -127,10 +123,13 @@ class _RegisterCustomerWithIdentifierPageState
       backgroundColor: background,
       body: Padding(
         padding: const EdgeInsets.only(
-            left: 18.0, top: 70.0, right: 18.0, bottom: 50),
+            left: 18.0, top: 90.0, right: 18.0, bottom: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 10.0,
+            ),
             //title email
             Text(
               'Đăng ký',
@@ -138,31 +137,31 @@ class _RegisterCustomerWithIdentifierPageState
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
             SizedBox(
-              height: 30.0,
+              height: 100.0,
             ),
             //form email
-            TextFormFieldEmail(
-              hintText: 'Email',
-              prefixIconData: Icons.email,
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      emailController.clear();
-                    });
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: primaryColors,
-                  )),
-              controller: emailController,
-              iconColor: primaryColors,
-            ),
-            SizedBox(
-              height: 15.0,
-            ),
+            // TextFormFieldEmail(
+            //   hintText: 'Email',
+            //   prefixIconData: Icons.email,
+            //   suffixIcon: IconButton(
+            //       onPressed: () {
+            //         setState(() {
+            //           emailController.clear();
+            //         });
+            //       },
+            //       icon: Icon(
+            //         Icons.clear,
+            //         color: primaryColors,
+            //       )),
+            //   controller: emailController,
+            //   iconColor: primaryColors,
+            // ),
+            // SizedBox(
+            //   height: 15.0,
+            // ),
             //form phone number
             MyTextFormField(
-              hintText: 'Số điện thoại',
+              hintText: 'Nhập số điện thoại',
               prefixIconData: Icons.phone,
               suffixIcon: IconButton(
                   onPressed: () {
@@ -182,11 +181,11 @@ class _RegisterCustomerWithIdentifierPageState
             ),
 
             SizedBox(
-              height: 15.0,
+              height: 20.0,
             ),
             //form address
             MyTextFormField(
-              hintText: 'Địa chỉ',
+              hintText: 'Nhập địa chỉ',
               prefixIconData: Icons.location_on,
               suffixIcon: IconButton(
                   onPressed: () {
@@ -202,11 +201,11 @@ class _RegisterCustomerWithIdentifierPageState
               iconColor: primaryColors,
             ),
             SizedBox(
-              height: 15.0,
+              height: 20.0,
             ),
             //form name
             MyTextFormField(
-              hintText: 'Tên hiển thị',
+              hintText: 'Nhập tên hiển thị',
               prefixIconData: Icons.person,
               suffixIcon: IconButton(
                   onPressed: () {
@@ -226,7 +225,7 @@ class _RegisterCustomerWithIdentifierPageState
             ),
             //form password
             TextFormFieldPassword(
-              hintText: 'Mật khẩu',
+              hintText: 'Nhập mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
               suffixIcon: IconButton(
                 icon: Icon(
@@ -244,29 +243,29 @@ class _RegisterCustomerWithIdentifierPageState
               obscureText: !isObsecurePassword,
             ),
             SizedBox(
-              height: 15.0,
+              height: 10.0,
             ),
-            //form confirm password
-            MyTextFormField(
-              hintText: 'Xác nhận mật khẩu',
-              prefixIconData: Icons.vpn_key_sharp,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isObsecureConfirmPassword
-                      ? Icons.visibility
-                      : Icons.visibility_off,
-                  color: primaryColors,
-                ),
-                onPressed: () {
-                  setState(() {
-                    isObsecureConfirmPassword = !isObsecureConfirmPassword;
-                  });
-                },
-              ),
-              controller: confirm_passwordController,
-              iconColor: primaryColors,
-              obscureText: !isObsecureConfirmPassword,
-            ),
+            // //form confirm password
+            // MyTextFormField(
+            //   hintText: 'Xác nhận mật khẩu',
+            //   prefixIconData: Icons.vpn_key_sharp,
+            //   suffixIcon: IconButton(
+            //     icon: Icon(
+            //       isObsecureConfirmPassword
+            //           ? Icons.visibility
+            //           : Icons.visibility_off,
+            //       color: primaryColors,
+            //     ),
+            //     onPressed: () {
+            //       setState(() {
+            //         isObsecureConfirmPassword = !isObsecureConfirmPassword;
+            //       });
+            //     },
+            //   ),
+            //   controller: confirm_passwordController,
+            //   iconColor: primaryColors,
+            //   obscureText: !isObsecureConfirmPassword,
+            // ),
             SizedBox(
               height: 30.0,
             ),
@@ -301,14 +300,14 @@ class _RegisterCustomerWithIdentifierPageState
               ],
             ),
             SizedBox(
-              height: 25.0,
+              height: 30.0,
             ),
             //or login with
             Center(
                 child: Text('ĐĂNG NHẬP BẰNG',
                     style: GoogleFonts.roboto(color: grey))),
             SizedBox(
-              height: 25.0,
+              height: 30.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -328,7 +327,7 @@ class _RegisterCustomerWithIdentifierPageState
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             //text tip
             Row(

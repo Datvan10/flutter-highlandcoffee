@@ -62,45 +62,38 @@ class Staff {
 
 // Model customer
 class Customer {
-  int? id;
+  String? id;
   final String name;
-  final String email;
-  String password;
-  final String confirm_password;
-  Uint8List? image;
-  final int phone_number;
+  final String phonenumber;
   final String address;
+  int? point;
+  final String password;
 
   Customer({
-    this.id,
+    required this.id,
     required this.name,
-    required this.email,
-    required this.password,
-    required this.confirm_password,
-    this.image,
-    required this.phone_number,
+    required this.phonenumber,
     required this.address,
+    required this.point,
+    required this.password,
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
         id: json['id'],
         name: json['name'],
-        email: json['email'],
-        password: json['password'],
-        confirm_password: json['confirm_password'],
-        image: json['image'],
-        phone_number: json['phone_number'],
+        phonenumber: json['phonenumber'],
         address: json['address'],
+        point: json['point'],
+        password: json['password'],
       );
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'name': name,
-        'email': email,
-        'password': password,
-        'confirm_password': confirm_password,
-        'image': image,
-        'phone_number': phone_number,
+        'phonenumber': phonenumber,
         'address': address,
+        'point': point,
+        'password': password,
       };
 }
 
@@ -141,7 +134,7 @@ class Order {
 
 // Model cart
 class Cart {
-  int customer_id;
+  String customer_id;
   String category_name;
   int product_id;
   int quantity;
@@ -184,7 +177,7 @@ class Cart {
 
 // Model favorite
 class Favorite {
-  int customer_id;
+  String customer_id;
   String category_name;
   int product_id;
   String product_name;
