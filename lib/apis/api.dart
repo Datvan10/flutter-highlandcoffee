@@ -261,6 +261,8 @@ class CustomerApi {
     final uri = Uri.parse(customerUrl);
 
     try {
+      // final customerJson = jsonEncode(customer.toJson());
+      // print('Customer JSON: $customerJson'); // In ra dữ liệu để kiểm tra
       final response = await http.post(
         uri,
         headers: <String, String>{
@@ -334,8 +336,7 @@ class CustomerApi {
         for (var customerData in jsonResponse) {
           Customer customer = Customer.fromJson(customerData);
           // Kiểm tra nếu email hoặc số điện thoại trùng khớp
-          if (customer.email == identifier ||
-              customer.phone_number.toString() == identifier) {
+          if (customer.phonenumber.toString() == identifier) {
             try {
               // Gửi yêu cầu API để cập nhật mật khẩu với id của khách hàng tương ứng
               final updateResponse = await http.put(
@@ -373,42 +374,23 @@ class CustomerApi {
     }
   }
 
-  // Authenticate customer
-  Future<bool> authenticateCustomer(String identifier, String password) async {
-    String url;
-
-    identifier = removeLeadingZeros(identifier);
-
-    // Kiểm tra nếu identifier có định dạng email
-    if (RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(identifier)) {
-      url = '$customerUrl?email=$identifier&password=$password';
-    } else {
-      // Kiểm tra nếu identifier có định dạng số điện thoại
-      if (RegExp(r'^[0-9]+$').hasMatch(identifier)) {
-        url = '$customerUrl?phone_number=$identifier&password=$password';
-      } else {
-        // Nếu không phải email hoặc số điện thoại, coi identifier là email
-        url = '$customerUrl?email=$identifier&password=$password';
-      }
-    }
+  // Authenticate account
+  Future<bool> authenticateAccountCustomer(String identifier, String password) async {
+    final uri = Uri.parse(customerUrl);
 
     try {
-      final response = await http.get(
-        Uri.parse(url),
-      );
-      if (response.statusCode == 200) {
-        List jsonResponse = json.decode(response.body);
+      final response = await http.get(uri);
 
-        for (var adminData in jsonResponse) {
-          Customer customer = Customer.fromJson(adminData);
-          // Kiểm tra cả email và số điện thoại
-          if (customer.email == identifier ||
-              customer.phone_number.toString() == identifier) {
-            if (customer.password == password) {
-              return true;
-            } else {
-              return false;
-            }
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+
+        for (var customerData in jsonResponse) {
+          Customer customer = Customer.fromJson(customerData);
+          // Kiểm tra `name` hoặc `phonenumber` và `password`
+          if ((customer.name == identifier ||
+                  customer.phonenumber == identifier) &&
+              customer.password == password) {
+            return true;
           }
         }
         return false;
@@ -420,41 +402,26 @@ class CustomerApi {
     }
   }
 
-  //
+  // Hàm lấy thông tin khách hàng dựa vào identifier
   Future<Customer> getCustomerByIdentifier(String identifier) async {
-    String url;
-    identifier = removeLeadingZeros(identifier);
-    try {
-      // Kiểm tra nếu identifier có định dạng email
-      if (RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(identifier)) {
-        url = '$customerUrl?email=$identifier';
-      } else {
-        // Kiểm tra nếu identifier có định dạng số điện thoại
-        if (RegExp(r'^[0-9]+$').hasMatch(identifier)) {
-          url = '$customerUrl?phone_number=$identifier';
-        } else {
-          // Nếu không phải email hoặc số điện thoại, không thực hiện truy vấn và ném ra ngoại lệ
-          throw Exception('Invalid identifier format');
-        }
-      }
+    final uri = Uri.parse(customerUrl);
 
-      final response = await http.get(
-        Uri.parse(url),
-      );
+    try {
+      final response = await http.get(uri);
 
       if (response.statusCode == 200) {
         List<dynamic> responseData = json.decode(response.body);
 
         for (var userData in responseData) {
           Customer customer = Customer.fromJson(userData);
-          // Kiểm tra cả email và số điện thoại
-          if (customer.email == identifier ||
-              customer.phone_number.toString() == identifier) {
+          // Kiểm tra `name` hoặc `phonenumber`
+          if (customer.name == identifier ||
+              customer.phonenumber == identifier) {
             return customer;
           }
         }
 
-        // Nếu không tìm thấy người dùng có thông tin email hoặc số điện thoại trùng khớp, ném ra một ngoại lệ
+        // Nếu không tìm thấy người dùng có thông tin trùng khớp, ném ra một ngoại lệ
         throw Exception('Customer data not found for identifier: $identifier');
       } else {
         // Nếu không thành công, ném ra một ngoại lệ

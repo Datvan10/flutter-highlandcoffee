@@ -15,7 +15,7 @@ class InformationCustomerForm extends StatelessWidget {
       // Trích xuất thông tin từ loggedInUser
       String userName = loggedInUser!.name;
       String address = loggedInUser!.address;
-      String phoneNumber = loggedInUser!.phone_number.toString();
+      String phoneNumber = loggedInUser!.phonenumber.toString();
 
       return Container(
         height: 150,

@@ -27,12 +27,12 @@ class _LoginCustomerWithIdentifierPageState
   final passWordController = TextEditingController();
   bool isLoggedIn = false;
   bool isObsecure = false;
-  bool _isVietnamSelected = true; // Ban đầu chọn hình ảnh Việt Nam
+  bool _isVietnamSelected = true;
 
   void _toggleImage() {
     setState(() {
       _isVietnamSelected =
-          !_isVietnamSelected; // Đảo ngược trạng thái của biến boolean
+          !_isVietnamSelected;
     });
   }
 
@@ -46,7 +46,7 @@ class _LoginCustomerWithIdentifierPageState
     } else {
       try {
         bool isAuthenticated =
-            await api.authenticateCustomer(identifier, password);
+            await api.authenticateAccountCustomer(identifier, password);
 
         if (isAuthenticated) {
           Customer loggedInCustomer =
@@ -98,25 +98,25 @@ class _LoginCustomerWithIdentifierPageState
     return Scaffold(
       backgroundColor: background,
       body: Padding(
-        padding: const EdgeInsets.only(left: 18.0, top: 50.0, right: 18.0),
+        padding: const EdgeInsets.only(left: 18.0, top: 90.0, right: 18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Chose language
-            GestureDetector(
-              onTap: _toggleImage,
-              child: _isVietnamSelected
-                  ? Image.asset(
-                      'assets/langs/vn.png',
-                      width: 40,
-                      height: 40,
-                    )
-                  : Image.asset(
-                      'assets/langs/en.png',
-                      width: 40,
-                      height: 40,
-                    ),
-            ),
+            // GestureDetector(
+            //   onTap: _toggleImage,
+            //   child: _isVietnamSelected
+            //       ? Image.asset(
+            //           'assets/langs/vn.png',
+            //           width: 40,
+            //           height: 40,
+            //         )
+            //       : Image.asset(
+            //           'assets/langs/en.png',
+            //           width: 40,
+            //           height: 40,
+            //         ),
+            // ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.start,
             //   children: [
@@ -160,7 +160,7 @@ class _LoginCustomerWithIdentifierPageState
             ),
             //form email
             MyTextFormField(
-              hintText: 'Nhập email hoặc số điện thoại',
+              hintText: 'Tên đăng nhập',
               prefixIconData: Icons.person,
               suffixIcon: IconButton(
                   onPressed: () {
@@ -180,7 +180,7 @@ class _LoginCustomerWithIdentifierPageState
             ),
             //form password
             TextFormFieldPassword(
-              hintText: 'Nhập mật khẩu',
+              hintText: 'Mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
               suffixIcon: IconButton(
                 icon: Icon(

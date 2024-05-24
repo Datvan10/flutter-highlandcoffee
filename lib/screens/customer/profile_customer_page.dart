@@ -208,7 +208,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
               height: 10.0,
             ),
             //email
-            Text(loggedInUser?.email ?? ''),
+            Text(loggedInUser?.phonenumber ?? ''),
             SizedBox(
               height: 20.0,
             ),
