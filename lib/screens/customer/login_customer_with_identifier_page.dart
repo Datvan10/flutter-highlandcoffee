@@ -31,8 +31,7 @@ class _LoginCustomerWithIdentifierPageState
 
   void _toggleImage() {
     setState(() {
-      _isVietnamSelected =
-          !_isVietnamSelected;
+      _isVietnamSelected = !_isVietnamSelected;
     });
   }
 
@@ -43,6 +42,8 @@ class _LoginCustomerWithIdentifierPageState
 
     if (identifier.isEmpty || password.isEmpty) {
       showNotification('Vui lòng nhập đầy đủ thông tin đăng nhập');
+    } else if (password.length < 6) {
+      showNotification('Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
     } else {
       try {
         bool isAuthenticated =
@@ -160,7 +161,7 @@ class _LoginCustomerWithIdentifierPageState
             ),
             //form email
             MyTextFormField(
-              hintText: 'Tên đăng nhập',
+              hintText: 'Tên hoặc số điện thoại',
               prefixIconData: Icons.person,
               suffixIcon: IconButton(
                   onPressed: () {
