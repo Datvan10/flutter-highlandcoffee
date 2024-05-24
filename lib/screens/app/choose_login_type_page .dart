@@ -35,7 +35,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                     fontSize: 50.0,
                     decoration: TextDecoration.none),
               ),
-              SizedBox(height: 250,),
+              SizedBox(height: 220,),
               ElevatedButton(
                 onPressed: () {
                   // Di chuyển đến trang đăng nhập User
@@ -51,6 +51,25 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                       Icon(Icons.login, color: blue,),
                       SizedBox(width: 100,),
                       Text('Đăng nhập khách hàng', style: TextStyle(color: black),),
+                    ],
+                  )),
+              ),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  // Di chuyển đến trang đăng nhập Staff
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginRegisterSwitcherCustomerPage()),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      Icon(Icons.login, color: blue,),
+                      SizedBox(width: 100,),
+                      Text('Đăng nhập nhân viên', style: TextStyle(color: black),),
                     ],
                   )),
               ),

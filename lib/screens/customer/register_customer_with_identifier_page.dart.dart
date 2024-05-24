@@ -47,9 +47,16 @@ class _RegisterCustomerWithIdentifierPageState
     // Validate input fields
     if (phonenumber.isEmpty ||
         address.isEmpty ||
-        name.isEmpty) {
+        name.isEmpty ||
+        password.isEmpty) {
       // Show alert for empty fields
       showNotification('Vui lòng nhập đầy đủ thông tin đăng ký');
+      return;
+    }
+    // Check if password length is at least 6 characters
+    if (password.length < 6) {
+      // Show alert for short password
+      showNotification('Mật khẩu không hợp lệ, phải có ít nhất 6 ký tự');
       return;
     }
 
@@ -72,7 +79,8 @@ class _RegisterCustomerWithIdentifierPageState
       );
       // Call API to register user
       await api.addCustomer(newCustomer);
-      Navigator.pushReplacementNamed(context, '/login_register_switcher_customer_page');
+      Navigator.pushReplacementNamed(
+          context, '/login_register_switcher_customer_page');
       // Show success alert
       showNotification('Đăng ký thành công, đăng nhập ngay!');
       // Clear input fields
