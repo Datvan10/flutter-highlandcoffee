@@ -98,16 +98,15 @@ class _AddProductPageState extends State<AddProductPage> {
       final String base64Image = base64Encode(bytesImage);
       final String base64ImageDetail = base64Encode(bytesImageDetail);
       Product newProduct = Product(
-        id : 0,
-        category_name: _selectedCategory,
-        product_name: _productNameController.text,
+        productid : "sp00",
+        categoryid: _selectedCategory,
+        productname: _productNameController.text,
         description: _descriptionController.text,
-        size_s_price: int.tryParse(_sizeSPriceController.text) ?? 0,
-        size_m_price: int.tryParse(_sizeMPriceController.text) ?? 0,
-        size_l_price: int.tryParse(_sizeLPriceController.text) ?? 0,
+        size: 'S',
+        price: int.tryParse(_sizeMPriceController.text) ?? 0,
         unit: _unitController.text,
         image: base64Image,
-        image_detail: base64ImageDetail,
+        imagedetail: base64ImageDetail,
       );
 
       await adminApi.addProducts(newProduct, _selectedCategory);
