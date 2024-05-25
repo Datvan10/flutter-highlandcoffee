@@ -31,7 +31,7 @@ class ProductForm extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  product.product_name,
+                  product.productname,
                   style: GoogleFonts.arsenal(
                       color: black, fontSize: 19, fontWeight: FontWeight.bold),
                 ),
@@ -44,7 +44,7 @@ class ProductForm extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product.size_m_price.toStringAsFixed(3) + 'đ',
+                      product.price.toStringAsFixed(3) + 'đ',
                       style: GoogleFonts.roboto(
                         color: grey,
                         fontSize: 15,
@@ -54,7 +54,7 @@ class ProductForm extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      product.size_s_price.toStringAsFixed(3) + 'đ',
+                      product.price.toStringAsFixed(3) + 'đ',
                       style: GoogleFonts.roboto(
                           color: primaryColors,
                           fontSize: 17,

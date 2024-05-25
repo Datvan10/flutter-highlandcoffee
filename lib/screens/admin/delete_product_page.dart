@@ -58,16 +58,15 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
       List<Product> products = await adminApi.getProducts(selectedCategory);
       return products.map((product) {
         return Product(
-          id: product.id,
-          category_name: product.category_name,
-          product_name: product.product_name,
+          productid: product.productid,
+          categoryid: product.categoryid,
+          productname: product.productname,
           description: product.description,
-          size_s_price: product.size_s_price,
-          size_m_price: product.size_m_price,
-          size_l_price: product.size_l_price,
+          size: product.size,
+          price: product.price,
           unit: product.unit,
           image: product.image,
-          image_detail: product.image_detail,
+          imagedetail: product.imagedetail,
         );
       }).toList();
     } catch (e) {
@@ -104,7 +103,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
               onPressed: () async {
                 try {
                   await adminApi.deleteProducts(
-                      productToDelete.id, selectedCategory);
+                      productToDelete.productid, selectedCategory);
                   Navigator.pop(context);
                   _showAlert(
                       'Thông báo', 'Xóa sản phẩm thành công.');
@@ -327,7 +326,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    product.product_name,
+                                    product.productname,
                                     style: GoogleFonts.arsenal(
                                       fontSize: 18,
                                       color: primaryColors,
@@ -335,7 +334,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                                     ),
                                   ),
                                   Text(
-                                    product.size_m_price.toStringAsFixed(3) +
+                                    product.price.toStringAsFixed(3) +
                                         'đ',
                                     style: GoogleFonts.roboto(
                                       color: primaryColors,

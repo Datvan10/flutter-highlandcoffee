@@ -31,7 +31,7 @@ class FavoriteProductForm extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  favorite.product_name,
+                  favorite.productname,
                   style: GoogleFonts.arsenal(
                       color: black, fontSize: 19, fontWeight: FontWeight.bold),
                 ),
@@ -44,7 +44,7 @@ class FavoriteProductForm extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      favorite.size_m_price.toStringAsFixed(3) + 'đ',
+                      favorite.price.toStringAsFixed(3) + 'đ',
                       style: GoogleFonts.roboto(
                         color: grey,
                         fontSize: 15,
@@ -54,7 +54,7 @@ class FavoriteProductForm extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      favorite.size_s_price.toStringAsFixed(3) + 'đ',
+                      favorite.price.toStringAsFixed(3) + 'đ',
                       style: GoogleFonts.roboto(
                           color: primaryColors,
                           fontSize: 17,

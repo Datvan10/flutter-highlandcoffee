@@ -205,7 +205,7 @@ class AdminApi {
           Product product = Product.fromJson(item);
           // Decode image and image detail
           Uint8List decodedImage = base64Decode(product.image);
-          Uint8List decodedImageDetail = base64Decode(product.image_detail);
+          Uint8List decodedImageDetail = base64Decode(product.imagedetail);
           final image = MemoryImage(decodedImage);
           final image_detail = MemoryImage(decodedImageDetail);
 
@@ -221,7 +221,7 @@ class AdminApi {
   }
 
   // Delete product for admin
-  Future<void> deleteProducts(int id, String selectedCategory) async {
+  Future<void> deleteProducts(String id, String selectedCategory) async {
     final apiUrl = getCategoryApiUrl(selectedCategory);
     final uri = Uri.parse('$apiUrl/$id');
 
@@ -440,42 +440,26 @@ class ProductApi {
   // Read data from API
   Future<List<Product>> getListProducts() async {
     try {
-      final List<String> apiUrlList = [
-        'http://localhost:5194/api/coffees',
-        'http://localhost:5194/api/teas',
-        'http://localhost:5194/api/freezes',
-        'http://localhost:5194/api/breads',
-        'http://localhost:5194/api/foods',
-      ];
+      final response = await http.get(Uri.parse(productUrl));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Product> products = [];
+        for (var item in jsonData) {
+          Product product = Product.fromJson(item);
+          // Decode image and image detail
+          Uint8List decodedImage = base64Decode(product.image);
+          Uint8List decodedImageDetail = base64Decode(product.imagedetail);
+          final image = MemoryImage(decodedImage);
+          final imagedetail = MemoryImage(decodedImageDetail);
 
-      final List<http.Response> responses =
-          await Future.wait(apiUrlList.map((String apiUrl) {
-        return http.get(Uri.parse(apiUrl));
-      }));
-
-      List<Product> products = [];
-
-      for (final response in responses) {
-        if (response.statusCode == 200) {
-          final List<dynamic> jsonData = json.decode(response.body);
-          for (var item in jsonData) {
-            Product product = Product.fromJson(item);
-            // Decode image and image detail
-            Uint8List decodedImage = base64Decode(product.image);
-            Uint8List decodedImageDetail = base64Decode(product.image_detail);
-            final image = MemoryImage(decodedImage);
-            final image_detail = MemoryImage(decodedImageDetail);
-
-            products.add(product);
-          }
-        } else {
-          throw Exception('Failed to load products');
+          products.add(product);
         }
+        return products;
+      } else {
+        throw Exception('Failed to load product products');
       }
-
-      return products;
     } catch (e) {
-      throw Exception('Failed to load products');
+      throw Exception('Failed to load product products');
     }
   }
 
@@ -534,7 +518,7 @@ class ProductApi {
 
 // API for popular products
 class PopularApi {
-  final String popularUrl = "http://localhost:5194/api/populars";
+  final String popularUrl = "http://localhost:5194/api/products/category/dm005";
   // Read data from API
   Future<List<Product>> getPopulars() async {
     try {
@@ -546,9 +530,9 @@ class PopularApi {
           Product popular = Product.fromJson(item);
           // Decode image and image detail
           Uint8List decodedImage = base64Decode(popular.image);
-          Uint8List decodedImageDetail = base64Decode(popular.image_detail);
+          Uint8List decodedImageDetail = base64Decode(popular.imagedetail);
           final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+          final imagedetail = MemoryImage(decodedImageDetail);
 
           populars.add(popular);
         }
@@ -631,7 +615,7 @@ class FavoriteApi {
             Favorite favorite = Favorite.fromJson(item);
             // Decode image and image detail
             Uint8List decodedImage = base64Decode(favorite.image);
-            Uint8List decodedImageDetail = base64Decode(favorite.image_detail);
+            Uint8List decodedImageDetail = base64Decode(favorite.imagedetail);
             final image = MemoryImage(decodedImage);
             final image_detail = MemoryImage(decodedImageDetail);
 
@@ -705,37 +689,37 @@ class FavoriteApi {
 
 // API fo best sale
 class BestSaleApi {
-  final String bestSaleUrl = "http://localhost:5194/api/bestsales";
+  final String bestSaleUrl = "http://localhost:5194/api/products/category/dm006";
   // Read data from API
   Future<List<Product>> getBestSales() async {
     try {
       final response = await http.get(Uri.parse(bestSaleUrl));
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
-        List<Product> bestSales = [];
+        List<Product> bestsales = [];
         for (var item in jsonData) {
-          Product bestSale = Product.fromJson(item);
+          Product bestsale = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(bestSale.image);
-          Uint8List decodedImageDetail = base64Decode(bestSale.image_detail);
+          Uint8List decodedImage = base64Decode(bestsale.image);
+          Uint8List decodedImageDetail = base64Decode(bestsale.imagedetail);
           final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+          final imagedetail = MemoryImage(decodedImageDetail);
 
-          bestSales.add(bestSale);
+          bestsales.add(bestsale);
         }
-        return bestSales;
+        return bestsales;
       } else {
-        throw Exception('Failed to load best sale products');
+        throw Exception('Failed to load bestsale products');
       }
     } catch (e) {
-      throw Exception('Failed to load best sale products');
+      throw Exception('Failed to load bestsale products');
     }
   }
 }
 
 // API for Coffee
 class CoffeeApi {
-  final String coffeeUrl = "http://localhost:5194/api/coffees";
+  final String coffeeUrl = "http://localhost:5194/api/products/category/dm001";
   // Read data from API
   Future<List<Product>> getCoffees() async {
     try {
@@ -747,18 +731,18 @@ class CoffeeApi {
           Product coffee = Product.fromJson(item);
           // Decode image and image detail
           Uint8List decodedImage = base64Decode(coffee.image);
-          Uint8List decodedImageDetail = base64Decode(coffee.image_detail);
+          Uint8List decodedImageDetail = base64Decode(coffee.imagedetail);
           final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+          final imagedetail = MemoryImage(decodedImageDetail);
 
           coffees.add(coffee);
         }
         return coffees;
       } else {
-        throw Exception('Failed to load coffee products');
+        throw Exception('Failed to load bestsale products');
       }
     } catch (e) {
-      throw Exception('Failed to load coffee products');
+      throw Exception('Failed to load bestsale products');
     }
   }
 
@@ -817,7 +801,7 @@ class CoffeeApi {
 
 // API for Freeze
 class FreezeApi {
-  final String freezeUrl = "http://localhost:5194/api/freezes";
+  final String freezeUrl = "http://localhost:5194/api/products/category/dm002";
   // Read data from API
   Future<List<Product>> getFreezes() async {
     try {
@@ -829,9 +813,9 @@ class FreezeApi {
           Product freeze = Product.fromJson(item);
           // Decode image and image detail
           Uint8List decodedImage = base64Decode(freeze.image);
-          Uint8List decodedImageDetail = base64Decode(freeze.image_detail);
+          Uint8List decodedImageDetail = base64Decode(freeze.imagedetail);
           final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+          final imagedetail = MemoryImage(decodedImageDetail);
 
           freezes.add(freeze);
         }
@@ -911,7 +895,7 @@ class TeaApi {
           Product tea = Product.fromJson(item);
           // Decode image and image detail
           Uint8List decodedImage = base64Decode(tea.image);
-          Uint8List decodedImageDetail = base64Decode(tea.image_detail);
+          Uint8List decodedImageDetail = base64Decode(tea.imagedetail);
           final image = MemoryImage(decodedImage);
           final image_detail = MemoryImage(decodedImageDetail);
 
@@ -993,7 +977,7 @@ class BreadApi {
           Product bread = Product.fromJson(item);
           // Decode image and image detail
           Uint8List decodedImage = base64Decode(bread.image);
-          Uint8List decodedImageDetail = base64Decode(bread.image_detail);
+          Uint8List decodedImageDetail = base64Decode(bread.imagedetail);
           final image = MemoryImage(decodedImage);
           final image_detail = MemoryImage(decodedImageDetail);
 
@@ -1075,7 +1059,7 @@ class FoodApi {
           Product food = Product.fromJson(item);
           // Decode image and image detail
           Uint8List decodedImage = base64Decode(food.image);
-          Uint8List decodedImageDetail = base64Decode(food.image_detail);
+          Uint8List decodedImageDetail = base64Decode(food.imagedetail);
           final image = MemoryImage(decodedImage);
           final image_detail = MemoryImage(decodedImageDetail);
 
@@ -1157,7 +1141,7 @@ class OtherApi {
           Product other = Product.fromJson(item);
           // Decode image and image detail
           Uint8List decodedImage = base64Decode(other.image);
-          Uint8List decodedImageDetail = base64Decode(other.image_detail);
+          Uint8List decodedImageDetail = base64Decode(other.imagedetail);
           final image = MemoryImage(decodedImage);
           final image_detail = MemoryImage(decodedImageDetail);
 
@@ -1238,7 +1222,7 @@ class CartApi {
         for (var item in jsonData) {
           Cart cart = Cart.fromJson(item);
           // Decode product_image
-          Uint8List decodedImage = base64Decode(cart.product_image);
+          Uint8List decodedImage = base64Decode(cart.image);
           final product_image = MemoryImage(decodedImage);
 
           carts.add(cart);

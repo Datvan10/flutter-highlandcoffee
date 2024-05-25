@@ -70,7 +70,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   // void updateTotalPrice() {
   //   setState(() {
-  //     int productPrice = widget.product.size_s_price;
+  //     int productPrice = widget.product.price;
   //     totalPrice = productPrice * quantityCount;
   //   });
   // }
@@ -80,13 +80,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       int productPrice;
       switch (selectedSize) {
         case 'S':
-          productPrice = widget.product.size_s_price;
+          productPrice = widget.product.price;
           break;
         case 'M':
-          productPrice = widget.product.size_m_price;
+          productPrice = widget.product.price;
           break;
         case 'L':
-          productPrice = widget.product.size_l_price;
+          productPrice = widget.product.price;
           break;
         default:
           productPrice = 0;
@@ -100,11 +100,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     // Dựa vào kích thước đã chọn, trả về giá tương ứng
     switch (selectedSize) {
       case 'S':
-        return widget.product.size_s_price;
+        return widget.product.price;
       case 'M':
-        return widget.product.size_m_price;
+        return widget.product.price;
       case 'L':
-        return widget.product.size_l_price;
+        return widget.product.price;
       default:
         return 0;
     }
@@ -174,22 +174,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void _addToFavorites() async {
     try{
       List<int> image = utf8.encode(widget.product.image);
-      List<int> imageDetail = utf8.encode(widget.product.image_detail);
+      List<int> imageDetail = utf8.encode(widget.product.imagedetail);
       String base64Image = base64Encode(image);
       String base64ImageDetail = base64Encode(imageDetail);
 
       Favorite favorite = Favorite(
-        customer_id: loggedInUser!.id!,
-        category_name: widget.product.category_name,
-        product_id: widget.product.id,
-        product_name: widget.product.product_name,
+        customerid: loggedInUser!.id!,
+        categoryid: widget.product.categoryid,
+        productid: widget.product.productid,
+        productname: widget.product.productname,
         description: widget.product.description,
-        size_s_price: widget.product.size_s_price,
-        size_m_price: widget.product.size_m_price,
-        size_l_price: widget.product.size_l_price,
+        size: selectedSize,
+        price: widget.product.price,
         unit: widget.product.unit,
         image: base64Image,
-        image_detail: base64ImageDetail,
+        imagedetail: base64ImageDetail,
       );
 
       await favoriteApi.addFavorite(favorite);
@@ -208,14 +207,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       // Mã hóa mảng byte sang chuỗi base64
       String base64Image = base64Encode(imageBytes);
       Cart cart = Cart(
-          customer_id: loggedInUser!.id!,
-          category_name: widget.product.category_name,
-          product_id: widget.product.id,
+          customerid: loggedInUser!.id!,
+          categoryid: widget.product.categoryid,
+          productid: widget.product.productid,
           quantity: quantityCount,
-          product_image: base64Image,
-          product_name: widget.product.product_name,
-          selected_price: totalPrice,
-          selected_size: selectedSize);
+          image: base64Image,
+          productname: widget.product.productname,
+          price: totalPrice,
+          size: selectedSize);
       // print(cart.toJson());
 
       await cartApi.addCart(cart);
@@ -262,8 +261,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           Stack(
             children: [
               Image.memory(
-                widget.product.image_detail != null
-                    ? base64Decode(widget.product.image_detail)
+                widget.product.imagedetail != null
+                    ? base64Decode(widget.product.imagedetail)
                     : Uint8List(0),
               ),
 
@@ -310,7 +309,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 //product name and icon favorite
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
-                    widget.product.product_name,
+                    widget.product.productname,
                     style: GoogleFonts.arsenal(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
