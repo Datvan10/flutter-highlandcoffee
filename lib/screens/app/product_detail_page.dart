@@ -14,6 +14,7 @@ import 'package:highlandcoffeeapp/widgets/button_add_to_cart.dart';
 import 'package:highlandcoffeeapp/widgets/button_buy_now.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/notification_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/size_product.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
 
@@ -28,8 +29,7 @@ class ProductDetailPage extends StatefulWidget {
   State<ProductDetailPage> createState() => _ProductDetailPageState();
 }
 
-class CartPageArguments {
-}
+class CartPageArguments {}
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   int quantityCount = 1; //quantity
@@ -172,15 +172,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   //
   void _addToFavorites() async {
-    try{
-      List<int> image = utf8.encode(widget.product.image);
-      List<int> imageDetail = utf8.encode(widget.product.imagedetail);
+    try {
+      // Chuyển đổi chuỗi base64 thành dữ liệu nhị phân (Uint8List)
+      Uint8List image = base64Decode(widget.product.image);
+      Uint8List imageDetail = base64Decode(widget.product.imagedetail);
+
+      // Mã hóa dữ liệu nhị phân thành chuỗi base64
       String base64Image = base64Encode(image);
       String base64ImageDetail = base64Encode(imageDetail);
 
       Favorite favorite = Favorite(
-        customerid: loggedInUser!.id!,
-        categoryid: widget.product.categoryid,
+        favoriteid: '',
+        customerid: loggedInUser!.customerid!,
         productid: widget.product.productid,
         productname: widget.product.productname,
         description: widget.product.description,
@@ -192,10 +195,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       );
 
       await favoriteApi.addFavorite(favorite);
-      showNotification('Thành công', 'Đã thêm sản phẩm vào danh sách yêu thích');
+      showNotification(
+          'Thành công', 'Đã thêm sản phẩm vào danh sách yêu thích');
     } catch (e) {
       print(e);
-      showNotification('Lỗi', 'Không thể thêm sản phẩm vào danh sách yêu thích');
+      showNotification(
+          'Lỗi', 'Không thể thêm sản phẩm vào danh sách yêu thích');
     }
   }
 
@@ -207,7 +212,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       // Mã hóa mảng byte sang chuỗi base64
       String base64Image = base64Encode(imageBytes);
       Cart cart = Cart(
-          customerid: loggedInUser!.id!,
+          customerid: loggedInUser!.customerid!,
           categoryid: widget.product.categoryid,
           productid: widget.product.productid,
           quantity: quantityCount,
@@ -227,30 +232,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   //
   void showNotification(String title, String content) {
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: GoogleFonts.arsenal(color: primaryColors),
-          ),
-          content: Text(content),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(color: blue),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return NotificationDialog(title: title, content: content);
+    },
+  );
+}
+
   //
 
   @override

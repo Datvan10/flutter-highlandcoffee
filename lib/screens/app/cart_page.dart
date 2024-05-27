@@ -60,7 +60,7 @@ class _CartPageState extends State<CartPage> {
           // if(isValidBase64(data['product_image'])) {
           //   print('Du lieu base64 hợp lệ');
           // }
-          if (data['customer_id'] == loggedInUser?.id) {
+          if (data['customer_id'] == loggedInUser?.customerid) {
             // List<int> imageBytes = base64Decode(data['product_image']);
             // String productImageBase64 = base64Encode(imageBytes);
             return CartItem(
