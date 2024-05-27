@@ -1286,3 +1286,21 @@ class CartApi {
     }
   }
 }
+
+class CartDetailApi{
+  final String cartDetailsUrl = "http://localhost:5194/api/cartdetails";
+
+  Future<List<dynamic>> fetchCartDetails() async {
+    try {
+      final response = await http.get(Uri.parse(cartDetailsUrl));
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+        return jsonResponse;
+      } else {
+        throw Exception('Failed to load cart details');
+      }
+    } catch (e) {
+      throw Exception('Error fetching cart details: $e');
+    }
+  }
+}
