@@ -60,7 +60,7 @@ class _BillPageState extends State<BillPage> {
 
   // Loop through each cart item and sum up the total price
   widget.cartItems.forEach((CartItem cartItem) {
-    total += cartItem.selected_price;
+    total += cartItem.totalprice;
   });
 
   setState(() {

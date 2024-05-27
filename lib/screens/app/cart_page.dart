@@ -23,6 +23,7 @@ class _CartPageState extends State<CartPage> {
   int _selectedIndexBottomBar = 3;
   late List<CartItem> cartItems = [];
   CartApi api = CartApi();
+  CartDetailApi cartDetailApi = CartDetailApi();
   Customer? loggedInUser = AuthManager().loggedInCustomer;
 
   void _selectedBottomBar(int index) {
@@ -52,43 +53,32 @@ class _CartPageState extends State<CartPage> {
   // Hàm để gọi API lấy dữ liệu giỏ hàng
   Future<void> fetchCartItems() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://localhost:5194/api/carts'));
-      if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = json.decode(response.body);
-        List<dynamic> items = jsonResponse.map((data) {
-          // if(isValidBase64(data['product_image'])) {
-          //   print('Du lieu base64 hợp lệ');
-          // }
-          if (data['customer_id'] == loggedInUser?.customerid) {
-            // List<int> imageBytes = base64Decode(data['product_image']);
-            // String productImageBase64 = base64Encode(imageBytes);
-            return CartItem(
-              data['id'],
-              data['customer_id'],
-              data['category_name'],
-              data['product_id'],
-              data['quantity'],
-              data['product_image'],
-              data['product_name'],
-              data['selected_price'],
-              data['selected_size'],
-            );
-          }
-        }).toList();
-
-        bool hasItems = items.any((item) => item != null);
-        if (!hasItems) {
-          items = [];
+      List<dynamic> jsonResponse = await cartDetailApi.fetchCartDetails();
+      List<dynamic> items = jsonResponse.map((data) {
+        if (data['customerid'] == loggedInUser?.customerid) {
+          return CartItem(
+            data['cartdetailid'],
+            data['cartid'],
+            data['customerid'],
+            data['productid'],
+            data['productname'],
+            data['size'],
+            data['quantity'],
+            data['totalprice'],
+            data['image'],
+          );
         }
+      }).toList();
 
-        setState(() {
-          cartItems =
-              items.where((item) => item != null).cast<CartItem>().toList();
-        });
-      } else {
-        throw Exception('Failed to load carts');
+      bool hasItems = items.any((item) => item != null);
+      if (!hasItems) {
+        items = [];
       }
+
+      setState(() {
+        cartItems =
+            items.where((item) => item != null).cast<CartItem>().toList();
+      });
     } catch (e) {
       print('Error fetching cart items: $e');
     }
@@ -105,7 +95,9 @@ class _CartPageState extends State<CartPage> {
             icon: Icons.shopping_cart_checkout,
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BillPage(cartItems: cartItems,),
+                builder: (context) => BillPage(
+                  cartItems: cartItems,
+                ),
               ));
             },
           ),
@@ -138,7 +130,8 @@ class _CartPageState extends State<CartPage> {
                         children: [
                           Text(
                             'Giỏ hàng trống, mua sắm ngay',
-                            style: GoogleFonts.arsenal(color: black, fontSize: 18),
+                            style:
+                                GoogleFonts.arsenal(color: black, fontSize: 18),
                           ),
                           SizedBox(
                             width: 15,
@@ -155,7 +148,9 @@ class _CartPageState extends State<CartPage> {
                 : Column(
                     children: [
                       // Truyền danh sách sản phẩm vào OrderForm
-                      CartProductForm(cartItems: cartItems, onDelete: ()=> fetchCartItems()),
+                      CartProductForm(
+                          cartItems: cartItems,
+                          onDelete: () => fetchCartItems()),
                       // button order now
                       // SizedBox(
                       //   height: 10,
@@ -185,24 +180,25 @@ class _CartPageState extends State<CartPage> {
 
 // Trong class CartItem, thêm trường productId
 class CartItem {
-  final int id;
-  final int customer_id;
-  final String category_name;
-  final int product_id;
+  final String cartdetailid;
+  final String cartid;
+  final String customerid;
+  final String productid;
+  final String productname;
+  final String size;
   final int quantity;
-  String product_image;
-  final String product_name;
-  final int selected_price;
-  final String selected_size;
+  final int totalprice;
+  String image;
 
   CartItem(
-      this.id,
-      this.customer_id,
-      this.category_name,
-      this.product_id,
-      this.quantity,
-      this.product_image,
-      this.product_name,
-      this.selected_price,
-      this.selected_size);
+    this.cartdetailid,
+    this.cartid,
+    this.customerid,
+    this.productid,
+    this.productname,
+    this.size,
+    this.quantity,
+    this.totalprice,
+    this.image,
+  );
 }

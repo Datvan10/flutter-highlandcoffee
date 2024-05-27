@@ -1269,7 +1269,7 @@ class CartApi {
   }
 
   // Delete data from API
-  Future<void> deleteCart(int cartId) async {
+  Future<void> deleteCart(String cartId) async {
     try {
       // print(cartId);
       final response = await http.delete(
@@ -1283,6 +1283,24 @@ class CartApi {
       }
     } catch (e) {
       print('Product removal failed: $e');
+    }
+  }
+}
+
+class CartDetailApi{
+  final String cartDetailsUrl = "http://localhost:5194/api/cartdetails";
+
+  Future<List<dynamic>> fetchCartDetails() async {
+    try {
+      final response = await http.get(Uri.parse(cartDetailsUrl));
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+        return jsonResponse;
+      } else {
+        throw Exception('Failed to load cart details');
+      }
+    } catch (e) {
+      throw Exception('Error fetching cart details: $e');
     }
   }
 }
