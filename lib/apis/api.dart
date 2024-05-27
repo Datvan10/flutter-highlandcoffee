@@ -1269,7 +1269,7 @@ class CartApi {
   }
 
   // Delete data from API
-  Future<void> deleteCart(int cartId) async {
+  Future<void> deleteCart(String cartId) async {
     try {
       // print(cartId);
       final response = await http.delete(

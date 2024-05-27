@@ -53,26 +53,26 @@ class _CartPageState extends State<CartPage> {
   Future<void> fetchCartItems() async {
     try {
       final response =
-          await http.get(Uri.parse('http://localhost:5194/api/carts'));
+          await http.get(Uri.parse('http://localhost:5194/api/cartdetails'));
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
         List<dynamic> items = jsonResponse.map((data) {
           // if(isValidBase64(data['product_image'])) {
           //   print('Du lieu base64 hợp lệ');
           // }
-          if (data['customer_id'] == loggedInUser?.customerid) {
+          if (data['customerid'] == loggedInUser?.customerid) {
             // List<int> imageBytes = base64Decode(data['product_image']);
             // String productImageBase64 = base64Encode(imageBytes);
             return CartItem(
-              data['id'],
-              data['customer_id'],
-              data['category_name'],
-              data['product_id'],
+              data['cartdetailid'],
+              data['cartid'],
+              data['customerid'],
+              data['productid'],
+              data['productname'],
+              data['size'],
               data['quantity'],
-              data['product_image'],
-              data['product_name'],
-              data['selected_price'],
-              data['selected_size'],
+              data['totalprice'],
+              data['image'],
             );
           }
         }).toList();
@@ -185,24 +185,24 @@ class _CartPageState extends State<CartPage> {
 
 // Trong class CartItem, thêm trường productId
 class CartItem {
-  final int id;
-  final int customer_id;
-  final String category_name;
-  final int product_id;
+  final String cartdetailid;
+  final String cartid;
+  final String customerid;
+  final String productid;
+  final String productname;
+  final String size;
   final int quantity;
-  String product_image;
-  final String product_name;
-  final int selected_price;
-  final String selected_size;
+  final int totalprice;
+  String image;
 
   CartItem(
-      this.id,
-      this.customer_id,
-      this.category_name,
-      this.product_id,
-      this.quantity,
-      this.product_image,
-      this.product_name,
-      this.selected_price,
-      this.selected_size);
+    this.cartdetailid,
+    this.cartid,
+    this.customerid,
+    this.productid,
+    this.productname,
+    this.size,
+    this.quantity,
+    this.totalprice,
+    this.image,);
 }

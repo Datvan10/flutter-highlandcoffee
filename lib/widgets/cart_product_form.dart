@@ -25,7 +25,7 @@ class CartProductForm extends StatefulWidget {
 class _CartProductFormState extends State<CartProductForm> {
   CartApi cartApi = CartApi();
   // Hàm show notification xóa sản phẩm từ giỏ hàng
-  void deleteProductFromCart(int id) async {
+  void deleteProductFromCart(String id) async {
     showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -139,7 +139,7 @@ class _CartProductFormState extends State<CartProductForm> {
             itemCount: widget.cartItems.length,
             itemBuilder: (context, index) {
               var item = widget.cartItems[index];
-              Uint8List _imageBytesDecoded = base64.decode(item.product_image);
+              // Uint8List _imageBytesDecoded = base64.decode(item.product_image);
               return Slidable(
                 startActionPane: ActionPane(motion: StretchMotion(), children: [
                   SlidableAction(
@@ -157,7 +157,7 @@ class _CartProductFormState extends State<CartProductForm> {
                   SlidableAction(
                     onPressed: ((context) {
                       //comand delete
-                      deleteProductFromCart(item.id);
+                      deleteProductFromCart(item.cartid);
                     }),
                     borderRadius: BorderRadius.circular(18.0),
                     backgroundColor: Colors.transparent,
@@ -182,16 +182,16 @@ class _CartProductFormState extends State<CartProductForm> {
                       children: [
                         // if(isValidBase64(item.product_image))
                         ///////////////////////////////////////////////////////////// Chưa fix lỗi hình ảnh chỗ này
-                        // Image.memory(
-                        //   _imageBytesDecoded,
-                        //   height: 70.0,
-                        //   width: 70.0,
-                        // ),
+                        Image.memory(
+                          base64Decode(item.image),
+                          width: 85,
+                          height: 85,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item.product_name,
+                              item.productname,
                               style: GoogleFonts.arsenal(
                                   fontSize: 18,
                                   color: primaryColors,
@@ -201,7 +201,7 @@ class _CartProductFormState extends State<CartProductForm> {
                               height: 5,
                             ),
                             Text(
-                              item.selected_price.toStringAsFixed(3) + 'đ',
+                              item.totalprice.toStringAsFixed(3) + 'đ',
                               style: GoogleFonts.roboto(
                                 color: primaryColors,
                                 fontSize: 16,
@@ -276,7 +276,7 @@ class _CartProductFormState extends State<CartProductForm> {
                               ),
                               child: Center(
                                 child: Text(
-                                  item.selected_size,
+                                  item.size,
                                   style: GoogleFonts.arsenal(
                                       color: primaryColors,
                                       fontSize: 15,
