@@ -340,14 +340,14 @@ class CustomerApi {
             try {
               // Gửi yêu cầu API để cập nhật mật khẩu với id của khách hàng tương ứng
               final updateResponse = await http.put(
-                Uri.parse('$customerUrl/${customer.id}'),
+                Uri.parse('$customerUrl/${customer.customerid}'),
                 headers: <String, String>{
                   'Content-Type': 'application/json; charset=UTF-8',
                 },
                 body: jsonEncode({'password': newPassword}),
               );
               print(updateResponse.statusCode);
-              print(customer.id);
+              print(customer.customerid);
 
               if (updateResponse.statusCode == 200) {
                 return true; // Trả về true nếu cập nhật thành công
@@ -375,7 +375,8 @@ class CustomerApi {
   }
 
   // Authenticate account
-  Future<bool> authenticateAccountCustomer(String identifier, String password) async {
+  Future<bool> authenticateAccountCustomer(
+      String identifier, String password) async {
     final uri = Uri.parse(customerUrl);
 
     try {
@@ -603,21 +604,23 @@ class FavoriteApi {
   final String favoriteUrl = "http://localhost:5194/api/favorites";
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   // Read data from API
-  Future<List<Favorite>> getFavorites() async {
+  Future<List<Favorite>> getFavoritesByCustomerId() async {
+    // print(loggedInUser?.customerid);
     try {
       final response = await http.get(Uri.parse('$favoriteUrl'));
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         final List<dynamic> jsonResponse = json.decode(response.body);
         List<Favorite> favorites = [];
 
         for (var item in jsonResponse) {
-          if (item['customer_id'] == loggedInUser?.id) {
+          if (item['customerid'] == loggedInUser?.customerid) {
             Favorite favorite = Favorite.fromJson(item);
             // Decode image and image detail
             Uint8List decodedImage = base64Decode(favorite.image);
             Uint8List decodedImageDetail = base64Decode(favorite.imagedetail);
             final image = MemoryImage(decodedImage);
-            final image_detail = MemoryImage(decodedImageDetail);
+            final imagedetail = MemoryImage(decodedImageDetail);
 
             favorites.add(favorite);
           } else {
@@ -627,9 +630,11 @@ class FavoriteApi {
 
         return favorites;
       } else {
+        print('Failed to load favorite products');
         throw Exception('Failed to load favorite products');
       }
     } catch (e) {
+      print('Failed to load favorite products');
       throw Exception('Failed to load favorite products');
     }
   }
@@ -656,29 +661,14 @@ class FavoriteApi {
     }
   }
 
-  // Update data to API
-  Future<Product> updateFavorite(Product favorite) async {
-    try {
-      final response = await http.put(Uri.parse('$favoriteUrl/${favorite}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(favorite.toJson()));
-      if (response.statusCode == 200) {
-        return Product.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to update favorite product');
-      }
-    } catch (e) {
-      throw Exception('Failed to update favorite product');
-    }
-  }
-
   // Delete data from API
-  Future<void> deleteFavorite(int id) async {
+  // Delete data from API
+  Future<void> deleteFavorite(String favoriteid) async {
     try {
-      final response = await http.delete(Uri.parse('$favoriteUrl/$id'));
-      if (response.statusCode != 204) {
+      final response = await http.delete(Uri.parse('$favoriteUrl/$favoriteid'));
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        print('Favorite product deleted successfully');
+      } else {
         throw Exception('Failed to delete favorite product');
       }
     } catch (e) {
@@ -689,7 +679,8 @@ class FavoriteApi {
 
 // API fo best sale
 class BestSaleApi {
-  final String bestSaleUrl = "http://localhost:5194/api/products/category/dm006";
+  final String bestSaleUrl =
+      "http://localhost:5194/api/products/category/dm006";
   // Read data from API
   Future<List<Product>> getBestSales() async {
     try {
@@ -883,7 +874,7 @@ class FreezeApi {
 
 // API for Tea
 class TeaApi {
-  final String teaUrl = "http://localhost:5194/api/teas";
+  final String teaUrl = "http://localhost:5194/api/products/category/dm003";
   // Read data from API
   Future<List<Product>> getTeas() async {
     try {
@@ -897,7 +888,7 @@ class TeaApi {
           Uint8List decodedImage = base64Decode(tea.image);
           Uint8List decodedImageDetail = base64Decode(tea.imagedetail);
           final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+          final imagedetail = MemoryImage(decodedImageDetail);
 
           teas.add(tea);
         }
@@ -1047,7 +1038,7 @@ class BreadApi {
 
 // API for food
 class FoodApi {
-  final String foodUrl = "http://localhost:5194/api/foods";
+  final String foodUrl = "http://localhost:5194/api/products/category/dm004";
   // Read data from API
   Future<List<Product>> getFoods() async {
     try {
@@ -1061,7 +1052,7 @@ class FoodApi {
           Uint8List decodedImage = base64Decode(food.image);
           Uint8List decodedImageDetail = base64Decode(food.imagedetail);
           final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+          final imagedetail = MemoryImage(decodedImageDetail);
 
           foods.add(food);
         }

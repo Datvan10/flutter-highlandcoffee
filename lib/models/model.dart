@@ -62,7 +62,7 @@ class Staff {
 
 // Model customer
 class Customer {
-  String? id;
+  String? customerid;
   final String name;
   final String phonenumber;
   final String address;
@@ -70,7 +70,7 @@ class Customer {
   final String password;
 
   Customer({
-    required this.id,
+    this.customerid,
     required this.name,
     required this.phonenumber,
     required this.address,
@@ -79,7 +79,7 @@ class Customer {
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-        id: json['id'],
+        customerid: json['customerid'],
         name: json['name'],
         phonenumber: json['phonenumber'],
         address: json['address'],
@@ -88,7 +88,7 @@ class Customer {
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+        'customerid': customerid,
         'name': name,
         'phonenumber': phonenumber,
         'address': address,
@@ -177,8 +177,8 @@ class Cart {
 
 // Model favorite
 class Favorite {
+  String? favoriteid;
   String customerid;
-  String categoryid;
   String productid;
   String productname;
   String description;
@@ -189,8 +189,8 @@ class Favorite {
   String imagedetail;
 
   Favorite(
-      {required this.customerid,
-      required this.categoryid,
+      {this.favoriteid,
+      required this.customerid,
       required this.productid,
       required this.productname,
       required this.description,
@@ -201,8 +201,8 @@ class Favorite {
       required this.imagedetail});
 
   factory Favorite.fromJson(Map<String, dynamic> json) => Favorite(
+      favoriteid: json['favoriteid'],
       customerid: json['customerid'],
-      categoryid: json['categoryid'],
       productid: json['productid'],
       productname: json['productname'],
       description: json['description'],
@@ -213,8 +213,8 @@ class Favorite {
       imagedetail: json['imagedetail']);
 
   Map<String, dynamic> toJson() => {
+        'favoriteid': favoriteid,
         'customerid': customerid,
-        'categoryid': categoryid,
         'productid': productid,
         'productname': productname,
         'description': description,

@@ -17,7 +17,7 @@ class FreezePage extends StatefulWidget {
 
 class _FreezePageState extends State<FreezePage> {
   int _selectedIndexBottomBar = 1;
-  Future<List<Product>>? productsFuture; // Cập nhật loại biến
+  Future<List<Product>>? productsFuture;
 
   final FreezeApi api = FreezeApi();
 

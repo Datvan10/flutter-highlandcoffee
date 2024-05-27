@@ -70,7 +70,7 @@ class _RegisterCustomerWithIdentifierPageState
     try {
       // Create new customer object
       Customer newCustomer = Customer(
-        id: '',
+        customerid: '',
         name: name,
         password: password,
         phonenumber: phonenumber,

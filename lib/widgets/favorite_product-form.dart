@@ -1,19 +1,83 @@
+import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/notification.dart';
+import 'package:highlandcoffeeapp/widgets/notification_dialog.dart';
 
-class FavoriteProductForm extends StatelessWidget {
-  final Favorite favorite; // Thay đổi từ Products sang Popular
+class FavoriteProductForm extends StatefulWidget {
+  final Favorite favorite;
   final VoidCallback onTap;
+  final VoidCallback onDeleteSuccess; // Thêm callback khi xóa thành công
 
-  const FavoriteProductForm({required this.favorite, required this.onTap});
+  const FavoriteProductForm(
+      {required this.favorite,
+      required this.onTap,
+      required this.onDeleteSuccess});
+
+  @override
+  State<FavoriteProductForm> createState() => _FavoriteProductFormState();
+}
+
+class _FavoriteProductFormState extends State<FavoriteProductForm> {
+  final FavoriteApi favoriteApi = FavoriteApi();
+  bool isFavorite = false;
+
+  void _showConfirmationDialog() {
+    notificationDialog(
+      context: context,
+      title: "Xóa khỏi danh sách sản phẩm yêu thích?",
+      onConfirm: () {},
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("Hủy", style: TextStyle(color: Colors.red)),
+        ),
+        TextButton(
+          onPressed: () {
+            _deleteFavorites();
+            setState(() {
+              isFavorite = !isFavorite;
+            });
+            Navigator.pop(context);
+          },
+          child: Text("Đồng ý", style: TextStyle(color: Colors.blue)),
+        ),
+      ],
+    );
+  }
+
+  void _deleteFavorites() async {
+    try {
+      await favoriteApi.deleteFavorite(widget.favorite.favoriteid!);
+      showNotification(context, "Thành công",
+          "Sản phẩm đã được xóa khỏi danh sách yêu thích");
+      widget.onDeleteSuccess(); // Gọi hàm callback khi xóa thành công
+    } catch (e) {
+      showNotification(
+          context, "Lỗi", "Không thể xóa sản phẩm khỏi danh sách yêu thích");
+    }
+  }
+
+  void showNotification(BuildContext context, String title, String content) {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return NotificationDialog(title: title, content: content);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         padding: EdgeInsets.all(15.0),
         decoration: BoxDecoration(
@@ -23,15 +87,15 @@ class FavoriteProductForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //////////////////////////////// Chưa fix lỗi hình ảnh chỗ này
-            // Image.memory(
-            //   base64Decode(favorite.image),
-            // ),
+            // Show image
+            Image.memory(
+              base64Decode(widget.favorite.image),
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  favorite.productname,
+                  widget.favorite.productname,
                   style: GoogleFonts.arsenal(
                       color: black, fontSize: 19, fontWeight: FontWeight.bold),
                 ),
@@ -44,7 +108,7 @@ class FavoriteProductForm extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      favorite.price.toStringAsFixed(3) + 'đ',
+                      widget.favorite.price.toStringAsFixed(3) + 'đ',
                       style: GoogleFonts.roboto(
                         color: grey,
                         fontSize: 15,
@@ -54,7 +118,7 @@ class FavoriteProductForm extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      favorite.price.toStringAsFixed(3) + 'đ',
+                      widget.favorite.price.toStringAsFixed(3) + 'đ',
                       style: GoogleFonts.roboto(
                           color: primaryColors,
                           fontSize: 17,
@@ -62,15 +126,15 @@ class FavoriteProductForm extends StatelessWidget {
                     ),
                   ],
                 ),
-                Container(
-                  // padding: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                      color: primaryColors, shape: BoxShape.circle),
-                  child: Icon(
-                    Icons.add,
-                    color: white,
-                  ),
-                )
+                IconButton(
+                    onPressed: () {
+                      // Remove favorite product
+                      _showConfirmationDialog();
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: primaryColors,
+                    ))
               ],
             )
           ],
