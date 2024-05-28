@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/screens/admin/login_admin_with_email_and_password_page.dart';
-import 'package:highlandcoffeeapp/screens/admin/register_admin_with_email_and_password_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/login_admin_with_identifier_and_password_page.dart';
 
 class LoginRegisterSwitcherAdminPage extends StatefulWidget {
   const LoginRegisterSwitcherAdminPage({Key? key}) : super(key: key);
@@ -24,8 +23,8 @@ class _LoginRegisterSwitcherPageAdminState extends State<LoginRegisterSwitcherAd
     return Scaffold(
       body: Center(
         child: showLoginPage
-            ? LoginAdminWithEmailAndPassWordPage(onTap: togglePage)
-            : LoginAdminWithEmailAndPassWordPage(onTap: togglePage),
+            ? LoginAdminWithIdentifierAndPassWordPage(onTap: togglePage)
+            : LoginAdminWithIdentifierAndPassWordPage(onTap: togglePage),
       ),
     );
   }

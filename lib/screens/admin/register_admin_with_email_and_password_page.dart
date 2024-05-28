@@ -42,7 +42,10 @@ class _RegisterAdminWithEmailAndPasswordPageState
     try {
       // Create new customer object
       Admin newAdmin = Admin(
-        email: email,
+        adminid: '',
+        name: email,
+        phonenumber: '',
+        shift: 0,
         password: password,
       );
       // Call API to register admin

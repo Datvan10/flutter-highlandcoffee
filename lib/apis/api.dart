@@ -9,25 +9,26 @@ import 'package:http/http.dart' as http;
 // Admin API
 class AdminApi {
   final String adminUrl = "http://localhost:5194/api/admins";
+  final String productUrl = "http://localhost:5194/api/products";
 
   // List of API URLs for each category
-  static const String baseUrl = 'http://localhost:5194/api';
+  static const String baseUrl = 'http://localhost:5194/api/products/category';
   String getCategoryApiUrl(String selectedCategory) {
     switch (selectedCategory) {
       case 'Coffee':
-        return '$baseUrl/coffees';
+        return '$baseUrl/dm001';
       case 'Freeze':
-        return '$baseUrl/freezes';
+        return '$baseUrl/dm002';
       case 'Trà':
-        return '$baseUrl/teas';
+        return '$baseUrl/dm003';
       case 'Đồ ăn':
-        return '$baseUrl/foods';
+        return '$baseUrl/dm004';
       case 'Danh sách sản phẩm':
         return '$baseUrl/products';
       case 'Sản phẩm phổ biến':
-        return '$baseUrl/populars';
+        return '$baseUrl/dm005';
       case 'Sản phẩm bán chạy nhất':
-        return '$baseUrl/bestsales';
+        return '$baseUrl/dm006';
       case 'Danh sách sản phẩm phổ biến':
         return '$baseUrl/populars';
       case 'Khác':
@@ -114,7 +115,7 @@ class AdminApi {
 
         for (var adminData in jsonResponse) {
           Admin admin = Admin.fromJson(adminData);
-          if (admin.email == email) {
+          if (admin.name == email) {
             try {
               final updateResponse = await http.put(
                 Uri.parse('$adminUrl'),
@@ -143,22 +144,22 @@ class AdminApi {
   }
 
   // Authenticate admin
-  Future<bool> authenticateAdmin(String email, String password) async {
+  Future<bool> authenticateAccountAdmin(
+      String identifier, String password) async {
+        final uri = Uri.parse(adminUrl);
     try {
-      final response = await http.get(
-        Uri.parse('$adminUrl?email=$email&password=$password'),
-      );
+      final response = await http.get(uri);
+
       if (response.statusCode == 200) {
-        List jsonResponse = json.decode(response.body);
+        List<dynamic> jsonResponse = json.decode(response.body);
 
         for (var adminData in jsonResponse) {
           Admin admin = Admin.fromJson(adminData);
-          if (admin.email == email) {
-            if (admin.password == password) {
-              return true;
-            } else {
-              return false;
-            }
+          // Kiểm tra `name` hoặc `phonenumber` và `password`
+          if ((admin.name == identifier ||
+                  admin.phonenumber == identifier) &&
+              admin.password == password) {
+            return true;
           }
         }
         return false;
@@ -171,17 +172,17 @@ class AdminApi {
   }
 
   // Add product for admin
-  Future<void> addProducts(Product product, String selectedCategory) async {
-    final apiUrl = getCategoryApiUrl(selectedCategory);
+  Future<void> addProduct(Product product) async {
 
     try {
       final response = await http.post(
-        Uri.parse(apiUrl),
+        Uri.parse(productUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(product.toJson()),
       );
+      print(response.statusCode);
       if (response.statusCode == 200) {
         print('Product added successfully');
       } else {
@@ -221,19 +222,17 @@ class AdminApi {
   }
 
   // Delete product for admin
-  Future<void> deleteProducts(String id, String selectedCategory) async {
-    final apiUrl = getCategoryApiUrl(selectedCategory);
-    final uri = Uri.parse('$apiUrl/$id');
-
+  Future<void> deleteProduct(String productid) async {
     try {
-      final response = await http.delete(uri);
-      if (response.statusCode == 200) {
+      final response = await http.delete(Uri.parse('$productUrl/$productid'));
+      // print(response.statusCode);
+      if (response.statusCode == 200 || response.statusCode == 204) {
         print('Product deleted successfully');
       } else {
-        throw Exception('Failed to delete product: ${response.body}');
+        throw Exception('Failed to delete product');
       }
     } catch (e) {
-      throw Exception('Failed to delete product: $e');
+      throw Exception('Failed to delete product');
     }
   }
 }
@@ -431,6 +430,25 @@ class CustomerApi {
     } catch (e) {
       // Nếu có lỗi xảy ra trong quá trình xử lý, ném ra một ngoại lệ
       throw Exception('Error fetching customer data: $e');
+    }
+  }
+}
+
+// Category API
+class CategoryApi{
+  final String categoryUrl = "http://localhost:5194/api/categories";
+  // Read data from API
+  Future<List<Category>> getCategories() async {
+    try {
+      final response = await http.get(Uri.parse(categoryUrl));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => new Category.fromJson(data)).toList();
+      } else {
+        throw Exception('Failed to load categories');
+      }
+    } catch (e) {
+      throw Exception('Failed to load categories');
     }
   }
 }
@@ -662,7 +680,6 @@ class FavoriteApi {
   }
 
   // Delete data from API
-  // Delete data from API
   Future<void> deleteFavorite(String favoriteid) async {
     try {
       final response = await http.delete(Uri.parse('$favoriteUrl/$favoriteid'));
@@ -736,58 +753,6 @@ class CoffeeApi {
       throw Exception('Failed to load bestsale products');
     }
   }
-
-  // Add data to API
-  Future<void> addCoffee(Product coffee) async {
-    final uri = Uri.parse(coffeeUrl);
-
-    try {
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(coffee.toJson()),
-      );
-      if (response.statusCode == 200) {
-        print('Coffee added successfully');
-      } else {
-        throw Exception('Failed to add coffee: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to add coffee: $e');
-    }
-  }
-
-  // Update data to API
-  Future<Product> updateCoffee(Product coffee) async {
-    try {
-      final response = await http.put(Uri.parse('$coffeeUrl/${coffee}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(coffee.toJson()));
-      if (response.statusCode == 200) {
-        return Product.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to update coffee');
-      }
-    } catch (e) {
-      throw Exception('Failed to update coffee');
-    }
-  }
-
-  // Delete data from API
-  Future<void> deleteCoffee(int id) async {
-    try {
-      final response = await http.delete(Uri.parse('$coffeeUrl/$id'));
-      if (response.statusCode != 204) {
-        throw Exception('Failed to delete coffee');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete coffee');
-    }
-  }
 }
 
 // API for Freeze
@@ -818,58 +783,6 @@ class FreezeApi {
       throw Exception('Failed to load freeze products');
     }
   }
-
-  // Add data to API
-  Future<void> addFreeze(Product freeze) async {
-    final uri = Uri.parse(freezeUrl);
-
-    try {
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(freeze.toJson()),
-      );
-      if (response.statusCode == 200) {
-        print('Freeze added successfully');
-      } else {
-        throw Exception('Failed to add freeze: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to add freeze: $e');
-    }
-  }
-
-  // Update data to API
-  Future<Product> updateFreeze(Product freeze) async {
-    try {
-      final response = await http.put(Uri.parse('$freezeUrl/${freeze}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(freeze.toJson()));
-      if (response.statusCode == 200) {
-        return Product.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to update freeze');
-      }
-    } catch (e) {
-      throw Exception('Failed to update freeze');
-    }
-  }
-
-  // Delete data from API
-  Future<void> deleteFreeze(int id) async {
-    try {
-      final response = await http.delete(Uri.parse('$freezeUrl/$id'));
-      if (response.statusCode != 204) {
-        throw Exception('Failed to delete freeze');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete freeze');
-    }
-  }
 }
 
 // API for Tea
@@ -898,58 +811,6 @@ class TeaApi {
       }
     } catch (e) {
       throw Exception('Failed to load tea products');
-    }
-  }
-
-  // Add data to API
-  Future<void> addTea(Product tea) async {
-    final uri = Uri.parse(teaUrl);
-
-    try {
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(tea.toJson()),
-      );
-      if (response.statusCode == 200) {
-        print('Tea added successfully');
-      } else {
-        throw Exception('Failed to add tea: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to add tea: $e');
-    }
-  }
-
-  // Update data to API
-  Future<Product> updateTea(Product tea) async {
-    try {
-      final response = await http.put(Uri.parse('$teaUrl/${tea}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(tea.toJson()));
-      if (response.statusCode == 200) {
-        return Product.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to update tea');
-      }
-    } catch (e) {
-      throw Exception('Failed to update tea');
-    }
-  }
-
-  // Delete data from API
-  Future<void> deleteTea(int id) async {
-    try {
-      final response = await http.delete(Uri.parse('$teaUrl/$id'));
-      if (response.statusCode != 204) {
-        throw Exception('Failed to delete tea');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete tea');
     }
   }
 }
@@ -1064,58 +925,6 @@ class FoodApi {
       throw Exception('Failed to load food products');
     }
   }
-
-  // Add data to API
-  Future<void> addFoods(Product food) async {
-    final uri = Uri.parse(foodUrl);
-
-    try {
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(food.toJson()),
-      );
-      if (response.statusCode == 200) {
-        print('food added successfully');
-      } else {
-        throw Exception('Failed to add food: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to add food: $e');
-    }
-  }
-
-  // Update data to API
-  Future<Product> updateFoods(Product food) async {
-    try {
-      final response = await http.put(Uri.parse('$foodUrl/${food}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(food.toJson()));
-      if (response.statusCode == 200) {
-        return Product.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to update food');
-      }
-    } catch (e) {
-      throw Exception('Failed to update food');
-    }
-  }
-
-  // Delete data from API
-  Future<void> deleteFoods(int id) async {
-    try {
-      final response = await http.delete(Uri.parse('$foodUrl/$id'));
-      if (response.statusCode != 204) {
-        throw Exception('Failed to delete food');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete food');
-    }
-  }
 }
 
 // API for Other
@@ -1144,58 +953,6 @@ class OtherApi {
       }
     } catch (e) {
       throw Exception('Failed to load other products');
-    }
-  }
-
-  // Add data to API
-  Future<void> addOther(Product other) async {
-    final uri = Uri.parse(otherUrl);
-
-    try {
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(other.toJson()),
-      );
-      if (response.statusCode == 200) {
-        print('Other added successfully');
-      } else {
-        throw Exception('Failed to add other: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to add other: $e');
-    }
-  }
-
-  // Update data to API
-  Future<Product> updateOther(Product other) async {
-    try {
-      final response = await http.put(Uri.parse('$otherUrl/${other}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(other.toJson()));
-      if (response.statusCode == 200) {
-        return Product.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to update other');
-      }
-    } catch (e) {
-      throw Exception('Failed to update other');
-    }
-  }
-
-  // Delete data from API
-  Future<void> deleteOther(int id) async {
-    try {
-      final response = await http.delete(Uri.parse('$otherUrl/$id'));
-      if (response.statusCode != 204) {
-        throw Exception('Failed to delete other');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete other');
     }
   }
 }
@@ -1287,7 +1044,7 @@ class CartApi {
   }
 }
 
-class CartDetailApi{
+class CartDetailApi {
   final String cartDetailsUrl = "http://localhost:5194/api/cartdetails";
 
   Future<List<dynamic>> fetchCartDetails() async {

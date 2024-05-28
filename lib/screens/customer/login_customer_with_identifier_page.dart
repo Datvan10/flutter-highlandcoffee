@@ -152,7 +152,7 @@ class _LoginCustomerWithIdentifierPageState
             ),
             //title email
             Text(
-              'Đăng nhập',
+              'Đăng nhập khách hàng',
               style: GoogleFonts.arsenal(
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),

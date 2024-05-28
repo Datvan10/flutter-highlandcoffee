@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/dashboard_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_product_page.dart';
@@ -11,6 +12,7 @@ import 'package:highlandcoffeeapp/screens/admin/most_sold_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/revenue_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/notification.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -81,6 +83,30 @@ class _AdminPageState extends State<AdminPage> {
     }
   }
 
+  //
+  void _showConfirmExit() {
+    notificationDialog(
+      context: context,
+      title: "Đăng xuất khỏi tài khoản của bạn?",
+      onConfirm: () {},
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("Hủy", style: TextStyle(color: Colors.red)),
+        ),
+        TextButton(
+          onPressed: () {
+            AuthManager().logoutAdmin();
+            Navigator.pushReplacementNamed(context, '/choose_login_type_page');
+          },
+          child: Text("Đồng ý", style: TextStyle(color: Colors.blue)),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AdminScaffold(
@@ -90,8 +116,8 @@ class _AdminPageState extends State<AdminPage> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
-              child:
-                  IconButton(onPressed: () {}, icon: Icon(Icons.account_circle)),
+              child: IconButton(
+                  onPressed: () {}, icon: Icon(Icons.account_circle)),
             )
           ],
           backgroundColor: Colors.transparent,

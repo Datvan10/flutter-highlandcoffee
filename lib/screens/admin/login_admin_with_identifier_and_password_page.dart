@@ -5,50 +5,57 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
+import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
-class LoginAdminWithEmailAndPassWordPage extends StatefulWidget {
+class LoginAdminWithIdentifierAndPassWordPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginAdminWithEmailAndPassWordPage({super.key, required this.onTap});
+  const LoginAdminWithIdentifierAndPassWordPage(
+      {super.key, required this.onTap});
 
   @override
-  State<LoginAdminWithEmailAndPassWordPage> createState() =>
-      _LoginAdminWithEmailAndPassWordPageState();
+  State<LoginAdminWithIdentifierAndPassWordPage> createState() =>
+      _LoginAdminWithIdentifierAndPassWordPageState();
 }
 
-class _LoginAdminWithEmailAndPassWordPageState
-    extends State<LoginAdminWithEmailAndPassWordPage> {
+class _LoginAdminWithIdentifierAndPassWordPageState
+    extends State<LoginAdminWithIdentifierAndPassWordPage> {
   final AdminApi api = AdminApi();
-  final emailController = TextEditingController();
+  final identifierController = TextEditingController();
   final passWordController = TextEditingController();
   bool isObsecure = false;
 
-  // Function login admin with email and password
-  void loginAdminWithEmailAndPassword() async {
-    String email = emailController.text.trim();
+  // Function login admin with identifier and password
+  void loginAdminWithIdentifierAndPassword() async {
+    String identifier = identifierController.text.trim();
     String password = passWordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
+    if (identifier.isEmpty || password.isEmpty) {
       showNotification('Vui lòng nhập đầy đủ thông tin đăng nhập');
+    } else if (password.length < 6) {
+      showNotification('Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
     } else {
       try {
         bool isAuthenticated =
-            await api.authenticateAdmin(email, password);
+            await api.authenticateAccountAdmin(identifier, password);
 
         if (isAuthenticated) {
           Navigator.pushReplacementNamed(context, '/admin_page');
           showNotification('Đăng nhập thành công');
         } else {
-          showNotification('Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
+          showNotification(
+              'Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
         }
       } catch (e) {
         print("Authentication Error: $e");
-        showNotification('Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
+        showNotification(
+            'Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
       }
     }
   }
+
   // Show notification dialog
   void showNotification(String message) {
     showCupertinoDialog(
@@ -87,7 +94,7 @@ class _LoginAdminWithEmailAndPassWordPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //title email
+            //title identifier
             Text(
               'Đăng nhập Admin',
               style: GoogleFonts.arsenal(
@@ -96,21 +103,21 @@ class _LoginAdminWithEmailAndPassWordPageState
             SizedBox(
               height: 150.0,
             ),
-            //form email
-            TextFormFieldEmail(
-              hintText: 'Nhập email',
-              prefixIconData: Icons.email,
+            //form identifier
+            MyTextFormField(
+              hintText: 'Tên đăng nhập',
+              prefixIconData: Icons.person,
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      emailController.clear();
+                      identifierController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: emailController,
+              controller: identifierController,
               iconColor: primaryColors,
             ),
             SizedBox(
@@ -160,7 +167,7 @@ class _LoginAdminWithEmailAndPassWordPageState
             //button login
             MyButton(
               text: 'Đăng nhập',
-              onTap: loginAdminWithEmailAndPassword,
+              onTap: loginAdminWithIdentifierAndPassword,
               buttonColor: primaryColors,
             ),
             SizedBox(

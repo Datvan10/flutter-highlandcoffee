@@ -119,7 +119,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
         ),
         TextButton(
           onPressed: () {
-            AuthManager().logout();
+            AuthManager().logoutCustomer();
             Navigator.pushReplacementNamed(context, '/choose_login_type_page');
           },
           child: Text("Đồng ý", style: TextStyle(color: Colors.blue)),
