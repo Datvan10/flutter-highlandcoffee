@@ -25,7 +25,7 @@ class CartProductForm extends StatefulWidget {
 class _CartProductFormState extends State<CartProductForm> {
   CartApi cartApi = CartApi();
   // Hàm show notification xóa sản phẩm từ giỏ hàng
-  void deleteProductFromCart(String id) async {
+  void deleteProductFromCart(String cartid) async {
     showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -45,7 +45,7 @@ class _CartProductFormState extends State<CartProductForm> {
               isDestructiveAction: true,
               child: Text("Xóa"),
               onPressed: () async {
-                await cartApi.deleteCart(id);
+                await cartApi.deleteCart(cartid);
                 Navigator.pop(context);
                 _showAlert(
                     'Thông báo', 'Xóa sản phẩm khỏi giỏ hàng thành công.');
@@ -114,18 +114,6 @@ class _CartProductFormState extends State<CartProductForm> {
         );
       },
     );
-  }
-
-  // Hàm kiểm tra xem một chuỗi có đúng định dạng base64 hay không
-  bool isValidBase64(String value) {
-    try {
-      base64.decode(value);
-      print('Decoding base64 is successful!');
-      return true;
-    } catch (e) {
-      print('Error decoding base64: $e');
-      return false;
-    }
   }
 
   @override

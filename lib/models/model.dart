@@ -134,44 +134,48 @@ class Order {
 
 // Model cart
 class Cart {
+  String cartdetailid;
+  String cartid;
   String customerid;
-  String categoryid;
   String productid;
   int quantity;
-  String image;
+  int totalprice;
   String productname;
-  int price;
   String size;
+  String image;
 
   Cart(
-      {required this.customerid,
-      required this.categoryid,
+      {required this.cartdetailid,
+      required this.cartid,
+      required this.customerid,
       required this.productid,
       required this.quantity,
-      required this.image,
+      required this.totalprice,
       required this.productname,
-      required this.price,
-      required this.size});
+      required this.size,
+      required this.image});
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
+      cartdetailid: json['cartdetailid'],
+      cartid: json['cartid'],
       customerid: json['customerid'],
-      categoryid: json['categoryid'],
       productid: json['productid'],
       quantity: json['quantity'],
-      image: json['image'],
+      totalprice: json['totalprice'],
       productname: json['productname'],
-      price: json['price'],
-      size: json['size']);
+      size: json['size'],
+      image: json['image']);
 
   Map<String, dynamic> toJson() => {
+        'cartdetailid': cartdetailid,
+        'cartid': cartid,
         'customerid': customerid,
-        'categoryid': categoryid,
         'productid': productid,
         'quantity': quantity,
-        'image': image,
+        'totalprice': totalprice,
         'productname': productname,
-        'price': price,
-        'size': size
+        'size': size,
+        'image': image
       };
 }
 

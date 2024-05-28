@@ -1239,7 +1239,7 @@ class CartApi {
         },
         body: jsonEncode(cart.toJson()),
       );
-      // print(response.statusCode);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         // print('Cart added successfully');
       } else {
@@ -1269,13 +1269,13 @@ class CartApi {
   }
 
   // Delete data from API
-  Future<void> deleteCart(String cartId) async {
+  Future<void> deleteCart(String cartid) async {
     try {
       // print(cartId);
       final response = await http.delete(
-        Uri.parse('$cartUrl/$cartId'),
+        Uri.parse('$cartUrl/$cartid'),
       );
-      // print(response.statusCode);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         print('Product removed successfully!');
       } else {
