@@ -1,4 +1,3 @@
-import 'package:highlandcoffeeapp/models/customer.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 
 class AuthManager {
@@ -11,14 +10,25 @@ class AuthManager {
   AuthManager._internal();
 
   Customer? loggedInCustomer;
+  Admin? loggedInAdmin;
 
   // Get the logged in customer
   void setLoggedInCustomer(Customer customer) {
     loggedInCustomer = customer;
   }
 
+  // Get the logged in admin
+  void setLoggedInAdmin(Admin admin) {
+    loggedInAdmin = admin;
+  }
+
   // Delete the logged in customer
-  void logout() {
+  void logoutCustomer() {
     loggedInCustomer = null;
+  }
+
+  // Delete the logged in admin
+  void logoutAdmin() {
+    loggedInAdmin = null;
   }
 }

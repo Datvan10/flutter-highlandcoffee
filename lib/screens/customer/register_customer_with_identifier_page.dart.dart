@@ -140,7 +140,7 @@ class _RegisterCustomerWithIdentifierPageState
             ),
             //title email
             Text(
-              'Đăng ký',
+              'Đăng ký khách hàng',
               style: GoogleFonts.arsenal(
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),

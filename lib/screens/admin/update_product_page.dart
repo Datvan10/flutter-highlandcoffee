@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
@@ -32,65 +35,65 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
   File? _imagePath;
   File? _imageDetailPath;
 
-  //
+  final AdminApi adminApi = AdminApi();
+  List<String> collectionNames = [
+    'Coffee',
+    'Trà',
+    'Freeze',
+    'Đồ ăn',
+    'Khác',
+    'Danh sách sản phẩm',
+    'Danh sách sản phẩm phổ biến',
+    'Sản phẩm bán chạy nhất',
+    'Sản phẩm phổ biến',
+  ];
 
-  //
-  Future<List<Products>> getProductsFromCollection(
-      String collectionName) async {
+  Map<String, List<Product>> productsMap = {};
+  String selectedCategory = '';
+
+  @override
+  void initState() {
+    super.initState();
+    selectedCategory = collectionNames.first;
+    loadData();
+  }
+
+  void loadData() async {
+    for (String collectionName in collectionNames) {
+      List<Product> products = await getProductsFromApi(collectionName);
+      productsMap[collectionName] = products;
+    }
+    setState(() {});
+  }
+
+  Future<List<Product>> getProductsFromApi(String selectedCategory) async {
     try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection(collectionName).get();
-
-      return querySnapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return Products(
-          id: data['id'],
-          name: data['name'],
-          description: data['description'],
-          imagePath: data['imagePath'],
-          imageDetailPath: data['imageDetailPath'],
-          oldPrice: data['oldPrice'].toDouble(),
-          newPrice: data['newPrice'].toDouble(),
-          rating: data['rating'],
-          category: data['category']
+      List<Product> products = await adminApi.getProducts(selectedCategory);
+      return products.map((product) {
+        return Product(
+          productid: product.productid,
+          categoryid: product.categoryid,
+          productname: product.productname,
+          description: product.description,
+          size: product.size,
+          price: product.price,
+          unit: product.unit,
+          image: product.image,
+          imagedetail: product.imagedetail,
         );
       }).toList();
     } catch (e) {
-      print('Error getting products from $collectionName: $e');
+      print('Error getting products from API for $selectedCategory: $e');
       return [];
     }
   }
 
-  Future<List<Products>> getAllProducts() async {
-    List<String> collectionNames = [
-      'Bánh mì',
-      'Bánh ngọt',
-      'Coffee',
-      'Danh sách sản phẩm',
-      'Danh sách sản phẩm phổ biến',
-      'Freeze',
-      'Sản phẩm bán chạy nhất',
-      'Sản phẩm phổ biến',
-      'Trà',
-      'Khác'
-    ];
-
-    List<Future<List<Products>>> futures = [];
-    for (String collectionName in collectionNames) {
-      futures.add(getProductsFromCollection(collectionName));
-    }
-
-    List<List<Products>> results = await Future.wait(futures);
-    List<Products> allProducts = results.expand((list) => list).toList();
-
-    return allProducts;
+  void updateSelectedProducts(String selectedCollection) {
+    setState(() {
+      selectedCategory = selectedCollection;
+    });
   }
 
-  List<Products> productList = [];
-
-  //
-
-  //
   Future<void> _pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -200,36 +203,52 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
         });
   }
 
-  Future<void> updateProductInFirestore(
-    String categoryCollection,
-    String id,
-    String name,
-    String description,
-    double oldPrice,
-    double newPrice,
-    String rating,
-    String imagePath,
-    String imageDetailPath,
-  ) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection(categoryCollection)
-          .doc(id)
-          .update({
-        'name': name,
-        'description': description,
-        'oldPrice': oldPrice,
-        'newPrice': newPrice,
-        'rating': rating,
-        'imagePath': imagePath,
-        'imageDetailPath': imageDetailPath,
-      });
-      print('Product updated in Firestore successfully');
-      _showAlert('Thông báo', 'Cập nhật sản phẩm thành công.');
-    } catch (e) {
-      print('Error updating product in Firestore: $e');
-      _showAlert('Thông báo', 'Cập nhật sản phẩm thất bại, vui lòng thử lại.');
-    }
+  Future<void> updateProduct(Product productToDelete) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.arsenal(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          content: Text("Bạn có chắc muốn xóa sản phẩm này không?"),
+          actions: [
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text("Xóa"),
+              onPressed: () async {
+                try {
+                  await adminApi.deleteProduct(
+                      productToDelete.productid);
+                  Navigator.pop(context);
+                  _showAlert('Thông báo', 'Sửa sản phẩm thành công.');
+                  // Gọi hàm loadData() để cập nhật danh sách sản phẩm sau khi Sửa
+                  loadData();
+                } catch (e) {
+                  print('Error deleting product: $e');
+                  Navigator.pop(context);
+                  _showAlert('Lỗi', 'Đã xảy ra lỗi khi sửa sản phẩm.');
+                }
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(
+                "Hủy",
+                style: TextStyle(color: blue),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showAlert(String title, String content) {
@@ -258,21 +277,9 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    loadData();
-  }
-
-  void loadData() async {
-    productList = await getAllProducts();
-    setState(() {});
-  }
-
   Widget build(BuildContext context) {
     return Column(
       children: [
-        //
         SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
           child: Padding(
@@ -291,48 +298,51 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
                 TextField(
                   controller: _textSearchProductController,
                   decoration: InputDecoration(
-                      hintText: 'Tìm kiếm sản phẩm',
-                      contentPadding: EdgeInsets.symmetric(),
-                      alignLabelWithHint: true,
-                      filled: true,
-                      fillColor: white,
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        size: 20,
-                      ),
-                      //icon clear
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                              color: background, shape: BoxShape.circle),
-                          child: Center(
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.clear,
-                                size: 10,
-                              ),
-                              onPressed: () {
-                                _textSearchProductController.clear();
-                              },
+                    hintText: 'Tìm kiếm sản phẩm',
+                    contentPadding: EdgeInsets.symmetric(),
+                    alignLabelWithHint: true,
+                    filled: true,
+                    fillColor: white,
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      size: 20,
+                    ),
+                    //icon clear
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            color: background, shape: BoxShape.circle),
+                        child: Center(
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.clear,
+                              size: 10,
                             ),
+                            onPressed: () {
+                              _textSearchProductController.clear();
+                            },
                           ),
                         ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(28.0),
-                          borderSide: BorderSide(color: Colors.white)),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(28.0),
-                          borderSide: BorderSide(color: Colors.white))),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(28.0),
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(28.0),
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                  ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -343,7 +353,34 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                )
+                ),
+                SizedBox(height: 15),
+                // Danh sách danh mục sản phẩm
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: collectionNames.map((category) {
+                      final bool isSelected = category == selectedCategory;
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            updateSelectedProducts(category);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: isSelected ? primaryColors : white,
+                          ),
+                          child: Text(
+                            category,
+                            style: TextStyle(
+                              color: isSelected ? white : black,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ],
             ),
           ),
@@ -356,99 +393,124 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: productList.length,
+              itemCount: 1,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Image.network(
-                          productList[index].imagePath,
-                          height: 80,
-                          width: 80,
+                // Lọc danh sách sản phẩm dựa trên danh mục được chọn
+                List<Product> products = selectedCategory.isNotEmpty
+                    ? productsMap[selectedCategory] ?? []
+                    : [];
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        selectedCategory.isNotEmpty
+                            ? selectedCategory
+                            : collectionNames[index],
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: brown,
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    // Hiển thị danh sách sản phẩm trong danh mục
+                    ...products.map((product) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              productList[index].name,
-                              style: GoogleFonts.arsenal(
-                                  fontSize: 18,
-                                  color: primaryColors,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              productList[index].newPrice.toStringAsFixed(3) +
-                                  'đ',
-                              style: GoogleFonts.roboto(
-                                color: primaryColors,
-                                fontSize: 16,
+                            Expanded(
+                              flex: 1,
+                              child: Image.memory(
+                                base64Decode(product.image),
+                                height: 80,
+                                width: 80,
                               ),
                             ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 19,
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.productname,
+                                    style: GoogleFonts.arsenal(
+                                      fontSize: 18,
+                                      color: primaryColors,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    product.price.toStringAsFixed(3) + 'đ',
+                                    style: GoogleFonts.roboto(
+                                      color: primaryColors,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                        size: 19,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                        size: 19,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                        size: 19,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                        size: 19,
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: blue,
                                 ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 19,
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 19,
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 19,
-                                ),
-                              ],
+                                onPressed: () {
+                                  _showUpdateProductForm(context);
+                                },
+                              ),
                             )
                           ],
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.edit,
-                            color: blue,
-                          ),
-                          onPressed: () {
-                            _showUpdateProductForm(context);
-                          },
-                        ),
-                      )
-                    ],
-                  ),
+                      );
+                    }).toList(),
+                  ],
                 );
               },
             ),
           ),
         ),
-
-        //
+        // Nút hoàn thành
         Padding(
-          padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 18.0),
+          padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 25.0),
           child: MyButton(
             text: 'Hoàn thành',
             onTap: () {},

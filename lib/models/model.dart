@@ -2,22 +2,34 @@ import 'dart:typed_data';
 
 // Model admin
 class Admin {
-  final String email;
+  String? adminid;
+  final String name;
+  final String phonenumber;
+  int? shift;
   final String password;
 
   Admin({
+    this.adminid,
+    required this.name,
+    required this.phonenumber,
+    required this.shift,
     required this.password,
-    required this.email,
   });
 
   factory Admin.fromJson(Map<String, dynamic> json) => Admin(
+        adminid: json['adminid'],
+        name: json['name'],
+        phonenumber: json['phonenumber'],
+        shift: json['shift'],
         password: json['password'],
-        email: json['email'],
       );
 
   Map<String, dynamic> toJson() => {
+        'adminid': adminid,
+        'name': name,
+        'phonenumber': phonenumber,
+        'shift': shift,
         'password': password,
-        'email': email,
       };
 }
 
@@ -228,6 +240,34 @@ class Favorite {
         'image': image,
         'imagedetail': imagedetail
       };
+}
+
+// Model category
+class Category{
+  final String categoryid;
+  final String categoryname;
+  final String description;
+
+  Category({
+    required this.categoryid,
+    required this.categoryname,
+    required this.description,
+  });
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      categoryid: json['categoryid'],
+      categoryname: json['categoryname'],
+      description: json['description'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'categoryid': categoryid,
+    'categoryname': categoryname,
+    'description': description,
+  };
+
 }
 
 // Model product

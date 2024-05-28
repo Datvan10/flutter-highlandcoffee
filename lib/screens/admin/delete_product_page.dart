@@ -28,7 +28,6 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
     'Freeze',
     'Đồ ăn',
     'Khác',
-    'Bánh mì',
     'Danh sách sản phẩm',
     'Danh sách sản phẩm phổ biến',
     'Sản phẩm bán chạy nhất',
@@ -81,7 +80,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
     });
   }
 
-  Future<void> deleteProduct(Product productToDelete) async {
+  Future<void> deleteProduct(String productid) async {
     showDialog(
       context: context,
       builder: (context) {
@@ -102,8 +101,8 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
               child: Text("Xóa"),
               onPressed: () async {
                 try {
-                  await adminApi.deleteProducts(
-                      productToDelete.productid, selectedCategory);
+                  await adminApi.deleteProduct(
+                      productid);
                   Navigator.pop(context);
                   _showAlert(
                       'Thông báo', 'Xóa sản phẩm thành công.');
@@ -179,7 +178,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
                 TextField(
                   controller: _textSearchProductController,
                   decoration: InputDecoration(
@@ -223,7 +222,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -235,7 +234,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
                 // Danh sách danh mục sản phẩm
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -343,25 +342,19 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                                   ),
                                   Row(
                                     children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: 19,
+                                      Text(
+                                        'Size: ',
+                                        style: GoogleFonts.roboto(
+                                          color: primaryColors,
+                                          fontSize: 16,
+                                        ),
                                       ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: 19,
-                                      ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: 19,
-                                      ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: 19,
+                                      Text(
+                                        product.size,
+                                        style: GoogleFonts.roboto(
+                                          color: primaryColors,
+                                          fontSize: 16,
+                                        ),
                                       ),
                                     ],
                                   )
@@ -379,24 +372,8 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                                   if (selectedCategory.isNotEmpty) {
                                     // Lấy thông tin sản phẩm cần xóa
                                     Product productToDelete = product;
-
                                     // Gọi hàm xóa sản phẩm
-                                    deleteProduct(productToDelete);
-                                    // try {
-                                    //   // Gọi hàm xóa sản phẩm
-                                    //   await adminApi.deleteProducts(
-                                    //       productToDelete.id, selectedCategory);
-
-                                    //   // Sau khi xóa thành công, cập nhật lại danh sách sản phẩm
-                                    //   setState(() {
-                                    //     productsMap[selectedCategory]
-                                    //         ?.remove(productToDelete);
-                                    //   });
-
-                                    //   print('Product deleted successfully');
-                                    // } catch (e) {
-                                    //   print('Error deleting product: $e');
-                                    // }
+                                    deleteProduct(productToDelete.productid);
                                   }
                                 },
                               ),
@@ -413,7 +390,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
         ),
         // Nút hoàn thành
         Padding(
-          padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 18.0),
+          padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 25.0),
           child: MyButton(
             text: 'Hoàn thành',
             onTap: () {},

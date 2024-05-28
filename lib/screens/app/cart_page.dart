@@ -10,7 +10,6 @@ import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/cart_product_form.dart';
-import 'package:http/http.dart' as http; // Import thư viện http để gọi API
 
 class CartPage extends StatefulWidget {
   const CartPage();
