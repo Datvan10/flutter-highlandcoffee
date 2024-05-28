@@ -39,7 +39,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   final CartApi cartApi = CartApi();
   final FavoriteApi favoriteApi = FavoriteApi();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -207,18 +206,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   // Function to add item to the cart collection
   Future<void> addToCart() async {
     try {
-      // Chuyển đổi hình ảnh từ chuỗi sang mảng byte
-      List<int> imageBytes = utf8.encode(widget.product.image);
-      // Mã hóa mảng byte sang chuỗi base64
-      String base64Image = base64Encode(imageBytes);
+      // Chuyển đổi chuỗi base64 thành dữ liệu nhị phân (Uint8List)
+      Uint8List image = base64Decode(widget.product.image);
+      // Mã hóa dữ liệu nhị phân thành chuỗi base64
+      String base64Image = base64Encode(image);
       Cart cart = Cart(
+          cartdetailid: '',
+          cartid: '',
           customerid: loggedInUser!.customerid!,
-          categoryid: widget.product.categoryid,
           productid: widget.product.productid,
           quantity: quantityCount,
           image: base64Image,
           productname: widget.product.productname,
-          price: totalPrice,
+          totalprice: totalPrice,
           size: selectedSize);
       // print(cart.toJson());
 
