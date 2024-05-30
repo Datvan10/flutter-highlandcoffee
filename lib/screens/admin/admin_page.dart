@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:highlandcoffeeapp/screens/admin/add_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/dashboard_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/delete_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/feddback_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/order_list_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/most_sold_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/revenue_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/update_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
@@ -44,6 +47,27 @@ class _AdminPageState extends State<AdminPage> {
       case MostSoldProductPage.routeName:
         setState(() {
           _selectedItem = MostSoldProductPage();
+        });
+
+        break;
+      
+      case AddCategoryPage.routeName:
+        setState(() {
+          _selectedItem = AddCategoryPage();
+        });
+
+        break;
+
+      case DeleteCategoryPage.routeName:
+        setState(() {
+          _selectedItem = DeleteCategoryPage();
+        });
+
+        break;
+        
+      case UpdateCategoryPage.routeName:
+        setState(() {
+          _selectedItem = UpdateCategoryPage();
         });
 
         break;
@@ -148,6 +172,25 @@ class _AdminPageState extends State<AdminPage> {
                       icon: Icons.trending_up,
                       route: MostSoldProductPage.routeName)
                 ]),
+            // manage category
+            AdminMenuItem(
+              title: 'Danh mục',
+              icon: Icons.category_outlined,
+              children: [
+                AdminMenuItem(
+                    title: 'Thêm danh mục',
+                    route: AddCategoryPage.routeName,
+                    icon: Icons.add),
+                AdminMenuItem(
+                    title: 'Xóa danh mục',
+                    route: DeleteCategoryPage.routeName,
+                    icon: Icons.remove),
+                AdminMenuItem(
+                    title: 'Sửa danh mục',
+                    route: UpdateCategoryPage.routeName,
+                    icon: Icons.edit),
+              ],
+            ),
             //manager product
             AdminMenuItem(
               title: 'Sản phẩm',

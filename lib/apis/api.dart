@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 class AdminApi {
   final String adminUrl = "http://localhost:5194/api/admins";
   final String productUrl = "http://localhost:5194/api/products";
+  final String categoryUrl = "http://localhost:5194/api/categories";
 
   // List of API URLs for each category
   static const String baseUrl = 'http://localhost:5194/api/products/category';
@@ -146,7 +147,7 @@ class AdminApi {
   // Authenticate admin
   Future<bool> authenticateAccountAdmin(
       String identifier, String password) async {
-        final uri = Uri.parse(adminUrl);
+    final uri = Uri.parse(adminUrl);
     try {
       final response = await http.get(uri);
 
@@ -156,8 +157,7 @@ class AdminApi {
         for (var adminData in jsonResponse) {
           Admin admin = Admin.fromJson(adminData);
           // Kiểm tra `name` hoặc `phonenumber` và `password`
-          if ((admin.name == identifier ||
-                  admin.phonenumber == identifier) &&
+          if ((admin.name == identifier || admin.phonenumber == identifier) &&
               admin.password == password) {
             return true;
           }
@@ -173,7 +173,6 @@ class AdminApi {
 
   // Add product for admin
   Future<void> addProduct(Product product) async {
-
     try {
       final response = await http.post(
         Uri.parse(productUrl),
@@ -233,6 +232,48 @@ class AdminApi {
       }
     } catch (e) {
       throw Exception('Failed to delete product');
+    }
+  }
+
+  // Update product for admin
+  Future<void> updateProduct(Product product) async {
+    try {
+      final response = await http.put(
+        Uri.parse(
+            '$productUrl/${product.productid}'), // Include the product ID in the URL
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(product.toJson()),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Product updated successfully');
+      } else {
+        throw Exception('Failed to update product: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update product: $e');
+    }
+  }
+
+  // Add category for admin
+  Future<void> addCategory(Category category) async {
+    try {
+      final response = await http.post(
+        Uri.parse(categoryUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(category.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Category added successfully');
+      } else {
+        throw Exception('Failed to add category: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add category: $e');
     }
   }
 }
@@ -435,15 +476,17 @@ class CustomerApi {
 }
 
 // Category API
-class CategoryApi{
+class CategoryApi {
   final String categoryUrl = "http://localhost:5194/api/categories";
   // Read data from API
   Future<List<Category>> getCategories() async {
     try {
       final response = await http.get(Uri.parse(categoryUrl));
       if (response.statusCode == 200) {
-        List jsonResponse = json.decode(response.body);
-        return jsonResponse.map((data) => new Category.fromJson(data)).toList();
+        List<dynamic> body = jsonDecode(response.body);
+        List<Category> categories =
+            body.map((dynamic item) => Category.fromJson(item)).toList();
+        return categories;
       } else {
         throw Exception('Failed to load categories');
       }
