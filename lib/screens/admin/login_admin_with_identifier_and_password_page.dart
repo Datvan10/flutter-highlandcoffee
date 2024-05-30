@@ -6,7 +6,6 @@ import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
-import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
@@ -90,10 +89,13 @@ class _LoginAdminWithIdentifierAndPassWordPageState
       backgroundColor: background,
       body: Padding(
         padding: const EdgeInsets.only(
-            left: 18.0, top: 120.0, right: 18.0, bottom: 60),
+            left: 18.0, top: 90.0, right: 18.0, bottom: 60),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 10.0,
+            ),
             //title identifier
             Text(
               'Đăng nhập Admin',
@@ -101,7 +103,7 @@ class _LoginAdminWithIdentifierAndPassWordPageState
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
             SizedBox(
-              height: 150.0,
+              height: 190.0,
             ),
             //form identifier
             MyTextFormField(

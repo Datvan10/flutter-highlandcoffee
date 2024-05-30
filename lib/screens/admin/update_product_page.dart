@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
+import 'package:highlandcoffeeapp/widgets/category_dropdown.dart';
+import 'package:highlandcoffeeapp/widgets/image_picker_widget.dart';
+import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
@@ -23,42 +25,52 @@ class UpdateProductPage extends StatefulWidget {
 class _UpdateProductPageState extends State<UpdateProductPage> {
   //
   final _textSearchProductController = TextEditingController();
-
-  //
   TextEditingController _editIdController = TextEditingController();
   TextEditingController _editNameController = TextEditingController();
   TextEditingController _editDescriptionController = TextEditingController();
-  TextEditingController _editOldPriceController = TextEditingController();
-  TextEditingController _editNewPriceController = TextEditingController();
-  TextEditingController _editRatingController = TextEditingController();
+  TextEditingController _editPriceController = TextEditingController();
+  TextEditingController _editSizeController = TextEditingController();
+  TextEditingController _editUnitController = TextEditingController();
 
   File? _imagePath;
   File? _imageDetailPath;
 
   final AdminApi adminApi = AdminApi();
-  List<String> collectionNames = [
-    'Coffee',
-    'Trà',
-    'Freeze',
-    'Đồ ăn',
-    'Khác',
-    'Danh sách sản phẩm',
-    'Danh sách sản phẩm phổ biến',
-    'Sản phẩm bán chạy nhất',
-    'Sản phẩm phổ biến',
-  ];
-
+  final CategoryApi categoryApi = CategoryApi();
+  List<String> collectionNames = [];
   Map<String, List<Product>> productsMap = {};
   String selectedCategory = '';
 
   @override
   void initState() {
     super.initState();
-    selectedCategory = collectionNames.first;
-    loadData();
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    try {
+      List<Category> categories = await categoryApi.getCategories();
+      setState(() {
+        collectionNames =
+            categories.map((category) => category.categoryname).toList();
+        if (collectionNames.isNotEmpty) {
+          selectedCategory = collectionNames.first;
+          loadData();
+        }
+      });
+    } catch (e) {
+      print('Error fetching categories: $e');
+      setState(() {
+        collectionNames = ['Coffee', 'Trà', 'Freeze', 'Đồ ăn', 'Khác'];
+        selectedCategory = 'Coffee';
+        loadData();
+      });
+    }
   }
 
   void loadData() async {
+    if (collectionNames.isEmpty) return;
+
     for (String collectionName in collectionNames) {
       List<Product> products = await getProductsFromApi(collectionName);
       productsMap[collectionName] = products;
@@ -116,8 +128,29 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     }
   }
 
+  //
+  // Tạo một hàm để cập nhật sản phẩm
+Future<void> updateProduct(Product product) async {
+  try {
+    await adminApi.updateProduct(product);
+    _showAlert('Thông báo', 'Cập nhật sản phẩm thành công');
+    loadData();
+    Navigator.pop(context);
+  } catch (e) {
+    print('Error updating product: $e');
+  }
+}
+
   //update product
-  void _showUpdateProductForm(BuildContext context) {
+  void _showUpdateProductForm(BuildContext context, Product product) {
+    List<String> _categories = collectionNames;
+    // Điền các giá trị hiện tại của sản phẩm vào các trường nhập liệu hoặc các trường hiển thị
+    _editIdController.text = product.productid;
+    _editNameController.text = product.productname;
+    _editDescriptionController.text = product.description;
+    _editPriceController.text = product.price.toString();
+    _editSizeController.text = product.size;
+    _editUnitController.text = product.unit;
     showModalBottomSheet(
         context: context,
         isScrollControlled: true, // Chiều dài có thể được cuộn
@@ -126,7 +159,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
         ),
         builder: (BuildContext context) {
           return Container(
-            height: 800,
+            height: 830,
             width: MediaQuery.of(context).size.width,
             child: Padding(
               padding: const EdgeInsets.only(
@@ -140,18 +173,39 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                         fontWeight: FontWeight.bold,
                         color: primaryColors),
                   ),
-                  //
-                  buildTextFieldWithLabel('ID sản phẩm', _editIdController),
-                  buildTextFieldWithLabel('Tên sản phẩm', _editNameController),
-                  buildTextFieldWithLabel(
-                      'Mô tả sản phẩm', _editDescriptionController),
-                  buildTextFieldWithLabel(
-                      'Giá cũ', _editOldPriceController, TextInputType.number),
-                  buildTextFieldWithLabel(
-                      'Giá mới', _editNewPriceController, TextInputType.number),
-                  buildTextFieldWithLabel('Xếp hạng', _editRatingController),
                   SizedBox(height: 10),
-                  buildImagePicker(),
+                  CategoryDropdown(
+                    categories: _categories,
+                    selectedCategory: selectedCategory,
+                    onChanged: (String? value) {
+                      setState(() {
+                        selectedCategory = value ?? '';
+                      });
+                    },
+                  ),
+                  // LabeledTextField(
+                  //     label: 'ID sản phẩm', controller: _editIdController),
+                  LabeledTextField(
+                      label: 'Tên sản phẩm', controller: _editNameController),
+                  LabeledTextField(
+                      label: 'Mô tả sản phẩm',
+                      controller: _editDescriptionController),
+                  LabeledTextField(
+                      label: 'Giá', controller: _editPriceController),
+                  LabeledTextField(
+                      label: 'Size', controller: _editSizeController),
+                  LabeledTextField(
+                      label: 'Đơn vị tính', controller: _editUnitController),
+                  SizedBox(height: 10),
+                  ImagePickerWidget(
+                    imagePath: _imagePath,
+                    onPressed: _pickImage,
+                    label: 'Hình ảnh sản phẩm',
+                  ),
+                  ImagePickerWidget(
+                      imagePath: _imageDetailPath,
+                      onPressed: _pickImageDetail,
+                      label: 'Hình ảnh chi tiết sản phẩm'),
                   SizedBox(
                     height: 15.0,
                   ),
@@ -159,22 +213,28 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
-                          // Xử lý khi nhấn nút "Thêm sản phẩm"
-                          String id = _editIdController.text;
-                          String name = _editNameController.text;
-                          String description = _editDescriptionController.text;
-                          double oldPrice =
-                              double.tryParse(_editOldPriceController.text) ??
-                                  0;
-                          double newPrice =
-                              double.tryParse(_editNewPriceController.text) ??
-                                  0;
-                          String rating = _editRatingController.text;
-                          // Thực hiện thêm sản phẩm vào cơ sở dữ liệu hoặc xử lý tùy ý
-                          // Sau khi thêm sản phẩm, bạn có thể chuyển người dùng đến trang khác
-                          // hoặc thực hiện hành động tùy ý
-                          // Navigator.pop(context); // Đóng trang thêm sản phẩm sau khi thêm thành công
+                        onPressed: () async {
+                          Product updateNewProduct = Product(
+                            productid: _editIdController.text,
+                            categoryid: product.categoryid,
+                            productname: _editNameController.text,
+                            description: _editDescriptionController.text,
+                            size: _editSizeController.text,
+                            price: int.tryParse(_editPriceController.text) ?? 0,
+                            unit: _editUnitController.text,
+                            image: _imagePath != null
+                                ? base64Encode(_imagePath!.readAsBytesSync())
+                                : product.image,
+                            imagedetail: _imageDetailPath != null
+                                ? base64Encode(
+                                    _imageDetailPath!.readAsBytesSync())
+                                : product.imagedetail,
+                          );
+                          print(updateNewProduct.productid);
+                          print(updateNewProduct.categoryid);
+                          print(updateNewProduct.size);
+                          // Xử lý khi nhấn nút
+                          await updateProduct(updateNewProduct);
                         },
                         style: ElevatedButton.styleFrom(backgroundColor: green),
                         child: Row(
@@ -201,54 +261,6 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
             ),
           );
         });
-  }
-
-  Future<void> updateProduct(Product productToDelete) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            "Thông báo",
-            style: GoogleFonts.arsenal(
-              color: primaryColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: Text("Bạn có chắc muốn xóa sản phẩm này không?"),
-          actions: [
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              child: Text("Xóa"),
-              onPressed: () async {
-                try {
-                  await adminApi.deleteProduct(
-                      productToDelete.productid);
-                  Navigator.pop(context);
-                  _showAlert('Thông báo', 'Sửa sản phẩm thành công.');
-                  // Gọi hàm loadData() để cập nhật danh sách sản phẩm sau khi Sửa
-                  loadData();
-                } catch (e) {
-                  print('Error deleting product: $e');
-                  Navigator.pop(context);
-                  _showAlert('Lỗi', 'Đã xảy ra lỗi khi sửa sản phẩm.');
-                }
-              },
-            ),
-            CupertinoDialogAction(
-              child: Text(
-                "Hủy",
-                style: TextStyle(color: blue),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void _showAlert(String title, String content) {
@@ -408,7 +420,9 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                       child: Text(
                         selectedCategory.isNotEmpty
                             ? selectedCategory
-                            : collectionNames[index],
+                            : collectionNames.isNotEmpty
+                                ? collectionNames[index]
+                                : '',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -461,25 +475,19 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                                   ),
                                   Row(
                                     children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: 19,
+                                      Text(
+                                        'Size: ',
+                                        style: GoogleFonts.roboto(
+                                          color: primaryColors,
+                                          fontSize: 16,
+                                        ),
                                       ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: 19,
-                                      ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: 19,
-                                      ),
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: 19,
+                                      Text(
+                                        product.size,
+                                        style: GoogleFonts.roboto(
+                                          color: primaryColors,
+                                          fontSize: 16,
+                                        ),
                                       ),
                                     ],
                                   )
@@ -494,7 +502,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                                   color: blue,
                                 ),
                                 onPressed: () {
-                                  _showUpdateProductForm(context);
+                                  _showUpdateProductForm(context, product);
                                 },
                               ),
                             )
@@ -517,171 +525,6 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
             buttonColor: primaryColors,
           ),
         )
-      ],
-    );
-  }
-
-  //
-  Widget buildTextFieldWithLabel(String label, TextEditingController controller,
-      [TextInputType inputType = TextInputType.text]) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 150,
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(right: 10),
-            child: Text(
-              label,
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              keyboardType: inputType,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0)),
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildImagePicker() {
-    return Column(
-      children: [
-        // Hình ảnh sản phẩm
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 150,
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.only(right: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hình ảnh sản phẩm',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 35),
-                  ElevatedButton(
-                    onPressed: _pickImage,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: light_grey,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Chọn file',
-                          style: TextStyle(color: white),
-                        ),
-                        Icon(
-                          Icons.upload,
-                          color: blue,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _imagePath != null
-                        ? Image.file(
-                            _imagePath!,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          )
-                        : Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        // Hình ảnh chi tiết sản phẩm
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 150,
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.only(right: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hình ảnh chi tiết sản phẩm',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 35),
-                  ElevatedButton(
-                    onPressed: _pickImageDetail,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: light_grey,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Chọn file',
-                          style: TextStyle(color: white),
-                        ),
-                        Icon(
-                          Icons.upload,
-                          color: blue,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _imageDetailPath != null
-                        ? Image.file(
-                            _imageDetailPath!,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          )
-                        : Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,29 +21,41 @@ class DeleteProductPage extends StatefulWidget {
 class _DeleteProductPageState extends State<DeleteProductPage> {
   final _textSearchProductController = TextEditingController();
   final AdminApi adminApi = AdminApi();
-  List<String> collectionNames = [
-    'Coffee',
-    'Trà',
-    'Freeze',
-    'Đồ ăn',
-    'Khác',
-    'Danh sách sản phẩm',
-    'Danh sách sản phẩm phổ biến',
-    'Sản phẩm bán chạy nhất',
-    'Sản phẩm phổ biến',
-  ];
-
+  final CategoryApi categoryApi = CategoryApi();
+  List<String> collectionNames = [];
   Map<String, List<Product>> productsMap = {};
   String selectedCategory = '';
 
   @override
   void initState() {
     super.initState();
-    selectedCategory = collectionNames.first;
-    loadData();
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    try {
+      List<Category> categories = await categoryApi.getCategories();
+      setState(() {
+        collectionNames =
+            categories.map((category) => category.categoryname).toList();
+        if (collectionNames.isNotEmpty) {
+          selectedCategory = collectionNames.first;
+          loadData();
+        }
+      });
+    } catch (e) {
+      print('Error fetching categories: $e');
+      setState(() {
+        collectionNames = ['Coffee', 'Trà', 'Freeze', 'Đồ ăn', 'Khác'];
+        selectedCategory = 'Coffee';
+        loadData();
+      });
+    }
   }
 
   void loadData() async {
+    if (collectionNames.isEmpty) return;
+
     for (String collectionName in collectionNames) {
       List<Product> products = await getProductsFromApi(collectionName);
       productsMap[collectionName] = products;
@@ -93,19 +104,16 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
               fontSize: 18,
             ),
           ),
-          content:
-              Text("Bạn có chắc muốn xóa sản phẩm này không?"),
+          content: Text("Bạn có chắc muốn xóa sản phẩm này không?"),
           actions: [
             CupertinoDialogAction(
               isDestructiveAction: true,
               child: Text("Xóa"),
               onPressed: () async {
                 try {
-                  await adminApi.deleteProduct(
-                      productid);
+                  await adminApi.deleteProduct(productid);
                   Navigator.pop(context);
-                  _showAlert(
-                      'Thông báo', 'Xóa sản phẩm thành công.');
+                  _showAlert('Thông báo', 'Xóa sản phẩm thành công.');
                   // Gọi hàm loadData() để cập nhật danh sách sản phẩm sau khi xóa
                   loadData();
                 } catch (e) {
@@ -157,6 +165,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -288,7 +297,9 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                       child: Text(
                         selectedCategory.isNotEmpty
                             ? selectedCategory
-                            : collectionNames[index],
+                            : collectionNames.isNotEmpty
+                                ? collectionNames[index]
+                                : '',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -333,8 +344,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                                     ),
                                   ),
                                   Text(
-                                    product.price.toStringAsFixed(3) +
-                                        'đ',
+                                    product.price.toStringAsFixed(3) + 'đ',
                                     style: GoogleFonts.roboto(
                                       color: primaryColors,
                                       fontSize: 16,

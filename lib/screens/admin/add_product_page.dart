@@ -109,7 +109,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   // Function to add a product to database
-  Future<void> addProducts() async {
+  Future<void> addProduct() async {
     try {
       // Find the selected category's ID
       String? selectedCategoryId;
@@ -151,8 +151,8 @@ class _AddProductPageState extends State<AddProductPage> {
       }
 
       await adminApi.addProduct(newProduct);
-      print(newProduct.categoryid);
-      print('Product add successfully');
+      // print(newProduct.categoryid);
+      // print('Product add successfully');
       _showAlert('Thông báo', 'Thêm sản phẩm vào cơ sở dữ liệu thành công.');
       // Reset text controllers
       _productNameController.clear();
@@ -166,7 +166,7 @@ class _AddProductPageState extends State<AddProductPage> {
       });
     } catch (e) {
       print('Error adding product to Database: $e');
-      _showAlert('Thông báo', 'Thêm sản phẩm thất bại, vui lòng thử lại.');
+      _showAlert('Lỗi', 'Thêm sản phẩm thất bại, vui lòng thử lại.');
     }
   }
 
@@ -239,17 +239,28 @@ class _AddProductPageState extends State<AddProductPage> {
               onPressed: _pickImageDetail,
               label: 'Hình ảnh chi tiết sản phẩm',
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    addProducts();
+                    Navigator.pushNamed(context, '/admin_page');
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: red),
+                  child: Text(
+                    'Hủy',
+                    style: TextStyle(color: white),
+                  ),
+                ),
+                SizedBox(width: 15),
+                ElevatedButton(
+                  onPressed: () {
+                    addProduct();
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: green),
                   child: Text(
-                    'Thêm sản phẩm',
+                    'Thêm',
                     style: TextStyle(color: white),
                   ),
                 ),
