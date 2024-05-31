@@ -276,6 +276,55 @@ class AdminApi {
       throw Exception('Failed to add category: $e');
     }
   }
+
+  // Get category for admin
+  Future<List<Category>> getCategories() async {
+    try {
+      final response = await http.get(Uri.parse(categoryUrl));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => new Category.fromJson(data)).toList();
+      } else {
+        throw Exception('Failed to load categories');
+      }
+    } catch (e) {
+      throw Exception('Failed to load categories');
+    }
+  }
+
+  // Delete category for admin
+  Future<void> deleteCategory(String categoryid) async {
+    try {
+      final response = await http.delete(Uri.parse('$categoryUrl/$categoryid'));
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        print('Category deleted successfully');
+      } else {
+        throw Exception('Failed to delete category');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete category');
+    }
+  }
+
+  // Update category for admin
+  Future<void> updateCategory(Category category) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$categoryUrl/${category.categoryid}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(category.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Category updated successfully');
+      } else {
+        throw Exception('Failed to update category: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update category: $e');
+    }
+  }
 }
 
 // Customer API

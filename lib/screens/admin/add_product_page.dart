@@ -139,7 +139,8 @@ class _AddProductPageState extends State<AddProductPage> {
         image: base64Image,
         imagedetail: base64ImageDetail,
       );
-      if (newProduct.productname.isEmpty ||
+      if (newProduct.categoryid.isEmpty ||
+          newProduct.productname.isEmpty ||
           newProduct.description.isEmpty ||
           newProduct.size.isEmpty ||
           newProduct.price == 0 ||
