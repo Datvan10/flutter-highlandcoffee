@@ -403,7 +403,9 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
           padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 25.0),
           child: MyButton(
             text: 'Hoàn thành',
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/admin_page');
+            },
             buttonColor: primaryColors,
           ),
         )

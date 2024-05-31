@@ -130,16 +130,17 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
 
   //
   // Tạo một hàm để cập nhật sản phẩm
-Future<void> updateProduct(Product product) async {
-  try {
-    await adminApi.updateProduct(product);
-    _showAlert('Thông báo', 'Cập nhật sản phẩm thành công');
-    loadData();
-    Navigator.pop(context);
-  } catch (e) {
-    print('Error updating product: $e');
+  Future<void> updateProduct(Product product) async {
+    try {
+      await adminApi.updateProduct(product);
+      Navigator.pop(context);
+      _showAlert('Thông báo', 'Cập nhật sản phẩm thành công.');
+      loadData();
+    } catch (e) {
+      _showAlert('Lỗi', 'Cập nhật sản phẩm thất bại. Vui lòng thử lại.');
+      print('Error updating product: $e');
+    }
   }
-}
 
   //update product
   void _showUpdateProductForm(BuildContext context, Product product) {
@@ -153,7 +154,7 @@ Future<void> updateProduct(Product product) async {
     _editUnitController.text = product.unit;
     showModalBottomSheet(
         context: context,
-        isScrollControlled: true, // Chiều dài có thể được cuộn
+        isScrollControlled: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
         ),
@@ -230,6 +231,17 @@ Future<void> updateProduct(Product product) async {
                                     _imageDetailPath!.readAsBytesSync())
                                 : product.imagedetail,
                           );
+                          if (updateNewProduct.productname.isEmpty ||
+                              updateNewProduct.description.isEmpty ||
+                              updateNewProduct.size.isEmpty ||
+                              updateNewProduct.price == 0 ||
+                              updateNewProduct.unit.isEmpty ||
+                              updateNewProduct.image.isEmpty ||
+                              updateNewProduct.imagedetail.isEmpty) {
+                            _showAlert('Lỗi',
+                                'Vui lòng nhập đầy đủ thông tin sản phẩm.');
+                            return;
+                          }
                           print(updateNewProduct.productid);
                           print(updateNewProduct.categoryid);
                           print(updateNewProduct.size);
@@ -240,15 +252,15 @@ Future<void> updateProduct(Product product) async {
                         child: Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(
-                              Icons.cloud,
-                              color: white,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
+                            // Icon(
+                            //   Icons.cloud,
+                            //   color: white,
+                            // ),
+                            // SizedBox(
+                            //   width: 10,
+                            // ),
                             Text(
-                              'Cập nhật',
+                              'Lưu',
                               style: TextStyle(color: white),
                             ),
                           ],
@@ -521,7 +533,9 @@ Future<void> updateProduct(Product product) async {
           padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 25.0),
           child: MyButton(
             text: 'Hoàn thành',
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/admin_page');
+            },
             buttonColor: primaryColors,
           ),
         )
