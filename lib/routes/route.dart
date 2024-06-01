@@ -1,13 +1,13 @@
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/auth/login_register_switcher_admin_page.dart';
 import 'package:highlandcoffeeapp/auth/login_register_switcher_customer_page.dart';
-import 'package:highlandcoffeeapp/screens/customer/profile_customer_page.dart';
+import 'package:highlandcoffeeapp/screens/client/profile_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/app/bread_page.dart';
 import 'package:highlandcoffeeapp/screens/app/choose_login_type_page%20.dart';
 import 'package:highlandcoffeeapp/screens/app/coffee_page.dart';
 import 'package:highlandcoffeeapp/screens/app/list_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/forgot_password_admin_page.dart';
-import 'package:highlandcoffeeapp/screens/customer/forgot_password_customer_page.dart';
+import 'package:highlandcoffeeapp/screens/client/forgot_password_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/app/freeze_page.dart';
 import 'package:highlandcoffeeapp/screens/app/other_page.dart';
 import 'package:highlandcoffeeapp/screens/app/payment_result_page.dart';
@@ -20,8 +20,8 @@ import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/screens/app/home_page.dart';
 import 'package:highlandcoffeeapp/screens/app/introduce_page1.dart';
 import 'package:highlandcoffeeapp/screens/app/introduce_page2.dart';
-import 'package:highlandcoffeeapp/screens/customer/my_order_page.dart';
-import 'package:highlandcoffeeapp/screens/customer/update_customer_profille_page.dart';
+import 'package:highlandcoffeeapp/screens/client/my_order_page.dart';
+import 'package:highlandcoffeeapp/screens/client/update_customer_profille_page.dart';
 import 'package:highlandcoffeeapp/screens/app/welcome_page.dart';
 
 List<GetPage> getPages = [

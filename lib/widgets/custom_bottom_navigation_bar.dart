@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/screens/customer/profile_customer_page.dart';
+import 'package:highlandcoffeeapp/screens/client/profile_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/app/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/screens/app/list_product_page.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';

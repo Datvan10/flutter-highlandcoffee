@@ -2,17 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/category_dropdown.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/image_picker_widget.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 
 class AddProductPage extends StatefulWidget {
   static const String routeName = '/add_product_page';
@@ -147,14 +146,16 @@ class _AddProductPageState extends State<AddProductPage> {
           newProduct.unit.isEmpty ||
           newProduct.image.isEmpty ||
           newProduct.imagedetail.isEmpty) {
-        _showAlert('Thông báo', 'Vui lòng điền đầy đủ thông tin sản phẩm.');
+        showCustomAlertDialog(
+            context, 'Thông báo', 'Vui lòng điền đầy đủ thông tin sản phẩm.');
         return;
       }
 
       await adminApi.addProduct(newProduct);
       // print(newProduct.categoryid);
       // print('Product add successfully');
-      _showAlert('Thông báo', 'Thêm sản phẩm vào cơ sở dữ liệu thành công.');
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Thêm sản phẩm vào cơ sở dữ liệu thành công.');
       // Reset text controllers
       _productNameController.clear();
       _descriptionController.clear();
@@ -167,34 +168,9 @@ class _AddProductPageState extends State<AddProductPage> {
       });
     } catch (e) {
       print('Error adding product to Database: $e');
-      _showAlert('Lỗi', 'Thêm sản phẩm thất bại, vui lòng thử lại.');
+      showCustomAlertDialog(
+          context, 'Lỗi', 'Thêm sản phẩm thất bại, vui lòng thử lại.');
     }
-  }
-
-  void _showAlert(String title, String content) {
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: GoogleFonts.arsenal(color: primaryColors),
-          ),
-          content: Text(content),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(color: blue),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override

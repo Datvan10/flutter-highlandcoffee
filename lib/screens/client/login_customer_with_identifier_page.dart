@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
@@ -41,9 +41,11 @@ class _LoginCustomerWithIdentifierPageState
     String password = passWordController.text.trim();
 
     if (identifier.isEmpty || password.isEmpty) {
-      showNotification('Vui lòng nhập đầy đủ thông tin đăng nhập');
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Vui lòng nhập đầy đủ thông tin đăng nhập');
     } else if (password.length < 6) {
-      showNotification('Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
+      showCustomAlertDialog(
+          context, 'Lỗi', 'Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
     } else {
       try {
         bool isAuthenticated =
@@ -54,44 +56,17 @@ class _LoginCustomerWithIdentifierPageState
               await api.getCustomerByIdentifier(identifier);
           AuthManager().setLoggedInCustomer(loggedInCustomer);
           Navigator.pushReplacementNamed(context, '/home_page');
-          showNotification('Đăng nhập thành công');
+          showCustomAlertDialog(context, 'Thông báo', 'Đăng nhập thành công');
         } else {
-          showNotification(
+          showCustomAlertDialog(context, 'Thông báo',
               'Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
         }
       } catch (e) {
         print("Authentication Error: $e");
-        showNotification('Không thể xác thực tài khoản, vui lòng thử lại');
+        showCustomAlertDialog(
+            context, 'Lỗi', 'Không thể xác thực tài khoản, vui lòng thử lại');
       }
     }
-  }
-
-  // Show notification dialog
-  void showNotification(String message) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            "Thông báo",
-            style: GoogleFonts.arsenal(
-              color: primaryColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: Text(message),
-          actions: [
-            CupertinoDialogAction(
-              child: Text("OK", style: TextStyle(color: blue)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override

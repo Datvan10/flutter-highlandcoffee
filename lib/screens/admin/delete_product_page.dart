@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
-import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class DeleteProductPage extends StatefulWidget {
@@ -113,13 +112,15 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                 try {
                   await adminApi.deleteProduct(productid);
                   Navigator.pop(context);
-                  _showAlert('Thông báo', 'Xóa sản phẩm thành công.');
+                  showCustomAlertDialog(
+                      context, 'Thông báo', 'Xóa sản phẩm thành công.');
                   // Gọi hàm loadData() để cập nhật danh sách sản phẩm sau khi xóa
                   loadData();
                 } catch (e) {
                   print('Error deleting product: $e');
                   Navigator.pop(context);
-                  _showAlert('Lỗi', 'Đã xảy ra lỗi khi xóa sản phẩm.');
+                  showCustomAlertDialog(
+                      context, 'Lỗi', 'Đã xảy ra lỗi khi xóa sản phẩm.');
                 }
               },
             ),
@@ -128,33 +129,6 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                 "Hủy",
                 style: TextStyle(color: blue),
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showAlert(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: GoogleFonts.arsenal(
-              color: primaryColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: Text(message),
-          actions: [
-            CupertinoDialogAction(
-              child: Text("OK"),
               onPressed: () {
                 Navigator.pop(context);
               },

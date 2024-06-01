@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
 class DeleteCategoryPage extends StatefulWidget {
@@ -58,12 +59,14 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                 try {
                   await adminApi.deleteCategory(categoryId);
                   Navigator.pop(context);
-                  _showAlert('Thông báo', 'Xóa danh mục thành công.');
+                  showCustomAlertDialog(
+                      context, 'Thông báo', 'Xóa danh mục thành công.');
                   _fetchCategories();
                 } catch (e) {
                   print('Error deleting category: $e');
                   Navigator.pop(context);
-                  _showAlert('Lỗi', 'Đã xảy ra lỗi khi xóa danh mục.');
+                  showCustomAlertDialog(
+                      context, 'Lỗi', 'Đã xảy ra lỗi khi xóa danh mục.');
                 }
               },
             ),
@@ -72,33 +75,6 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                 "Hủy",
                 style: TextStyle(color: blue),
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showAlert(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: GoogleFonts.arsenal(
-              color: primaryColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: Text(message),
-          actions: [
-            CupertinoDialogAction(
-              child: Text("OK"),
               onPressed: () {
                 Navigator.pop(context);
               },

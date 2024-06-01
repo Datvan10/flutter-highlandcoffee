@@ -3,30 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/widgets/edit_text_form_field.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
+import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
+import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class UpdateCustomerProfilePage extends StatefulWidget {
   const UpdateCustomerProfilePage({super.key});
 
   @override
-  State<UpdateCustomerProfilePage> createState() => _UpdateCustomerProfilePageState();
+  State<UpdateCustomerProfilePage> createState() =>
+      _UpdateCustomerProfilePageState();
 }
 
 class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
+  bool isObsecure = false;
+  CustomerApi customerApi = CustomerApi();
   // Get information of the logged in
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   //
-  final _editEmailController = TextEditingController();
+  // final _editEmailController = TextEditingController();
   final _editPhoneNumberController = TextEditingController();
   final _editUserNameController = TextEditingController();
   final _editAdressController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _editPasswordController = TextEditingController();
 
   //
   initState() {
@@ -35,7 +40,23 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
     _editPhoneNumberController.text = loggedInUser!.phonenumber.toString();
     _editUserNameController.text = loggedInUser!.name;
     _editAdressController.text = loggedInUser!.address;
+    _editPasswordController.text = loggedInUser!.password;
   }
+
+  // Feature update customer profile
+  Future<void> updateCustomer(Customer customer) async {
+    try {
+      await customerApi.updateCustomer(customer);
+      AuthManager().loggedInCustomer = customer;
+      Get.back(result: true);
+      showCustomAlertDialog(context, 'Thông báo', 'Cập nhật hồ sơ thành công.');
+    } catch (e) {
+      showCustomAlertDialog(
+          context, 'Lỗi', 'Cập nhật hồ sơ thất bại. Vui lòng thử lại.');
+      print('Error updating customer: $e');
+    }
+  }
+
   //
   void _showCameraModal(BuildContext context) {
     showCupertinoModalPopup(
@@ -63,7 +84,8 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                 // Xử lý khi người dùng chọn ảnh từ thư viện
                 Navigator.pop(context);
               },
-              child: Text('Chọn ảnh từ thư viện', style: TextStyle(color: blue)),
+              child:
+                  Text('Chọn ảnh từ thư viện', style: TextStyle(color: blue)),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
@@ -71,7 +93,10 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
               // Xử lý khi người dùng nhấn nút hủy bỏ
               Navigator.pop(context);
             },
-            child: Text('Hủy', style: TextStyle(color: blue,)),
+            child: Text('Hủy',
+                style: TextStyle(
+                  color: blue,
+                )),
           ),
         );
       },
@@ -88,7 +113,10 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
             onPressed: () {
               Get.back();
             },
-            icon: Icon(Icons.arrow_back_ios, color: primaryColors,)),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: primaryColors,
+            )),
         actions: [
           Container(
               margin: EdgeInsets.only(right: 8),
@@ -96,7 +124,10 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                 onPressed: () {
                   Get.toNamed('/home_page');
                 },
-                icon: Icon(Icons.home, color : primaryColors, ),
+                icon: Icon(
+                  Icons.home,
+                  color: primaryColors,
+                ),
               ))
         ],
         title: Text('Chỉnh sửa hồ sơ',
@@ -146,85 +177,120 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
               ),
               //
               SizedBox(
-                height: 30,
+                height: 40,
               ),
               Text(
                 'Cập nhật thông tin cá nhân',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 25,
                   color: brown,
                 ),
               ),
               SizedBox(
-                height: 30,
+                height: 40,
               ),
               //
               Form(
                   child: Column(
                 children: [
-                  //email
-                  TextFormFieldEmail(
-              hintText: 'Nhập email mới',
-              prefixIconData: Icons.email,
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _editEmailController.clear();
-                    });
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: primaryColors,
-                  )),
-              controller: _editEmailController,
-              iconColor: primaryColors,
-            ),
-                  SizedBox(
-                    height: 20,
-                  ),
                   //phonenumber
-                  EditTextFormField(
+                  MyTextFormField(
                       hintText: 'Nhập số điện thoại mới',
                       prefixIconData: Icons.phone,
-                      suffixIconData: Icons.clear,
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _editPhoneNumberController.clear();
+                            });
+                          },
+                          icon: Icon(
+                            Icons.clear,
+                            color: primaryColors,
+                          )),
                       controller: _editPhoneNumberController,
                       iconColor: primaryColors),
                   SizedBox(
                     height: 20,
                   ),
                   //
-                  EditTextFormField(
+                  MyTextFormField(
                       hintText: 'Nhập tên hiển thị mới',
                       prefixIconData: Icons.person,
-                      suffixIconData: Icons.clear,
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _editUserNameController.clear();
+                            });
+                          },
+                          icon: Icon(
+                            Icons.clear,
+                            color: primaryColors,
+                          )),
                       controller: _editUserNameController,
                       iconColor: primaryColors),
                   SizedBox(
                     height: 20,
                   ),
                   //adress
-                  EditTextFormField(
+                  MyTextFormField(
                       hintText: 'Nhập địa chỉ mới',
                       prefixIconData: Icons.location_on,
-                      suffixIconData: Icons.clear,
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _editAdressController.clear();
+                            });
+                          },
+                          icon: Icon(
+                            Icons.clear,
+                            color: primaryColors,
+                          )),
                       controller: _editAdressController,
                       iconColor: primaryColors),
                   SizedBox(
                     height: 20,
                   ),
                   //password
-                  // EditTextFormField(
-                  //     hintText: 'Mật khẩu',
-                  //     prefixIconData: Icons.vpn_key,
-                  //     suffixIconData: Icons.visibility,
-                  //     controller: _passwordController,
-                  //     iconColor: blue),
+                  TextFormFieldPassword(
+                    hintText: 'Nhập mật khẩu mới',
+                    prefixIconData: Icons.vpn_key_sharp,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        isObsecure ? Icons.visibility : Icons.visibility_off,
+                        color: primaryColors,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isObsecure = !isObsecure;
+                        });
+                      },
+                    ),
+                    controller: _editPasswordController,
+                    iconColor: primaryColors,
+                    obscureText: !isObsecure,
+                  ),
                   SizedBox(
-                    height: 190,
+                    height: 175,
                   ),
                 ],
               )),
-              MyButton(text: 'Cập nhật hồ sơ', onTap: () {}, buttonColor: green)
+              MyButton(
+                  text: 'Cập nhật hồ sơ',
+                  onTap: () {
+                    Customer updateNewCustomer = Customer(
+                        customerid: loggedInUser!.customerid,
+                        name: _editUserNameController.text,
+                        address: _editAdressController.text,
+                        point: loggedInUser!.point,
+                        phonenumber: _editPhoneNumberController.text,
+                        password: _editPasswordController.text);
+                        if(_editUserNameController.text.isEmpty || _editAdressController.text.isEmpty || _editPhoneNumberController.text.isEmpty || _editPasswordController.text.isEmpty){
+                          showCustomAlertDialog(context, 'Lỗi', 'Vui lòng nhập đầy đủ thông tin.');
+                          return;
+                        }
+                    updateCustomer(updateNewCustomer);
+                  },
+                  buttonColor: green)
             ],
           ),
         ),

@@ -240,7 +240,7 @@ class AdminApi {
     try {
       final response = await http.put(
         Uri.parse(
-            '$productUrl/${product.productid}'), // Include the product ID in the URL
+            '$productUrl/${product.productid}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -373,18 +373,27 @@ class CustomerApi {
   // Update data to API
   Future<Customer> updateCustomer(Customer customer) async {
     try {
-      final response = await http.put(Uri.parse('$customerUrl/${customer}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(customer.toJson()));
+      final response =
+          await http.put(Uri.parse('$customerUrl/${customer.customerid}'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+              body: jsonEncode(customer.toJson()));
+      print(response.statusCode);
+      print('Response body: ${response.body}');
+
       if (response.statusCode == 200) {
-        return Customer.fromJson(json.decode(response.body));
+        print('Customer updated successfully');
+        if (response.body.isNotEmpty) {
+          return Customer.fromJson(json.decode(response.body));
+        } else {
+          return customer;
+        }
       } else {
-        throw Exception('Failed to update customer');
+        throw Exception('Failed to update customer: ${response.body}');
       }
     } catch (e) {
-      throw Exception('Failed to update customer');
+      throw Exception('Failed to update customer : $e');
     }
   }
 

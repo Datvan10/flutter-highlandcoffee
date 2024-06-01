@@ -7,11 +7,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/admin/feddback_user_page.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:highlandcoffeeapp/screens/client/update_customer_profille_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
 import 'package:highlandcoffeeapp/widgets/profile_menu_user.dart';
-import 'package:highlandcoffeeapp/screens/customer/my_order_page.dart';
-import 'package:highlandcoffeeapp/screens/customer/payment_method_page.dart';
+import 'package:highlandcoffeeapp/screens/client/my_order_page.dart';
+import 'package:highlandcoffeeapp/screens/client/payment_method_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
@@ -216,9 +217,14 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
             SizedBox(
               width: 160,
               child: ElevatedButton(
-                onPressed: () {
-                  Get.toNamed('/update_customer_profile_page');
-                },
+                onPressed: () async {
+                    final result = await Get.to(UpdateCustomerProfilePage());
+                    if (result == true) {
+                      setState(() {
+                        loggedInUser = AuthManager().loggedInCustomer;
+                      });
+                    }
+                  },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -290,11 +296,11 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
                 startIcon: LineAwesomeIcons.user_check,
                 onPress: () {},
                 textColor: grey),
-            // ProfileMenuUser(
-            //     title: 'Xem thêm',
-            //     startIcon: LineAwesomeIcons.info,
-            //     onPress: () {},
-            //     textColor: grey),
+            ProfileMenuUser(
+                title: 'Về chúng tôi',
+                startIcon: LineAwesomeIcons.info,
+                onPress: () {},
+                textColor: grey),
             ProfileMenuUser(
                 title: 'Đăng xuất',
                 startIcon: Icons.logout,

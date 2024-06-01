@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
-import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
@@ -50,13 +49,15 @@ class _RegisterCustomerWithIdentifierPageState
         name.isEmpty ||
         password.isEmpty) {
       // Show alert for empty fields
-      showNotification('Vui lòng nhập đầy đủ thông tin đăng ký');
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Vui lòng nhập đầy đủ thông tin đăng ký');
       return;
     }
     // Check if password length is at least 6 characters
     if (password.length < 6) {
       // Show alert for short password
-      showNotification('Mật khẩu không hợp lệ, phải có ít nhất 6 ký tự');
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Mật khẩu không hợp lệ, phải có ít nhất 6 ký tự');
       return;
     }
 
@@ -82,7 +83,8 @@ class _RegisterCustomerWithIdentifierPageState
       Navigator.pushReplacementNamed(
           context, '/login_register_switcher_customer_page');
       // Show success alert
-      showNotification('Đăng ký thành công, đăng nhập ngay!');
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Đăng ký thành công, đăng nhập ngay!');
       // Clear input fields
       nameController.clear();
       // emailController.clear();
@@ -93,36 +95,9 @@ class _RegisterCustomerWithIdentifierPageState
     } catch (e) {
       // print("Error adding customer: $e");
       // Show alert for error
-      showNotification('Email hoặc số điện thoại đã tồn tại vui lòng thử lại!');
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Email hoặc số điện thoại đã tồn tại vui lòng thử lại!');
     }
-  }
-
-  // Show notification dialog
-  void showNotification(String message) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            "Thông báo",
-            style: GoogleFonts.arsenal(
-              color: primaryColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: Text(message),
-          actions: [
-            CupertinoDialogAction(
-              child: Text("OK", style: TextStyle(color: blue)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override

@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/widgets/category_dropdown.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/image_picker_widget.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
-import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -134,10 +133,12 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     try {
       await adminApi.updateProduct(product);
       Navigator.pop(context);
-      _showAlert('Thông báo', 'Cập nhật sản phẩm thành công.');
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Cập nhật sản phẩm thành công.');
       loadData();
     } catch (e) {
-      _showAlert('Lỗi', 'Cập nhật sản phẩm thất bại. Vui lòng thử lại.');
+      showCustomAlertDialog(
+          context, 'Lỗi', 'Cập nhật sản phẩm thất bại. Vui lòng thử lại.');
       print('Error updating product: $e');
     }
   }
@@ -238,7 +239,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                               updateNewProduct.unit.isEmpty ||
                               updateNewProduct.image.isEmpty ||
                               updateNewProduct.imagedetail.isEmpty) {
-                            _showAlert('Lỗi',
+                            showCustomAlertDialog(context, 'Lỗi',
                                 'Vui lòng nhập đầy đủ thông tin sản phẩm.');
                             return;
                           }
@@ -273,32 +274,6 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
             ),
           );
         });
-  }
-
-  void _showAlert(String title, String content) {
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: GoogleFonts.arsenal(color: primaryColors),
-          ),
-          content: Text(content),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(color: blue),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Widget build(BuildContext context) {

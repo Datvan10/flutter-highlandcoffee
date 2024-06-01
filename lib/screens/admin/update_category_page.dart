@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
@@ -39,42 +39,17 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
     }
   }
 
-  void _showAlert(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: GoogleFonts.arsenal(
-              color: primaryColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: Text(message),
-          actions: [
-            CupertinoDialogAction(
-              child: Text("OK"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   // Tạo một hàm để cập nhật danh mục
   Future<void> updateCategory(Category category) async {
     try {
       await adminApi.updateCategory(category);
       Navigator.pop(context);
-      _showAlert('Thông báo', 'Cập nhật danh mục thành công');
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Cập nhật danh mục thành công');
       _fetchCategories();
     } catch (e) {
-      _showAlert('Lỗi', 'Cập nhật danh mục thất bại. Vui lòng thử lại.');
+      showCustomAlertDialog(
+          context, 'Lỗi', 'Cập nhật danh mục thất bại. Vui lòng thử lại.');
       print('Error updating category: $e');
     }
   }
@@ -127,15 +102,17 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                             categoryname: _editCategoryNameController.text,
                             description: _editDescriptionController.text,
                           );
-                          if(updateNewCategory.categoryname.isEmpty || updateNewCategory.description.isEmpty){
-                            _showAlert('Lỗi', 'Vui lòng nhập đầy đủ thông tin danh mục');
+                          if (updateNewCategory.categoryname.isEmpty ||
+                              updateNewCategory.description.isEmpty) {
+                            showCustomAlertDialog(context, 'Lỗi',
+                                'Vui lòng nhập đầy đủ thông tin danh mục');
                             return;
-                          };
+                          }
+                          ;
                           print(updateNewCategory.categoryid);
                           print(updateNewCategory.categoryname);
                           // Xử lý khi nhấn nút
                           await updateCategory(updateNewCategory);
-                          // _showAlert('Thông báo', 'Cập nhật danh mục thành công');
                         },
                         style: ElevatedButton.styleFrom(backgroundColor: green),
                         child: Row(

@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
 
 class AddCategoryPage extends StatefulWidget {
@@ -28,51 +28,26 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         categoryname: _categoryNameController.text,
         description: _descriptionController.text,
       );
-      if(newCategory.categoryname.isEmpty || newCategory.description.isEmpty) {
+      if (newCategory.categoryname.isEmpty || newCategory.description.isEmpty) {
         // Show error message
-        _showAlert('Thông báo', 'Vui lòng nhập đầy đủ thông tin');
+        showCustomAlertDialog(
+            context, 'Thông báo', 'Vui lòng nhập đầy đủ thông tin.');
         return;
       }
       // Add category
       await adminApi.addCategory(newCategory);
       // Show success message
-      _showAlert('Thông báo', 'Thêm danh mục thành công');
+      showCustomAlertDialog(context, 'Thông báo', 'Thêm danh mục thành công.');
       // Clear text field
       _categoryNameController.clear();
       _descriptionController.clear();
-
     } catch (e) {
       // Show error message
-      _showAlert('Lỗi', 'Danh mục đã tồn tại vui lòng thử lại');
+      showCustomAlertDialog(
+          context, 'Lỗi', 'Danh mục đã tồn tại vui lòng thử lại.');
     }
   }
 
-  //
-  void _showAlert(String title, String content) {
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: GoogleFonts.arsenal(color: primaryColors),
-          ),
-          content: Text(content),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(color: blue),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -107,7 +82,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     style: TextStyle(color: white),
                   ),
                 ),
-                SizedBox(width: 15,),
+                SizedBox(
+                  width: 15,
+                ),
                 ElevatedButton(
                   onPressed: () {
                     addCategory();
@@ -125,4 +102,4 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       ),
     );
   }
-  }
+}
