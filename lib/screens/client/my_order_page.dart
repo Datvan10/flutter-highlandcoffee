@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:highlandcoffeeapp/screens/customer/order_detail_page.dart';
+import 'package:highlandcoffeeapp/screens/client/order_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class MyOrderPage extends StatefulWidget {
