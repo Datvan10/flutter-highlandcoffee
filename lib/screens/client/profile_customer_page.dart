@@ -5,8 +5,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/screens/admin/feddback_user_page.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:highlandcoffeeapp/screens/client/rate_comment_page.dart';
 import 'package:highlandcoffeeapp/screens/client/update_customer_profille_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
@@ -140,7 +140,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(Icons.arrow_back_ios)),
+            icon: Icon(Icons.arrow_back_ios, color: primaryColors)),
         title: Text(
           'Hồ sơ cá nhân',
           style: GoogleFonts.arsenal(
@@ -274,7 +274,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FeddBackUserPage(),
+                      builder: (context) => RateCommentPage(),
                     ),
                   );
                 },
@@ -291,11 +291,11 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
                   );
                 },
                 textColor: grey),
-            ProfileMenuUser(
-                title: 'Quản lý tài khoản',
-                startIcon: LineAwesomeIcons.user_check,
-                onPress: () {},
-                textColor: grey),
+            // ProfileMenuUser(
+            //     title: 'Quản lý tài khoản',
+            //     startIcon: LineAwesomeIcons.user_check,
+            //     onPress: () {},
+            //     textColor: grey),
             ProfileMenuUser(
                 title: 'Về chúng tôi',
                 startIcon: LineAwesomeIcons.info,

@@ -24,7 +24,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
             onPressed: () {
               Get.back();
             },
-            icon: Icon(Icons.arrow_back_ios)),
+            icon: Icon(Icons.arrow_back_ios, color: primaryColors,)),
         actions: [
           Container(
               margin: EdgeInsets.only(right: 8),
@@ -32,7 +32,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
                 onPressed: () {
                   Get.toNamed('/home_page');
                 },
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.home, color: primaryColors),
               ))
         ],
         title: Text('Đơn hàng của tôi',

@@ -330,6 +330,7 @@ class AdminApi {
 // Customer API
 class CustomerApi {
   final String customerUrl = "http://localhost:5194/api/customers";
+  final String commentUrl = "http://localhost:5194/api/comments";
   // Read data from API
   Future<List<Customer>> getCustomers() async {
     try {
@@ -529,6 +530,29 @@ class CustomerApi {
     } catch (e) {
       // Nếu có lỗi xảy ra trong quá trình xử lý, ném ra một ngoại lệ
       throw Exception('Error fetching customer data: $e');
+    }
+  }
+
+  // Add comment for customer
+  Future<void> addComment(Comment comment) async {
+    final uri = Uri.parse(commentUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(comment.toJson()),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Comment added successfully');
+      } else {
+        throw Exception('Failed to add comment: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add comment: $e');
     }
   }
 }
