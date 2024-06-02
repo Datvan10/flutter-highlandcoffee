@@ -242,6 +242,53 @@ class Favorite {
       };
 }
 
+// Model comment
+class Comment{
+  final String commentid;
+  final String customerid;
+  final String customername;
+  final String titlecomment;
+  final String contentcomment;
+  final DateTime date;
+  String image;
+  int status;
+
+  Comment({
+    required this.commentid,
+    required this.customerid,
+    required this.customername,
+    required this.titlecomment,
+    required this.contentcomment,
+    required this.date,
+    required this.image,
+    required this.status,
+  });
+
+  factory Comment.fromJson(Map<String, dynamic> json) {
+    return Comment(
+      commentid: json['commentid'],
+      customerid: json['customerid'],
+      customername: json['customername'],
+      titlecomment: json['titlecomment'],
+      contentcomment: json['contentcomment'],
+      date: json['date'],
+      image: json['image'],
+      status: json['status'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'commentid': commentid,
+    'customerid': customerid,
+    'customername': customername,
+    'titlecomment': titlecomment,
+    'contentcomment': contentcomment,
+    'date': date.toIso8601String(),
+    'image': image,
+    'status': status,
+  };
+}
+
 // Model category
 class Category{
   final String categoryid;
