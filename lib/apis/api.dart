@@ -1085,6 +1085,7 @@ class OtherApi {
 // API for Cart
 class CartApi {
   final String cartUrl = "http://localhost:5194/api/carts";
+  final String cartDetailUrl = "http://localhost:5194/api/cartdetails";
   // Read data from API
   Future<List<Cart>> getCarts() async {
     try {
@@ -1151,11 +1152,11 @@ class CartApi {
   }
 
   // Delete data from API
-  Future<void> deleteCart(String cartid) async {
+  Future<void> deleteCart(String cartdetailid) async {
     try {
-      // print(cartId);
+      // print(cartdetailId);
       final response = await http.delete(
-        Uri.parse('$cartUrl/$cartid'),
+        Uri.parse('$cartDetailUrl/$cartdetailid'),
       );
       print(response.statusCode);
       if (response.statusCode == 200) {
@@ -1170,11 +1171,11 @@ class CartApi {
 }
 
 class CartDetailApi {
-  final String cartDetailsUrl = "http://localhost:5194/api/cartdetails";
+  final String cartDetailUrl = "http://localhost:5194/api/cartdetails";
 
   Future<List<dynamic>> fetchCartDetails() async {
     try {
-      final response = await http.get(Uri.parse(cartDetailsUrl));
+      final response = await http.get(Uri.parse(cartDetailUrl));
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
         return jsonResponse;
