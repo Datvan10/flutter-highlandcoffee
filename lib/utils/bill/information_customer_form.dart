@@ -60,7 +60,7 @@ class InformationCustomerForm extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
-                  Text('+84 ' + phoneNumber,
+                  Text(phoneNumber,
                       style: GoogleFonts.arsenal(
                         fontSize: 18,
                         color: black,
@@ -72,7 +72,7 @@ class InformationCustomerForm extends StatelessWidget {
         ),
       );
     } else {
-      return Text('Người dùng chưa đăng nhập'); // Xử lý khi không có người dùng đăng nhập
+      return Text('Người dùng chưa đăng nhập');
     }
   }
 }
