@@ -28,7 +28,7 @@ class CustomAlertDialog extends StatelessWidget {
       content: Text(message),
       actions: [
         CupertinoDialogAction(
-          child: Text("OK"),
+          child: Text("OK", style: TextStyle(color: blue),),
           onPressed: () {
             Navigator.pop(context);
           },
