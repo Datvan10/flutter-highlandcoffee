@@ -111,38 +111,112 @@ class Customer {
 
 // Model order
 class Order {
-  final int id;
-  final int customer_id;
-  final String product_name;
-  final int quantity;
-  final double total_price;
-  final String status;
+  final String orderid;
+  final String customerid;
+  final String? staffid;
+  final DateTime date;
+  final String paymentmethod;
+  final int status;
+  final int totalprice;
 
-  Order(
-      {required this.id,
-      required this.customer_id,
-      required this.product_name,
-      required this.quantity,
-      required this.total_price,
-      required this.status});
+  Order({
+    required this.orderid,
+    required this.customerid,
+    this.staffid,
+    required this.date,
+    required this.paymentmethod,
+    required this.status,
+    required this.totalprice,
+  });
 
-  factory Order.fromJson(Map<String, dynamic> json) => Order(
-      id: json['id'],
-      customer_id: json['customer_id'],
-      product_name: json['product_name'],
-      quantity: json['quantity'],
-      total_price: json['total_price'],
-      status: json['status']);
+  factory Order.fromJson(Map<String, dynamic> json) {
+    return Order(
+      orderid: json['orderid'],
+      customerid: json['customerid'],
+      staffid: json['staffid'],
+      date: DateTime.parse(json['date']),
+      paymentmethod: json['paymentmethod'],
+      status: json['status'],
+      totalprice: json['totalprice'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'customer_id': customer_id,
-        'product_name': product_name,
-        'quantity': quantity,
-        'total_price': total_price,
-        'status': status
+        'orderid': orderid,
+        'customerid': customerid,
+        'staffid': staffid,
+        'date': date.toIso8601String(),
+        'paymentmethod': paymentmethod,
+        'status': status,
+        'totalprice': totalprice,
       };
 }
+
+// Model orderdetail
+class OrderDetail {
+  final String orderdetailid;
+  final String orderid;
+  final String? cartid; // Allowing null values
+  final String staffid;
+  final String customerid;
+  final String productid;
+  final String productname;
+  final int quantity;
+  final String size;
+  final String image;
+  final int totalprice;
+  final DateTime date;
+  final String paymentmethod;
+  final int status;
+  final String customername;
+  final String address;
+  final String phonenumber;
+
+  OrderDetail({
+    required this.orderdetailid,
+    required this.orderid,
+    this.cartid, // Allowing null values
+    required this.staffid,
+    required this.customerid,
+    required this.productid,
+    required this.productname,
+    required this.quantity,
+    required this.size,
+    required this.image,
+    required this.totalprice,
+    required this.date,
+    required this.paymentmethod,
+    required this.status,
+    required this.customername,
+    required this.address,
+    required this.phonenumber,
+  });
+
+  factory OrderDetail.fromJson(Map<String, dynamic> json) {
+    return OrderDetail(
+      orderdetailid: json['orderdetailid'] ?? '',
+      orderid: json['orderid'] ?? '',
+      cartid: json['cartid'], // Allowing null values
+      staffid: json['staffid'] ?? '',
+      customerid: json['customerid'] ?? '',
+      productid: json['productid'] ?? '',
+      productname: json['productname'] ?? '',
+      quantity: json['quantity'] ?? 0,
+      size: json['size'] ?? '',
+      image: json['image'] ?? '',
+      totalprice: json['totalprice'] ?? 0,
+      date: DateTime.parse(json['date'] ?? DateTime.now().toString()),
+      paymentmethod: json['paymentmethod'] ?? '',
+      status: json['status'] ?? 0,
+      customername: json['customername'] ?? '',
+      address: json['address'] ?? '',
+      phonenumber: json['phonenumber'] ?? '',
+    );
+  }
+}
+
+
+
 
 // Model cart
 class Cart {
@@ -243,7 +317,7 @@ class Favorite {
 }
 
 // Model comment
-class Comment{
+class Comment {
   final String commentid;
   final String customerid;
   final String customername;
@@ -278,19 +352,19 @@ class Comment{
   }
 
   Map<String, dynamic> toJson() => {
-    'commentid': commentid,
-    'customerid': customerid,
-    'customername': customername,
-    'titlecomment': titlecomment,
-    'contentcomment': contentcomment,
-    'date': date.toIso8601String(),
-    'image': image,
-    'status': status,
-  };
+        'commentid': commentid,
+        'customerid': customerid,
+        'customername': customername,
+        'titlecomment': titlecomment,
+        'contentcomment': contentcomment,
+        'date': date.toIso8601String(),
+        'image': image,
+        'status': status,
+      };
 }
 
 // Model category
-class Category{
+class Category {
   final String categoryid;
   final String categoryname;
   final String description;
@@ -310,11 +384,10 @@ class Category{
   }
 
   Map<String, dynamic> toJson() => {
-    'categoryid': categoryid,
-    'categoryname': categoryname,
-    'description': description,
-  };
-
+        'categoryid': categoryid,
+        'categoryname': categoryname,
+        'description': description,
+      };
 }
 
 // Model product

@@ -12,6 +12,7 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/image_picker_widget.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
+import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RateCommentPage extends StatefulWidget {
@@ -165,6 +166,14 @@ class _RateCommentPageState extends State<RateCommentPage> {
                   ),
                 ],
               ),
+              SizedBox(height: 300),
+              MyButton(
+            text: 'Hoàn thành',
+            onTap: () {
+              Navigator.pushNamed(context, '/home_page');
+            },
+            buttonColor: primaryColors,
+          ),
             ],
           ),
         ),

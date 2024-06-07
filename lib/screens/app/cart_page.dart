@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/screens/app/bill_page.dart';
+import 'package:highlandcoffeeapp/screens/app/order_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
@@ -94,7 +94,7 @@ class _CartPageState extends State<CartPage> {
             icon: Icons.shopping_cart_checkout,
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BillPage(
+                builder: (context) => OrderPage(
                   cartItems: cartItems,
                 ),
               ));

@@ -239,8 +239,7 @@ class AdminApi {
   Future<void> updateProduct(Product product) async {
     try {
       final response = await http.put(
-        Uri.parse(
-            '$productUrl/${product.productid}'),
+        Uri.parse('$productUrl/${product.productid}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -1170,6 +1169,7 @@ class CartApi {
   }
 }
 
+// API for CartDetail
 class CartDetailApi {
   final String cartDetailUrl = "http://localhost:5194/api/cartdetails";
 
@@ -1184,6 +1184,102 @@ class CartDetailApi {
       }
     } catch (e) {
       throw Exception('Error fetching cart details: $e');
+    }
+  }
+}
+
+/// API for Order
+class OrderApi {
+  final String orderUrl = "http://localhost:5194/api/orders";
+
+  // fetch order by customer
+  Future<Order> fetchOrder(String customerid) async {
+    try {
+      final response =
+          await http.get(Uri.parse('$orderUrl/customer/$customerid'));
+      print(response.body);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        // Kiểm tra xem có dữ liệu được trả về không
+        if (jsonData.isNotEmpty) {
+          Order order = Order.fromJson(jsonData);
+          return order;
+        } else {
+          // Nếu không có dữ liệu, trả về một đối tượng Order trống
+          return Order(
+            orderid: '',
+            customerid: '',
+            staffid: '',
+            date: DateTime.now(),
+            paymentmethod: '',
+            status: 0,
+            totalprice: 0,
+          );
+        }
+      } else {
+        throw Exception('Failed to load order');
+      }
+    } catch (e) {
+      throw Exception('Failed to load order');
+    }
+  }
+
+  // Add order
+  Future<void> addOrder(OrderDetail orderdetail) async {
+    final uri = Uri.parse(orderUrl);
+
+    try {
+      // final response = await http.post(
+      //   uri,
+      //   headers: <String, String>{
+      //     'Content-Type': 'application/json; charset=UTF-8',
+      //   },
+      //   body: jsonEncode(orderdetail.toJson()),
+      // );
+      // if (response.statusCode == 200) {
+      //   print('Order added successfully');
+      // } else {
+      //   throw Exception('Failed to add order: ${response.body}');
+      // }
+    } catch (e) {
+      throw Exception('Failed to add order: $e');
+    }
+  }
+}
+
+//
+class OrderDetailApi {
+  final String orderDetailUrl = "http://localhost:5194/api/orderdetails";
+
+  // fetch order by customer
+  Future<List<OrderDetail>> fetchOrderDetail(String orderid) async {
+    try {
+      final response =
+          await http.get(Uri.parse('$orderDetailUrl/order/$orderid'));
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+
+        // Kiểm tra xem có dữ liệu được trả về không
+        if (jsonData.isNotEmpty) {
+          List<OrderDetail> orderDetails =
+              jsonData.map((item) => OrderDetail.fromJson(item)).toList();
+          return orderDetails;
+        } else {
+          // Nếu không có dữ liệu, trả về một danh sách trống
+          return [];
+        }
+      } else if (response.statusCode == 404) {
+        throw Exception('Order detail not found');
+      } else {
+        throw Exception(
+            'Failed to load order detail with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to load order detail');
     }
   }
 }
