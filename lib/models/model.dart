@@ -163,7 +163,8 @@ class OrderDetail {
   final String productname;
   final int quantity;
   final String size;
-  final String image;
+  final String image; // Assuming image is a base64 encoded string
+  final int intomoney;
   final int totalprice;
   final DateTime date;
   final String paymentmethod;
@@ -175,7 +176,7 @@ class OrderDetail {
   OrderDetail({
     required this.orderdetailid,
     required this.orderid,
-    this.cartid, // Allowing null values
+    this.cartid,
     required this.staffid,
     required this.customerid,
     required this.productid,
@@ -183,6 +184,7 @@ class OrderDetail {
     required this.quantity,
     required this.size,
     required this.image,
+    required this.intomoney,
     required this.totalprice,
     required this.date,
     required this.paymentmethod,
@@ -196,7 +198,7 @@ class OrderDetail {
     return OrderDetail(
       orderdetailid: json['orderdetailid'] ?? '',
       orderid: json['orderid'] ?? '',
-      cartid: json['cartid'], // Allowing null values
+      cartid: json['cartid'],
       staffid: json['staffid'] ?? '',
       customerid: json['customerid'] ?? '',
       productid: json['productid'] ?? '',
@@ -204,6 +206,7 @@ class OrderDetail {
       quantity: json['quantity'] ?? 0,
       size: json['size'] ?? '',
       image: json['image'] ?? '',
+      intomoney: json['intomoney'] ?? 0,
       totalprice: json['totalprice'] ?? 0,
       date: DateTime.parse(json['date'] ?? DateTime.now().toString()),
       paymentmethod: json['paymentmethod'] ?? '',
@@ -213,10 +216,28 @@ class OrderDetail {
       phonenumber: json['phonenumber'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'orderdetailid': orderdetailid,
+        'orderid': orderid,
+        'cartid': cartid,
+        'staffid': staffid,
+        'customerid': customerid,
+        'productid': productid,
+        'productname': productname,
+        'quantity': quantity,
+        'size': size,
+        'image': image,
+        'intomoney': intomoney,
+        'totalprice': totalprice,
+        'date': date.toIso8601String(),
+        'paymentmethod': paymentmethod,
+        'status': status,
+        'customername': customername,
+        'address': address,
+        'phonenumber': phonenumber,
+      };
 }
-
-
-
 
 // Model cart
 class Cart {

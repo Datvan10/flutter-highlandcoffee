@@ -1193,35 +1193,22 @@ class OrderApi {
   final String orderUrl = "http://localhost:5194/api/orders";
 
   // fetch order by customer
-  Future<Order> fetchOrder(String customerid) async {
+  Future<List<Order>> fetchOrder(String customerid) async {
     try {
       final response =
           await http.get(Uri.parse('$orderUrl/customer/$customerid'));
       print(response.body);
       print(response.statusCode);
       if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonData = json.decode(response.body);
-        // Kiểm tra xem có dữ liệu được trả về không
-        if (jsonData.isNotEmpty) {
-          Order order = Order.fromJson(jsonData);
-          return order;
-        } else {
-          // Nếu không có dữ liệu, trả về một đối tượng Order trống
-          return Order(
-            orderid: '',
-            customerid: '',
-            staffid: '',
-            date: DateTime.now(),
-            paymentmethod: '',
-            status: 0,
-            totalprice: 0,
-          );
-        }
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Order> orders =
+            jsonData.map((data) => Order.fromJson(data)).toList();
+        return orders;
       } else {
-        throw Exception('Failed to load order');
+        throw Exception('Failed to load orders');
       }
     } catch (e) {
-      throw Exception('Failed to load order');
+      throw Exception('Failed to load orders');
     }
   }
 
@@ -1230,18 +1217,20 @@ class OrderApi {
     final uri = Uri.parse(orderUrl);
 
     try {
-      // final response = await http.post(
-      //   uri,
-      //   headers: <String, String>{
-      //     'Content-Type': 'application/json; charset=UTF-8',
-      //   },
-      //   body: jsonEncode(orderdetail.toJson()),
-      // );
-      // if (response.statusCode == 200) {
-      //   print('Order added successfully');
-      // } else {
-      //   throw Exception('Failed to add order: ${response.body}');
-      // }
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(orderdetail.toJson()),
+      );
+      print(response.statusCode);
+      print(orderdetail.productid);
+      if (response.statusCode == 200) {
+        print('Order added successfully');
+      } else {
+        throw Exception('Failed to add order: ${response.body}');
+      }
     } catch (e) {
       throw Exception('Failed to add order: $e');
     }

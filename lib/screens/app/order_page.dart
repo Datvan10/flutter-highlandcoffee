@@ -72,94 +72,41 @@ class _OrderPageState extends State<OrderPage> {
 
   // Hàm để lưu thông tin đơn hàng vào cơ sở dữ liệu
   Future<void> addOrder() async {
-    try {
-      // Lấy thông tin người dùng từ InformationForm
-      String userName = loggedCustomer?.name ?? '';
-      String phoneNumber = loggedCustomer?.phonenumber ?? '';
-      String address = loggedCustomer?.address ?? '';
+  try {
+    // Tạo đối tượng OrderDetail với các giá trị được truyền theo đúng định dạng
+    OrderDetail newOrder = OrderDetail(
+      orderdetailid: '',
+      orderid: '',
+      staffid: '',
+      customerid: loggedCustomer?.customerid ?? '',
+      productid: '',  // Bổ sung giá trị mặc định
+      productname: '',  // Bổ sung giá trị mặc định
+      quantity: 0,  // Bổ sung giá trị mặc định
+      size: '',  // Bổ sung giá trị mặc định
+      image: '',  // Bổ sung giá trị mặc định
+      intomoney: 0,  // Bổ sung giá trị mặc định
+      totalprice: 0,  // Bổ sung giá trị mặc định
+      date: DateTime.now(),  // Bổ sung giá trị mặc định
+      paymentmethod: selectedPaymentMethod,
+      cartid: widget.cartItems.isNotEmpty ? widget.cartItems.first.cartid : '',
+      status: 0,  // Bổ sung giá trị mặc định
+      customername: loggedCustomer?.name ?? '',
+      address: loggedCustomer?.address ?? '',
+      phonenumber: loggedCustomer?.phonenumber ?? '',
+    );
 
-      //
-      // OrderDetail newOrder = OrderDetail(
-      //   orderdetailid: '',
-      //   orderid: '',
-      //   cartid: widget.cartItems[0].cartid ?? '',
-      //   staffid: '',
-      //   customerid: loggedCustomer?.customerid ?? '',
-      //   productid: widget.cartItems[0].productid ?? '',
-      //   productname: widget.cartItems[0].productname ?? '',
-      //   size: widget.cartItems[0].size ?? '',
-      //   quantity: totalQuantity,
-      //   image: widget.cartItems[0].image ?? '',
-      //   totalprice: totalPrice,
-      //   paymentmethod: selectedPaymentMethod,
-      //   status: 'Đang chờ duyệt',
-      //   date: DateTime.now(),
-      // );
+    // Gọi phương thức thêm đơn hàng từ API
+    await orderApi.addOrder(newOrder);
 
-      // Lấy danh sách sản phẩm từ giỏ hàng
-      // List<Map<String, dynamic>> products = [];
-      // widget.cartItems.forEach((CartItem cartItem) {
-      //   products.add({
-      //     'Tên sản phẩm': cartItem.productname,
-      //     'Số lượng': cartItem.quantity,
-      //     'Giá': cartItem.totalprice,
-      //   });
-      // });
-
-      // Tạo một đơn hàng
-
-      // await orderApi.addOrder(newOrder);
-      // await FirebaseFirestore.instance.collection('Đơn hàng').add({
-      //   'Mã đơn hàng': orderId,
-      //   'Thông tin khách hàng': {
-      //     'userName': userName,
-      //     'phoneNumber': phoneNumber,
-      //     'address': address,
-      //   },
-      //   'Sản phẩm': products,
-      //   'Số lượng sản phẩm': totalQuantity,
-      //   'Tổng tiền': totalPrice,
-      //   'Phương thức thanh toán': selectedPaymentMethod,
-      //   'Trạng thái': 'Đang chờ duyệt', // Thêm trường trạng thái ở đây
-      //   'Thời gian đặt hàng': FieldValue.serverTimestamp(),
-      //   // Thêm các trường khác cần thiết
-      // });
-      _showAlert('Thông báo', 'Đơn hàng được đặt thành công.', () {
-        Get.toNamed('/payment_result_page');
-      });
-
-      // Xóa giỏ hàng sau khi đặt hàng thành công
-      // await FirebaseFirestore.instance.collection('Giỏ hàng').get().then(
-      //   (snapshot) {
-      //     for (DocumentSnapshot ds in snapshot.docs) {
-      //       ds.reference.delete();
-      //     }
-      //   },
-      // );
-    } catch (e) {
-      print('Error adding order: $e');
-    }
+    // Hiển thị thông báo khi đặt hàng thành công
+    _showAlert('Thông báo', 'Đơn hàng được đặt thành công.', () {
+      Get.toNamed('/payment_result_page');
+    });
+  } catch (e) {
+    print('Error adding order: $e');
   }
+}
 
-  //
-  Future<Map<String, dynamic>> getUserData(String userId) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
-          await FirebaseFirestore.instance
-              .collection('Users')
-              .doc(userId)
-              .get();
-
-      if (userSnapshot.exists) {
-        return userSnapshot.data() ?? {};
-      } else {
-        return {};
-      }
-    } catch (e) {
-      print('Error fetching user data: $e');
-      return {};
-    }
-  }
 
   List discountTickets = [
     Tickets(
