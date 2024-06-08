@@ -18,13 +18,12 @@ class MyOrderPage extends StatefulWidget {
 
 class _MyOrderPageState extends State<MyOrderPage> {
   final OrderApi orderApi = OrderApi();
-  late Future<List<Order>> futureOrders; // Thay đổi kiểu Future
+  late Future<List<Order>> futureOrders;
   Customer? loggedInUser = AuthManager().loggedInCustomer;
 
   @override
   void initState() {
     super.initState();
-    // Thay đổi phương thức gọi API từ fetchOrder sang fetchOrders
     futureOrders = orderApi.fetchOrder(loggedInUser!.customerid!);
   }
 
@@ -57,59 +56,82 @@ class _MyOrderPageState extends State<MyOrderPage> {
               color: primaryColors, fontWeight: FontWeight.bold),
         ),
       ),
-      body: FutureBuilder<List<Order>>( // Thay đổi kiểu FutureBuilder
+      body: FutureBuilder<List<Order>>(
         future: futureOrders,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) { // Thay đổi điều kiện kiểm tra dữ liệu
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('Chưa có đơn đặt hàng, mua sắm ngay'));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             return Padding(
-              padding: const EdgeInsets.all(18.0),
+              padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 18.0, bottom: 25),
               child: Column(
                 children: [
-                  Container(
-                    height: 730,
-                    decoration: BoxDecoration(color: background),
+                  Expanded(
                     child: ListView.builder(
-                      itemCount: snapshot.data!.length, // Số lượng đơn hàng
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        Order order = snapshot.data![index]; // Lấy đơn hàng tương ứng
-                        int orderNumber = index + 1; // Số thứ tự của đơn hàng
-                        return Container(
-                          margin: EdgeInsets.only(bottom: 15.0),
-                          height: 100,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18.0),
-                              color: white),
-                          child: ListTile(
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Đơn hàng $orderNumber',
-                                  style: GoogleFonts.arsenal(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: primaryColors),
-                                ),
-                                Text('Mã đơn hàng : ${order.orderid}'),
-                                Text('Tổng tiền : ${order.totalprice.toStringAsFixed(3) + 'đ'}'),
-                                // Thêm các thông tin khác tùy ý
-                              ],
-                            ),
+                        Order order = snapshot.data![index];
+                        int orderNumber = index + 1;
+                        return MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
                             onTap: () {
-                              // Xử lý khi bấm vào một đơn hàng để xem chi tiết
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => OrderDetailPage(orderid: order.orderid,),
+                                  builder: (context) => OrderDetailPage(
+                                    orderid: order.orderid,
+                                  ),
                                 ),
                               );
                             },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 15.0),
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(18.0),
+                                color: white,
+                                border: Border.all(
+                                  color: white,
+                                  width: 1.0,
+                                ),
+                              ),
+                              child: ListTile(
+                                title: Padding(
+                                  padding: const EdgeInsets.only(bottom: 15.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Đơn hàng $orderNumber',
+                                            style: GoogleFonts.arsenal(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: primaryColors,
+                                            ),
+                                          ),
+                                          Text('Mã đơn hàng : ${order.orderid} ', style: GoogleFonts.arsenal(fontSize : 17),),
+                                          Text('Tổng tiền : ${order.totalprice.toStringAsFixed(3) + ' VND'}',  style: GoogleFonts.arsenal(fontSize : 17)),
+                                        ],
+                                      ),
+                                      Icon(
+                                        Icons.info,
+                                        size: 28,
+                                        color: grey,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         );
                       },

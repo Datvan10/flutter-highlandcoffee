@@ -37,7 +37,7 @@ class _PaymentResultPageState extends State<PaymentResultPage> {
             child: Padding(
               padding: const EdgeInsets.only(right: 18.0),
               child: Text(
-                'Done',
+                'Xong',
                 style: GoogleFonts.arsenal(
                     color: light_blue, fontSize: 20, fontWeight: FontWeight.bold),
               ),
@@ -52,12 +52,12 @@ class _PaymentResultPageState extends State<PaymentResultPage> {
           children: [
             // Text notification
             Padding(
-              padding: EdgeInsets.only(top: 150.0),
+              padding: EdgeInsets.only(top: 100.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'THANH TOÁN THÀNH CÔNG',
+                   'ĐẶT HÀNG THÀNH CÔNG',
                     style: GoogleFonts.arsenal(
                         fontSize: 25,
                         color: brown,
@@ -73,8 +73,9 @@ class _PaymentResultPageState extends State<PaymentResultPage> {
             // Image money
             Center(
               child: Image.asset(
-                'assets/images/icons/payment_result_money.png',
-                fit: BoxFit.cover,
+                'assets/images/icons/order.png',
+                height: 350,
+                width: 350,
               ),
             ),
             // Text notification
@@ -83,7 +84,7 @@ class _PaymentResultPageState extends State<PaymentResultPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('      Đơn hàng của bạn đã được xác nhân.\nCảm ơn bạn đã tin dùng Highlands Coffee!!!',
+                  Text('      Đơn hàng của bạn đã đặt thành công.\nCảm ơn bạn đã tin dùng Highlands Coffee!!!',
                       style: GoogleFonts.arsenal(
                           fontSize: 19, color: grey)),
                 ],
@@ -94,7 +95,7 @@ class _PaymentResultPageState extends State<PaymentResultPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 MyButton(
-                    text: 'Trang chủ',
+                    text: 'Hoàn thành',
                     onTap: () {
                       Navigator.pushNamed(context, '/home_page');
                     },
