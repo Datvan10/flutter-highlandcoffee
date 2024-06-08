@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:http/http.dart' as http;
 import 'package:highlandcoffeeapp/screens/app/home_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
@@ -39,7 +38,7 @@ class _BillPageState extends State<BillPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, color: primaryColors),
         ),
         actions: [
           Container(
@@ -53,11 +52,11 @@ class _BillPageState extends State<BillPage> {
                   ),
                 );
               },
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.home, color: primaryColors),
             ),
           )
         ],
-        title: Text('Hóa đơn',
+        title: Text('Preview hóa đơn',
             style: GoogleFonts.arsenal(
               color: primaryColors,
               fontWeight: FontWeight.bold,
@@ -71,7 +70,7 @@ class _BillPageState extends State<BillPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No order details found'));
+            return Center(child: Text('Không tìm thấy chi tiết đơn hàng'));
           } else {
             List<OrderDetail> orderDetails = snapshot.data!;
             return SingleChildScrollView(
@@ -79,59 +78,301 @@ class _BillPageState extends State<BillPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Chi tiết đơn hàng'),
-                  DataTable(
-                    columns: [
-                      DataColumn(label: Text('#Tên món')),
-                      DataColumn(label: Text('SL')),
-                      DataColumn(label: Text('Thành tiền')),
+                  Row(
+                    children: [
+                      //logo highland đang bị thiếu.
+                      Column(
+                        children: [],
+                      ),
+                      Column(
+                        children: [
+                          Text('Highland Coffee',
+                              style: GoogleFonts.arsenal(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: brown,
+                              )),
+                          Text(
+                            'Địa chỉ: 123 Phan Văn Trị, Phường 10, Quận Gò Vấp, TP.HCM',
+                          ),
+                          Text(
+                            'SĐT: 0352775476',
+                          ),
+                        ],
+                      )
                     ],
-                    rows: orderDetails.map((orderDetail) {
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            Center(
-                              child: Text(
-                                '${orderDetails.indexOf(orderDetail) + 1}. ${orderDetail.productname}',
-                              ),
+                  ),
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            'Hóa đơn bán hàng',
+                            style: GoogleFonts.arsenal(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          DataCell(
-                            Center(
+                          Text('Số hóa đơn: ${widget.orderid} - [Đơn hàng online]',
+                              style: GoogleFonts.arsenal(
+                                fontSize: 16,
+                              )),
+                          Text(
+                            'Ngày: ${orderDetails[0].date}',
+                            style: GoogleFonts.arsenal(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10.0),
+                  Divider(),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          '#Tên món',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'SL',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          'Thành tiền',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: orderDetails.length,
+                    itemBuilder: (context, index) {
+                      var orderDetail = orderDetails[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                '${index + 1}. ${orderDetail.productname}',
+                                style: GoogleFonts.arsenal(
+                                  fontSize: 16,
+                                ),
+                                softWrap: true,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
                               child: Text(
                                 orderDetail.quantity.toString(),
                                 style: TextStyle(
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: primaryColors,
+                                  color: black,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                          ),
-                          DataCell(
-                            Center(
+                            Expanded(
+                              flex: 2,
                               child: Text(
-                                orderDetail.totalprice.toString(),
+                                '${orderDetail.intomoney.toStringAsFixed(3)}',
+                                style: GoogleFonts.arsenal(
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.right,
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                    dividerThickness: 0, // Add this line to remove dividers
-                  ),
-                  MyButton(
-                    text: 'Hoàn thành',
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(),
+                          ],
                         ),
                       );
                     },
-                    buttonColor: primaryColors,
                   ),
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(flex: 3, child: Text('')),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          'Cộng tiền hàng:',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          '${orderDetails[0].totalprice.toStringAsFixed(3)}',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10.0),
+                  // Chưa xử lý phần discount.///////////////////////////////////////////////////
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(flex: 3, child: Text('')),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          'Chiết khấu:',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          // '${orderDetails[0].totalprice.toStringAsFixed(3)}',
+                          '0',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(flex: 3, child: Text('')),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          'Tổng cộng:',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          '${orderDetails[0].totalprice.toStringAsFixed(3)}',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10.0),
+                  // Chưa xử lý phần discount.
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(flex: 3, child: Text('')),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          'Tiền khách đưa:',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          // '${orderDetails[0].totalprice.toStringAsFixed(3)}',
+                          '0',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10.0),
+                  // Chưa xử lý phần discount.
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(flex: 3, child: Text('')),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          'Tiền thừa:',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          // '${orderDetails[0].totalprice.toStringAsFixed(3)}',
+                          '0',
+                          style: GoogleFonts.arsenal(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // SizedBox(height: 100.0),
+                  // MyButton(
+                  //   text: 'Hoàn thành',
+                  //   onTap: () {
+                  //     Navigator.pushReplacement(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => HomePage(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   buttonColor: primaryColors,
+                  // ),
                 ],
               ),
             );
