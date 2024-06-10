@@ -36,7 +36,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
 
   void showImage(BuildContext context) {
     // Tạm thời sử dụng đường dẫn ảnh cố định, bạn có thể thay thế bằng đường dẫn thực tế của ảnh bạn muốn hiển thị.
-    String imagePath = 'assets/images/profile/profile_user.jpg';
+    String imagePath = 'assets/images/profile/customer-default.jpeg';
 
     showCupertinoModalPopup(
       context: context,
@@ -171,7 +171,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
                       borderRadius: BorderRadius.circular(100),
                       child: Image(
                           image: AssetImage(
-                              'assets/images/profile/profile_user.jpg'))),
+                              'assets/images/profile/customer-default.jpeg'))),
                 ),
                 //
                 Positioned(

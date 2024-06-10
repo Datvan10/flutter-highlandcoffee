@@ -99,7 +99,7 @@ class _OrderPageState extends State<OrderPage> {
     await orderApi.addOrder(newOrder);
 
     // Hiển thị thông báo khi đặt hàng thành công
-    _showAlert('Thông báo', 'Đơn hàng được đặt thành công.', () {
+    _showNotificationNavigate('Thông báo', 'Đơn hàng được đặt thành công.', () {
       Get.toNamed('/payment_result_page');
     });
   } catch (e) {
@@ -357,7 +357,7 @@ class _OrderPageState extends State<OrderPage> {
 
   //
   //
-  void _showAlert(String title, String content, Function onPressed) {
+  void _showNotificationNavigate(String title, String content, Function onPressed) {
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/screens/app/bill_page.dart';
+import 'package:highlandcoffeeapp/screens/app/preview_bill_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
@@ -51,7 +51,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BillPage(
+                    builder: (context) => PreviewBillPage(
                       orderid: widget.orderid,
                     ),
                   ),
@@ -322,7 +322,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       ),
                       SizedBox(
                           height:
-                              130.0), // Khoảng cách phía dưới để tránh nút bị che
+                              130.0),
                     ],
                   ),
                 ),
@@ -332,10 +332,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   right: 16,
                   child: MyButton(
                     text: 'Hủy đơn hàng',
-                    onTap: () {
-                      // Xu ly huy don hang
-                    },
+                    onTap: orderDetails[0].status == 0
+                        ? () {
+                            // Xu ly huy don hang
+                          }
+                        : null,
                     buttonColor: primaryColors,
+                    isDisabled:
+                        orderDetails[0].status != 0,
                   ),
                 ),
               ],

@@ -23,8 +23,8 @@ class LoginCustomerWithIdentifierPage extends StatefulWidget {
 class _LoginCustomerWithIdentifierPageState
     extends State<LoginCustomerWithIdentifierPage> {
   final CustomerApi api = CustomerApi();
-  final identifierController = TextEditingController();
-  final passWordController = TextEditingController();
+  final _identifierController = TextEditingController();
+  final _passWordController = TextEditingController();
   bool isLoggedIn = false;
   bool isObsecure = false;
   bool _isVietnamSelected = true;
@@ -36,9 +36,9 @@ class _LoginCustomerWithIdentifierPageState
   }
 
   // Function login customer with indentifier and password
-  void loginCustomerWithIndentifierAndPassword() async {
-    String identifier = identifierController.text.trim();
-    String password = passWordController.text.trim();
+  void loginCustomer() async {
+    String identifier = _identifierController.text.trim();
+    String password = _passWordController.text.trim();
 
     if (identifier.isEmpty || password.isEmpty) {
       showCustomAlertDialog(
@@ -141,14 +141,14 @@ class _LoginCustomerWithIdentifierPageState
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      identifierController.clear();
+                      _identifierController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: identifierController,
+              controller: _identifierController,
               iconColor: primaryColors,
             ),
             SizedBox(
@@ -169,7 +169,7 @@ class _LoginCustomerWithIdentifierPageState
                   });
                 },
               ),
-              controller: passWordController,
+              controller: _passWordController,
               iconColor: primaryColors,
               obscureText: !isObsecure,
             ),
@@ -199,7 +199,7 @@ class _LoginCustomerWithIdentifierPageState
             //button login
             MyButton(
               text: 'Đăng nhập',
-              onTap: loginCustomerWithIndentifierAndPassword,
+              onTap: loginCustomer,
               buttonColor: primaryColors,
             ),
             SizedBox(

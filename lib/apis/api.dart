@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:http/http.dart' as http;
@@ -204,10 +202,8 @@ class AdminApi {
         for (var item in jsonData) {
           Product product = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(product.image);
-          Uint8List decodedImageDetail = base64Decode(product.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+          base64Decode(product.image);
+          base64Decode(product.imagedetail);
 
           products.add(product);
         }
@@ -245,7 +241,6 @@ class AdminApi {
         },
         body: jsonEncode(product.toJson()),
       );
-      print(response.statusCode);
       if (response.statusCode == 200) {
         print('Product updated successfully');
       } else {
@@ -417,15 +412,11 @@ class CustomerApi {
     return input;
   }
 
-  ///////////////// Chua xu ly phan nay
-  // Update customer password
   Future<bool> updateCustomerPassword(
       String identifier, String newPassword) async {
-    // Loại bỏ các ký tự không cần thiết trong số điện thoại
     identifier = removeLeadingZeros(identifier);
 
     try {
-      // Gửi yêu cầu API để lấy danh sách khách hàng
       final response = await http.get(Uri.parse(customerUrl));
 
       if (response.statusCode == 200) {
@@ -433,10 +424,8 @@ class CustomerApi {
 
         for (var customerData in jsonResponse) {
           Customer customer = Customer.fromJson(customerData);
-          // Kiểm tra nếu email hoặc số điện thoại trùng khớp
           if (customer.phonenumber.toString() == identifier) {
             try {
-              // Gửi yêu cầu API để cập nhật mật khẩu với id của khách hàng tương ứng
               final updateResponse = await http.put(
                 Uri.parse('$customerUrl/${customer.customerid}'),
                 headers: <String, String>{
@@ -448,27 +437,23 @@ class CustomerApi {
               print(customer.customerid);
 
               if (updateResponse.statusCode == 200) {
-                return true; // Trả về true nếu cập nhật thành công
+                return true;
               } else {
-                return false; // Trả về false nếu cập nhật không thành công
+                return false;
               }
             } catch (e) {
-              print(
-                  "Error updating password: $e"); // In ra lỗi nếu có lỗi xảy ra
-              return false; // Trả về false nếu có lỗi xảy ra
+              print("Error updating password: $e");
+              return false;
             }
           }
         }
-        // Trả về false nếu không tìm thấy khách hàng với email hoặc số điện thoại tương ứng
         return false;
       } else {
-        // Trả về false nếu không thể lấy được danh sách khách hàng từ API
         return false;
       }
     } catch (e) {
-      print(
-          "Error fetching customer data: $e"); // In ra lỗi nếu có lỗi xảy ra khi gửi yêu cầu API
-      return false; // Trả về false nếu có lỗi xảy ra khi gửi yêu cầu API
+      print("Error fetching customer data: $e");
+      return false;
     }
   }
 
@@ -485,7 +470,6 @@ class CustomerApi {
 
         for (var customerData in jsonResponse) {
           Customer customer = Customer.fromJson(customerData);
-          // Kiểm tra `name` hoặc `phonenumber` và `password`
           if ((customer.name == identifier ||
                   customer.phonenumber == identifier) &&
               customer.password == password) {
@@ -513,21 +497,18 @@ class CustomerApi {
 
         for (var userData in responseData) {
           Customer customer = Customer.fromJson(userData);
-          // Kiểm tra `name` hoặc `phonenumber`
+
           if (customer.name == identifier ||
               customer.phonenumber == identifier) {
             return customer;
           }
         }
 
-        // Nếu không tìm thấy người dùng có thông tin trùng khớp, ném ra một ngoại lệ
         throw Exception('Customer data not found for identifier: $identifier');
       } else {
-        // Nếu không thành công, ném ra một ngoại lệ
         throw Exception('Failed to load customer data');
       }
     } catch (e) {
-      // Nếu có lỗi xảy ra trong quá trình xử lý, ném ra một ngoại lệ
       throw Exception('Error fetching customer data: $e');
     }
   }
@@ -590,10 +571,8 @@ class ProductApi {
         for (var item in jsonData) {
           Product product = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(product.image);
-          Uint8List decodedImageDetail = base64Decode(product.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final imagedetail = MemoryImage(decodedImageDetail);
+          base64Decode(product.image);
+          base64Decode(product.imagedetail);
 
           products.add(product);
         }
@@ -672,10 +651,8 @@ class PopularApi {
         for (var item in jsonData) {
           Product popular = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(popular.image);
-          Uint8List decodedImageDetail = base64Decode(popular.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final imagedetail = MemoryImage(decodedImageDetail);
+          base64Decode(popular.image);
+          base64Decode(popular.imagedetail);
 
           populars.add(popular);
         }
@@ -759,10 +736,8 @@ class FavoriteApi {
           if (item['customerid'] == loggedInUser?.customerid) {
             Favorite favorite = Favorite.fromJson(item);
             // Decode image and image detail
-            Uint8List decodedImage = base64Decode(favorite.image);
-            Uint8List decodedImageDetail = base64Decode(favorite.imagedetail);
-            final image = MemoryImage(decodedImage);
-            final imagedetail = MemoryImage(decodedImageDetail);
+            base64Decode(favorite.image);
+            base64Decode(favorite.imagedetail);
 
             favorites.add(favorite);
           } else {
@@ -832,10 +807,8 @@ class BestSaleApi {
         for (var item in jsonData) {
           Product bestsale = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(bestsale.image);
-          Uint8List decodedImageDetail = base64Decode(bestsale.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final imagedetail = MemoryImage(decodedImageDetail);
+          base64Decode(bestsale.image);
+          base64Decode(bestsale.imagedetail);
 
           bestsales.add(bestsale);
         }
@@ -862,10 +835,8 @@ class CoffeeApi {
         for (var item in jsonData) {
           Product coffee = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(coffee.image);
-          Uint8List decodedImageDetail = base64Decode(coffee.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final imagedetail = MemoryImage(decodedImageDetail);
+          base64Decode(coffee.image);
+          base64Decode(coffee.imagedetail);
 
           coffees.add(coffee);
         }
@@ -892,10 +863,8 @@ class FreezeApi {
         for (var item in jsonData) {
           Product freeze = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(freeze.image);
-          Uint8List decodedImageDetail = base64Decode(freeze.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final imagedetail = MemoryImage(decodedImageDetail);
+          base64Decode(freeze.image);
+          base64Decode(freeze.imagedetail);
 
           freezes.add(freeze);
         }
@@ -922,10 +891,8 @@ class TeaApi {
         for (var item in jsonData) {
           Product tea = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(tea.image);
-          Uint8List decodedImageDetail = base64Decode(tea.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final imagedetail = MemoryImage(decodedImageDetail);
+          base64Decode(tea.image);
+          base64Decode(tea.imagedetail);
 
           teas.add(tea);
         }
@@ -952,10 +919,8 @@ class BreadApi {
         for (var item in jsonData) {
           Product bread = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(bread.image);
-          Uint8List decodedImageDetail = base64Decode(bread.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+          base64Decode(bread.image);
+          base64Decode(bread.imagedetail);
 
           breads.add(bread);
         }
@@ -1034,10 +999,8 @@ class FoodApi {
         for (var item in jsonData) {
           Product food = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(food.image);
-          Uint8List decodedImageDetail = base64Decode(food.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final imagedetail = MemoryImage(decodedImageDetail);
+          base64Decode(food.image);
+          base64Decode(food.imagedetail);
 
           foods.add(food);
         }
@@ -1064,10 +1027,8 @@ class OtherApi {
         for (var item in jsonData) {
           Product other = Product.fromJson(item);
           // Decode image and image detail
-          Uint8List decodedImage = base64Decode(other.image);
-          Uint8List decodedImageDetail = base64Decode(other.imagedetail);
-          final image = MemoryImage(decodedImage);
-          final image_detail = MemoryImage(decodedImageDetail);
+          base64Decode(other.image);
+          base64Decode(other.imagedetail);
 
           others.add(other);
         }
@@ -1095,8 +1056,7 @@ class CartApi {
         for (var item in jsonData) {
           Cart cart = Cart.fromJson(item);
           // Decode product_image
-          Uint8List decodedImage = base64Decode(cart.image);
-          final product_image = MemoryImage(decodedImage);
+          base64Decode(cart.image);
 
           carts.add(cart);
         }
@@ -1121,7 +1081,6 @@ class CartApi {
         },
         body: jsonEncode(cart.toJson()),
       );
-      print(response.statusCode);
       if (response.statusCode == 200) {
         // print('Cart added successfully');
       } else {

@@ -18,7 +18,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/welcome/background_login.jpg'),
+              image: AssetImage('assets/images/welcome-logo/background_login.jpg'),
               fit: BoxFit.cover,
             ),
           ),

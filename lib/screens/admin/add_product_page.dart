@@ -25,7 +25,7 @@ class _AddProductPageState extends State<AddProductPage> {
   late final Product product;
   final AdminApi adminApi = AdminApi();
   final CategoryApi categoryApi = CategoryApi();
-  String _selectedCategory = 'Coffee';
+  String _selectedCategoryController = 'Coffee';
   List<Category> _categoryList = [];
   List<String> _categories = [];
 
@@ -35,8 +35,8 @@ class _AddProductPageState extends State<AddProductPage> {
   TextEditingController _priceController = TextEditingController();
   TextEditingController _unitController = TextEditingController();
 
-  File? _imagePath;
-  File? _imageDetailPath;
+  File? _imageController;
+  File? _imageDetailController;
 
   @override
   void initState() {
@@ -51,13 +51,13 @@ class _AddProductPageState extends State<AddProductPage> {
         _categoryList = categories;
         _categories =
             categories.map((category) => category.categoryname).toList();
-        _selectedCategory = _categories.isNotEmpty ? _categories[0] : '';
+        _selectedCategoryController = _categories.isNotEmpty ? _categories[0] : '';
       });
     } catch (e) {
       print('Error fetching categories: $e');
       setState(() {
         _categories = ['Coffee', 'Freeze', 'Trà', 'Đồ ăn', 'Khác'];
-        _selectedCategory = 'Coffee';
+        _selectedCategoryController = 'Coffee';
       });
     }
   }
@@ -68,7 +68,7 @@ class _AddProductPageState extends State<AddProductPage> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _imagePath = File(pickedFile.path);
+        _imageController = File(pickedFile.path);
       });
     }
   }
@@ -79,7 +79,7 @@ class _AddProductPageState extends State<AddProductPage> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _imageDetailPath = File(pickedFile.path);
+        _imageDetailController = File(pickedFile.path);
       });
     }
   }
@@ -113,7 +113,7 @@ class _AddProductPageState extends State<AddProductPage> {
       // Find the selected category's ID
       String? selectedCategoryId;
       for (var category in _categoryList) {
-        if (category.categoryname == _selectedCategory) {
+        if (category.categoryname == _selectedCategoryController) {
           selectedCategoryId = category.categoryid;
           break;
         }
@@ -123,8 +123,8 @@ class _AddProductPageState extends State<AddProductPage> {
         throw Exception('Selected category not found');
       }
 
-      final bytesImage = _imagePath!.readAsBytesSync();
-      final bytesImageDetail = _imageDetailPath!.readAsBytesSync();
+      final bytesImage = _imageController!.readAsBytesSync();
+      final bytesImageDetail = _imageDetailController!.readAsBytesSync();
       final String base64Image = base64Encode(bytesImage);
       final String base64ImageDetail = base64Encode(bytesImageDetail);
       Product newProduct = Product(
@@ -163,8 +163,8 @@ class _AddProductPageState extends State<AddProductPage> {
       _priceController.clear();
       _unitController.clear();
       setState(() {
-        _imagePath = null;
-        _imageDetailPath = null;
+        _imageController = null;
+        _imageDetailController = null;
       });
     } catch (e) {
       print('Error adding product to Database: $e');
@@ -191,10 +191,10 @@ class _AddProductPageState extends State<AddProductPage> {
             SizedBox(height: 10),
             CategoryDropdown(
               categories: _categories,
-              selectedCategory: _selectedCategory,
+              selectedCategory: _selectedCategoryController,
               onChanged: (String? value) {
                 setState(() {
-                  _selectedCategory = value ?? '';
+                  _selectedCategoryController = value ?? '';
                 });
               },
             ),
@@ -207,12 +207,12 @@ class _AddProductPageState extends State<AddProductPage> {
             LabeledTextField(label: 'Đơn vị tính', controller: _unitController),
             SizedBox(height: 10),
             ImagePickerWidget(
-              imagePath: _imagePath,
+              imagePath: _imageController,
               onPressed: _pickImage,
               label: 'Hình ảnh sản phẩm',
             ),
             ImagePickerWidget(
-              imagePath: _imageDetailPath,
+              imagePath: _imageDetailController,
               onPressed: _pickImageDetail,
               label: 'Hình ảnh chi tiết sản phẩm',
             ),

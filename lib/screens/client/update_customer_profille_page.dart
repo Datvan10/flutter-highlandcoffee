@@ -149,7 +149,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                         borderRadius: BorderRadius.circular(100),
                         child: Image(
                             image: AssetImage(
-                                'assets/images/profile/profile_user.jpg'))),
+                                'assets/images/profile/customer-default.jpeg'))),
                   ),
                   //
                   Positioned(
