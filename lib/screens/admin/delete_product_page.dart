@@ -103,7 +103,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
               fontSize: 18,
             ),
           ),
-          content: Text("Bạn có chắc muốn xóa sản phẩm này không?"),
+          content: const Text("Bạn có chắc muốn xóa sản phẩm này không?"),
           actions: [
             CupertinoDialogAction(
               isDestructiveAction: true,
@@ -144,7 +144,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
     return Column(
       children: [
         SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.only(
                 left: 18.0, top: 18.0, right: 18.0, bottom: 10),

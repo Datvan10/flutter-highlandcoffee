@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
@@ -6,18 +5,17 @@ import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/home_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class BillPage extends StatefulWidget {
+class PreviewBillPage extends StatefulWidget {
   final String orderid;
 
-  const BillPage({Key? key, required this.orderid}) : super(key: key);
+  const PreviewBillPage({Key? key, required this.orderid}) : super(key: key);
 
   @override
-  State<BillPage> createState() => _BillPageState();
+  State<PreviewBillPage> createState() => _PreviewBillPageState();
 }
 
-class _BillPageState extends State<BillPage> {
+class _PreviewBillPageState extends State<PreviewBillPage> {
   OrderDetailApi orderDetailApi = OrderDetailApi();
   late Future<List<OrderDetail>> futureOrderDetails;
   Customer? loggedInUser = AuthManager().loggedInCustomer;
@@ -79,12 +77,20 @@ class _BillPageState extends State<BillPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       //logo highland đang bị thiếu.
                       Column(
-                        children: [],
+                        children: [
+                          Image.asset(
+                            'assets/images/welcome-logo/Highlands_Coffee_logo.png',
+                            width: 120,
+                            height: 120,
+                          ),
+                        ],
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text('Highland Coffee',
                               style: GoogleFonts.arsenal(
@@ -93,7 +99,7 @@ class _BillPageState extends State<BillPage> {
                                 color: brown,
                               )),
                           Text(
-                            'Địa chỉ: 123 Phan Văn Trị, Phường 10, Quận Gò Vấp, TP.HCM',
+                            'Địa chỉ: 123 Phan Văn Trị, Phường 10 \nQuận Gò Vấp, TP.HCM',
                           ),
                           Text(
                             'SĐT: 0352775476',

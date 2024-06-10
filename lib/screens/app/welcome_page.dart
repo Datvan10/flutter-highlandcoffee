@@ -26,7 +26,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       backgroundColor: primaryColors,
       body: Center(
-          child: Image.asset('assets/images/welcome/highlands-coffee.jpg')),
+          child: Image.asset('assets/images/welcome-logo/highlands-coffee.jpg')),
       // body: Column(
       //   mainAxisAlignment: MainAxisAlignment.spaceAround,
       //   children: [

@@ -21,13 +21,13 @@ class RegisterCustomerWithIdentifierPage extends StatefulWidget {
 
 class _RegisterCustomerWithIdentifierPageState
     extends State<RegisterCustomerWithIdentifierPage> {
-  final CustomerApi api = CustomerApi();
+  final CustomerApi customerApi = CustomerApi();
   // final TextEditingController emailController = TextEditingController();
-  final TextEditingController phone_numberController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  // final TextEditingController confirm_passwordController =
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  // final TextEditingController confirm__passwordController =
   //     TextEditingController();
 
   bool isObsecureName = false;
@@ -35,13 +35,13 @@ class _RegisterCustomerWithIdentifierPageState
   bool isObsecureConfirmPassword = false;
 
   // Register user
-  Future<void> registerUser() async {
+  Future<void> registerCustomer() async {
     // String email = emailController.text.trim();
-    String phonenumber = phone_numberController.text.trim();
-    String address = addressController.text.trim();
-    String name = nameController.text.trim();
-    String password = passwordController.text.trim();
-    // String confirm_password = confirm_passwordController.text.trim();
+    String phonenumber = _phoneNumberController.text.trim();
+    String address = _addressController.text.trim();
+    String name = _nameController.text.trim();
+    String password = _passwordController.text.trim();
+    // String confirm_password = confirm__passwordController.text.trim();
 
     // Validate input fields
     if (phonenumber.isEmpty ||
@@ -79,19 +79,19 @@ class _RegisterCustomerWithIdentifierPageState
         point: 0,
       );
       // Call API to register user
-      await api.addCustomer(newCustomer);
+      await customerApi.addCustomer(newCustomer);
       Navigator.pushReplacementNamed(
           context, '/login_register_switcher_customer_page');
       // Show success alert
       showCustomAlertDialog(
           context, 'Thông báo', 'Đăng ký thành công, đăng nhập ngay!');
       // Clear input fields
-      nameController.clear();
+      _nameController.clear();
       // emailController.clear();
-      phone_numberController.clear();
-      addressController.clear();
-      passwordController.clear();
-      // confirm_passwordController.clear();
+      _phoneNumberController.clear();
+      _addressController.clear();
+      _passwordController.clear();
+      // confirm__passwordController.clear();
     } catch (e) {
       // print("Error adding customer: $e");
       // Show alert for error
@@ -149,14 +149,14 @@ class _RegisterCustomerWithIdentifierPageState
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      phone_numberController.clear();
+                      _phoneNumberController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: phone_numberController,
+              controller: _phoneNumberController,
               iconColor: primaryColors,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -173,14 +173,14 @@ class _RegisterCustomerWithIdentifierPageState
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      addressController.clear();
+                      _addressController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: addressController,
+              controller: _addressController,
               iconColor: primaryColors,
             ),
             SizedBox(
@@ -193,14 +193,14 @@ class _RegisterCustomerWithIdentifierPageState
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      nameController.clear();
+                      _nameController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: nameController,
+              controller: _nameController,
               iconColor: primaryColors,
             ),
             SizedBox(
@@ -221,7 +221,7 @@ class _RegisterCustomerWithIdentifierPageState
                   });
                 },
               ),
-              controller: passwordController,
+              controller: _passwordController,
               iconColor: primaryColors,
               obscureText: !isObsecurePassword,
             ),
@@ -245,7 +245,7 @@ class _RegisterCustomerWithIdentifierPageState
             //       });
             //     },
             //   ),
-            //   controller: confirm_passwordController,
+            //   controller: confirm__passwordController,
             //   iconColor: primaryColors,
             //   obscureText: !isObsecureConfirmPassword,
             // ),
@@ -255,7 +255,7 @@ class _RegisterCustomerWithIdentifierPageState
             //button signinup
             MyButton(
               text: 'Đăng ký',
-              onTap: registerUser,
+              onTap: registerCustomer,
               buttonColor: primaryColors,
             ),
             SizedBox(

@@ -28,7 +28,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
 
   TextEditingController _titleCommentController = TextEditingController();
   TextEditingController _contentCommentController = TextEditingController();
-  File? _imagePath;
+  File? _imageController;
 
   // Function to pick an image from the gallery
   Future<void> _pickImage() async {
@@ -36,7 +36,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _imagePath = File(pickedFile.path);
+        _imageController = File(pickedFile.path);
       });
     }
   }
@@ -44,7 +44,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
   //
   Future<void> addComment() async {
     try {
-      final bytesImage = _imagePath!.readAsBytesSync();
+      final bytesImage = _imageController!.readAsBytesSync();
       final imageBase64 = base64Encode(bytesImage);
       Comment customerComment = Comment(
         commentid: '',
@@ -69,7 +69,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
       _titleCommentController.clear();
       _contentCommentController.clear();
       setState(() {
-        _imagePath = null;
+        _imageController = null;
       });
     } catch (e) {
       // showCustomAlertDialog(context, 'Lỗi', '');
@@ -135,7 +135,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
                   label: 'Nội dung', controller: _contentCommentController),
               SizedBox(height: 15),
               ImagePickerWidget(
-                imagePath: _imagePath,
+                imagePath: _imageController,
                 onPressed: _pickImage,
                 label: 'Hình ảnh sản phẩm',
               ),
