@@ -88,22 +88,23 @@ class _LoginStaffWithIdentifierAndPasswordPageState
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
             SizedBox(
-              height: 190.0,
+              height: 140.0,
             ),
             //form email
             MyTextFormField(
               hintText: 'Tên hoặc số điện thoại',
               prefixIconData: Icons.person,
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _identifierController.clear();
-                    });
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: primaryColors,
-                  )),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _identifierController.clear();
+                  });
+                },
+                child: Icon(
+                  Icons.clear,
+                  color: primaryColors,
+                ),
+              ),
               controller: _identifierController,
               iconColor: primaryColors,
             ),
@@ -114,16 +115,16 @@ class _LoginStaffWithIdentifierAndPasswordPageState
             TextFormFieldPassword(
               hintText: 'Mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isObsecure ? Icons.visibility : Icons.visibility_off,
-                  color: primaryColors,
-                ),
-                onPressed: () {
+              suffixIcon: GestureDetector(
+                onTap: () {
                   setState(() {
                     isObsecure = !isObsecure;
                   });
                 },
+                child: Icon(
+                  isObsecure ? Icons.visibility : Icons.visibility_off,
+                  color: primaryColors,
+                ),
               ),
               controller: _passWordController,
               iconColor: primaryColors,

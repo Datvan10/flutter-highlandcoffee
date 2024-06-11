@@ -25,10 +25,10 @@ class CustomAlertDialog extends StatelessWidget {
           fontSize: 18,
         ),
       ),
-      content: Text(message),
+      content: Text(message, style: GoogleFonts.roboto(color: black, fontSize : 16),),
       actions: [
         CupertinoDialogAction(
-          child: Text("OK", style: TextStyle(color: blue),),
+          child: Text("OK", style: GoogleFonts.arsenal(color: blue, fontSize : 16, fontWeight: FontWeight.bold)),
           onPressed: () {
             Navigator.pop(context);
           },

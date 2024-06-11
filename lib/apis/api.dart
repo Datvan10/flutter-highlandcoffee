@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 // Admin API
 class AdminApi {
   final String adminUrl = "http://localhost:5194/api/admins";
+  final String staffUrl = "http://localhost:5194/api/staffs";
   final String productUrl = "http://localhost:5194/api/products";
   final String categoryUrl = "http://localhost:5194/api/categories";
 
@@ -319,6 +320,80 @@ class AdminApi {
       throw Exception('Failed to update category: $e');
     }
   }
+
+  // Add staff for admin
+  Future<void> addStaff(Staff staff) async {
+    final uri = Uri.parse(staffUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(staff.toJson()),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Staff added successfully');
+      } else {
+        throw Exception('Failed to add staff: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add staff: $e');
+    }
+  }
+
+  // Get staff for admin
+  Future<List<Staff>> getStaffs() async {
+    try {
+      final response = await http.get(Uri.parse(staffUrl));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => new Staff.fromJson(data)).toList();
+      } else {
+        throw Exception('Failed to load staffs');
+      }
+    } catch (e) {
+      throw Exception('Failed to load staffs');
+    }
+  }
+
+  // Delete staff for admin
+  Future<void> deleteStaff(String staffid) async {
+    try {
+      final response = await http.delete(Uri.parse('$staffUrl/$staffid'));
+      print(response.statusCode);
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        print('Staff deleted successfully');
+      } else {
+        throw Exception('Failed to delete Staff');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete Staff');
+    }
+  }
+
+   // Update staff for admin
+  Future<void> updateStaff(Staff staff) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$staffUrl/${staff.staffid}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(staff.toJson()),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Staff updated successfully');
+      } else {
+        throw Exception('Failed to update Staff: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update Staff: $e');
+    }
+  }
 }
 
 // Customer API
@@ -582,12 +657,11 @@ class StaffApi {
   // Update data to API
   Future<Staff> updateStaffs(Staff staff) async {
     try {
-      final response =
-          await http.put(Uri.parse('$staffUrl/${staff.staffid}'),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: jsonEncode(staff.toJson()));
+      final response = await http.put(Uri.parse('$staffUrl/${staff.staffid}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(staff.toJson()));
       print(response.statusCode);
       print('Response body: ${response.body}');
 
@@ -684,8 +758,7 @@ class StaffApi {
 
         for (var staffData in jsonResponse) {
           Staff staff = Staff.fromJson(staffData);
-          if ((staff.name == identifier ||
-                  staff.phonenumber == identifier) &&
+          if ((staff.name == identifier || staff.phonenumber == identifier) &&
               staff.password == password) {
             return true;
           }
@@ -712,8 +785,7 @@ class StaffApi {
         for (var staffData in responseData) {
           Staff staff = Staff.fromJson(staffData);
 
-          if (staff.name == identifier ||
-              staff.phonenumber == identifier) {
+          if (staff.name == identifier || staff.phonenumber == identifier) {
             return staff;
           }
         }
@@ -727,6 +799,7 @@ class StaffApi {
     }
   }
 }
+
 // Category API
 class CategoryApi {
   final String categoryUrl = "http://localhost:5194/api/categories";

@@ -7,58 +7,62 @@ import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class UpdateCategoryPage extends StatefulWidget {
-  static const String routeName = '/update_category_page';
-  const UpdateCategoryPage({Key? key}) : super(key: key);
+class UpdateStaffAccountPage extends StatefulWidget {
+  static const String routeName = '/update_staff_account_page';
+  const UpdateStaffAccountPage({super.key});
 
   @override
-  State<UpdateCategoryPage> createState() => _UpdateCategoryPageState();
+  State<UpdateStaffAccountPage> createState() => _UpdateStaffAccountPageState();
 }
 
-class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
+class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
   final AdminApi adminApi = AdminApi();
-  List<Category> categories = [];
-  final _textSearchCategoryController = TextEditingController();
-  TextEditingController _editCategoryNameController = TextEditingController();
-  TextEditingController _editDescriptionController = TextEditingController();
+  List<Staff> staffs = [];
+  final _textSearchStaffController = TextEditingController();
+  TextEditingController _editNameController = TextEditingController();
+  TextEditingController _editPhoneNumberController = TextEditingController();
+  TextEditingController _editSlaryController = TextEditingController();
+  TextEditingController _editPassWordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _fetchCategories();
+    _fetchStaffs();
   }
 
-  Future<void> _fetchCategories() async {
+  Future<void> _fetchStaffs() async {
     try {
-      List<Category> fetchedCategories = await adminApi.getCategories();
+      List<Staff> fetchedStaffs = await adminApi.getStaffs();
       setState(() {
-        categories = fetchedCategories;
+        staffs = fetchedStaffs;
       });
     } catch (e) {
-      print('Error fetching categories: $e');
+      print('Error fetching staffs: $e');
     }
   }
 
   // Tạo một hàm để cập nhật danh mục
-  Future<void> updateCategory(Category category) async {
+  Future<void> updateStaff(Staff Staff) async {
     try {
-      await adminApi.updateCategory(category);
+      await adminApi.updateStaff(Staff);
       Navigator.pop(context);
       showCustomAlertDialog(
-          context, 'Thông báo', 'Cập nhật danh mục thành công');
-      _fetchCategories();
+          context, 'Thông báo', 'Cập nhật thông tin nhân viên thành công');
+      _fetchStaffs();
     } catch (e) {
       showCustomAlertDialog(
-          context, 'Lỗi', 'Cập nhật danh mục thất bại. Vui lòng thử lại.');
-      print('Error updating category: $e');
+          context, 'Lỗi', 'Cập nhật thông tin nhân viên thất bại. Vui lòng thử lại.');
+      print('Error updating Staff: $e');
     }
   }
 
   //update product
-  void _showUpdateCategoryForm(BuildContext context, Category category) {
-    // Điền các giá trị hiện tại của  danh mục vào các trường nhập liệu
-    _editCategoryNameController.text = category.categoryname;
-    _editDescriptionController.text = category.description;
+  void _showUpdateStaffForm(BuildContext context, Staff staff) {
+    // Điền các giá trị hiện tại của  thông tin nhân viên vào các trường nhập liệu
+    _editNameController.text = staff.name;
+    _editPhoneNumberController.text = staff.phonenumber;
+    _editSlaryController.text = staff.salary.toString();
+    _editPassWordController.text = staff.password;
     showModalBottomSheet(
         context: context,
         isScrollControlled: true, // Chiều dài có thể được cuộn
@@ -75,7 +79,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
               child: Column(
                 children: [
                   Text(
-                    'Cập nhật danh mục',
+                    'Cập nhật tài khoản nhân viên',
                     style: GoogleFonts.arsenal(
                         fontSize: 22.0,
                         fontWeight: FontWeight.bold,
@@ -83,11 +87,16 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                   ),
                   SizedBox(height: 10),
                   LabeledTextField(
-                      label: 'Tên danh mục mới',
-                      controller: _editCategoryNameController),
+                      label: 'Tên nhân viên mới',
+                      controller: _editNameController),
                   LabeledTextField(
-                      label: 'Mô tả danh mục',
-                      controller: _editDescriptionController),
+                      label: 'Số điện thoại',
+                      controller: _editPhoneNumberController),
+                  LabeledTextField(
+                      label: 'Lương cơ bản', controller: _editSlaryController),
+                  LabeledTextField(
+                      label: 'Mật khẩu mới',
+                      controller: _editPassWordController),
                   SizedBox(height: 10),
                   SizedBox(
                     height: 15.0,
@@ -97,22 +106,27 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
-                          Category updateNewCategory = Category(
-                            categoryid: category.categoryid,
-                            categoryname: _editCategoryNameController.text,
-                            description: _editDescriptionController.text,
+                          Staff updateNewStaff = Staff(
+                            staffid: staff.staffid,
+                            name: _editNameController.text,
+                            phonenumber: _editPhoneNumberController.text,
+                            salary: int.parse(_editSlaryController.text),
+                            startday: staff.startday,
+                            password: _editPassWordController.text,
                           );
-                          if (updateNewCategory.categoryname.isEmpty ||
-                              updateNewCategory.description.isEmpty) {
+                          if (updateNewStaff.name.isEmpty ||
+                              updateNewStaff.phonenumber.isEmpty ||
+                              updateNewStaff.password.isEmpty) {
                             showCustomAlertDialog(context, 'Lỗi',
                                 'Vui lòng nhập đầy đủ thông tin danh mục');
                             return;
+                          } else if (updateNewStaff.password.length < 6) {
+                            showCustomAlertDialog(context, 'Thông báo',
+                                'Mật khẩu không hợp lệ, phải có ít nhất 6 ký tự');
+                            return;
                           }
-                          ;
-                          // print(updateNewCategory.categoryid);
-                          // print(updateNewCategory.categoryname);
                           // Xử lý khi nhấn nút
-                          await updateCategory(updateNewCategory);
+                          await updateStaff(updateNewStaff);
                         },
                         style: ElevatedButton.styleFrom(backgroundColor: green),
                         child: Row(
@@ -155,7 +169,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Sửa danh mục',
+                    'Sửa thông tin nhân viên',
                     style: GoogleFonts.arsenal(
                       fontSize: 30,
                       color: brown,
@@ -165,9 +179,9 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                 ),
                 SizedBox(height: 15),
                 TextField(
-                  controller: _textSearchCategoryController,
+                  controller: _textSearchStaffController,
                   decoration: InputDecoration(
-                    hintText: 'Tìm kiếm danh mục',
+                    hintText: 'Tìm kiếm nhân viên',
                     contentPadding: EdgeInsets.symmetric(),
                     alignLabelWithHint: true,
                     filled: true,
@@ -190,7 +204,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                               size: 10,
                             ),
                             onPressed: () {
-                              _textSearchCategoryController.clear();
+                              _textSearchStaffController.clear();
                             },
                           ),
                         ),
@@ -210,7 +224,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Danh sách danh mục',
+                    'Danh sách tài khoản nhân viên',
                     style: GoogleFonts.arsenal(
                       fontSize: 20,
                       color: brown,
@@ -230,9 +244,9 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: categories.length,
+              itemCount: staffs.length,
               itemBuilder: (context, index) {
-                final category = categories[index];
+                final staff = staffs[index];
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                   padding: EdgeInsets.all(15),
@@ -246,8 +260,8 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                       Expanded(
                           flex: 1,
                           child: Icon(
-                            Icons.category,
-                            color: green,
+                            Icons.person,
+                            color: grey,
                             size: 30,
                           )),
                       Expanded(
@@ -256,11 +270,18 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              category.categoryname,
+                              staff.name,
                               style: GoogleFonts.arsenal(
                                 fontSize: 18,
                                 color: black,
                                 fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              staff.salary.toString() + ' VND',
+                              style: GoogleFonts.arsenal(
+                                fontSize: 16,
+                                color: brown,
                               ),
                             ),
                           ],
@@ -274,7 +295,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                             color: blue,
                           ),
                           onPressed: () {
-                            _showUpdateCategoryForm(context, category);
+                            _showUpdateStaffForm(context, staff);
                           },
                         ),
                       )

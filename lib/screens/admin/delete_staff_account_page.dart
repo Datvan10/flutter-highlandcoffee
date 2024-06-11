@@ -7,37 +7,37 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class DeleteCategoryPage extends StatefulWidget {
-  static const String routeName = '/delete_category_page';
-  const DeleteCategoryPage({Key? key}) : super(key: key);
+class DeleteStaffAccountPage extends StatefulWidget {
+  static const String routeName = '/delete_staff_account_page';
+  const DeleteStaffAccountPage({super.key});
 
   @override
-  State<DeleteCategoryPage> createState() => _DeleteCategoryPageState();
+  State<DeleteStaffAccountPage> createState() => _DeleteStaffAccountPageState();
 }
 
-class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
+class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
   final AdminApi adminApi = AdminApi();
-  List<Category> categories = [];
-  final _textSearchCategoryController = TextEditingController();
+  List<Staff> staffs = [];
+  final _textSearchStaffController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _fetchCategories();
+    _fetchStaffs();
   }
 
-  Future<void> _fetchCategories() async {
+  Future<void> _fetchStaffs() async {
     try {
-      List<Category> fetchedCategories = await adminApi.getCategories();
+      List<Staff> fetchedStaffs = await adminApi.getStaffs();
       setState(() {
-        categories = fetchedCategories;
+        staffs = fetchedStaffs;
       });
     } catch (e) {
-      print('Error fetching categories: $e');
+      print('Error fetching staffs: $e');
     }
   }
 
-  Future<void> deleteCategory(String categoryid) async {
+  Future<void> deleteStaff(String categoryId) async {
     showDialog(
       context: context,
       builder: (context) {
@@ -50,23 +50,23 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
               fontSize: 18,
             ),
           ),
-          content: Text("Bạn có chắc muốn xóa danh mục này không?"),
+          content: Text("Bạn có chắc muốn xóa nhân viên này không?"),
           actions: [
             CupertinoDialogAction(
               isDestructiveAction: true,
               child: Text("Xóa"),
               onPressed: () async {
                 try {
-                  await adminApi.deleteCategory(categoryid);
+                  await adminApi.deleteStaff(categoryId);
                   Navigator.pop(context);
                   showCustomAlertDialog(
-                      context, 'Thông báo', 'Xóa danh mục thành công.');
-                  _fetchCategories();
+                      context, 'Thông báo', 'Xóa nhân viên thành công.');
+                  _fetchStaffs();
                 } catch (e) {
-                  print('Error deleting category: $e');
+                  print('Error deleting staff: $e');
                   Navigator.pop(context);
                   showCustomAlertDialog(
-                      context, 'Lỗi', 'Đã xảy ra lỗi khi xóa danh mục.');
+                      context, 'Lỗi', 'Đã xảy ra lỗi khi xóa nhân viên.');
                 }
               },
             ),
@@ -99,7 +99,7 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Xóa danh mục',
+                    'Xóa thông tin tài khoản nhân viên',
                     style: GoogleFonts.arsenal(
                       fontSize: 30,
                       color: brown,
@@ -109,9 +109,9 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                 ),
                 SizedBox(height: 15),
                 TextField(
-                  controller: _textSearchCategoryController,
+                  controller: _textSearchStaffController,
                   decoration: InputDecoration(
-                    hintText: 'Tìm kiếm danh mục',
+                    hintText: 'Tìm kiếm nhân viên',
                     contentPadding: EdgeInsets.symmetric(),
                     alignLabelWithHint: true,
                     filled: true,
@@ -134,7 +134,7 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                               size: 10,
                             ),
                             onPressed: () {
-                              _textSearchCategoryController.clear();
+                              _textSearchStaffController.clear();
                             },
                           ),
                         ),
@@ -154,7 +154,7 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Danh sách danh mục',
+                    'Danh sách tài khoản nhân viên',
                     style: GoogleFonts.arsenal(
                       fontSize: 20,
                       color: brown,
@@ -174,9 +174,9 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: categories.length,
+              itemCount: staffs.length,
               itemBuilder: (context, index) {
-                final category = categories[index];
+                final staff = staffs[index];
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                   padding: EdgeInsets.all(15),
@@ -190,8 +190,8 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                       Expanded(
                           flex: 1,
                           child: Icon(
-                            Icons.category,
-                            color: green,
+                            Icons.person,
+                            color: grey,
                             size: 30,
                           )),
                       Expanded(
@@ -200,11 +200,18 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              category.categoryname,
+                              staff.name,
                               style: GoogleFonts.arsenal(
                                 fontSize: 18,
                                 color: black,
                                 fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              staff.salary.toString() + ' VND',
+                              style: GoogleFonts.arsenal(
+                                fontSize: 16,
+                                color: brown,
                               ),
                             ),
                           ],
@@ -218,7 +225,7 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                             color: red,
                           ),
                           onPressed: () {
-                            deleteCategory(category.categoryid);
+                            deleteStaff(staff.staffid);
                           },
                         ),
                       )

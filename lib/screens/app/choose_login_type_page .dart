@@ -48,10 +48,11 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                 child: Container(
                   width: double.infinity,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(Icons.login, color: blue,),
-                      SizedBox(width: 100,),
-                      Text('Đăng nhập khách hàng', style: TextStyle(color: black),),
+                      
+                      Text('Đăng nhập khách hàng', style: GoogleFonts.roboto(color: black, fontSize : 16),),
                     ],
                   )),
               ),
@@ -67,10 +68,11 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                 child: Container(
                   width: double.infinity,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(Icons.login, color: blue,),
-                      SizedBox(width: 100,),
-                      Text('Đăng nhập nhân viên', style: TextStyle(color: black),),
+                      
+                      Text('Đăng nhập nhân viên bán hàng', style: GoogleFonts.roboto(color: black, fontSize : 16),),
                     ],
                   )),
               ),
@@ -86,10 +88,11 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                 child: Container(
                   width: double.infinity,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(Icons.login, color: blue,),
-                      SizedBox(width: 100,),
-                      Text('Đăng nhập Admin', style: TextStyle(color: black)),
+                      
+                      Text('Đăng nhập Admin', style: GoogleFonts.roboto(color: black, fontSize : 16),),
                     ],
                   )),
               ),
@@ -103,7 +106,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                       Navigator.of(context).pop();
                     },
                     child: Container(
-                      child: Text('Quay lại', textAlign: TextAlign.center, style: TextStyle(color: black))),
+                      child: Text('Quay lại', textAlign: TextAlign.center, style: GoogleFonts.roboto(color: black, fontSize : 16),)),
                   ),
                 ],
               ),

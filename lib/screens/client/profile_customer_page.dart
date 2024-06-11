@@ -115,14 +115,14 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("Hủy", style: TextStyle(color: Colors.red)),
+          child: Text("Hủy", style: GoogleFonts.arsenal(color: red, fontSize : 16, fontWeight: FontWeight.bold)),
         ),
         TextButton(
           onPressed: () {
             AuthManager().logoutCustomer();
             Navigator.pushReplacementNamed(context, '/choose_login_type_page');
           },
-          child: Text("Đồng ý", style: TextStyle(color: Colors.blue)),
+          child: Text("Đồng ý", style: GoogleFonts.arsenal(color: blue, fontSize : 16, fontWeight: FontWeight.bold)),
         ),
       ],
     );

@@ -78,50 +78,6 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Chose language
-            // GestureDetector(
-            //   onTap: _toggleImage,
-            //   child: _isVietnamSelected
-            //       ? Image.asset(
-            //           'assets/langs/vn.png',
-            //           width: 40,
-            //           height: 40,
-            //         )
-            //       : Image.asset(
-            //           'assets/langs/en.png',
-            //           width: 40,
-            //           height: 40,
-            //         ),
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   children: [
-            //     DropdownButton(
-            //       onChanged: (String? value) {
-            //         if (value == 'vi') {
-            //           Get.updateLocale(Locale('vi', 'VN'));
-            //         } else {
-            //           Get.updateLocale(Locale('en', 'US'));
-            //         }
-            //       },
-            //       underline: SizedBox(),
-            //       icon: Icon(
-            //         Icons.language,
-            //         color: primaryColors,
-            //       ),
-            //       items: [
-            //         DropdownMenuItem(
-            //           value: 'vi',
-            //           child: Text('Tiếng Việt'),
-            //         ),
-            //         DropdownMenuItem(
-            //           value: 'en',
-            //           child: Text('English'),
-            //         ),
-            //       ],
-            //     ),
-            //   ],
-            // ),
             SizedBox(
               height: 10.0,
             ),
@@ -138,16 +94,17 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
             MyTextFormField(
               hintText: 'Tên hoặc số điện thoại',
               prefixIconData: Icons.person,
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _identifierController.clear();
-                    });
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: primaryColors,
-                  )),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _identifierController.clear();
+                  });
+                },
+                child: Icon(
+                  Icons.clear,
+                  color: primaryColors,
+                ),
+              ),
               controller: _identifierController,
               iconColor: primaryColors,
             ),
@@ -158,16 +115,16 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
             TextFormFieldPassword(
               hintText: 'Mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isObsecure ? Icons.visibility : Icons.visibility_off,
-                  color: primaryColors,
-                ),
-                onPressed: () {
+              suffixIcon: GestureDetector(
+                onTap: () {
                   setState(() {
                     isObsecure = !isObsecure;
                   });
                 },
+                child: Icon(
+                  isObsecure ? Icons.visibility : Icons.visibility_off,
+                  color: primaryColors,
+                ),
               ),
               controller: _passWordController,
               iconColor: primaryColors,

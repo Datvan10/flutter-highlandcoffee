@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 import 'package:flutter/services.dart';
@@ -42,6 +43,7 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
       },
       decoration: InputDecoration(
         hintText: widget.hintText,
+        hintStyle: GoogleFonts.roboto(color: grey, fontSize : 17),
         contentPadding: EdgeInsets.all(15),
         filled: true,
         fillColor: white,

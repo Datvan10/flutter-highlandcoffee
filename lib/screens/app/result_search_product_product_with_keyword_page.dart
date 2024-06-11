@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/models/products.dart';
 
 class ResultSearchProductWithKeyword extends StatefulWidget {
   final List<Product> searchResults;

@@ -9,13 +9,10 @@ import 'package:highlandcoffeeapp/widgets/best_sale_product_item.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/product_category.dart';
 import 'package:highlandcoffeeapp/widgets/product_popular_item.dart';
-import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/mic/mic_form.dart';
 import 'package:highlandcoffeeapp/widgets/slide_image.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

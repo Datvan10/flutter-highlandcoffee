@@ -47,6 +47,7 @@ class _TextFormFieldPasswordState extends State<TextFormFieldPassword> {
           },
           decoration: InputDecoration(
             hintText: widget.hintText,
+            hintStyle: GoogleFonts.roboto(color: grey, fontSize : 17),
             contentPadding: EdgeInsets.all(15),
             filled: true,
             fillColor: white,

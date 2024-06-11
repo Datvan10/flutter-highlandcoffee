@@ -83,16 +83,15 @@ class _LoginAdminWithIdentifierAndPassWordPageState
             MyTextFormField(
               hintText: 'Tên đăng nhập',
               prefixIconData: Icons.person,
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      identifierController.clear();
-                    });
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: primaryColors,
-                  )),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  identifierController.clear();
+                },
+                child: Icon(
+                  Icons.clear,
+                  color: primaryColors,
+                ),
+              ),
               controller: identifierController,
               iconColor: primaryColors,
             ),
@@ -103,16 +102,16 @@ class _LoginAdminWithIdentifierAndPassWordPageState
             TextFormFieldPassword(
               hintText: 'Nhập mật khẩu',
               prefixIconData: Icons.vpn_key_sharp,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isObsecure ? Icons.visibility : Icons.visibility_off,
-                  color: primaryColors,
-                ),
-                onPressed: () {
+              suffixIcon: GestureDetector(
+                onTap: () {
                   setState(() {
                     isObsecure = !isObsecure;
                   });
                 },
+                child: Icon(
+                  isObsecure ? Icons.visibility : Icons.visibility_off,
+                  color: primaryColors,
+                ),
               ),
               controller: passWordController,
               iconColor: primaryColors,

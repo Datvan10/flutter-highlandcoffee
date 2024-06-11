@@ -5,15 +5,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_product_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/add_staff_account_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/dashboard_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_product_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/delete_staff_account_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/feddback_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/order_list_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/most_sold_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/revenue_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/update_staff_account_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
 
@@ -50,7 +53,27 @@ class _AdminPageState extends State<AdminPage> {
         });
 
         break;
-      
+
+      case AddStaffAccountPage.routeName:
+        setState(() {
+          _selectedItem = AddStaffAccountPage();
+        });
+
+        break;
+
+      case DeleteStaffAccountPage.routeName:
+        setState(() {
+          _selectedItem = DeleteStaffAccountPage();
+        });
+
+        break;
+
+      case UpdateStaffAccountPage.routeName:
+        setState(() {
+          _selectedItem = UpdateStaffAccountPage();
+        });
+
+        break;
       case AddCategoryPage.routeName:
         setState(() {
           _selectedItem = AddCategoryPage();
@@ -64,7 +87,7 @@ class _AdminPageState extends State<AdminPage> {
         });
 
         break;
-        
+
       case UpdateCategoryPage.routeName:
         setState(() {
           _selectedItem = UpdateCategoryPage();
@@ -172,9 +195,28 @@ class _AdminPageState extends State<AdminPage> {
                       icon: Icons.trending_up,
                       route: MostSoldProductPage.routeName)
                 ]),
+            // manage account
+            AdminMenuItem(
+              title: 'Quản lý nhân sự',
+              icon: Icons.manage_accounts,
+              children: [
+                AdminMenuItem(
+                    title: 'Thêm tài khoản nhân viên',
+                    route: AddStaffAccountPage.routeName,
+                    icon: Icons.person_add),
+                AdminMenuItem(
+                    title: 'Xóa tài khoản nhân viên',
+                    route: DeleteStaffAccountPage.routeName,
+                    icon: Icons.person_remove),
+                AdminMenuItem(
+                    title: 'Sửa tài khoản nhân viên',
+                    route: UpdateStaffAccountPage.routeName,
+                    icon: Icons.person_search),
+              ],
+            ),
             // manage category
             AdminMenuItem(
-              title: 'Danh mục',
+              title: 'Quản lý danh mục',
               icon: Icons.category_outlined,
               children: [
                 AdminMenuItem(
@@ -193,7 +235,7 @@ class _AdminPageState extends State<AdminPage> {
             ),
             //manager product
             AdminMenuItem(
-              title: 'Sản phẩm',
+              title: 'Quản lý sản phẩm',
               icon: Icons.restaurant_menu_outlined,
               children: [
                 AdminMenuItem(
@@ -212,7 +254,7 @@ class _AdminPageState extends State<AdminPage> {
             ),
             //
             AdminMenuItem(
-                title: 'Đơn hàng',
+                title: 'Quản lý đơn hàng',
                 icon: CupertinoIcons.cart_fill,
                 children: [
                   AdminMenuItem(
@@ -222,7 +264,7 @@ class _AdminPageState extends State<AdminPage> {
                 ]),
             //
             AdminMenuItem(
-                title: 'Thông báo',
+                title: 'Quản lý đánh giá, bình luận',
                 icon: Icons.notifications_active_outlined,
                 children: [
                   AdminMenuItem(

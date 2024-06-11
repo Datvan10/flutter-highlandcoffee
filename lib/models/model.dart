@@ -35,7 +35,7 @@ class Admin {
 
 // Model staff
 class Staff {
-  String? staffid;
+  final String staffid;
   final String name;
   final String phonenumber;
   final DateTime startday;
@@ -43,7 +43,7 @@ class Staff {
   final String password;
 
   Staff({
-    this.staffid,
+    required this.staffid,
     required this.name,
     required this.phonenumber,
     required this.startday,
