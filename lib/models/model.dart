@@ -35,40 +35,38 @@ class Admin {
 
 // Model staff
 class Staff {
-  final int id;
-  final String staff_name;
+  String? staffid;
+  final String name;
+  final String phonenumber;
+  final DateTime startday;
+  int? salary;
   final String password;
-  final String confirm_password;
-  final String email;
-  final String address;
-  final int phone;
 
-  Staff(
-      {required this.id,
-      required this.staff_name,
-      required this.password,
-      required this.confirm_password,
-      required this.email,
-      required this.address,
-      required this.phone});
+  Staff({
+    this.staffid,
+    required this.name,
+    required this.phonenumber,
+    required this.startday,
+    required this.salary,
+    required this.password,
+  });
 
   factory Staff.fromJson(Map<String, dynamic> json) => Staff(
-      id: json['id'],
-      staff_name: json['staff_name'],
-      password: json['password'],
-      confirm_password: json['confirm_password'],
-      email: json['email'],
-      address: json['address'],
-      phone: json['phone']);
+        staffid: json['staffid'],
+        name: json['name'],
+        phonenumber: json['phonenumber'],
+        startday: DateTime.parse(json['startday']),
+        salary: json['salary'],
+        password: json['password'],
+      );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'staff_name': staff_name,
+        'staffid': staffid,
+        'name': name,
+        'phonenumber': phonenumber,
+        'startday': startday.toIso8601String(),
+        'salary': salary,
         'password': password,
-        'confirm_password': confirm_password,
-        'email': email,
-        'address': address,
-        'phone': phone
       };
 }
 

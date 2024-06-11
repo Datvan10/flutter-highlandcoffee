@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/screens/client/login_customer_with_identifier_page.dart';
+import 'package:highlandcoffeeapp/screens/client/login_customer_with_identifier_and_password_page.dart';
 import 'package:highlandcoffeeapp/screens/client/register_customer_with_identifier_page.dart.dart';
 
 class LoginRegisterSwitcherCustomerPage extends StatefulWidget {
@@ -23,7 +23,7 @@ class _LoginRegisterSwitcherCustomerPageState extends State<LoginRegisterSwitche
     return Scaffold(
       body: Center(
         child: showloginPage
-            ? LoginCustomerWithIdentifierPage(onTap: togglePage)
+            ? LoginCustomerWithIdentifierAndPassWordPage(onTap: togglePage)
             : RegisterCustomerWithIdentifierPage(onTap: togglePage),
       ),
     );

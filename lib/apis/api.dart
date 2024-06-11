@@ -537,6 +537,196 @@ class CustomerApi {
   }
 }
 
+class StaffApi {
+  final String staffUrl = "http://localhost:5194/api/staffs";
+  // Read data from API
+  Future<List<Staff>> getStaffs() async {
+    try {
+      final response = await http.get(Uri.parse(staffUrl));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => new Staff.fromJson(data)).toList();
+      } else {
+        throw Exception('Failed to load staff');
+      }
+    } catch (e) {
+      throw Exception('Failed to load staff');
+    }
+  }
+
+  // Add data to API
+  Future<void> addStaffs(Staff staff) async {
+    final uri = Uri.parse(staffUrl);
+
+    try {
+      // final customerJson = jsonEncode(customer.toJson());
+      // print('Customer JSON: $customerJson'); // In ra dữ liệu để kiểm tra
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(staff.toJson()),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Staff added successfully');
+      } else {
+        throw Exception('Failed to add staff: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add staff: $e');
+    }
+  }
+
+  // Update data to API
+  Future<Staff> updateStaffs(Staff staff) async {
+    try {
+      final response =
+          await http.put(Uri.parse('$staffUrl/${staff.staffid}'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+              body: jsonEncode(staff.toJson()));
+      print(response.statusCode);
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        print('staff updated successfully');
+        if (response.body.isNotEmpty) {
+          return Staff.fromJson(json.decode(response.body));
+        } else {
+          return staff;
+        }
+      } else {
+        throw Exception('Failed to update staff: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update staff : $e');
+    }
+  }
+
+  // Delete data from API
+  Future<void> deleteStaffs(int id) async {
+    try {
+      final response = await http.delete(Uri.parse('$staffUrl/$id'));
+      if (response.statusCode != 204) {
+        throw Exception('Failed to delete customer');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete customer');
+    }
+  }
+
+  // Remove leading zeros from input
+  String removeLeadingZeros(String input) {
+    if (input.startsWith('0')) {
+      return input.replaceFirst(RegExp('^0+'), '');
+    }
+    return input;
+  }
+
+  Future<bool> updateStaffsPassword(
+      String identifier, String newPassword) async {
+    identifier = removeLeadingZeros(identifier);
+
+    try {
+      final response = await http.get(Uri.parse(staffUrl));
+
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+
+        for (var staffData in jsonResponse) {
+          Staff staff = Staff.fromJson(staffData);
+          if (staff.phonenumber.toString() == identifier) {
+            try {
+              final updateResponse = await http.put(
+                Uri.parse('$staffUrl/${staff.staffid}'),
+                headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: jsonEncode({'password': newPassword}),
+              );
+              print(updateResponse.statusCode);
+              print(staff.staffid);
+
+              if (updateResponse.statusCode == 200) {
+                return true;
+              } else {
+                return false;
+              }
+            } catch (e) {
+              print("Error updating password: $e");
+              return false;
+            }
+          }
+        }
+        return false;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Error fetching staff data: $e");
+      return false;
+    }
+  }
+
+  // Authenticate account
+  Future<bool> authenticateAccountStaffs(
+      String identifier, String password) async {
+    final uri = Uri.parse(staffUrl);
+
+    try {
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+
+        for (var staffData in jsonResponse) {
+          Staff staff = Staff.fromJson(staffData);
+          if ((staff.name == identifier ||
+                  staff.phonenumber == identifier) &&
+              staff.password == password) {
+            return true;
+          }
+        }
+        return false;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Hàm lấy thông tin khách hàng dựa vào identifier
+  Future<Staff> getStaffByIdentifier(String identifier) async {
+    final uri = Uri.parse(staffUrl);
+
+    try {
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        List<dynamic> responseData = json.decode(response.body);
+
+        for (var staffData in responseData) {
+          Staff staff = Staff.fromJson(staffData);
+
+          if (staff.name == identifier ||
+              staff.phonenumber == identifier) {
+            return staff;
+          }
+        }
+
+        throw Exception('Staff data not found for identifier: $identifier');
+      } else {
+        throw Exception('Failed to load staff data');
+      }
+    } catch (e) {
+      throw Exception('Error fetching staff data: $e');
+    }
+  }
+}
 // Category API
 class CategoryApi {
   final String categoryUrl = "http://localhost:5194/api/categories";

@@ -11,6 +11,7 @@ class AuthManager {
 
   Customer? loggedInCustomer;
   Admin? loggedInAdmin;
+  Staff? loggedInStaff;
 
   // Get the logged in customer
   void setLoggedInCustomer(Customer customer) {
@@ -30,5 +31,15 @@ class AuthManager {
   // Delete the logged in admin
   void logoutAdmin() {
     loggedInAdmin = null;
+  }
+
+  // Get the logged in staff
+  void setLoggedInStaff(Staff staff) {
+    loggedInStaff = staff;
+  }
+
+  // Delete the logged in staff
+  void logoutStaff() {
+    loggedInStaff = null;
   }
 }

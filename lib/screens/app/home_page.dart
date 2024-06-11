@@ -1,9 +1,9 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/result_search_product_product_with_keyword_page.dart';
 import 'package:highlandcoffeeapp/widgets/best_sale_product_item.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
@@ -14,10 +14,12 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/mic/mic_form.dart';
 import 'package:highlandcoffeeapp/widgets/slide_image.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-  
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -27,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   bool _isListening = false;
   bool _isMicFormVisible = false;
   final _textSearchController = TextEditingController();
-  List<DocumentSnapshot> searchResults = [];
+  List<Product> searchResults = [];
 
   //
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
@@ -47,148 +49,71 @@ class _HomePageState extends State<HomePage> {
 
   //
   Future<void> _refreshData() async {
-    // Implement your refresh logic here
-    // For example, you can fetch new data from the server
-    // or reset the state of your widget
-
-    // Simulate a delay for demonstration purposes
     await Future.delayed(Duration(seconds: 5));
 
-    setState(() {
-      // Update your data or perform any other necessary actions
-    });
+    setState(() {});
   }
 
   //
   Future<void> _requestMicrophonePermission() async {
     var status = await Permission.microphone.status;
     if (status.isDenied) {
-      // Yêu cầu quyền truy cập
       await Permission.microphone.request();
     }
   }
 
-//
   void _startListening() async {
     await _requestMicrophonePermission();
 
     if (await Permission.microphone.isGranted) {
-      // Quyền đã được cấp, bắt đầu lắng nghe
-      // Sử dụng speech_to_text để thực hiện thu âm
-
       Get.to(() => MicForm())?.then((value) {
-        // Xử lý sau khi người dùng đóng trang MicForm
         setState(() {
           _isMicFormVisible = false;
         });
       });
     } else {
-      // Người dùng từ chối cấp quyền
-      // Xử lý tương ứng, ví dụ hiển thị thông báo
       print("Người dùng từ chối cấp quyền truy cập vào microphone");
     }
   }
 
-  //
-  void performSearch(String query) {
-    FirebaseFirestore.instance
-        .collection('Danh sách sản phẩm')
-        .where('name', isGreaterThanOrEqualTo: query)
-        .where('name', isLessThan: query + 'z')
-        .get()
-        .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
-      List<Products> searchResults = querySnapshot.docs
-          .where((doc) => doc['name'] != null && doc['name'] is String)
-          .map((doc) => Products(
-              // Tạo đối tượng Products từ dữ liệu Firestore
-              imagePath: doc['imagePath'],
-              name: doc['name'],
-              oldPrice: doc['oldPrice'],
-              newPrice: doc['newPrice'],
-              id: doc['id'],
-              description: doc['description'],
-              rating: doc['rating'],
-              imageDetailPath: doc['imageDetailPath'],
-              category: doc['category']))
+  void performSearch(String query) async {
+    try {
+      ProductApi productApi = ProductApi();
+      List<Product> products = await productApi.getListProducts();
+
+      List<Product> filteredProducts = products
+          .where((product) =>
+              product.productname.toLowerCase().contains(query.toLowerCase()))
           .toList();
 
-      // Nếu không có kết quả, thử tìm kiếm theo tên không dấu và so sánh
-      if (searchResults.isEmpty) {
-        String normalizedQuery = removeDiacritics(query.toLowerCase());
-        searchResults = querySnapshot.docs
-            .where((doc) =>
-                doc['normalized_name'] != null &&
-                doc['normalized_name'] is String &&
-                doc['normalized_name'].contains(normalizedQuery))
-            .map((doc) => Products(
-                // Tạo đối tượng Products từ dữ liệu Firestore
-                imagePath: doc['imagePath'],
-                name: doc['name'],
-                oldPrice: doc['oldPrice'],
-                newPrice: doc['newPrice'],
-                id: doc['id'],
-                description: doc['description'],
-                rating: doc['rating'],
-                imageDetailPath: doc['imageDetailPath'],
-                category: doc['category']))
-            .toList();
-      }
+      List<Product> convertedResults = filteredProducts.map((product) {
+        return Product(
+          productid: product.productid,
+          productname: product.productname,
+          size: product.size,
+          price: product.price,
+          unit: product.unit,
+          image: product.image,
+          imagedetail: product.imagedetail,
+          description: product.description,
+          categoryid: product.categoryid,
+        );
+      }).toList();
 
-      // In ra danh sách sản phẩm
-      print('Search results: $searchResults');
+      print('Search results: $convertedResults');
 
-      // Chuyển hướng đến trang hiển thị kết quả tìm kiếm
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ResultSearchProductWithKeyword(searchResults: searchResults, voiceQuery: query,),
+          builder: (context) => ResultSearchProductWithKeyword(
+            searchResults: convertedResults,
+            voiceQuery: query,
+          ),
         ),
       );
-    }).catchError((error) {
+    } catch (error) {
       print('Error searching products: $error');
-    });
-  }
-
-// Hàm loại bỏ dấu tiếng Việt
-  String removeDiacritics(String input) {
-    return input
-        .replaceAll('ă', 'a')
-        .replaceAll('â', 'a')
-        .replaceAll('đ', 'd')
-        .replaceAll('ê', 'e')
-        .replaceAll('ô', 'o')
-        .replaceAll('ơ', 'o')
-        .replaceAll('ư', 'u')
-        .replaceAll('á', 'a')
-        .replaceAll('à', 'a')
-        .replaceAll('ả', 'a')
-        .replaceAll('ã', 'a')
-        .replaceAll('ạ', 'a')
-        .replaceAll('é', 'e')
-        .replaceAll('è', 'e')
-        .replaceAll('ẻ', 'e')
-        .replaceAll('ẽ', 'e')
-        .replaceAll('ẹ', 'e')
-        .replaceAll('í', 'i')
-        .replaceAll('ì', 'i')
-        .replaceAll('ỉ', 'i')
-        .replaceAll('ĩ', 'i')
-        .replaceAll('ị', 'i')
-        .replaceAll('ó', 'o')
-        .replaceAll('ò', 'o')
-        .replaceAll('ỏ', 'o')
-        .replaceAll('õ', 'o')
-        .replaceAll('ọ', 'o')
-        .replaceAll('ú', 'u')
-        .replaceAll('ù', 'u')
-        .replaceAll('ủ', 'u')
-        .replaceAll('ũ', 'u')
-        .replaceAll('ụ', 'u')
-        .replaceAll('ý', 'y')
-        .replaceAll('ỳ', 'y')
-        .replaceAll('ỷ', 'y')
-        .replaceAll('ỹ', 'y')
-        .replaceAll('ỵ', 'y');
+    }
   }
 
   @override
@@ -201,65 +126,10 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: primaryColors,
         title: Padding(
           padding: const EdgeInsets.only(bottom: 15.0),
-          child: SizedBox(
-            height: 40,
-            child: TextField(
-              controller: _textSearchController,
-              onSubmitted: (String query) {
-                performSearch(query);
-              },
-              decoration: InputDecoration(
-                  hintText: 'Tìm kiếm đồ uống của bạn...',
-                  contentPadding: EdgeInsets.symmetric(),
-                  alignLabelWithHint: true,
-                  filled: true,
-                  fillColor: white,
-                  prefixIcon: const Icon(
-                    Icons.search,
-                    size: 20,
-                  ),
-                  //icon search with microphone
-                  suffixIcon: IconButton(
-                    icon: const Icon(
-                      Icons.mic,
-                      size: 20,
-                    ),
-                    focusColor: primaryColors,
-                    onPressed: _startListening,
-                    // onPressed: () {
-                    //   setState(() {
-                    //     _isMicFormVisible = !_isMicFormVisible;
-                    //   });
-                    // },
-                  ),
-                  //icon clear
-                  // suffixIcon: Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Container(
-                  //     width: 20,
-                  //     height: 20,
-                  //     decoration: BoxDecoration(
-                  //         color: background, shape: BoxShape.circle),
-                  //     child: Center(
-                  //       child: IconButton(
-                  //         icon: const Icon(
-                  //           Icons.clear,
-                  //           size: 10,
-                  //         ),
-                  //         onPressed: () {
-                  //           _textSearchController.clear();
-                  //         },100
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide(color: Colors.white)),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide(color: Colors.white))),
-            ),
+          child: SearchBar(
+            textSearchController: _textSearchController,
+            performSearch: performSearch,
+            startListening: _startListening,
           ),
         ),
       ),
@@ -271,20 +141,16 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //slide adv
               SlideImage(
                 height: 180,
               ),
               SizedBox(height: 15),
-              //product category
               ProductCategory(),
               SizedBox(height: 15),
-              //product popular item
               ProductPopularItem(),
               SizedBox(
                 height: 5.0,
               ),
-              //more product popular
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -299,7 +165,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              // hot product
               Text('ĐỒ UỐNG HÓT',
                   style: GoogleFonts.arsenal(
                       fontSize: 20,
@@ -315,10 +180,109 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      //bottom bar
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndexBottomBar,
         onTap: _selectedBottomBar,
+      ),
+    );
+  }
+}
+
+class SearchBar extends StatefulWidget {
+  final TextEditingController textSearchController;
+  final Function(String) performSearch;
+  final VoidCallback startListening;
+
+  const SearchBar({
+    Key? key,
+    required this.textSearchController,
+    required this.performSearch,
+    required this.startListening,
+  }) : super(key: key);
+
+  @override
+  _SearchBarState createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  @override
+  void initState() {
+    super.initState();
+    widget.textSearchController.addListener(_updateSuffixIcon);
+  }
+
+  @override
+  void dispose() {
+    widget.textSearchController.removeListener(_updateSuffixIcon);
+    super.dispose();
+  }
+
+  void _updateSuffixIcon() {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      child: TextField(
+        controller: widget.textSearchController,
+        onSubmitted: (String query) {
+          widget.performSearch(query);
+        },
+        decoration: InputDecoration(
+          hintText: 'Tìm kiếm đồ uống của bạn...',
+          hintStyle: GoogleFonts.arsenal(color: black, fontSize: 17),
+          contentPadding: EdgeInsets.symmetric(),
+          alignLabelWithHint: true,
+          filled: true,
+          fillColor: Colors.white,
+          prefixIcon: const Icon(
+            Icons.search,
+            size: 20,
+          ),
+          suffixIcon: widget.textSearchController.text.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: white_grey,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                        child: GestureDetector(
+                      onTap: () {
+                        widget.textSearchController.clear();
+                        setState(() {});
+                      },
+                      child: Icon(
+                        Icons.close,
+                        size: 10,
+                      ),
+                    )),
+                  ),
+                )
+              : GestureDetector(
+                  onTap: () {
+                    widget.startListening();
+                    setState(() {});
+                  },
+                  child: Icon(
+                    Icons.mic,
+                    size: 20,
+                  ),
+                ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(color: Colors.white),
+          ),
+        ),
       ),
     );
   }
