@@ -11,18 +11,18 @@ import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
-class LoginCustomerWithIdentifierPage extends StatefulWidget {
+class LoginStaffWithIdentifierAndPasswordPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginCustomerWithIdentifierPage({super.key, required this.onTap});
+  const LoginStaffWithIdentifierAndPasswordPage({super.key, required this.onTap});
 
   @override
-  State<LoginCustomerWithIdentifierPage> createState() =>
-      _LoginCustomerWithIdentifierPageState();
+  State<LoginStaffWithIdentifierAndPasswordPage> createState() =>
+      _LoginStaffWithIdentifierAndPasswordPageState();
 }
 
-class _LoginCustomerWithIdentifierPageState
-    extends State<LoginCustomerWithIdentifierPage> {
-  final CustomerApi api = CustomerApi();
+class _LoginStaffWithIdentifierAndPasswordPageState
+    extends State<LoginStaffWithIdentifierAndPasswordPage> {
+  final StaffApi api = StaffApi();
   final _identifierController = TextEditingController();
   final _passWordController = TextEditingController();
   bool isLoggedIn = false;
@@ -49,12 +49,12 @@ class _LoginCustomerWithIdentifierPageState
     } else {
       try {
         bool isAuthenticated =
-            await api.authenticateAccountCustomer(identifier, password);
+            await api.authenticateAccountStaffs(identifier, password);
 
         if (isAuthenticated) {
-          Customer loggedInCustomer =
-              await api.getCustomerByIdentifier(identifier);
-          AuthManager().setLoggedInCustomer(loggedInCustomer);
+          Staff loggedInStaff =
+              await api.getStaffByIdentifier(identifier);
+          AuthManager().setLoggedInStaff(loggedInStaff);
           Navigator.pushReplacementNamed(context, '/home_page');
           showCustomAlertDialog(context, 'Thông báo', 'Đăng nhập thành công');
         } else {
@@ -78,56 +78,12 @@ class _LoginCustomerWithIdentifierPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Chose language
-            // GestureDetector(
-            //   onTap: _toggleImage,
-            //   child: _isVietnamSelected
-            //       ? Image.asset(
-            //           'assets/langs/vn.png',
-            //           width: 40,
-            //           height: 40,
-            //         )
-            //       : Image.asset(
-            //           'assets/langs/en.png',
-            //           width: 40,
-            //           height: 40,
-            //         ),
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   children: [
-            //     DropdownButton(
-            //       onChanged: (String? value) {
-            //         if (value == 'vi') {
-            //           Get.updateLocale(Locale('vi', 'VN'));
-            //         } else {
-            //           Get.updateLocale(Locale('en', 'US'));
-            //         }
-            //       },
-            //       underline: SizedBox(),
-            //       icon: Icon(
-            //         Icons.language,
-            //         color: primaryColors,
-            //       ),
-            //       items: [
-            //         DropdownMenuItem(
-            //           value: 'vi',
-            //           child: Text('Tiếng Việt'),
-            //         ),
-            //         DropdownMenuItem(
-            //           value: 'en',
-            //           child: Text('English'),
-            //         ),
-            //       ],
-            //     ),
-            //   ],
-            // ),
             SizedBox(
               height: 10.0,
             ),
             //title email
             Text(
-              'Đăng nhập khách hàng',
+              'Đăng nhập nhân viên bán hàng',
               style: GoogleFonts.arsenal(
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),

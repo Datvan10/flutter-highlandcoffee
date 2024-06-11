@@ -1,6 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/result_search_product_product_with_keyword_page.dart';
 import 'package:highlandcoffeeapp/models/products.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
@@ -17,7 +18,7 @@ class _MicFormState extends State<MicForm> {
   bool _isListening = false;
   String _text = '';
   LanguageTranslator _translator = LanguageTranslator();
-  List<Products> searchResults = [];
+  List<Product> searchResults = [];
 
   @override
   void initState() {
@@ -63,71 +64,71 @@ class _MicFormState extends State<MicForm> {
 
   //
   void _performSearch(String query) {
-  FirebaseFirestore.instance
-      .collection('Danh sách sản phẩm')
-      .where('name', isGreaterThanOrEqualTo: query)
-      .where('name', isLessThan: query + 'z')
-      .get()
-      .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
-    List<Products> newSearchResults = querySnapshot.docs
-        .where((doc) => doc['name'] != null && doc['name'] is String)
-        .map((doc) => Products(
-              // Tạo đối tượng Products từ dữ liệu Firestore
-              imagePath: doc['imagePath'],
-              name: doc['name'],
-              oldPrice: doc['oldPrice'],
-              newPrice: doc['newPrice'],
-              id: doc['id'],
-              description: doc['description'],
-              rating: doc['rating'],
-              imageDetailPath: doc['imageDetailPath'],
-              category: doc['category'],
-            ))
-        .toList();
+  // FirebaseFirestore.instance
+  //     .collection('Danh sách sản phẩm')
+  //     .where('name', isGreaterThanOrEqualTo: query)
+  //     .where('name', isLessThan: query + 'z')
+  //     .get()
+  //     .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+  //   List<Product> newSearchResults = querySnapshot.docs
+  //       .where((doc) => doc['name'] != null && doc['name'] is String)
+  //       .map((doc) => Product(
+  //             // Tạo đối tượng Products từ dữ liệu Firestore
+  //             imagePath: doc['imagePath'],
+  //             name: doc['name'],
+  //             oldPrice: doc['oldPrice'],
+  //             newPrice: doc['newPrice'],
+  //             id: doc['id'],
+  //             description: doc['description'],
+  //             rating: doc['rating'],
+  //             imageDetailPath: doc['imageDetailPath'],
+  //             category: doc['category'],
+  //           ))
+  //       .toList();
 
-    // Nếu không có kết quả, thử tìm kiếm theo tên không dấu và so sánh
-    if (newSearchResults.isEmpty) {
-      String normalizedQuery = removeDiacritics(query.toLowerCase());
-      newSearchResults = querySnapshot.docs
-          .where((doc) =>
-              doc['normalized_name'] != null &&
-              doc['normalized_name'] is String &&
-              doc['normalized_name'].contains(normalizedQuery))
-          .map((doc) => Products(
-                // Tạo đối tượng Products từ dữ liệu Firestore
-                imagePath: doc['imagePath'],
-                name: doc['name'],
-                oldPrice: doc['oldPrice'],
-                newPrice: doc['newPrice'],
-                id: doc['id'],
-                description: doc['description'],
-                rating: doc['rating'],
-                imageDetailPath: doc['imageDetailPath'],
-                category: doc['category'],
-              ))
-          .toList();
-    }
+  //   // Nếu không có kết quả, thử tìm kiếm theo tên không dấu và so sánh
+  //   if (newSearchResults.isEmpty) {
+  //     String normalizedQuery = removeDiacritics(query.toLowerCase());
+  //     newSearchResults = querySnapshot.docs
+  //         .where((doc) =>
+  //             doc['normalized_name'] != null &&
+  //             doc['normalized_name'] is String &&
+  //             doc['normalized_name'].contains(normalizedQuery))
+  //         .map((doc) => Products(
+  //               // Tạo đối tượng Products từ dữ liệu Firestore
+  //               imagePath: doc['imagePath'],
+  //               name: doc['name'],
+  //               oldPrice: doc['oldPrice'],
+  //               newPrice: doc['newPrice'],
+  //               id: doc['id'],
+  //               description: doc['description'],
+  //               rating: doc['rating'],
+  //               imageDetailPath: doc['imageDetailPath'],
+  //               category: doc['category'],
+  //             ))
+  //         .toList();
+  //   }
 
-    setState(() {
-      searchResults = newSearchResults;
-      _text = ''; // Clear the text after the search
-    });
+  //   setState(() {
+  //     searchResults = newSearchResults;
+  //     _text = ''; // Clear the text after the search
+  //   });
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ResultSearchProductWithKeyword(
-          searchResults: newSearchResults,
-          voiceQuery: query,
-        ),
-      ),
-    );
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => ResultSearchProductWithKeyword(
+  //         searchResults: newSearchResults,
+  //         voiceQuery: query,
+  //       ),
+  //     ),
+  //   );
 
-    // In ra danh sách sản phẩm
-    print('Search results: $newSearchResults');
-  }).catchError((error) {
-    print('Error searching products: $error');
-  });
+  //   // In ra danh sách sản phẩm
+  //   print('Search results: $newSearchResults');
+  // }).catchError((error) {
+  //   print('Error searching products: $error');
+  // });
 }
 
 
