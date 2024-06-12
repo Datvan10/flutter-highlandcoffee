@@ -17,6 +17,7 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/bill/discount_code_form.dart';
 import 'package:highlandcoffeeapp/utils/bill/information_customer_form.dart';
 import 'package:highlandcoffeeapp/utils/bill/payment_method_form.dart';
+import 'package:highlandcoffeeapp/widgets/show_notification_navigate.dart';
 
 class OrderPage extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -72,41 +73,42 @@ class _OrderPageState extends State<OrderPage> {
 
   // Hàm để lưu thông tin đơn hàng vào cơ sở dữ liệu
   Future<void> addOrder() async {
-  try {
-    // Tạo đối tượng OrderDetail với các giá trị được truyền theo đúng định dạng
-    OrderDetail newOrder = OrderDetail(
-      orderdetailid: '',
-      orderid: '',
-      staffid: '',
-      customerid: loggedCustomer?.customerid ?? '',
-      productid: '',  // Bổ sung giá trị mặc định
-      productname: '',  // Bổ sung giá trị mặc định
-      quantity: 0,  // Bổ sung giá trị mặc định
-      size: '',  // Bổ sung giá trị mặc định
-      image: '',  // Bổ sung giá trị mặc định
-      intomoney: 0,  // Bổ sung giá trị mặc định
-      totalprice: 0,  // Bổ sung giá trị mặc định
-      date: DateTime.now(),  // Bổ sung giá trị mặc định
-      paymentmethod: selectedPaymentMethod,
-      cartid: widget.cartItems.isNotEmpty ? widget.cartItems.first.cartid : '',
-      status: 0,  // Bổ sung giá trị mặc định
-      customername: loggedCustomer?.name ?? '',
-      address: loggedCustomer?.address ?? '',
-      phonenumber: loggedCustomer?.phonenumber ?? '',
-    );
+    try {
+      // Tạo đối tượng OrderDetail với các giá trị được truyền theo đúng định dạng
+      OrderDetail newOrder = OrderDetail(
+        orderdetailid: '',
+        orderid: '',
+        staffid: '',
+        customerid: loggedCustomer?.customerid ?? '',
+        productid: '', // Bổ sung giá trị mặc định
+        productname: '', // Bổ sung giá trị mặc định
+        quantity: 0, // Bổ sung giá trị mặc định
+        size: '', // Bổ sung giá trị mặc định
+        image: '', // Bổ sung giá trị mặc định
+        intomoney: 0, // Bổ sung giá trị mặc định
+        totalprice: 0, // Bổ sung giá trị mặc định
+        date: DateTime.now(), // Bổ sung giá trị mặc định
+        paymentmethod: selectedPaymentMethod,
+        cartid:
+            widget.cartItems.isNotEmpty ? widget.cartItems.first.cartid : '',
+        status: 0, // Bổ sung giá trị mặc định
+        customername: loggedCustomer?.name ?? '',
+        address: loggedCustomer?.address ?? '',
+        phonenumber: loggedCustomer?.phonenumber ?? '',
+      );
 
-    // Gọi phương thức thêm đơn hàng từ API
-    await orderApi.addOrder(newOrder);
+      // Gọi phương thức thêm đơn hàng từ API
+      await orderApi.addOrder(newOrder);
 
-    // Hiển thị thông báo khi đặt hàng thành công
-    _showNotificationNavigate('Thông báo', 'Đơn hàng được đặt thành công.', () {
-      Get.toNamed('/payment_result_page');
-    });
-  } catch (e) {
-    print('Error adding order: $e');
+      // Hiển thị thông báo khi đặt hàng thành công
+      showNotificationNavigate(
+          context, 'Thông báo', 'Đơn hàng được đặt thành công.', () {
+        Get.toNamed('/order_result_page');
+      });
+    } catch (e) {
+      print('Error adding order: $e');
+    }
   }
-}
-
 
   List discountTickets = [
     Tickets(
@@ -350,37 +352,6 @@ class _OrderPageState extends State<OrderPage> {
               )
             ],
           ),
-        );
-      },
-    );
-  }
-
-  //
-  //
-  void _showNotificationNavigate(String title, String content, Function onPressed) {
-    showCupertinoDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            title,
-            style: GoogleFonts.arsenal(color: primaryColors),
-          ),
-          content: Text(content),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.pop(context);
-                if (onPressed != null) {
-                  onPressed();
-                }
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(color: light_blue),
-              ),
-            ),
-          ],
         );
       },
     );

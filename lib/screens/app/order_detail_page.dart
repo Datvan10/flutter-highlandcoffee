@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
@@ -25,6 +26,7 @@ class OrderDetailPage extends StatefulWidget {
 class _OrderDetailPageState extends State<OrderDetailPage> {
   OrderDetailApi orderDetailApi = OrderDetailApi();
   StaffApi staffApi = StaffApi();
+  CustomerApi customerApi = CustomerApi();
   late Future<List<OrderDetail>> futureOrderDetails;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
@@ -41,8 +43,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         ? UserRole.customer
         : AuthManager().loggedInStaff != null
             ? UserRole.staff
-            : UserRole
-                .customer;
+            : UserRole.customer;
   }
 
   // function to confirm order
@@ -53,7 +54,47 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     });
 
     // show dialog
-    showCustomAlertDialog(context ,'Thông báo', 'Xác nhận đơn hàng thành công.');
+    showCustomAlertDialog(
+        context, 'Thông báo', 'Xác nhận đơn hàng thành công.');
+  }
+
+  // function to cancel order
+  void cancelOrder(String orderid) async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(
+              'Thông báo',
+              style: GoogleFonts.roboto(
+                color: primaryColors,
+                fontSize: 19,
+              ),
+            ),
+            content: Text('Bạn có chắc muốn hủy đơn hàng này không?', style: GoogleFonts.roboto(color: black, fontSize : 16,)),
+            actions: [
+              CupertinoDialogAction(
+                isDestructiveAction: true,
+                child: Text('OK', style: GoogleFonts.roboto(color: blue, fontSize : 17, fontWeight: FontWeight.bold)),
+                onPressed: () async {
+                  await customerApi.cancelOrder(orderid);
+                  setState(() {
+                    futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+                  });
+                  showCustomAlertDialog(
+                      context, 'Thông báo', 'Hủy đơn hàng thành công.');
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('Hủy', style: GoogleFonts.roboto(color: blue, fontSize : 17)),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
   }
 
   @override
@@ -362,8 +403,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           text: 'Xác nhận đơn hàng',
                           onTap: orderDetails[0].status == 0
                               ? () {
-                                  confirmOrder(
-                                      orderDetails[0].orderid,
+                                  confirmOrder(orderDetails[0].orderid,
                                       loggedInStaff!.staffid);
                                 }
                               : null,
@@ -374,7 +414,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           text: 'Hủy đơn hàng',
                           onTap: orderDetails[0].status == 0
                               ? () {
-                                  // Xử lý hủy đơn hàng
+                                  cancelOrder(orderDetails[0].orderid);
                                 }
                               : null,
                           buttonColor: primaryColors,

@@ -3,14 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class PaymentResultPage extends StatefulWidget {
-  const PaymentResultPage({super.key});
+class OrderResultPage extends StatefulWidget {
+  const OrderResultPage({super.key});
 
   @override
-  State<PaymentResultPage> createState() => _PaymentResultPageState();
+  State<OrderResultPage> createState() => _OrderResultPageState();
 }
 
-class _PaymentResultPageState extends State<PaymentResultPage> {
+class _OrderResultPageState extends State<OrderResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +38,8 @@ class _PaymentResultPageState extends State<PaymentResultPage> {
               padding: const EdgeInsets.only(right: 18.0),
               child: Text(
                 'Xong',
-                style: GoogleFonts.arsenal(
-                    color: light_blue, fontSize: 20, fontWeight: FontWeight.bold),
+                style: GoogleFonts.roboto(
+                    color: blue, fontSize: 17, fontWeight: FontWeight.bold)
               ),
             ),
           ),

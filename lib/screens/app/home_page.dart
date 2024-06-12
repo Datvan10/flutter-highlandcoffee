@@ -228,7 +228,7 @@ class _SearchBarState extends State<SearchBar> {
           widget.performSearch(query);
         },
         decoration: InputDecoration(
-          hintText: 'Tìm kiếm đồ uống của bạn...',
+          hintText: 'Tìm kiếm sản phẩm',
           hintStyle: GoogleFonts.roboto(color: black, fontSize : 17),
           contentPadding: EdgeInsets.symmetric(),
           alignLabelWithHint: true,

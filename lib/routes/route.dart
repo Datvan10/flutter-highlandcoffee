@@ -10,7 +10,7 @@ import 'package:highlandcoffeeapp/screens/admin/forgot_password_admin_page.dart'
 import 'package:highlandcoffeeapp/screens/client/forgot_password_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/app/freeze_page.dart';
 import 'package:highlandcoffeeapp/screens/app/other_page.dart';
-import 'package:highlandcoffeeapp/screens/app/payment_result_page.dart';
+import 'package:highlandcoffeeapp/screens/app/order_result_page.dart';
 import 'package:highlandcoffeeapp/screens/app/tea_page.dart';
 import 'package:highlandcoffeeapp/widgets/best_sale_product_item.dart';
 import 'package:highlandcoffeeapp/screens/app/favorite_product_page.dart';
@@ -20,7 +20,7 @@ import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/screens/app/home_page.dart';
 import 'package:highlandcoffeeapp/screens/app/introduce_page1.dart';
 import 'package:highlandcoffeeapp/screens/app/introduce_page2.dart';
-import 'package:highlandcoffeeapp/screens/client/my_order_page.dart';
+import 'package:highlandcoffeeapp/screens/client/customer_order_page.dart';
 import 'package:highlandcoffeeapp/screens/client/update_customer_profille_page.dart';
 import 'package:highlandcoffeeapp/screens/app/welcome_page.dart';
 
@@ -50,6 +50,6 @@ List<GetPage> getPages = [
   GetPage(name: '/forgot_password_customer_page', page:() => const ForgotPasswordCustomerPage()),
   GetPage(name: '/profile_user_page', page:() => ProfilePage()),
   GetPage(name: '/update_customer_profile_page', page:() => const UpdateCustomerProfilePage()),
-  GetPage(name: '/my_order_page', page:() => const MyOrderPage()),
-  GetPage(name: '/payment_result_page', page:() => const PaymentResultPage()),
+  GetPage(name: '/my_order_page', page:() => const CustomerOrderPage()),
+  GetPage(name: '/order_result_page', page:() => const OrderResultPage()),
 ];
