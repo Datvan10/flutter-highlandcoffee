@@ -1,7 +1,7 @@
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/auth/login_register_switcher_admin_page.dart';
 import 'package:highlandcoffeeapp/auth/login_register_switcher_customer_page.dart';
-import 'package:highlandcoffeeapp/screens/client/profile_customer_page.dart';
+import 'package:highlandcoffeeapp/screens/app/profile_page.dart';
 import 'package:highlandcoffeeapp/screens/app/bread_page.dart';
 import 'package:highlandcoffeeapp/screens/app/choose_login_type_page%20.dart';
 import 'package:highlandcoffeeapp/screens/app/coffee_page.dart';
@@ -48,7 +48,7 @@ List<GetPage> getPages = [
   GetPage(name: '/admin_page', page:() => const AdminPage()),
   GetPage(name: '/forgot_password_admin_page', page:() => const ForgotPasswordAdminPage()),
   GetPage(name: '/forgot_password_customer_page', page:() => const ForgotPasswordCustomerPage()),
-  GetPage(name: '/profile_user_page', page:() => ProfileCustomerPage()),
+  GetPage(name: '/profile_user_page', page:() => ProfilePage()),
   GetPage(name: '/update_customer_profile_page', page:() => const UpdateCustomerProfilePage()),
   GetPage(name: '/my_order_page', page:() => const MyOrderPage()),
   GetPage(name: '/payment_result_page', page:() => const PaymentResultPage()),
