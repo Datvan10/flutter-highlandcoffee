@@ -7,25 +7,27 @@ import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/screens/client/rate_comment_page.dart';
 import 'package:highlandcoffeeapp/screens/client/update_customer_profille_page.dart';
+import 'package:highlandcoffeeapp/screens/staff/list_order_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
-import 'package:highlandcoffeeapp/widgets/profile_menu_user.dart';
+import 'package:highlandcoffeeapp/widgets/profile_menu.dart';
 import 'package:highlandcoffeeapp/screens/client/my_order_page.dart';
 import 'package:highlandcoffeeapp/screens/client/payment_method_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class ProfileCustomerPage extends StatefulWidget {
-  ProfileCustomerPage({super.key});
+class ProfilePage extends StatefulWidget {
+  ProfilePage({super.key});
 
   @override
-  State<ProfileCustomerPage> createState() => _ProfileCustomerPageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
+class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndexBottomBar = 4;
   // Lấy thông tin người dùng từ AuthManager
-  Customer? loggedInUser = AuthManager().loggedInCustomer;
+  Customer? loggedInCustomer = AuthManager().loggedInCustomer;
+  Staff? loggedInStaff = AuthManager().loggedInStaff;
   //
   void _selectedBottomBar(int index) {
     setState(() {
@@ -201,35 +203,38 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
             ),
             //name
             Text(
-              loggedInUser?.name ?? '',
-              style: TextStyle(fontSize: 20),
+              loggedInCustomer?.name ?? loggedInStaff?.name ?? '',
+              style: GoogleFonts.roboto(color: black, fontSize : 20),
             ),
             SizedBox(
               height: 10.0,
             ),
             //email
-            Text(loggedInUser?.phonenumber ?? ''),
+            Text(loggedInCustomer?.phonenumber ?? loggedInStaff?.phonenumber ?? '', style: GoogleFonts.roboto(color: black, fontSize : 16)),
             SizedBox(
               height: 20.0,
             ),
             //
             SizedBox(
-              width: 160,
+              width: 150,
               child: ElevatedButton(
-                onPressed: () async {
-                    final result = await Get.to(UpdateCustomerProfilePage());
-                    if (result == true) {
-                      setState(() {
-                        loggedInUser = AuthManager().loggedInCustomer;
-                      });
-                    }
-                  },
+                onPressed: loggedInCustomer != null
+                    ? () async {
+                        final result = await Get.to(UpdateCustomerProfilePage());
+                        if (result == true) {
+                          setState(() {
+                            loggedInCustomer = AuthManager().loggedInCustomer;
+                            loggedInStaff = AuthManager().loggedInStaff;
+                          });
+                        }
+                      }
+                    : null,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      'Chỉnh sửa',
-                      style: TextStyle(color: white, fontSize: 18),
+                      'Cập nhật',
+                      style: GoogleFonts.roboto(color: white, fontSize : 16, fontWeight : FontWeight.bold),
                     ),
                     Icon(
                       Icons.edit,
@@ -238,7 +243,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
                     )
                   ],
                 ),
-                style: ElevatedButton.styleFrom(backgroundColor: primaryColors),
+                style: ElevatedButton.styleFrom(backgroundColor: blue),
               ),
             ),
             //
@@ -249,24 +254,37 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
             SizedBox(
               height: 30.0,
             ),
-            ProfileMenuUser(
+            ProfileMenu(
                 title: 'Cài đặt',
                 startIcon: LineAwesomeIcons.cog,
                 onPress: () {},
                 textColor: grey),
-            ProfileMenuUser(
-                title: 'Đơn hàng',
-                startIcon: Icons.local_shipping,
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyOrderPage(),
-                    ),
-                  );
-                },
-                textColor: grey),
-            ProfileMenuUser(
+            loggedInCustomer != null
+                ? ProfileMenu(
+                    title: 'Đơn hàng',
+                    startIcon: Icons.local_shipping,
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyOrderPage(),
+                        ),
+                      );
+                    },
+                    textColor: grey)
+                : ProfileMenu(
+                    title: 'Đơn đặt hàng',
+                    startIcon: Icons.local_shipping,
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ListOrderPage(),
+                        ),
+                      );
+                    },
+                    textColor: grey),
+            ProfileMenu(
                 title: 'Phản hồi',
                 startIcon: Icons.mark_email_unread,
                 onPress: () {
@@ -278,7 +296,7 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
                   );
                 },
                 textColor: grey),
-            ProfileMenuUser(
+            ProfileMenu(
                 title: 'Phương thức thanh toán',
                 startIcon: LineAwesomeIcons.wallet,
                 onPress: () {
@@ -290,17 +308,17 @@ class _ProfileCustomerPageState extends State<ProfileCustomerPage> {
                   );
                 },
                 textColor: grey),
-            // ProfileMenuUser(
+            // ProfileMenu(
             //     title: 'Quản lý tài khoản',
             //     startIcon: LineAwesomeIcons.user_check,
             //     onPress: () {},
             //     textColor: grey),
-            ProfileMenuUser(
+            ProfileMenu(
                 title: 'Về chúng tôi',
                 startIcon: LineAwesomeIcons.info,
                 onPress: () {},
                 textColor: grey),
-            ProfileMenuUser(
+            ProfileMenu(
                 title: 'Đăng xuất',
                 startIcon: Icons.logout,
                 onPress: () {

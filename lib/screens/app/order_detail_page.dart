@@ -6,7 +6,12 @@ import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/preview_bill_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
+
+enum UserRole { customer, staff }
+
+late UserRole currentUserRole;
 
 class OrderDetailPage extends StatefulWidget {
   final String orderid;
@@ -19,13 +24,36 @@ class OrderDetailPage extends StatefulWidget {
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
   OrderDetailApi orderDetailApi = OrderDetailApi();
+  StaffApi staffApi = StaffApi();
   late Future<List<OrderDetail>> futureOrderDetails;
-  Customer? loggedInUser = AuthManager().loggedInCustomer;
+  Customer? loggedInCustomer = AuthManager().loggedInCustomer;
+  Staff? loggedInStaff = AuthManager().loggedInStaff;
 
   @override
   void initState() {
     super.initState();
+    _initializeUserRole();
     futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+  }
+
+  void _initializeUserRole() {
+    currentUserRole = AuthManager().loggedInCustomer != null
+        ? UserRole.customer
+        : AuthManager().loggedInStaff != null
+            ? UserRole.staff
+            : UserRole
+                .customer;
+  }
+
+  // function to confirm order
+  void confirmOrder(String orderid, String staffid) async {
+    await staffApi.confirmOrder(orderid, staffid);
+    setState(() {
+      futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+    });
+
+    // show dialog
+    showCustomAlertDialog(context ,'Thông báo', 'Xác nhận đơn hàng thành công.');
   }
 
   @override
@@ -306,7 +334,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             orderDetails[0].status == 0
                                 ? 'Đang chờ duyệt'
                                 : orderDetails[0].status == 1
-                                    ? 'Đã xác nhận'
+                                    ? 'Đang giao hàng'
                                     : 'Trạng thái không xác định',
                             style: GoogleFonts.arsenal(
                               fontSize: 16,
@@ -320,9 +348,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                          height:
-                              130.0),
+                      SizedBox(height: 130.0),
                     ],
                   ),
                 ),
@@ -330,17 +356,30 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   bottom: 16,
                   left: 16,
                   right: 16,
-                  child: MyButton(
-                    text: 'Hủy đơn hàng',
-                    onTap: orderDetails[0].status == 0
-                        ? () {
-                            // Xu ly huy don hang
-                          }
-                        : null,
-                    buttonColor: primaryColors,
-                    isDisabled:
-                        orderDetails[0].status != 0,
-                  ),
+                  child: currentUserRole ==
+                          UserRole.staff // Kiểm tra nếu là staff đăng nhập
+                      ? MyButton(
+                          text: 'Xác nhận đơn hàng',
+                          onTap: orderDetails[0].status == 0
+                              ? () {
+                                  confirmOrder(
+                                      orderDetails[0].orderid,
+                                      loggedInStaff!.staffid);
+                                }
+                              : null,
+                          buttonColor: green,
+                          isDisabled: orderDetails[0].status != 0,
+                        )
+                      : MyButton(
+                          text: 'Hủy đơn hàng',
+                          onTap: orderDetails[0].status == 0
+                              ? () {
+                                  // Xử lý hủy đơn hàng
+                                }
+                              : null,
+                          buttonColor: primaryColors,
+                          isDisabled: orderDetails[0].status != 0,
+                        ),
                 ),
               ],
             );

@@ -614,136 +614,7 @@ class CustomerApi {
 
 class StaffApi {
   final String staffUrl = "http://localhost:5194/api/staffs";
-  // Read data from API
-  Future<List<Staff>> getStaffs() async {
-    try {
-      final response = await http.get(Uri.parse(staffUrl));
-      if (response.statusCode == 200) {
-        List jsonResponse = json.decode(response.body);
-        return jsonResponse.map((data) => new Staff.fromJson(data)).toList();
-      } else {
-        throw Exception('Failed to load staff');
-      }
-    } catch (e) {
-      throw Exception('Failed to load staff');
-    }
-  }
-
-  // Add data to API
-  Future<void> addStaffs(Staff staff) async {
-    final uri = Uri.parse(staffUrl);
-
-    try {
-      // final customerJson = jsonEncode(customer.toJson());
-      // print('Customer JSON: $customerJson'); // In ra dữ liệu để kiểm tra
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(staff.toJson()),
-      );
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        print('Staff added successfully');
-      } else {
-        throw Exception('Failed to add staff: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to add staff: $e');
-    }
-  }
-
-  // Update data to API
-  Future<Staff> updateStaffs(Staff staff) async {
-    try {
-      final response = await http.put(Uri.parse('$staffUrl/${staff.staffid}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(staff.toJson()));
-      print(response.statusCode);
-      print('Response body: ${response.body}');
-
-      if (response.statusCode == 200) {
-        print('staff updated successfully');
-        if (response.body.isNotEmpty) {
-          return Staff.fromJson(json.decode(response.body));
-        } else {
-          return staff;
-        }
-      } else {
-        throw Exception('Failed to update staff: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to update staff : $e');
-    }
-  }
-
-  // Delete data from API
-  Future<void> deleteStaffs(int id) async {
-    try {
-      final response = await http.delete(Uri.parse('$staffUrl/$id'));
-      if (response.statusCode != 204) {
-        throw Exception('Failed to delete customer');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete customer');
-    }
-  }
-
-  // Remove leading zeros from input
-  String removeLeadingZeros(String input) {
-    if (input.startsWith('0')) {
-      return input.replaceFirst(RegExp('^0+'), '');
-    }
-    return input;
-  }
-
-  Future<bool> updateStaffsPassword(
-      String identifier, String newPassword) async {
-    identifier = removeLeadingZeros(identifier);
-
-    try {
-      final response = await http.get(Uri.parse(staffUrl));
-
-      if (response.statusCode == 200) {
-        List jsonResponse = json.decode(response.body);
-
-        for (var staffData in jsonResponse) {
-          Staff staff = Staff.fromJson(staffData);
-          if (staff.phonenumber.toString() == identifier) {
-            try {
-              final updateResponse = await http.put(
-                Uri.parse('$staffUrl/${staff.staffid}'),
-                headers: <String, String>{
-                  'Content-Type': 'application/json; charset=UTF-8',
-                },
-                body: jsonEncode({'password': newPassword}),
-              );
-              print(updateResponse.statusCode);
-              print(staff.staffid);
-
-              if (updateResponse.statusCode == 200) {
-                return true;
-              } else {
-                return false;
-              }
-            } catch (e) {
-              print("Error updating password: $e");
-              return false;
-            }
-          }
-        }
-        return false;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      print("Error fetching staff data: $e");
-      return false;
-    }
-  }
+  final String orderUrl = "http://localhost:5194/api/orders";
 
   // Authenticate account
   Future<bool> authenticateAccountStaffs(
@@ -772,7 +643,7 @@ class StaffApi {
     }
   }
 
-  // Hàm lấy thông tin khách hàng dựa vào identifier
+  // Function to get staff by identifier
   Future<Staff> getStaffByIdentifier(String identifier) async {
     final uri = Uri.parse(staffUrl);
 
@@ -796,6 +667,32 @@ class StaffApi {
       }
     } catch (e) {
       throw Exception('Error fetching staff data: $e');
+    }
+  }
+
+  // Confirm order
+  Future<void> confirmOrder(String orderid, String staffid) async {
+    final uri = Uri.parse('$orderUrl/confirm');
+
+    try {
+      final response = await http.put(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'orderid': orderid,
+          'staffid': staffid,
+        }),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Order confirmed successfully');
+      } else {
+        throw Exception('Failed to confirm order: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to confirm order: $e');
     }
   }
 }
@@ -1415,7 +1312,7 @@ class OrderApi {
   final String orderUrl = "http://localhost:5194/api/orders";
 
   // fetch order by customer
-  Future<List<Order>> fetchOrder(String customerid) async {
+  Future<List<Order>> fetchCustomerOrder(String customerid) async {
     try {
       final response =
           await http.get(Uri.parse('$orderUrl/customer/$customerid'));
@@ -1455,6 +1352,23 @@ class OrderApi {
       }
     } catch (e) {
       throw Exception('Failed to add order: $e');
+    }
+  }
+
+  // fetch all order from customer
+  Future<List<Order>> fetchAllOrder() async {
+    try {
+      final response = await http.get(Uri.parse(orderUrl));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Order> orders = jsonData.map((data) => Order.fromJson(data)).toList();
+        return orders;
+      } else {
+        throw Exception('Failed to load orders');
+      }
+    } catch (e) {
+      throw Exception('Failed to load orders');
     }
   }
 }

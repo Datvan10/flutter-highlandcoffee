@@ -229,7 +229,7 @@ class _SearchBarState extends State<SearchBar> {
         },
         decoration: InputDecoration(
           hintText: 'Tìm kiếm đồ uống của bạn...',
-          hintStyle: GoogleFonts.arsenal(color: black, fontSize: 17),
+          hintStyle: GoogleFonts.roboto(color: black, fontSize : 17),
           contentPadding: EdgeInsets.symmetric(),
           alignLabelWithHint: true,
           filled: true,

@@ -3,28 +3,26 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
-import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/order_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class MyOrderPage extends StatefulWidget {
-  const MyOrderPage({Key? key}) : super(key: key);
+class ListOrderPage extends StatefulWidget {
+  const ListOrderPage({Key? key}) : super(key: key);
 
   @override
-  _MyOrderPageState createState() => _MyOrderPageState();
+  _ListOrderPageState createState() => _ListOrderPageState();
 }
 
-class _MyOrderPageState extends State<MyOrderPage> {
+class _ListOrderPageState extends State<ListOrderPage> {
   final OrderApi orderApi = OrderApi();
   late Future<List<Order>> futureOrders;
-  Customer? loggedInCustomer = AuthManager().loggedInCustomer;
 
   @override
   void initState() {
     super.initState();
-    futureOrders = orderApi.fetchCustomerOrder(loggedInCustomer!.customerid!);
+    futureOrders = orderApi.fetchAllOrder();
   }
 
   @override
@@ -51,7 +49,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
           ),
         ],
         title: Text(
-          'Đơn hàng của tôi',
+          'Tất cả đơn hàng',
           style: GoogleFonts.arsenal(
               color: primaryColors, fontWeight: FontWeight.bold),
         ),
@@ -62,12 +60,13 @@ class _MyOrderPageState extends State<MyOrderPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Chưa có đơn đặt hàng, mua sắm ngay'));
+            return Center(child: Text('Khônng có đơn hàng nào cần xử lý'));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             return Padding(
-              padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 18.0, bottom: 25),
+              padding: const EdgeInsets.only(
+                  left: 18.0, right: 18.0, top: 18.0, bottom: 25),
               child: Column(
                 children: [
                   Expanded(
@@ -104,11 +103,14 @@ class _MyOrderPageState extends State<MyOrderPage> {
                                 title: Padding(
                                   padding: const EdgeInsets.only(bottom: 15.0),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             'Đơn hàng $orderNumber',
@@ -118,8 +120,15 @@ class _MyOrderPageState extends State<MyOrderPage> {
                                               color: primaryColors,
                                             ),
                                           ),
-                                          Text('Mã đơn hàng : ${order.orderid} ', style: GoogleFonts.arsenal(fontSize : 17),),
-                                          Text('Tổng tiền : ${order.totalprice.toStringAsFixed(3) + ' VND'}',  style: GoogleFonts.arsenal(fontSize : 17)),
+                                          Text(
+                                            'Mã đơn hàng : ${order.orderid} ',
+                                            style: GoogleFonts.arsenal(
+                                                fontSize: 17),
+                                          ),
+                                          Text(
+                                              'Tổng tiền : ${order.totalprice.toStringAsFixed(3) + ' VND'}',
+                                              style: GoogleFonts.arsenal(
+                                                  fontSize: 17)),
                                         ],
                                       ),
                                       Icon(

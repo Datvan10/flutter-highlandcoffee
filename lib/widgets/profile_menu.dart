@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class ProfileMenuUser extends StatelessWidget {
-  const ProfileMenuUser({
+class ProfileMenu extends StatelessWidget {
+  const ProfileMenu({
     super.key,
     required this.title,
     required this.startIcon,
@@ -34,7 +35,7 @@ class ProfileMenuUser extends StatelessWidget {
           color: primaryColors,
         ),
       ),
-      title: Text(title),
+      title: Text(title, style: GoogleFonts.roboto(color: black, fontSize : 16),),
       trailing: endIcon
           ? Container(
               width: 30,

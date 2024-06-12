@@ -181,10 +181,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
               ),
               Text(
                 'Cập nhật thông tin cá nhân',
-                style: TextStyle(
-                  fontSize: 25,
-                  color: brown,
-                ),
+                style: GoogleFonts.roboto(color: brown, fontSize : 25),
               ),
               SizedBox(
                 height: 40,
@@ -205,10 +202,10 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                           },
                           icon: Icon(
                             Icons.clear,
-                            color: primaryColors,
+                            color: grey,
                           )),
                       controller: _editPhoneNumberController,
-                      iconColor: primaryColors),
+                      iconColor: grey),
                   SizedBox(
                     height: 20,
                   ),
@@ -224,10 +221,10 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                           },
                           icon: Icon(
                             Icons.clear,
-                            color: primaryColors,
+                            color: grey,
                           )),
                       controller: _editUserNameController,
-                      iconColor: primaryColors),
+                      iconColor: grey),
                   SizedBox(
                     height: 20,
                   ),
@@ -243,10 +240,10 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                           },
                           icon: Icon(
                             Icons.clear,
-                            color: primaryColors,
+                            color: grey,
                           )),
                       controller: _editAdressController,
-                      iconColor: primaryColors),
+                      iconColor: grey),
                   SizedBox(
                     height: 20,
                   ),
@@ -257,7 +254,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         isObsecure ? Icons.visibility : Icons.visibility_off,
-                        color: primaryColors,
+                        color: grey,
                       ),
                       onPressed: () {
                         setState(() {
@@ -266,7 +263,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                       },
                     ),
                     controller: _editPasswordController,
-                    iconColor: primaryColors,
+                    iconColor: grey,
                     obscureText: !isObsecure,
                   ),
                   SizedBox(
