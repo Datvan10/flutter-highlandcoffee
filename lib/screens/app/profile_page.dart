@@ -11,7 +11,7 @@ import 'package:highlandcoffeeapp/screens/staff/list_order_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
 import 'package:highlandcoffeeapp/widgets/profile_menu.dart';
-import 'package:highlandcoffeeapp/screens/client/my_order_page.dart';
+import 'package:highlandcoffeeapp/screens/client/customer_order_page.dart';
 import 'package:highlandcoffeeapp/screens/client/payment_method_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -267,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MyOrderPage(),
+                          builder: (context) => CustomerOrderPage(),
                         ),
                       );
                     },

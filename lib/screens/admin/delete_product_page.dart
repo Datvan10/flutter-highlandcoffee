@@ -97,17 +97,22 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
         return CupertinoAlertDialog(
           title: Text(
             "Thông báo",
-            style: GoogleFonts.arsenal(
+            style: GoogleFonts.roboto(
               color: primaryColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 19,
             ),
           ),
-          content: const Text("Bạn có chắc muốn xóa sản phẩm này không?"),
+          content: Text("Bạn có chắc muốn xóa sản phẩm này không?",
+              style: GoogleFonts.roboto(
+                color: black,
+                fontSize: 16,
+              )),
           actions: [
             CupertinoDialogAction(
               isDestructiveAction: true,
-              child: Text("Xóa"),
+              child: Text('OK',
+                  style: GoogleFonts.roboto(
+                      color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
               onPressed: () async {
                 try {
                   await adminApi.deleteProduct(productid);
@@ -127,7 +132,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
             CupertinoDialogAction(
               child: Text(
                 "Hủy",
-                style: TextStyle(color: blue),
+                style: GoogleFonts.roboto(color: blue, fontSize: 17),
               ),
               onPressed: () {
                 Navigator.pop(context);

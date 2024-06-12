@@ -77,8 +77,13 @@ class _ResultSearchProductWithKeywordState
           children: [
             Text(
               'Tìm thấy ${widget.searchResults.length} kết quả phù hợp với "${widget.voiceQuery}"',
-              style: TextStyle(fontSize: 18, color: grey),
+              style: GoogleFonts.roboto(
+                color: blue,
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            SizedBox(height: 15),
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

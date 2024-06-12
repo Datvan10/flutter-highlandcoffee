@@ -374,7 +374,7 @@ class AdminApi {
     }
   }
 
-   // Update staff for admin
+  // Update staff for admin
   Future<void> updateStaff(Staff staff) async {
     try {
       final response = await http.put(
@@ -399,6 +399,7 @@ class AdminApi {
 // Customer API
 class CustomerApi {
   final String customerUrl = "http://localhost:5194/api/customers";
+  final String orderUrl = "http://localhost:5194/api/orders";
   final String commentUrl = "http://localhost:5194/api/comments";
   // Read data from API
   Future<List<Customer>> getCustomers() async {
@@ -608,6 +609,28 @@ class CustomerApi {
       }
     } catch (e) {
       throw Exception('Failed to add comment: $e');
+    }
+  }
+
+  // function cancel order
+  Future<void> cancelOrder(String orderId) async {
+    final uri = Uri.parse('$orderUrl/cancel/$orderId');
+
+    try {
+      final response = await http.put(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Order cancelled successfully');
+      } else {
+        throw Exception('Failed to cancel order: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to cancel order: $e');
     }
   }
 }
@@ -1362,7 +1385,8 @@ class OrderApi {
       print(response.statusCode);
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
-        List<Order> orders = jsonData.map((data) => Order.fromJson(data)).toList();
+        List<Order> orders =
+            jsonData.map((data) => Order.fromJson(data)).toList();
         return orders;
       } else {
         throw Exception('Failed to load orders');

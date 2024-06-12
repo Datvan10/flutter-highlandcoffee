@@ -9,14 +9,14 @@ import 'package:highlandcoffeeapp/screens/app/order_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class MyOrderPage extends StatefulWidget {
-  const MyOrderPage({Key? key}) : super(key: key);
+class CustomerOrderPage extends StatefulWidget {
+  const CustomerOrderPage({Key? key}) : super(key: key);
 
   @override
-  _MyOrderPageState createState() => _MyOrderPageState();
+  _CustomerOrderPageState createState() => _CustomerOrderPageState();
 }
 
-class _MyOrderPageState extends State<MyOrderPage> {
+class _CustomerOrderPageState extends State<CustomerOrderPage> {
   final OrderApi orderApi = OrderApi();
   late Future<List<Order>> futureOrders;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;

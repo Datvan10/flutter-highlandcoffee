@@ -32,18 +32,24 @@ class _CartProductFormState extends State<CartProductForm> {
         return CupertinoAlertDialog(
           title: Text(
             "Thông báo",
-            style: GoogleFonts.arsenal(
+            style: GoogleFonts.roboto(
               color: primaryColors,
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 19,
             ),
           ),
           content:
-              Text("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?"),
+              Text("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?",
+                  style: GoogleFonts.roboto(
+                    color: black,
+                    fontSize: 16,
+                  )),
           actions: [
             CupertinoDialogAction(
               isDestructiveAction: true,
-              child: Text("Xóa"),
+              child: Text("OK",
+                  style: GoogleFonts.roboto(
+                      color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
               onPressed: () async {
                 await cartApi.deleteCart(cartdetailid);
                 Navigator.pop(context);
@@ -55,7 +61,7 @@ class _CartProductFormState extends State<CartProductForm> {
             CupertinoDialogAction(
               child: Text(
                 "Hủy",
-                style: TextStyle(color: blue),
+                style: GoogleFonts.roboto(color: blue, fontSize: 17),
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -70,172 +76,171 @@ class _CartProductFormState extends State<CartProductForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
-  children: [
-    Container(
-      height: 650,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: widget.cartItems.length,
-        itemBuilder: (context, index) {
-          var item = widget.cartItems[index];
-          return Slidable(
-            startActionPane: ActionPane(motion: StretchMotion(), children: [
-              SlidableAction(
-                onPressed: ((context) {
-                  Get.toNamed('/home_page');
-                }),
-                borderRadius: BorderRadius.circular(18.0),
-                backgroundColor: Colors.transparent,
-                foregroundColor: blue,
-                label: 'Thêm',
-                icon: Icons.add_shopping_cart,
-              )
-            ]),
-            endActionPane: ActionPane(motion: StretchMotion(), children: [
-              SlidableAction(
-                onPressed: ((context) {
-                  //command delete
-                  deleteProductFromCart(item.cartdetailid);
-                }),
-                borderRadius: BorderRadius.circular(18.0),
-                backgroundColor: Colors.transparent,
-                foregroundColor: red,
-                label: 'Xóa',
-                icon: Icons.remove_shopping_cart,
-              ),
-            ]),
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Image.memory(
-                        base64Decode(item.image),
-                        width: 85,
-                        height: 85,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item.productname,
-                            style: GoogleFonts.arsenal(
-                                fontSize: 18,
-                                color: primaryColors,
-                                fontWeight: FontWeight.bold),
+      children: [
+        Container(
+          height: 650,
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: widget.cartItems.length,
+            itemBuilder: (context, index) {
+              var item = widget.cartItems[index];
+              return Slidable(
+                startActionPane: ActionPane(motion: StretchMotion(), children: [
+                  SlidableAction(
+                    onPressed: ((context) {
+                      Get.toNamed('/home_page');
+                    }),
+                    borderRadius: BorderRadius.circular(18.0),
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: blue,
+                    label: 'Thêm',
+                    icon: Icons.add_shopping_cart,
+                  )
+                ]),
+                endActionPane: ActionPane(motion: StretchMotion(), children: [
+                  SlidableAction(
+                    onPressed: ((context) {
+                      //command delete
+                      deleteProductFromCart(item.cartdetailid);
+                    }),
+                    borderRadius: BorderRadius.circular(18.0),
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: red,
+                    label: 'Xóa',
+                    icon: Icons.remove_shopping_cart,
+                  ),
+                ]),
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Image.memory(
+                            base64Decode(item.image),
+                            width: 85,
+                            height: 85,
                           ),
-                          SizedBox(
-                            height: 5,
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.productname,
+                                style: GoogleFonts.arsenal(
+                                    fontSize: 18,
+                                    color: primaryColors,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                item.totalprice.toStringAsFixed(3) + 'đ',
+                                style: GoogleFonts.roboto(
+                                  color: primaryColors,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                          color: primaryColors,
+                                          shape: BoxShape.circle),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          // Xử lý khi nhấn nút giảm
+                                        },
+                                        child: Icon(
+                                          Icons.remove,
+                                          size: 15,
+                                          color: white,
+                                        ),
+                                      )),
+                                  SizedBox(
+                                    width: 35,
+                                    child: Center(
+                                      child: Text(
+                                        item.quantity.toString(),
+                                        style: GoogleFonts.roboto(
+                                            fontSize: 15, color: black),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                          color: primaryColors,
+                                          shape: BoxShape.circle),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          // Xử lý khi nhấn nút thêm
+                                        },
+                                        child: Icon(
+                                          Icons.add,
+                                          size: 15,
+                                          color: white,
+                                        ),
+                                      ))
+                                ],
+                              )
+                            ],
                           ),
-                          Text(
-                            item.totalprice.toStringAsFixed(3) + 'đ',
-                            style: GoogleFonts.roboto(
-                              color: primaryColors,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
                             children: [
                               Container(
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      color: primaryColors,
-                                      shape: BoxShape.circle),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // Xử lý khi nhấn nút giảm
-                                    },
-                                    child: Icon(
-                                      Icons.remove,
-                                      size: 15,
-                                      color: white,
-                                    ),
-                                  )),
-                              SizedBox(
-                                width: 35,
+                                height: 25,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  border: Border.all(
+                                    color: primaryColors,
+                                    width: 1,
+                                  ),
+                                ),
                                 child: Center(
                                   child: Text(
-                                    item.quantity.toString(),
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 15, color: black),
+                                    item.size,
+                                    style: GoogleFonts.arsenal(
+                                        color: primaryColors,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
-                              Container(
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      color: primaryColors,
-                                      shape: BoxShape.circle),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // Xử lý khi nhấn nút thêm
-                                    },
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 15,
-                                      color: white,
-                                    ),
-                                  ))
                             ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 25,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(18.0),
-                              border: Border.all(
-                                color: primaryColors,
-                                width: 1,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                item.size,
-                                style: GoogleFonts.arsenal(
-                                    color: primaryColors,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
                           ),
-                        ],
-                      ),
-                    )
-                  ],
+                        )
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
-    ),
-  ],
-);
-
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
