@@ -31,10 +31,10 @@ class MyButton extends StatelessWidget {
           child: Center(
             child: Text(
               text,
-              style: GoogleFonts.arsenal(
+              style: GoogleFonts.roboto(
                 color: white,
                 fontWeight: FontWeight.bold,
-                fontSize: 16.0,
+                fontSize: 17.0,
               ),
             ),
           ),
