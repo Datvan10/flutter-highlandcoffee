@@ -600,7 +600,7 @@ class CustomerApi {
         for (var customerData in jsonResponse) {
           Customer customer = Customer.fromJson(customerData);
           if ((customer.name == identifier ||
-                  customer.phonenumber == identifier) &&
+                  customer.phonenumber == identifier) && (customer.status == 0) &&
               customer.password == password) {
             return true;
           }
