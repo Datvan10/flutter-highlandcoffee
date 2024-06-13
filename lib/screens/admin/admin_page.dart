@@ -14,6 +14,7 @@ import 'package:highlandcoffeeapp/screens/admin/feddback_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/order_list_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/most_sold_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/revenue_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/update_account_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_staff_account_page.dart';
@@ -71,6 +72,13 @@ class _AdminPageState extends State<AdminPage> {
       case UpdateStaffAccountPage.routeName:
         setState(() {
           _selectedItem = UpdateStaffAccountPage();
+        });
+
+        break;
+
+      case UpdateAccountCustomerPage.routeName:
+        setState(() {
+          _selectedItem = UpdateAccountCustomerPage();
         });
 
         break;
@@ -212,6 +220,25 @@ class _AdminPageState extends State<AdminPage> {
                     title: 'Sửa tài khoản nhân viên',
                     route: UpdateStaffAccountPage.routeName,
                     icon: Icons.person_search),
+              ],
+            ),
+            // mânge account customer
+            AdminMenuItem(
+              title: 'Quản lý tài khoản khách hàng',
+              icon: Icons.supervisor_account,
+              children: [
+                AdminMenuItem(
+                    title: 'Cập nhật  khoản khách hàng',
+                    route: UpdateAccountCustomerPage.routeName,
+                    icon: Icons.person_add_disabled),
+                // AdminMenuItem(
+                //     title: 'Xóa tài khoản khách hàng',
+                //     route: DeleteStaffAccountPage.routeName,
+                //     icon: Icons.person_remove),
+                // AdminMenuItem(
+                //     title: 'Sửa tài khoản khách hàng',
+                //     route: UpdateStaffAccountPage.routeName,
+                //     icon: Icons.person_search),
               ],
             ),
             // manage category

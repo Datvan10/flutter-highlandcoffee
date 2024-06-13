@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/widgets/search_bar.dart' as custom_widgets;
+import 'package:highlandcoffeeapp/widgets/custom_search_bar.dart' as custom_widgets;
 import 'package:highlandcoffeeapp/widgets/product_form.dart';
 import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
 

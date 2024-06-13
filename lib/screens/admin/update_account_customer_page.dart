@@ -7,85 +7,61 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class DeleteStaffAccountPage extends StatefulWidget {
-  static const String routeName = '/delete_staff_account_page';
-  const DeleteStaffAccountPage({super.key});
+class UpdateAccountCustomerPage extends StatefulWidget {
+  static const String routeName = '/update_account_customer_page';
+  const UpdateAccountCustomerPage({super.key});
 
   @override
-  State<DeleteStaffAccountPage> createState() => _DeleteStaffAccountPageState();
+  State<UpdateAccountCustomerPage> createState() =>
+      _UpdateAccountCustomerPageState();
 }
 
-class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
+class _UpdateAccountCustomerPageState extends State<UpdateAccountCustomerPage> {
   final AdminApi adminApi = AdminApi();
-  List<Staff> staffs = [];
-  final _textSearchStaffController = TextEditingController();
+  List<Customer> customers = [];
+  final _textSearchCustomerController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _fetchStaffs();
+    _fetchCustomers();
   }
 
-  Future<void> _fetchStaffs() async {
+  Future<void> _fetchCustomers() async {
     try {
-      List<Staff> fetchedStaffs = await adminApi.getAllStaffs();
+      List<Customer> fetchedCustomers = await adminApi.getAllCustomers();
       setState(() {
-        staffs = fetchedStaffs;
+        customers = fetchedCustomers;
       });
     } catch (e) {
-      print('Error fetching staffs: $e');
+      print('Error fetching customers: $e');
     }
   }
 
-  Future<void> deleteStaff(String categoryId) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            "Thông báo",
-            style: GoogleFonts.roboto(
-              color: primaryColors,
-              fontSize: 19,
-            ),
-          ),
-          content: Text("Bạn có chắc muốn xóa nhân viên này không?",
-              style: GoogleFonts.roboto(
-                color: black,
-                fontSize: 16,
-              )),
-          actions: [
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              child: Text('OK',
-                  style: GoogleFonts.roboto(
-                      color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
-              onPressed: () async {
-                try {
-                  await adminApi.deleteStaff(categoryId);
-                  Navigator.pop(context);
-                  showCustomAlertDialog(
-                      context, 'Thông báo', 'Xóa nhân viên thành công.');
-                  _fetchStaffs();
-                } catch (e) {
-                  print('Error deleting staff: $e');
-                  Navigator.pop(context);
-                  showCustomAlertDialog(
-                      context, 'Lỗi', 'Đã xảy ra lỗi khi xóa nhân viên.');
-                }
-              },
-            ),
-            CupertinoDialogAction(
-              child: Text('Hủy',
-                  style: GoogleFonts.roboto(color: blue, fontSize: 17)),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+  // function active account
+  Future<void> activeAccountCustomer(String customerid) async {
+    try {
+      await adminApi.activateAccountCustomer(customerid);
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Kích hoạt tài khoản khách hàng thành công');
+          _fetchCustomers();
+    } catch (e) {
+      showCustomAlertDialog(context, 'Lỗi',
+          'Cập nhật tài khoản khách hàng thật bại. Vui lòng thử lại.');
+    }
+  }
+
+  // function block account
+  Future<void> blockAccountCustomer(String customerid) async {
+    try {
+      await adminApi.blockAccountCustomer(customerid);
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Chặn tài khoản khách hàng thành công');
+          _fetchCustomers();
+    } catch (e) {
+      showCustomAlertDialog(context, 'Lỗi',
+          'Cập nhật tài khoản khách hàng thất bại. Vui lòng thử lại.');
+    }
   }
 
   @override
@@ -102,7 +78,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Xóa thông tin tài khoản nhân viên',
+                    'Cập nhật tài khoản khách hàng',
                     style: GoogleFonts.arsenal(
                       fontSize: 30,
                       color: brown,
@@ -112,9 +88,9 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                 ),
                 SizedBox(height: 15),
                 TextField(
-                  controller: _textSearchStaffController,
+                  controller: _textSearchCustomerController,
                   decoration: InputDecoration(
-                    hintText: 'Tìm kiếm nhân viên',
+                    hintText: 'Tìm kiếm khách hàng',
                     contentPadding: EdgeInsets.symmetric(),
                     alignLabelWithHint: true,
                     filled: true,
@@ -137,7 +113,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                               size: 10,
                             ),
                             onPressed: () {
-                              _textSearchStaffController.clear();
+                              _textSearchCustomerController.clear();
                             },
                           ),
                         ),
@@ -157,7 +133,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Danh sách tài khoản nhân viên',
+                    'Danh sách tài khoản khách hàng',
                     style: GoogleFonts.arsenal(
                       fontSize: 20,
                       color: brown,
@@ -177,9 +153,9 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: staffs.length,
+              itemCount: customers.length,
               itemBuilder: (context, index) {
-                final staff = staffs[index];
+                final customer = customers[index];
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                   padding: EdgeInsets.all(15),
@@ -193,7 +169,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                       Expanded(
                           flex: 1,
                           child: Icon(
-                            Icons.person,
+                            Icons.manage_accounts,
                             color: grey,
                             size: 30,
                           )),
@@ -203,7 +179,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              staff.name,
+                              customer.name,
                               style: GoogleFonts.arsenal(
                                 fontSize: 18,
                                 color: black,
@@ -211,10 +187,19 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                               ),
                             ),
                             Text(
-                              staff.salary.toString() + ' VND',
+                              customer.address,
                               style: GoogleFonts.arsenal(
                                 fontSize: 16,
                                 color: brown,
+                              ),
+                            ),
+                            Text(
+                              customer.status == 0
+                                  ? 'Đang hoạt động'
+                                  : 'Đã bị chặn',
+                              style: GoogleFonts.roboto(
+                                fontSize: 16,
+                                color: customer.status == 0 ? green : red,
                               ),
                             ),
                           ],
@@ -224,11 +209,25 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                         flex: 1,
                         child: IconButton(
                           icon: Icon(
-                            Icons.delete,
+                            Icons.block,
                             color: red,
                           ),
                           onPressed: () {
-                            deleteStaff(staff.staffid);
+                            blockAccountCustomer(
+                                customer.customerid.toString());
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.task_alt,
+                            color: green,
+                          ),
+                          onPressed: () {
+                            activeAccountCustomer(
+                                customer.customerid.toString());
                           },
                         ),
                       )

@@ -14,7 +14,7 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/mic/mic_form.dart';
 import 'package:highlandcoffeeapp/widgets/slide_image.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:highlandcoffeeapp/widgets/search_bar.dart';
+import 'package:highlandcoffeeapp/widgets/custom_search_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

@@ -10,6 +10,7 @@ class AdminApi {
   final String staffUrl = "http://localhost:5194/api/staffs";
   final String productUrl = "http://localhost:5194/api/products";
   final String categoryUrl = "http://localhost:5194/api/categories";
+  final String customerUrl = "http://localhost:5194/api/customers";
 
   // List of API URLs for each category
   static const String baseUrl = 'http://localhost:5194/api/products/category';
@@ -345,7 +346,7 @@ class AdminApi {
   }
 
   // Get staff for admin
-  Future<List<Staff>> getStaffs() async {
+  Future<List<Staff>> getAllStaffs() async {
     try {
       final response = await http.get(Uri.parse(staffUrl));
       if (response.statusCode == 200) {
@@ -392,6 +393,58 @@ class AdminApi {
       }
     } catch (e) {
       throw Exception('Failed to update Staff: $e');
+    }
+  }
+
+  // Get all customer
+  Future<List<Customer>> getAllCustomers() async {
+    final customerUrl = "http://localhost:5194/api/customers";
+    try {
+      final response = await http.get(Uri.parse(customerUrl));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => new Customer.fromJson(data)).toList();
+      } else {
+        throw Exception('Failed to load customers');
+      }
+    } catch (e) {
+      throw Exception('Failed to load customers');
+    }
+  }
+
+  // function active account customer
+  Future<void> activateAccountCustomer(String customerid) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$customerUrl/activate/$customerid'),
+      );
+
+      if (response.statusCode == 200) {
+        print('Account activated successfully');
+      } else {
+        print('Failed to activate account: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error activating account: $e');
+      // Xử lý lỗi nếu cần thiết
+    }
+  }
+
+  // function block account customer
+  Future<void> blockAccountCustomer(String customerid) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$customerUrl/block/$customerid'),
+      );
+
+      if (response.statusCode == 200) {
+        print('Account blocked successfully');
+      } else {
+        print('Failed to block account: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error blocking account: $e');
+      // Xử lý lỗi nếu cần thiết
     }
   }
 }

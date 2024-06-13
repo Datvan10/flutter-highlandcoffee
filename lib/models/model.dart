@@ -78,6 +78,7 @@ class Customer {
   final String address;
   int? point;
   final String password;
+  int? status;
 
   Customer({
     this.customerid,
@@ -86,6 +87,7 @@ class Customer {
     required this.address,
     required this.point,
     required this.password,
+    required this.status,
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
@@ -95,6 +97,7 @@ class Customer {
         address: json['address'],
         point: json['point'],
         password: json['password'],
+        status: json['status'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -104,6 +107,7 @@ class Customer {
         'address': address,
         'point': point,
         'password': password,
+        'status': status,
       };
 }
 

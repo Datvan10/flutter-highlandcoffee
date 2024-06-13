@@ -280,7 +280,9 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                         address: _editAdressController.text,
                         point: loggedInUser!.point,
                         phonenumber: _editPhoneNumberController.text,
-                        password: _editPasswordController.text);
+                        password: _editPasswordController.text,
+                        status: 0,
+                        );
                         if(_editUserNameController.text.isEmpty || _editAdressController.text.isEmpty || _editPhoneNumberController.text.isEmpty || _editPasswordController.text.isEmpty){
                           showCustomAlertDialog(context, 'Lỗi', 'Vui lòng nhập đầy đủ thông tin.');
                           return;
