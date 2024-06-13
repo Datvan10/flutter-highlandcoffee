@@ -1,9 +1,12 @@
+// result_search_product_with_keyword_page.dart
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/search_bar.dart' as custom_widgets;
+import 'package:highlandcoffeeapp/widgets/product_form.dart';
+import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
 
 class ResultSearchProductWithKeyword extends StatefulWidget {
   final List<Product> searchResults;
@@ -23,6 +26,15 @@ class _ResultSearchProductWithKeywordState
     extends State<ResultSearchProductWithKeyword> {
   final TextEditingController _textSearchController = TextEditingController();
 
+  void _navigateToProductDetails(int index, List<Product> products) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductDetailPage(product: products[index]),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,41 +44,16 @@ class _ResultSearchProductWithKeywordState
         backgroundColor: Colors.transparent,
         title: Container(
           height: 40,
-          child: TextField(
-            controller: _textSearchController,
-            decoration: InputDecoration(
-              hintText: 'Tìm kiếm đồ uống của bạn...',
-              contentPadding: EdgeInsets.symmetric(),
-              alignLabelWithHint: true,
-              filled: true,
-              fillColor: white,
-              prefixIcon: const Icon(
-                Icons.search,
-                size: 20,
-              ),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    _textSearchController.clear();
-                  },
-                  child: Icon(
-                    Icons.clear,
-                    size: 20,
-                  ),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Colors.white),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Colors.white),
-              ),
-            ),
-            onChanged: (String query) {
+          child: custom_widgets.CustomSearchBar(
+            textSearchController: _textSearchController,
+            performSearch: (query) {
               // Implement search logic here
+            },
+            startListening: () {
+              // Implement voice search logic here
+            },
+            onBackButtonPressed: () {
+              Navigator.pop(context);
             },
           ),
         ),
@@ -95,75 +82,9 @@ class _ResultSearchProductWithKeywordState
                 itemCount: widget.searchResults.length,
                 itemBuilder: (context, index) {
                   final product = widget.searchResults[index];
-                  return GestureDetector(
-                    onTap: () {
-                      // Navigate to product details page
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(15.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.memory(
-                            base64Decode(product.image),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                product.productname,
-                                style: GoogleFonts.arsenal(
-                                  color: black,
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${product.price.toStringAsFixed(3)}đ',
-                                    style: GoogleFonts.roboto(
-                                      color: grey,
-                                      fontSize: 15,
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
-                                  ),
-                                  SizedBox(height: 3),
-                                  Text(
-                                    '${product.price.toStringAsFixed(3)}đ',
-                                    style: GoogleFonts.roboto(
-                                      color: primaryColors,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: primaryColors,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.add,
-                                  color: white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                  return ProductForm(
+                    product: product,
+                    onTap: () => _navigateToProductDetails(index, widget.searchResults),
                   );
                 },
               ),

@@ -115,16 +115,19 @@ class _ProfilePageState extends State<ProfilePage> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text("Hủy", style: GoogleFonts.arsenal(color: red, fontSize : 16, fontWeight: FontWeight.bold)),
-        ),
-        TextButton(
-          onPressed: () {
             AuthManager().logoutCustomer();
             Navigator.pushReplacementNamed(context, '/choose_login_type_page');
           },
-          child: Text("Đồng ý", style: GoogleFonts.arsenal(color: blue, fontSize : 16, fontWeight: FontWeight.bold)),
+          child: Text("OK",
+              style: GoogleFonts.roboto(
+                  color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child:
+              Text("Hủy", style: GoogleFonts.roboto(color: blue, fontSize: 17)),
         ),
       ],
     );
@@ -204,13 +207,17 @@ class _ProfilePageState extends State<ProfilePage> {
             //name
             Text(
               loggedInCustomer?.name ?? loggedInStaff?.name ?? '',
-              style: GoogleFonts.roboto(color: black, fontSize : 20),
+              style: GoogleFonts.roboto(color: black, fontSize: 20),
             ),
             SizedBox(
               height: 10.0,
             ),
             //email
-            Text(loggedInCustomer?.phonenumber ?? loggedInStaff?.phonenumber ?? '', style: GoogleFonts.roboto(color: black, fontSize : 16)),
+            Text(
+                loggedInCustomer?.phonenumber ??
+                    loggedInStaff?.phonenumber ??
+                    '',
+                style: GoogleFonts.roboto(color: black, fontSize: 16)),
             SizedBox(
               height: 20.0,
             ),
@@ -220,7 +227,8 @@ class _ProfilePageState extends State<ProfilePage> {
               child: ElevatedButton(
                 onPressed: loggedInCustomer != null
                     ? () async {
-                        final result = await Get.to(UpdateCustomerProfilePage());
+                        final result =
+                            await Get.to(UpdateCustomerProfilePage());
                         if (result == true) {
                           setState(() {
                             loggedInCustomer = AuthManager().loggedInCustomer;
@@ -234,7 +242,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Text(
                       'Cập nhật',
-                      style: GoogleFonts.roboto(color: white, fontSize : 16, fontWeight : FontWeight.bold),
+                      style: GoogleFonts.roboto(
+                          color: white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
                     Icon(
                       Icons.edit,
