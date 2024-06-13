@@ -32,7 +32,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
 
   Future<void> _fetchStaffs() async {
     try {
-      List<Staff> fetchedStaffs = await adminApi.getStaffs();
+      List<Staff> fetchedStaffs = await adminApi.getAllStaffs();
       setState(() {
         staffs = fetchedStaffs;
       });

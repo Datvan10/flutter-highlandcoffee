@@ -77,6 +77,7 @@ class _RegisterCustomerWithIdentifierPageState
         phonenumber: phonenumber,
         address: address,
         point: 0,
+        status: 0,
       );
       // Call API to register user
       await customerApi.addCustomer(newCustomer);
