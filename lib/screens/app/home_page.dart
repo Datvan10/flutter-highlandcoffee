@@ -1,3 +1,4 @@
+// home_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -13,6 +14,7 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/mic/mic_form.dart';
 import 'package:highlandcoffeeapp/widgets/slide_image.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:highlandcoffeeapp/widgets/search_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -123,7 +125,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: primaryColors,
         title: Padding(
           padding: const EdgeInsets.only(bottom: 15.0),
-          child: SearchBar(
+          child: CustomSearchBar(
             textSearchController: _textSearchController,
             performSearch: performSearch,
             startListening: _startListening,
@@ -180,106 +182,6 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndexBottomBar,
         onTap: _selectedBottomBar,
-      ),
-    );
-  }
-}
-
-class SearchBar extends StatefulWidget {
-  final TextEditingController textSearchController;
-  final Function(String) performSearch;
-  final VoidCallback startListening;
-
-  const SearchBar({
-    Key? key,
-    required this.textSearchController,
-    required this.performSearch,
-    required this.startListening,
-  }) : super(key: key);
-
-  @override
-  _SearchBarState createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<SearchBar> {
-  @override
-  void initState() {
-    super.initState();
-    widget.textSearchController.addListener(_updateSuffixIcon);
-  }
-
-  @override
-  void dispose() {
-    widget.textSearchController.removeListener(_updateSuffixIcon);
-    super.dispose();
-  }
-
-  void _updateSuffixIcon() {
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40,
-      child: TextField(
-        controller: widget.textSearchController,
-        onSubmitted: (String query) {
-          widget.performSearch(query);
-        },
-        decoration: InputDecoration(
-          hintText: 'Tìm kiếm sản phẩm',
-          hintStyle: GoogleFonts.roboto(color: black, fontSize : 17),
-          contentPadding: EdgeInsets.symmetric(),
-          alignLabelWithHint: true,
-          filled: true,
-          fillColor: Colors.white,
-          prefixIcon: const Icon(
-            Icons.search,
-            size: 20,
-          ),
-          suffixIcon: widget.textSearchController.text.isNotEmpty
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: white_grey,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                        child: GestureDetector(
-                      onTap: () {
-                        widget.textSearchController.clear();
-                        setState(() {});
-                      },
-                      child: Icon(
-                        Icons.close,
-                        size: 10,
-                      ),
-                    )),
-                  ),
-                )
-              : GestureDetector(
-                  onTap: () {
-                    widget.startListening();
-                    setState(() {});
-                  },
-                  child: Icon(
-                    Icons.mic,
-                    size: 20,
-                  ),
-                ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(color: Colors.white),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(color: Colors.white),
-          ),
-        ),
       ),
     );
   }

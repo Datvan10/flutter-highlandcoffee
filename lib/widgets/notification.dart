@@ -13,7 +13,7 @@ void notificationDialog({
     context: context,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
-        title: Text(title, style: GoogleFonts.arsenal(color: black, fontSize : 16, fontWeight: FontWeight.bold)),
+        title: Text(title, style: GoogleFonts.roboto(color: black, fontSize : 16,)),
         actions: actions,
       );
     },

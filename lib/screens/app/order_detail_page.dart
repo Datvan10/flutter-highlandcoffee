@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
+import 'package:highlandcoffeeapp/screens/app/home_page.dart';
 import 'package:highlandcoffeeapp/screens/app/preview_bill_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
@@ -71,23 +72,38 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 fontSize: 19,
               ),
             ),
-            content: Text('Bạn có chắc muốn hủy đơn hàng này không?', style: GoogleFonts.roboto(color: black, fontSize : 16,)),
+            content: Text('Bạn có chắc muốn hủy đơn hàng này không?',
+                style: GoogleFonts.roboto(
+                  color: black,
+                  fontSize: 16,
+                )),
             actions: [
               CupertinoDialogAction(
                 isDestructiveAction: true,
-                child: Text('OK', style: GoogleFonts.roboto(color: blue, fontSize : 17, fontWeight: FontWeight.bold)),
+                child: Text('OK',
+                    style: GoogleFonts.roboto(
+                        color: blue,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  await customerApi.cancelOrder(orderid);
-                  setState(() {
-                    futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
-                  });
-                  showCustomAlertDialog(
-                      context, 'Thông báo', 'Hủy đơn hàng thành công.');
-                  Navigator.pop(context);
+                  try {
+                    await customerApi.cancelOrder(orderid);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ),
+                    );
+                    showCustomAlertDialog(
+                        context, 'Thông báo', 'Hủy đơn hàng thành công.');
+                  } catch (e) {
+                    print(e);
+                  }
                 },
               ),
               CupertinoDialogAction(
-                child: Text('Hủy', style: GoogleFonts.roboto(color: blue, fontSize : 17)),
+                child: Text('Hủy',
+                    style: GoogleFonts.roboto(color: blue, fontSize: 17)),
                 onPressed: () {
                   Navigator.pop(context);
                 },

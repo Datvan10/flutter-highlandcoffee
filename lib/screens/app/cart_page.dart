@@ -111,7 +111,10 @@ class _CartPageState extends State<CartPage> {
             Center(
               child: Text(
                 'Miễn phí vận chuyển với đơn hàng trên 300.000đ',
-                style: TextStyle(color: black),
+                style: GoogleFonts.roboto(
+                  color: grey,
+                  fontSize: 17,
+                ),
               ),
             ),
             const SizedBox(
@@ -129,8 +132,10 @@ class _CartPageState extends State<CartPage> {
                         children: [
                           Text(
                             'Giỏ hàng trống, mua sắm ngay',
-                            style:
-                                GoogleFonts.arsenal(color: black, fontSize: 18),
+                            style: GoogleFonts.roboto(
+                              color: black,
+                              fontSize: 19,
+                            ),
                           ),
                           SizedBox(
                             width: 15,
@@ -146,24 +151,9 @@ class _CartPageState extends State<CartPage> {
                   )
                 : Column(
                     children: [
-                      // Truyền danh sách sản phẩm vào OrderForm
                       CartProductForm(
                           cartItems: cartItems,
                           onDelete: () => fetchCartItems()),
-                      // button order now
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
-                      // MyButton(
-                      //   text: 'Xác nhận',
-                      //   onTap: () {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(builder: (context) => BillPage()),
-                      //     );
-                      //   },
-                      //   buttonColor: primaryColors,
-                      // ),
                     ],
                   ),
           ],
@@ -177,7 +167,7 @@ class _CartPageState extends State<CartPage> {
   }
 }
 
-// Trong class CartItem, thêm trường productId
+//
 class CartItem {
   final String cartdetailid;
   final String cartid;

@@ -35,7 +35,7 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
       );
       if (newStaff.name == '' ||
           newStaff.phonenumber == '' ||
-          newStaff.password == '') {
+          newStaff.password == '' || newStaff.salary == 0) {
         // Show error message
         showCustomAlertDialog(
             context, 'Thông báo', 'Vui lòng nhập đầy đủ thông tin.');
