@@ -464,3 +464,72 @@ class Product {
         'imagedetail': imagedetail,
       };
 }
+
+// Modle Bill
+class Bill {
+  String billid;
+  String orderid;
+  String staffid;
+  String staffname;
+  String customerid;
+  String customername;
+  DateTime date;
+  String paymentmethod;
+  int totalprice;
+  int status;
+  String address;
+  int discountcode;
+  String phonenumber;
+  
+
+  Bill({
+    required this.billid,
+    required this.orderid,
+    required this.staffid,
+    required this.customerid,
+    required this.date,
+    required this.paymentmethod,
+    required this.totalprice,
+    required this.status,
+    required this.address,
+    required this.discountcode,
+    required this.staffname,
+    required this.phonenumber,
+    required this.customername,
+  });
+
+  factory Bill.fromJson(Map<String, dynamic> json) {
+    return Bill(
+      billid: json['billid'],
+      orderid: json['orderid'],
+      staffid: json['staffid'],
+      customerid: json['customerid'],
+      date: DateTime.parse(json['date']),
+      paymentmethod: json['paymentmethod'],
+      totalprice: json['totalprice'],
+      status: json['status'],
+      address: json['address'],
+      discountcode: json['discountcode'],
+      staffname: json['staffname'],
+      phonenumber: json['phonenumber'],
+      customername: json['customername'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'billid': billid,
+      'orderid': orderid,
+      'staffid': staffid,
+      'customerid': customerid,
+      'date': date.toIso8601String(),
+      'paymentmethod': paymentmethod,
+      'totalprice': totalprice,
+      'status': status,
+      'address': address,
+      'staffname': staffname,
+      'phonenumber': phonenumber,
+      'customername': customername,
+    };
+  }
+}

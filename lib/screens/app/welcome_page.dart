@@ -16,7 +16,7 @@ class _WelcomePageState extends State<WelcomePage> {
     // TODO: implement initState
     var d = Duration(seconds: 5);
     Future.delayed(d, () {
-      Get.offAll(() => IntroducePage1());
+      Get.offAll(() => const IntroducePage1());
     });
     super.initState();
   }
@@ -27,14 +27,6 @@ class _WelcomePageState extends State<WelcomePage> {
       backgroundColor: primaryColors,
       body: Center(
           child: Image.asset('assets/images/welcome-logo/highlands-coffee.jpg')),
-      // body: Column(
-      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //   children: [
-      //     SizedBox(height: 50,),
-      //     Image.asset('assets/images/welcome/highlands-coffee.jpg'),
-      //     ButtonGetStarted(text: 'Get Started', onTap: (){})
-      //   ],
-      // )
     );
   }
 }

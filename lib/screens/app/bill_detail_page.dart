@@ -3,25 +3,24 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/screens/app/bill_detail_page.dart';
 import 'package:highlandcoffeeapp/screens/app/home_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class PreviewBillPage extends StatefulWidget {
+class BillDetailPage extends StatefulWidget {
   final String orderid;
 
-  const PreviewBillPage({Key? key, required this.orderid}) : super(key: key);
+  const BillDetailPage({Key? key, required this.orderid}) : super(key: key);
 
   @override
-  State<PreviewBillPage> createState() => _PreviewBillPageState();
+  State<BillDetailPage> createState() => _BillDetailPageState();
 }
 
-class _PreviewBillPageState extends State<PreviewBillPage> {
+class _BillDetailPageState extends State<BillDetailPage> {
   OrderDetailApi orderDetailApi = OrderDetailApi();
   StaffApi staffApi = StaffApi();
   late Future<List<OrderDetail>> futureOrderDetails;
+  late Future<List<Bill>> futureBillDetails;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
 
@@ -29,43 +28,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
   void initState() {
     super.initState();
     futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
-  }
-
-  // function add bill
-  Future<void> addBill() async {
-    try {
-      List<OrderDetail> orderDetails = await futureOrderDetails;
-      int totalprice =
-          orderDetails.fold(0, (sum, item) => sum + item.intomoney);
-
-      String paymentmethod = orderDetails.first.paymentmethod;
-      String address = orderDetails.first.address;
-      String staffname = loggedInStaff!.name;
-      String phonenumber = orderDetails.first.phonenumber;
-      String customername = loggedInCustomer?.name ?? '';
-
-      Bill newBill = Bill(
-        billid: '',
-        orderid: widget.orderid,
-        staffid: loggedInStaff!.staffid,
-        customerid: loggedInCustomer?.customerid ?? '',
-        totalprice: totalprice,
-        paymentmethod: paymentmethod,
-        date: DateTime.now(),
-        status: 0,
-        address: address,
-        discountcode: 0,
-        staffname: staffname,
-        phonenumber: phonenumber,
-        customername: customername,
-      );
-      print(newBill.totalprice);
-      await staffApi.addBill(newBill);
-      showCustomAlertDialog(context, 'Thông báo', 'Tạo hóa đơn thành công!');
-    } catch (e) {
-      showCustomAlertDialog(context, 'Lỗi', 'Tạo hóa đơn thất bại!');
-      print('Error adding bill: $e');
-    }
+    futureBillDetails = staffApi.getBillByOrderId(widget.orderid);
   }
 
   @override
@@ -80,51 +43,58 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
           },
           icon: Icon(Icons.arrow_back_ios, color: primaryColors),
         ),
-        actions: loggedInStaff != null
-            ? [
-                Container(
-                  margin: EdgeInsets.only(right: 8),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              BillDetailPage(orderid: widget.orderid),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.print, color: primaryColors),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            child: IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
                   ),
-                )
-              ]
-            : [],
-        title: Text('Preview hóa đơn',
+                );
+              },
+              icon: Icon(Icons.home, color: primaryColors),
+            ),
+          )
+        ],
+        title: Text('Hóa đơn',
             style: GoogleFonts.arsenal(
               color: primaryColors,
               fontWeight: FontWeight.bold,
             )),
       ),
-      body: FutureBuilder<List<OrderDetail>>(
-        future: futureOrderDetails,
-        builder: (context, snapshot) {
+      body: FutureBuilder(
+        future: Future.wait([futureOrderDetails, futureBillDetails]),
+        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Không tìm thấy chi tiết đơn hàng'));
+          } else if (!snapshot.hasData) {
+            return Center(child: Text('Không có dữ liệu'));
           } else {
-            List<OrderDetail> orderDetails = snapshot.data!;
+            List<OrderDetail> orderDetails = snapshot.data![0];
+            List<Bill> billDetails = snapshot.data![1];
+
+            if (orderDetails.isEmpty || billDetails.isEmpty) {
+              return Center(child: Text('Không tìm thấy chi tiết hóa đơn'));
+            }
+
+            OrderDetail orderDetail = orderDetails[0];
+            Bill bill = billDetails[0];
+
             return SingleChildScrollView(
               padding: EdgeInsets.all(18.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Phần logo và thông tin cửa hàng
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      //logo highland đang bị thiếu.
+                      // Logo của cửa hàng
                       Column(
                         children: [
                           Image.asset(
@@ -134,6 +104,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                           ),
                         ],
                       ),
+                      // Thông tin của hàng
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -157,6 +128,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                     ],
                   ),
                   Divider(),
+                  // Phần thông tin hóa đơn
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -170,12 +142,17 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             ),
                           ),
                           Text(
-                              'Số đơn hàng: ${widget.orderid} - [Đơn hàng online]',
+                            'Nhân viên tạo hóa đơn: ${bill.staffname}',
+                            style: GoogleFonts.roboto(
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text('Hóa đơn số: ${bill.billid} - [Đơn hàng online]',
                               style: GoogleFonts.roboto(
                                 fontSize: 16,
                               )),
                           Text(
-                            'Ngày: ${orderDetails[0].date}',
+                            'Ngày: ${orderDetail.date}',
                             style: GoogleFonts.roboto(
                               fontSize: 16,
                             ),
@@ -186,6 +163,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                   ),
                   SizedBox(height: 10.0),
                   Divider(),
+                  // Danh sách chi tiết đơn hàng
                   Row(
                     children: [
                       Expanded(
@@ -223,6 +201,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                     ],
                   ),
                   Divider(),
+                  // Danh sách chi tiết sản phẩm
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -269,6 +248,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                     },
                   ),
                   Divider(),
+                  // Phần tổng cộng, chiết khấu và các thông tin khác
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -286,7 +266,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          '${orderDetails[0].totalprice.toStringAsFixed(3)}',
+                          '${bill.totalprice.toStringAsFixed(3)}',
                           style: GoogleFonts.arsenal(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -297,6 +277,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                     ],
                   ),
                   SizedBox(height: 10.0),
+                  // Chiết khấu
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -314,8 +295,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          // '${orderDetails[0].totalprice.toStringAsFixed(3)}',
-                          '0',
+                          '${bill.discountcode.toString()}',
                           style: GoogleFonts.arsenal(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -326,6 +306,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                     ],
                   ),
                   SizedBox(height: 10.0),
+// Tổng cộng
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -343,67 +324,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          '${orderDetails[0].totalprice.toStringAsFixed(3)}',
-                          style: GoogleFonts.arsenal(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.0),
-                  // Chưa xử lý phần discount.
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(flex: 3, child: Text('')),
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          'Tiền khách đưa:',
-                          style: GoogleFonts.arsenal(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          // '${orderDetails[0].totalprice.toStringAsFixed(3)}',
-                          '0',
-                          style: GoogleFonts.arsenal(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.0),
-                  // Chưa xử lý phần discount.
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(flex: 3, child: Text('')),
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          'Tiền thừa:',
-                          style: GoogleFonts.arsenal(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          // '${orderDetails[0].totalprice.toStringAsFixed(3)}',
-                          '0',
+                          '${bill.totalprice.toStringAsFixed(3)}',
                           style: GoogleFonts.arsenal(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -420,10 +341,8 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                       left: 16,
                       right: 16,
                       child: MyButton(
-                          text: 'Tạo hóa đơn',
-                          onTap: () {
-                            addBill();
-                          },
+                          text: 'Cập nhật hóa đơn',
+                          onTap: () {},
                           buttonColor: primaryColors),
                     )
                   else if (loggedInCustomer != null)
@@ -433,14 +352,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                       right: 16,
                       child: MyButton(
                           text: 'Hoàn thành',
-                          onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                            );
-                          },
+                          onTap: () {},
                           buttonColor: primaryColors),
                     ),
                 ],
