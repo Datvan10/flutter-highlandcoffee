@@ -146,12 +146,17 @@ class _ListOrderPageState extends State<ListOrderPage> {
                       },
                     ),
                   ),
-                  MyButton(
-                    text: 'Hoàn thành',
-                    onTap: () {
-                      Navigator.pushNamed(context, '/home_page');
-                    },
-                    buttonColor: primaryColors,
+                  Positioned(
+                    bottom: 16,
+                    left: 16,
+                    right: 16,
+                    child: MyButton(
+                      text: 'Hoàn thành',
+                      onTap: () {
+                        Navigator.pushNamed(context, '/home_page');
+                      },
+                      buttonColor: primaryColors,
+                    ),
                   ),
                 ],
               ),

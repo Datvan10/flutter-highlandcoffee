@@ -600,7 +600,8 @@ class CustomerApi {
         for (var customerData in jsonResponse) {
           Customer customer = Customer.fromJson(customerData);
           if ((customer.name == identifier ||
-                  customer.phonenumber == identifier) && (customer.status == 0) &&
+                  customer.phonenumber == identifier) &&
+              (customer.status == 0) &&
               customer.password == password) {
             return true;
           }
@@ -691,6 +692,7 @@ class CustomerApi {
 class StaffApi {
   final String staffUrl = "http://localhost:5194/api/staffs";
   final String orderUrl = "http://localhost:5194/api/orders";
+  final String billUrl = "http://localhost:5194/api/bills";
 
   // Authenticate account
   Future<bool> authenticateAccountStaffs(
@@ -769,6 +771,60 @@ class StaffApi {
       }
     } catch (e) {
       throw Exception('Failed to confirm order: $e');
+    }
+  }
+
+  // Add bill
+  Future<void> addBill(Bill bill) async {
+    final uri = Uri.parse(billUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(bill.toJson()),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Bill added successfully');
+      } else {
+        throw Exception('Failed to add bill: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add bill: $e');
+    }
+  }
+
+  // Get bill by orderid for Staff
+  Future<List<Bill>> getBillByOrderId(String orderid) async {
+    try {
+      final response =
+          await http.get(Uri.parse('$billUrl/bill/$orderid'));
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+
+        // Kiểm tra xem có dữ liệu được trả về không
+        if (jsonData.isNotEmpty) {
+          List<Bill> billDetails =
+              jsonData.map((item) => Bill.fromJson(item)).toList();
+          return billDetails;
+        } else {
+          // Nếu không có dữ liệu, trả về một danh sách trống
+          return [];
+        }
+      } else if (response.statusCode == 404) {
+        throw Exception('Bill detail not found');
+      } else {
+        throw Exception(
+            'Failed to load Bill detail with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to load order detail');
     }
   }
 }

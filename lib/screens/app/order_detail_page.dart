@@ -176,7 +176,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 10.0),
-                      Text('Ngày đặt: ${orderDetails[0].date}'),
+                      Text(
+                        'Ngày đặt: ${orderDetails[0].date}',
+                        style: GoogleFonts.roboto(
+                          fontSize: 14,
+                        ),
+                      ),
                       SizedBox(height: 10.0),
                       Text(
                         'Thông tin sản phẩm:',
@@ -245,9 +250,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                           ),
                                           Text(
                                             'Size: ${orderDetail.size}',
-                                            style: GoogleFonts.arsenal(
-                                              fontSize: 15,
-                                              color: grey,
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 14,
                                             ),
                                           ),
                                         ],
@@ -270,9 +274,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                           ),
                                           Text(
                                             'SL: ${orderDetail.quantity}',
-                                            style: GoogleFonts.arsenal(
-                                              fontSize: 16,
-                                              color: grey,
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 14,
                                             ),
                                           ),
                                         ],
@@ -328,16 +331,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 ),
                                 SizedBox(height: 5.0),
                                 Text(
-                                  orderDetails[0].paymentmethod ??
-                                      '', // Kiểm tra null
-                                  style: GoogleFonts.arsenal(
-                                    fontSize: 16,
+                                  orderDetails[0].paymentmethod ?? '',
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(width: 20), // Khoảng cách giữa hai cột
+                          SizedBox(width: 20),
                           // Column Thông tin khách hàng
                           Expanded(
                             child: Column(
@@ -353,21 +355,21 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 SizedBox(height: 5.0),
                                 Text(
                                   'Tên khách hàng: ${orderDetails[0].customername ?? ''}',
-                                  style: GoogleFonts.arsenal(
-                                    fontSize: 16,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 15,
                                   ),
                                 ),
                                 Text(
                                   'Số điện thoại: ${orderDetails[0].phonenumber ?? ''}',
-                                  style: GoogleFonts.arsenal(
-                                    fontSize: 16,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 15,
                                   ),
                                 ),
                                 SizedBox(height: 5.0),
                                 Text(
                                   'Địa chỉ: ${orderDetails[0].address ?? ''}',
-                                  style: GoogleFonts.arsenal(
-                                    fontSize: 16,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 15,
                                   ),
                                 ),
                               ],
@@ -375,7 +377,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 5.0),
+                      SizedBox(height: 10.0),
                       Row(
                         children: [
                           Text(
@@ -405,7 +407,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 130.0),
+                      SizedBox(height: 135.0),
                     ],
                   ),
                 ),
@@ -414,7 +416,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   left: 16,
                   right: 16,
                   child: currentUserRole ==
-                          UserRole.staff // Kiểm tra nếu là staff đăng nhập
+                          UserRole.staff
                       ? MyButton(
                           text: 'Xác nhận đơn hàng',
                           onTap: orderDetails[0].status == 0
