@@ -40,13 +40,10 @@ dependencies:
   google_fonts: ^6.1.0
   smooth_page_indicator: ^1.1.0
   carousel_slider: ^4.2.1
-  firebase_auth: ^4.15.3
-  firebase_core: ^2.24.2
   intl: ^0.18.1
   speech_to_text: ^6.4.1
   permission_handler: ^11.0.1
   provider: ^6.1.1
-  cloud_firestore: ^4.13.3
   flutter_slidable: ^3.0.1
   avatar_glow: ^2.0.2
   firebase_storage: ^11.5.6
@@ -56,11 +53,6 @@ dependencies:
   line_awesome_flutter: ^2.0.0
   cached_network_image: ^3.3.0
   fluttertoast: ^8.2.4
-  fl_chart: ^0.66.0
-  pay: ^1.1.2
-  upi_payment_qrcode_generator: ^1.4.0
-  qr_flutter: ^4.1.0
-  mobile_scanner: ^4.0.1
   dash_chat_2: ^0.0.20
   http: ^1.2.0
   flutter_image_compress: ^2.2.0

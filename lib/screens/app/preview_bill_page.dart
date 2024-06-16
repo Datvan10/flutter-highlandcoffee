@@ -61,9 +61,9 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
       );
       print(newBill.totalprice);
       await staffApi.addBill(newBill);
-      showCustomAlertDialog(context, 'Thông báo', 'Tạo hóa đơn thành công!');
+      showCustomAlertDialog(context, 'Thông báo', 'Lập hóa đơn thành công');
     } catch (e) {
-      showCustomAlertDialog(context, 'Lỗi', 'Tạo hóa đơn thất bại!');
+      showCustomAlertDialog(context, 'Lỗi', 'Hóa đơn đã tồn tại, vui lòng tạo hóa đơn khác ');
       print('Error adding bill: $e');
     }
   }
@@ -420,7 +420,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                       left: 16,
                       right: 16,
                       child: MyButton(
-                          text: 'Tạo hóa đơn',
+                          text: 'Lập hóa đơn',
                           onTap: () {
                             addBill();
                           },

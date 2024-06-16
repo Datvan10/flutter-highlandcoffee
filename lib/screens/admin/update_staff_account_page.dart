@@ -47,11 +47,11 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
       await adminApi.updateStaff(Staff);
       Navigator.pop(context);
       showCustomAlertDialog(
-          context, 'Thông báo', 'Cập nhật thông tin nhân viên thành công');
+          context, 'Thông báo', 'Cập nhật sản thông tin tìa khoản nhân viên thành công');
       _fetchStaffs();
     } catch (e) {
       showCustomAlertDialog(
-          context, 'Lỗi', 'Cập nhật thông tin nhân viên thất bại. Vui lòng thử lại.');
+          context, 'Lỗi', 'Thông tin tài khoản nhân viên đã tồn tại. Vui lòng thử lại.');
       print('Error updating Staff: $e');
     }
   }
@@ -118,7 +118,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                               updateNewStaff.phonenumber.isEmpty ||
                               updateNewStaff.password.isEmpty) {
                             showCustomAlertDialog(context, 'Lỗi',
-                                'Vui lòng nhập đầy đủ thông tin danh mục');
+                                'Vui lòng nhập đầy đủ thông tin nhân viên');
                             return;
                           } else if (updateNewStaff.password.length < 6) {
                             showCustomAlertDialog(context, 'Thông báo',
@@ -169,7 +169,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Sửa thông tin nhân viên',
+                    'Cập nhật thông tin tài khoản nhân viên',
                     style: GoogleFonts.arsenal(
                       fontSize: 30,
                       color: brown,

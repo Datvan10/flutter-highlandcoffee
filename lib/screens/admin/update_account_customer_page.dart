@@ -24,10 +24,10 @@ class _UpdateAccountCustomerPageState extends State<UpdateAccountCustomerPage> {
   @override
   void initState() {
     super.initState();
-    _fetchCustomers();
+    fetchCustomers();
   }
 
-  Future<void> _fetchCustomers() async {
+  Future<void> fetchCustomers() async {
     try {
       List<Customer> fetchedCustomers = await adminApi.getAllCustomers();
       setState(() {
@@ -44,7 +44,7 @@ class _UpdateAccountCustomerPageState extends State<UpdateAccountCustomerPage> {
       await adminApi.activateAccountCustomer(customerid);
       showCustomAlertDialog(
           context, 'Thông báo', 'Kích hoạt tài khoản khách hàng thành công');
-          _fetchCustomers();
+          fetchCustomers();
     } catch (e) {
       showCustomAlertDialog(context, 'Lỗi',
           'Cập nhật tài khoản khách hàng thật bại. Vui lòng thử lại.');
@@ -57,7 +57,7 @@ class _UpdateAccountCustomerPageState extends State<UpdateAccountCustomerPage> {
       await adminApi.blockAccountCustomer(customerid);
       showCustomAlertDialog(
           context, 'Thông báo', 'Chặn tài khoản khách hàng thành công');
-          _fetchCustomers();
+          fetchCustomers();
     } catch (e) {
       showCustomAlertDialog(context, 'Lỗi',
           'Cập nhật tài khoản khách hàng thất bại. Vui lòng thử lại.');

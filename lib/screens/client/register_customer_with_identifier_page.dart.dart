@@ -97,7 +97,7 @@ class _RegisterCustomerWithIdentifierPageState
       // print("Error adding customer: $e");
       // Show alert for error
       showCustomAlertDialog(
-          context, 'Thông báo', 'Email hoặc số điện thoại đã tồn tại vui lòng thử lại!');
+          context, 'Thông báo', 'Tài khoản đã tồn tại, vui lòng thử lại một tài khoản khác.');
     }
   }
 

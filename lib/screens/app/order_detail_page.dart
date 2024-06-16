@@ -394,6 +394,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 ? 'Đang chờ duyệt'
                                 : orderDetails[0].status == 1
                                     ? 'Đang giao hàng'
+                                    : orderDetails[0].status == 2
+                                        ? 'Đã nhận hàng và thanh toán'
                                     : 'Trạng thái không xác định',
                             style: GoogleFonts.arsenal(
                               fontSize: 16,
@@ -401,7 +403,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               color: orderDetails[0].status == 0
                                   ? red
                                   : orderDetails[0].status == 1
-                                      ? green
+                                      ? light_yellow
+                                      : orderDetails[0].status == 2
+                                          ? green
                                       : Colors.black,
                             ),
                           ),

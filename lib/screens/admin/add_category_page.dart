@@ -58,7 +58,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
             Container(
               alignment: Alignment.topLeft,
               child: Text(
-                'Thêm sản danh mục',
+                'Thêm danh mục',
                 style: GoogleFonts.arsenal(
                     fontSize: 30, fontWeight: FontWeight.bold, color: brown),
               ),

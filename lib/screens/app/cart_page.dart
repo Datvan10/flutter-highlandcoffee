@@ -110,7 +110,7 @@ class _CartPageState extends State<CartPage> {
             //text notification
             Center(
               child: Text(
-                'Miễn phí vận chuyển với đơn hàng trên 300.000đ',
+                'Miễn phí vận chuyển với đơn hàng trên 500.000đ',
                 style: GoogleFonts.roboto(
                   color: grey,
                   fontSize: 17,

@@ -65,7 +65,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                   await adminApi.deleteStaff(categoryId);
                   Navigator.pop(context);
                   showCustomAlertDialog(
-                      context, 'Thông báo', 'Xóa nhân viên thành công.');
+                      context, 'Thông báo', 'Xóa thông tin tài khoản nhân viên thành công');
                   _fetchStaffs();
                 } catch (e) {
                   print('Error deleting staff: $e');
