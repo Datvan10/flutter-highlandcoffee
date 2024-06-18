@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
-import 'package:highlandcoffeeapp/screens/app/product_detail_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
@@ -16,6 +15,7 @@ class FavoriteProductPage extends StatefulWidget {
 }
 
 class _FavoriteProductPageState extends State<FavoriteProductPage> {
+  Future<String> categoryNameFuture = Future.value('Danh sách yêu thích');
   int _selectedIndexBottomBar = 2;
   Future<List<Favorite>>? productsFuture;
 
@@ -53,7 +53,7 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
     return Scaffold(
       backgroundColor: background,
       appBar: CustomAppBar(
-        title: 'SẢN PHẨM YÊU THÍCH',
+        futureTitle: categoryNameFuture,
         actions: [
           AppBarAction(
             icon: Icons.shopping_cart,

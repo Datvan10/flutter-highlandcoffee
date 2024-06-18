@@ -16,6 +16,7 @@ class ProductPopularPage extends StatefulWidget {
 }
 
 class _ProductPopularPageState extends State<ProductPopularPage> {
+  Future<String> categoryNameFuture = Future.value('Sản phẩm phổ biến');
   int _selectedIndexBottomBar = 1;
   Future<List<Product>>? productsFuture;
 
@@ -48,7 +49,7 @@ class _ProductPopularPageState extends State<ProductPopularPage> {
     return Scaffold(
       backgroundColor: background,
       appBar: CustomAppBar(
-        title: 'SẢN PHẨM PHỔ BIẾN',
+        futureTitle: categoryNameFuture,
         actions: [
           AppBarAction(
             icon: Icons.shopping_cart,

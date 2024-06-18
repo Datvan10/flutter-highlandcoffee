@@ -16,6 +16,7 @@ class ListProductPage extends StatefulWidget {
 }
 
 class _ListProductPageState extends State<ListProductPage> {
+  Future<String> categoryNameFuture = Future.value('Danh sách sản phẩm');
   int _selectedIndexBottomBar = 1;
  Future<List<Product>>? productsFuture;
 
@@ -48,7 +49,7 @@ class _ListProductPageState extends State<ListProductPage> {
     return Scaffold(
       backgroundColor: background,
       appBar: CustomAppBar(
-        title: 'DANH SÁCH SẢN PHẨM',
+        futureTitle: categoryNameFuture,
         actions: [
           AppBarAction(
             icon: Icons.shopping_cart,

@@ -26,6 +26,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  Future<String> categoryNameFuture = Future.value('Đặt hàng');
   int totalQuantity = 0;
   late int totalPrice = 0;
   Customer? loggedCustomer = AuthManager().loggedInCustomer;
@@ -360,7 +361,7 @@ class _OrderPageState extends State<OrderPage> {
     return Scaffold(
       backgroundColor: background,
       appBar: CustomAppBar(
-        title: 'Đơn hàng',
+        futureTitle: categoryNameFuture,
         actions: null,
       ),
       body: Padding(

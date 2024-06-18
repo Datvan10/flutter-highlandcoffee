@@ -11,33 +11,7 @@ class AdminApi {
   final String productUrl = "http://localhost:5194/api/products";
   final String categoryUrl = "http://localhost:5194/api/categories";
   final String customerUrl = "http://localhost:5194/api/customers";
-
-  // List of API URLs for each category
-  static const String baseUrl = 'http://localhost:5194/api/products/category';
-  String getCategoryApiUrl(String selectedCategory) {
-    switch (selectedCategory) {
-      case 'Coffee':
-        return '$baseUrl/dm001';
-      case 'Freeze':
-        return '$baseUrl/dm002';
-      case 'Trà':
-        return '$baseUrl/dm003';
-      case 'Đồ ăn':
-        return '$baseUrl/dm004';
-      case 'Danh sách sản phẩm':
-        return '$baseUrl/products';
-      case 'Sản phẩm phổ biến':
-        return '$baseUrl/dm005';
-      case 'Sản phẩm bán chạy nhất':
-        return '$baseUrl/dm006';
-      case 'Danh sách sản phẩm phổ biến':
-        return '$baseUrl/populars';
-      case 'Khác':
-        return '$baseUrl/others';
-      default:
-        throw Exception('Invalid category');
-    }
-  }
+  final String getProductUrl = 'http://localhost:5194/api/products/category';
 
   // Read data from API
   Future<List<Admin>> getAdmins() async {
@@ -193,19 +167,14 @@ class AdminApi {
   }
 
   // Get product for admin
-  Future<List<Product>> getProducts(String selectedCategory) async {
-    final apiUrl = getCategoryApiUrl(selectedCategory);
-
+  Future<List<Product>> getProducts(String categoryid) async {
     try {
-      final response = await http.get(Uri.parse(apiUrl));
+      final response = await http.get(Uri.parse('$getProductUrl/$categoryid'));
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         List<Product> products = [];
         for (var item in jsonData) {
           Product product = Product.fromJson(item);
-          // Decode image and image detail
-          base64Decode(product.image);
-          base64Decode(product.imagedetail);
 
           products.add(product);
         }
@@ -800,8 +769,7 @@ class StaffApi {
   // Get bill by orderid for Staff
   Future<List<Bill>> getBillByOrderId(String orderid) async {
     try {
-      final response =
-          await http.get(Uri.parse('$billUrl/bill/$orderid'));
+      final response = await http.get(Uri.parse('$billUrl/bill/$orderid'));
       print(response.statusCode);
 
       if (response.statusCode == 200) {
@@ -853,6 +821,7 @@ class CategoryApi {
 // Product API
 class ProductApi {
   final String productUrl = "http://localhost:5194/api/products";
+  final String categoryUrl = "http://localhost:5194/api/categories";
   // Read data from API
   Future<List<Product>> getListProducts() async {
     try {
@@ -874,6 +843,53 @@ class ProductApi {
       }
     } catch (e) {
       throw Exception('Failed to load product products');
+    }
+  }
+
+  //
+  Future<Category> getCategoryById(String categoryId) async {
+    // Giả sử bạn có một API endpoint để lấy danh mục theo ID
+    final response = await http.get(Uri.parse('$categoryUrl/$categoryId'));
+    if (response.statusCode == 200) {
+      return Category.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load category');
+    }
+  }
+
+  //
+  Future<List<Category>> getCategories() async {
+    try {
+      final response = await http.get(Uri.parse(categoryUrl));
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        List<Category> categories =
+            body.map((dynamic item) => Category.fromJson(item)).toList();
+        return categories;
+      } else {
+        throw Exception('Failed to load categories');
+      }
+    } catch (e) {
+      throw Exception('Failed to load categories');
+    }
+  }
+
+  //
+  Future<List<Product>> getProductsByCategory(String categoryid) async {
+    final String productUrl =
+        "http://localhost:5194/api/products/category/$categoryid";
+    try {
+      final response = await http.get(Uri.parse(productUrl));
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = json.decode(response.body);
+        List<Product> products =
+            jsonData.map((item) => Product.fromJson(item)).toList();
+        return products;
+      } else {
+        throw Exception('Failed to load products');
+      }
+    } catch (e) {
+      throw Exception('Failed to load products');
     }
   }
 
@@ -932,7 +948,7 @@ class ProductApi {
 
 // API for popular products
 class PopularApi {
-  final String popularUrl = "http://localhost:5194/api/products/category/dm005";
+  final String popularUrl = "http://localhost:5194/api/products/category/dm030";
   // Read data from API
   Future<List<Product>> getPopulars() async {
     try {
@@ -1088,7 +1104,7 @@ class FavoriteApi {
 // API fo best sale
 class BestSaleApi {
   final String bestSaleUrl =
-      "http://localhost:5194/api/products/category/dm006";
+      "http://localhost:5194/api/products/category/dm029";
   // Read data from API
   Future<List<Product>> getBestSales() async {
     try {

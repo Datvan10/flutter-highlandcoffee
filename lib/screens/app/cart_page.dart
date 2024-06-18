@@ -19,6 +19,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  Future<String> categoryNameFuture = Future.value('Giỏ hàng');
   int _selectedIndexBottomBar = 3;
   late List<CartItem> cartItems = [];
   CartApi api = CartApi();
@@ -88,7 +89,7 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       backgroundColor: background,
       appBar: CustomAppBar(
-        title: 'Giỏ hàng',
+        futureTitle : categoryNameFuture,
         actions: [
           AppBarAction(
             icon: Icons.shopping_cart_checkout,

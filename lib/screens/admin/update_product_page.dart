@@ -15,14 +15,14 @@ import 'package:image_picker/image_picker.dart';
 
 class UpdateProductPage extends StatefulWidget {
   static const String routeName = '/update_product_page';
-  const UpdateProductPage({super.key});
+
+  const UpdateProductPage({Key? key}) : super(key: key);
 
   @override
   State<UpdateProductPage> createState() => _UpdateProductPageState();
 }
 
 class _UpdateProductPageState extends State<UpdateProductPage> {
-  //
   final _textSearchProductController = TextEditingController();
   TextEditingController _editIdController = TextEditingController();
   TextEditingController _editNameController = TextEditingController();
@@ -36,9 +36,10 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
 
   final AdminApi adminApi = AdminApi();
   final CategoryApi categoryApi = CategoryApi();
-  List<String> collectionNames = [];
+  List<Category> categories = [];
   Map<String, List<Product>> productsMap = {};
-  String selectedCategory = '';
+  String selectedCategoryId = '';
+  String selectedCategoryName = '';
 
   @override
   void initState() {
@@ -48,38 +49,37 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
 
   Future<void> _fetchCategories() async {
     try {
-      List<Category> categories = await categoryApi.getCategories();
+      categories = await categoryApi.getCategories();
       setState(() {
-        collectionNames =
-            categories.map((category) => category.categoryname).toList();
-        if (collectionNames.isNotEmpty) {
-          selectedCategory = collectionNames.first;
+        if (categories.isNotEmpty) {
+          selectedCategoryId = categories.first.categoryid;
+          selectedCategoryName = categories.first.categoryname;
           loadData();
         }
       });
     } catch (e) {
       print('Error fetching categories: $e');
-      setState(() {
-        collectionNames = ['Coffee', 'Trà', 'Freeze', 'Đồ ăn', 'Khác'];
-        selectedCategory = 'Coffee';
-        loadData();
-      });
+      showCustomAlertDialog(
+        context,
+        'Lỗi',
+        'Đã xảy ra lỗi khi tải danh mục sản phẩm.',
+      );
     }
   }
 
   void loadData() async {
-    if (collectionNames.isEmpty) return;
+    if (categories.isEmpty) return;
 
-    for (String collectionName in collectionNames) {
-      List<Product> products = await getProductsFromApi(collectionName);
-      productsMap[collectionName] = products;
+    for (Category category in categories) {
+      List<Product> products = await getProductsFromApi(category.categoryid);
+      productsMap[category.categoryname] = products;
     }
     setState(() {});
   }
 
-  Future<List<Product>> getProductsFromApi(String selectedCategory) async {
+  Future<List<Product>> getProductsFromApi(String categoryid) async {
     try {
-      List<Product> products = await adminApi.getProducts(selectedCategory);
+      List<Product> products = await adminApi.getProducts(categoryid);
       return products.map((product) {
         return Product(
           productid: product.productid,
@@ -94,15 +94,37 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
         );
       }).toList();
     } catch (e) {
-      print('Error getting products from API for $selectedCategory: $e');
+      print('Error getting products from API for $categoryid: $e');
       return [];
     }
   }
 
-  void updateSelectedProducts(String selectedCollection) {
+  void updateSelectedProducts(String categoryid, String categoryname) {
     setState(() {
-      selectedCategory = selectedCollection;
+      selectedCategoryId = categoryid;
+      selectedCategoryName = categoryname;
+      loadData();
     });
+  }
+
+  Future<void> updateProduct(Product product) async {
+    try {
+      await adminApi.updateProduct(product);
+      Navigator.pop(context);
+      showCustomAlertDialog(
+        context,
+        'Thông báo',
+        'Cập nhật sản phẩm thành công.',
+      );
+      loadData();
+    } catch (e) {
+      showCustomAlertDialog(
+        context,
+        'Lỗi',
+        'Cập nhật sản phẩm thất bại. Vui lòng thử lại.',
+      );
+      print('Error updating product: $e');
+    }
   }
 
   Future<void> _pickImage() async {
@@ -115,8 +137,6 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     }
   }
 
-  //
-  //
   Future<void> _pickImageDetail() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -127,26 +147,9 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     }
   }
 
-  //
-  // Tạo một hàm để cập nhật sản phẩm
-  Future<void> updateProduct(Product product) async {
-    try {
-      await adminApi.updateProduct(product);
-      Navigator.pop(context);
-      showCustomAlertDialog(
-          context, 'Thông báo', 'Cập nhật sản phẩm thành công.');
-      loadData();
-    } catch (e) {
-      showCustomAlertDialog(
-          context, 'Lỗi', 'Cập nhật sản phẩm thất bại. Vui lòng thử lại.');
-      print('Error updating product: $e');
-    }
-  }
-
-  //update product
   void _showUpdateProductForm(BuildContext context, Product product) {
-    List<String> _categories = collectionNames;
-    // Điền các giá trị hiện tại của sản phẩm vào các trường nhập liệu hoặc các trường hiển thị
+    List<String> _categories =
+        categories.map((category) => category.categoryname).toList();
     _editIdController.text = product.productid;
     _editNameController.text = product.productname;
     _editDescriptionController.text = product.description;
@@ -154,128 +157,135 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     _editSizeController.text = product.size;
     _editUnitController.text = product.unit;
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
-        ),
-        builder: (BuildContext context) {
-          return Container(
-            height: 830,
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 18.0, top: 30.0, right: 18.0, bottom: 18.0),
-              child: Column(
-                children: [
-                  Text(
-                    'Cập nhật sản phẩm',
-                    style: GoogleFonts.arsenal(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.bold,
-                        color: primaryColors),
-                  ),
-                  SizedBox(height: 10),
-                  CategoryDropdown(
-                    categories: _categories,
-                    selectedCategory: selectedCategory,
-                    onChanged: (String? value) {
-                      setState(() {
-                        selectedCategory = value ?? '';
-                      });
-                    },
-                  ),
-                  // LabeledTextField(
-                  //     label: 'ID sản phẩm', controller: _editIdController),
-                  LabeledTextField(
-                      label: 'Tên sản phẩm', controller: _editNameController),
-                  LabeledTextField(
-                      label: 'Mô tả sản phẩm',
-                      controller: _editDescriptionController),
-                  LabeledTextField(
-                      label: 'Giá', controller: _editPriceController),
-                  LabeledTextField(
-                      label: 'Size', controller: _editSizeController),
-                  LabeledTextField(
-                      label: 'Đơn vị tính', controller: _editUnitController),
-                  SizedBox(height: 10),
-                  ImagePickerWidget(
-                    imagePath: _imagePath,
-                    onPressed: _pickImage,
-                    label: 'Hình ảnh sản phẩm',
-                  ),
-                  ImagePickerWidget(
-                      imagePath: _imageDetailPath,
-                      onPressed: _pickImageDetail,
-                      label: 'Hình ảnh chi tiết sản phẩm'),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          Product updateNewProduct = Product(
-                            productid: _editIdController.text,
-                            categoryid: product.categoryid,
-                            productname: _editNameController.text,
-                            description: _editDescriptionController.text,
-                            size: _editSizeController.text,
-                            price: int.tryParse(_editPriceController.text) ?? 0,
-                            unit: _editUnitController.text,
-                            image: _imagePath != null
-                                ? base64Encode(_imagePath!.readAsBytesSync())
-                                : product.image,
-                            imagedetail: _imageDetailPath != null
-                                ? base64Encode(
-                                    _imageDetailPath!.readAsBytesSync())
-                                : product.imagedetail,
-                          );
-                          if (updateNewProduct.productname.isEmpty ||
-                              updateNewProduct.description.isEmpty ||
-                              updateNewProduct.size.isEmpty ||
-                              updateNewProduct.price == 0 ||
-                              updateNewProduct.unit.isEmpty ||
-                              updateNewProduct.image.isEmpty ||
-                              updateNewProduct.imagedetail.isEmpty) {
-                            showCustomAlertDialog(context, 'Lỗi',
-                                'Vui lòng nhập đầy đủ thông tin sản phẩm.');
-                            return;
-                          }
-                          print(updateNewProduct.productid);
-                          print(updateNewProduct.categoryid);
-                          print(updateNewProduct.size);
-                          // Xử lý khi nhấn nút
-                          await updateProduct(updateNewProduct);
-                        },
-                        style: ElevatedButton.styleFrom(backgroundColor: green),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Icon(
-                            //   Icons.cloud,
-                            //   color: white,
-                            // ),
-                            // SizedBox(
-                            //   width: 10,
-                            // ),
-                            Text(
-                              'Lưu',
-                              style: TextStyle(color: white),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          height: 830,
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 18.0,
+              top: 30.0,
+              right: 18.0,
+              bottom: 18.0,
             ),
-          );
-        });
+            child: Column(
+              children: [
+                Text(
+                  'Cập nhật sản phẩm',
+                  style: GoogleFonts.arsenal(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColors,
+                  ),
+                ),
+                SizedBox(height: 10),
+                CategoryDropdown(
+                  categories: _categories,
+                  selectedCategory: selectedCategoryName,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedCategoryName = value ?? '';
+                    });
+                  },
+                ),
+                LabeledTextField(
+                  label: 'Tên sản phẩm',
+                  controller: _editNameController,
+                ),
+                LabeledTextField(
+                  label: 'Mô tả sản phẩm',
+                  controller: _editDescriptionController,
+                ),
+                LabeledTextField(
+                  label: 'Giá',
+                  controller: _editPriceController,
+                ),
+                LabeledTextField(
+                  label: 'Size',
+                  controller: _editSizeController,
+                ),
+                LabeledTextField(
+                  label: 'Đơn vị tính',
+                  controller: _editUnitController,
+                ),
+                SizedBox(height: 10),
+                ImagePickerWidget(
+                  imagePath: _imagePath,
+                  onPressed: _pickImage,
+                  label: 'Hình ảnh sản phẩm',
+                ),
+                ImagePickerWidget(
+                  imagePath: _imageDetailPath,
+                  onPressed: _pickImageDetail,
+                  label: 'Hình ảnh chi tiết sản phẩm',
+                ),
+                SizedBox(height: 15.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        Product updateNewProduct = Product(
+                          productid: _editIdController.text,
+                          categoryid: product.categoryid,
+                          productname: _editNameController.text,
+                          description: _editDescriptionController.text,
+                          size: _editSizeController.text,
+                          price: int.tryParse(_editPriceController.text) ?? 0,
+                          unit: _editUnitController.text,
+                          image: _imagePath != null
+                              ? base64Encode(
+                                  _imagePath!.readAsBytesSync(),
+                                )
+                              : product.image,
+                          imagedetail: _imageDetailPath != null
+                              ? base64Encode(
+                                  _imageDetailPath!.readAsBytesSync(),
+                                )
+                              : product.imagedetail,
+                        );
+                        if (updateNewProduct.productname.isEmpty ||
+                            updateNewProduct.description.isEmpty ||
+                            updateNewProduct.size.isEmpty ||
+                            updateNewProduct.price == 0 ||
+                            updateNewProduct.unit.isEmpty ||
+                            updateNewProduct.image.isEmpty ||
+                            updateNewProduct.imagedetail.isEmpty) {
+                          showCustomAlertDialog(
+                            context,
+                            'Lỗi',
+                            'Vui lòng nhập đầy đủ thông tin sản phẩm.',
+                          );
+                          return;
+                        }
+                        await updateProduct(updateNewProduct);
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: green),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Lưu',
+                            style: TextStyle(color: white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -283,7 +293,11 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
           physics: NeverScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.only(
-                left: 18.0, top: 18.0, right: 18.0, bottom: 10),
+              left: 18.0,
+              top: 18.0,
+              right: 18.0,
+              bottom: 10,
+            ),
             child: Column(
               children: [
                 Container(
@@ -310,7 +324,6 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                       Icons.search,
                       size: 20,
                     ),
-                    //icon clear
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
@@ -354,23 +367,24 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                   ),
                 ),
                 SizedBox(height: 15),
-                // Danh sách danh mục sản phẩm
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: collectionNames.map((category) {
-                      final bool isSelected = category == selectedCategory;
+                    children: categories.map((category) {
+                      final bool isSelected =
+                          category.categoryid == selectedCategoryId;
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                           onPressed: () {
-                            updateSelectedProducts(category);
+                            updateSelectedProducts(
+                                category.categoryid, category.categoryname);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isSelected ? primaryColors : white,
                           ),
                           child: Text(
-                            category,
+                            category.categoryname,
                             style: TextStyle(
                               color: isSelected ? white : black,
                             ),
@@ -384,7 +398,6 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
             ),
           ),
         ),
-        // Hiển thị danh sách sản phẩm
         Expanded(
           child: Padding(
             padding:
@@ -394,9 +407,8 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
               shrinkWrap: true,
               itemCount: 1,
               itemBuilder: (context, index) {
-                // Lọc danh sách sản phẩm dựa trên danh mục được chọn
-                List<Product> products = selectedCategory.isNotEmpty
-                    ? productsMap[selectedCategory] ?? []
+                List<Product> products = selectedCategoryName.isNotEmpty
+                    ? productsMap[selectedCategoryName] ?? []
                     : [];
 
                 return Column(
@@ -405,10 +417,10 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        selectedCategory.isNotEmpty
-                            ? selectedCategory
-                            : collectionNames.isNotEmpty
-                                ? collectionNames[index]
+                        selectedCategoryName.isNotEmpty
+                            ? selectedCategoryName
+                            : categories.isNotEmpty
+                                ? categories[index].categoryname
                                 : '',
                         style: TextStyle(
                           fontSize: 20,
@@ -417,7 +429,6 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                         ),
                       ),
                     ),
-                    // Hiển thị danh sách sản phẩm trong danh mục
                     ...products.map((product) {
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 10),
@@ -503,7 +514,6 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
             ),
           ),
         ),
-        // Nút hoàn thành
         Padding(
           padding: const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 25.0),
           child: MyButton(

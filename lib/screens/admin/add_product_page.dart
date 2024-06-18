@@ -110,6 +110,7 @@ class _AddProductPageState extends State<AddProductPage> {
   // Function to add a product to database
   Future<void> addProduct() async {
     try {
+      int price = int.tryParse(_priceController.text) ?? 0;
       // Find the selected category's ID
       String? selectedCategoryId;
       for (var category in _categoryList) {
@@ -121,6 +122,12 @@ class _AddProductPageState extends State<AddProductPage> {
 
       if (selectedCategoryId == null) {
         throw Exception('Selected category not found');
+      }
+
+      if(price <= 0) {
+        showCustomAlertDialog(
+            context, 'Thông báo', 'Giá sản phẩm không hợp lệ, vui lòng nhập lại.');
+        return;
       }
 
       final bytesImage = _imageController!.readAsBytesSync();

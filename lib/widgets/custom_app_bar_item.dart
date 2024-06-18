@@ -3,11 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBarItem extends StatelessWidget implements PreferredSizeWidget {
   final Future<String>? futureTitle;
   final List<AppBarAction>? actions;
 
-  CustomAppBar({this.futureTitle, this.actions});
+  CustomAppBarItem({this.futureTitle, this.actions});
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);

@@ -2,16 +2,11 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/auth/login_register_switcher_admin_page.dart';
 import 'package:highlandcoffeeapp/auth/login_register_switcher_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/app/profile_page.dart';
-import 'package:highlandcoffeeapp/screens/app/bread_page.dart';
 import 'package:highlandcoffeeapp/screens/app/choose_login_type_page%20.dart';
-import 'package:highlandcoffeeapp/screens/app/coffee_page.dart';
 import 'package:highlandcoffeeapp/screens/app/list_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/forgot_password_admin_page.dart';
 import 'package:highlandcoffeeapp/screens/client/forgot_password_customer_page.dart';
-import 'package:highlandcoffeeapp/screens/app/freeze_page.dart';
-import 'package:highlandcoffeeapp/screens/app/other_page.dart';
 import 'package:highlandcoffeeapp/screens/app/order_result_page.dart';
-import 'package:highlandcoffeeapp/screens/app/tea_page.dart';
 import 'package:highlandcoffeeapp/widgets/best_sale_product_item.dart';
 import 'package:highlandcoffeeapp/screens/app/favorite_product_page.dart';
 import 'package:highlandcoffeeapp/screens/app/product_popular_page.dart';
@@ -36,11 +31,6 @@ List<GetPage> getPages = [
   GetPage(name: '/list_product_page', page:() => const ListProductPage()),
   GetPage(name: '/product_popular_page', page:() => const ProductPopularPage()),
   GetPage(name: '/favorite_product_page', page:() => const FavoriteProductPage()),
-  GetPage(name: '/coffee_page', page:() => const CoffeePage(),),
-  GetPage(name: '/freeze_page', page:() => const FreezePage()),
-  GetPage(name: '/tea_page', page:() => const TeaPage()),
-  GetPage(name: '/bread_page', page:() => const BreadPage()),
-  GetPage(name : '/other_page', page:() => const OtherPage()),
   GetPage(name: '/product_popular_page', page:() => const ProductPopularPage()),
   GetPage(name: '/best_sale_product_item', page:() => const BestSaleProductItem()),
   GetPage(name: '/favorite_product_page', page: () => const FavoriteProductPage()),

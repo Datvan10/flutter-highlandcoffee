@@ -36,7 +36,12 @@ class _RegisterCustomerWithIdentifierPageState
 
   // Register user
   Future<void> registerCustomer() async {
-    // String email = emailController.text.trim();
+    if (_phoneNumberController.text.length < 10 ||
+        _phoneNumberController.text.length > 10) {
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Số điện thoại không hợp lệ, phải có 10 số.');
+      return;
+    }
     String phonenumber = _phoneNumberController.text.trim();
     String address = _addressController.text.trim();
     String name = _nameController.text.trim();
@@ -56,8 +61,8 @@ class _RegisterCustomerWithIdentifierPageState
     // Check if password length is at least 6 characters
     if (password.length < 6) {
       // Show alert for short password
-      showCustomAlertDialog(
-          context, 'Thông báo', 'Mật khẩu không hợp lệ, phải có ít nhất 6 ký tự');
+      showCustomAlertDialog(context, 'Thông báo',
+          'Mật khẩu không hợp lệ, phải có ít nhất 6 ký tự');
       return;
     }
 
@@ -96,8 +101,8 @@ class _RegisterCustomerWithIdentifierPageState
     } catch (e) {
       // print("Error adding customer: $e");
       // Show alert for error
-      showCustomAlertDialog(
-          context, 'Thông báo', 'Tài khoản đã tồn tại, vui lòng thử lại một tài khoản khác.');
+      showCustomAlertDialog(context, 'Thông báo',
+          'Tài khoản đã tồn tại, vui lòng thử lại một tài khoản khác.');
     }
   }
 

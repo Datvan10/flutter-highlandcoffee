@@ -1,77 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/screens/app/coffee_page.dart';
-import 'package:highlandcoffeeapp/screens/app/freeze_page.dart';
-import 'package:highlandcoffeeapp/screens/app/other_page.dart';
-import 'package:highlandcoffeeapp/screens/app/food_page.dart';
-import 'package:highlandcoffeeapp/screens/app/tea_page.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
+import 'package:highlandcoffeeapp/screens/app/product_page.dart';
 import 'package:highlandcoffeeapp/widgets/product_category_form.dart';
 
 class ProductCategory extends StatefulWidget {
-  const ProductCategory({super.key});
+  const ProductCategory({Key? key}) : super(key: key);
 
   @override
   State<ProductCategory> createState() => _ProductCategoryState();
 }
 
 class _ProductCategoryState extends State<ProductCategory> {
+  final CategoryApi categoryApi = CategoryApi();
   String selectedCategory = '';
+  List<Category> categories = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCategories(); // Fetch categories when widget initializes
+  }
+
+  Future<void> fetchCategories() async {
+    try {
+      // Call your API function to get categories
+      List<Category> fetchedCategories = await categoryApi.getCategories();
+      setState(() {
+        categories = fetchedCategories.take(5).toList();
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Failed to load categories: $e');
+      // Handle error if needed
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ProductCategoryForm(
-          titleProduct: 'Cà phê',
-          isSelected: selectedCategory == 'Cà phê',
+      children: categories.map((category) {
+        return ProductCategoryForm(
+          titleProduct: category.categoryname,
+          isSelected: selectedCategory == category.categoryname,
           onTap: () {
             setState(() {
-              selectedCategory = 'Cà phê';
+              selectedCategory = category.categoryname;
             });
-          },
-          destinationPage: CoffeePage(),
-        ),
-        ProductCategoryForm(
-          titleProduct: 'Freeze',
-          isSelected: selectedCategory == 'Freeze',
-          onTap: () {
-            setState(() {
-              selectedCategory = 'Freeze';
-            });
-          },
-          destinationPage: FreezePage(),
-        ),
-        ProductCategoryForm(
-          titleProduct: 'Trà',
-          isSelected: selectedCategory == 'Trà',
-          onTap: () {
-            setState(() {
-              selectedCategory = 'Trà';
-            });
-          },
-          destinationPage: TeaPage(),
-        ),
-        ProductCategoryForm(
-          titleProduct: 'Đồ ăn',
-          isSelected: selectedCategory == 'Đồ ăn',
-          onTap: () {
-            setState(() {
-              selectedCategory = 'Đồ ăn';
-            });
-          },
-          destinationPage: FoodPage(),
-        ),
-        ProductCategoryForm(
-          titleProduct: 'Khác',
-          isSelected: selectedCategory == 'Khác',
-          onTap: () {
-            setState(() {
-              selectedCategory = 'Khác';
-            });
-          },
-          destinationPage: OtherPage(),
-        )
-      ],
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => ProductPage(categoryId: category.categoryid),
+            //   ),
+            // );
+          }, destinationPage: ProductPage(categoryid: category.categoryid),
+        );
+      }).toList(),
     );
   }
 }

@@ -21,9 +21,10 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
   final _textSearchProductController = TextEditingController();
   final AdminApi adminApi = AdminApi();
   final CategoryApi categoryApi = CategoryApi();
-  List<String> collectionNames = [];
+  List<Category> categories = [];
   Map<String, List<Product>> productsMap = {};
-  String selectedCategory = '';
+  String selectedCategoryId = '';
+  String selectedCategoryName = '';
 
   @override
   void initState() {
@@ -33,38 +34,34 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
 
   Future<void> _fetchCategories() async {
     try {
-      List<Category> categories = await categoryApi.getCategories();
+      categories = await categoryApi.getCategories();
       setState(() {
-        collectionNames =
-            categories.map((category) => category.categoryname).toList();
-        if (collectionNames.isNotEmpty) {
-          selectedCategory = collectionNames.first;
+        if (categories.isNotEmpty) {
+          selectedCategoryId = categories.first.categoryid;
+          selectedCategoryName = categories.first.categoryname;
           loadData();
         }
       });
     } catch (e) {
       print('Error fetching categories: $e');
-      setState(() {
-        collectionNames = ['Coffee', 'Trà', 'Freeze', 'Đồ ăn', 'Khác'];
-        selectedCategory = 'Coffee';
-        loadData();
-      });
+      showCustomAlertDialog(
+          context, 'Lỗi', 'Đã xảy ra lỗi khi tải danh mục sản phẩm.');
     }
   }
 
   void loadData() async {
-    if (collectionNames.isEmpty) return;
+    if (categories.isEmpty) return;
 
-    for (String collectionName in collectionNames) {
-      List<Product> products = await getProductsFromApi(collectionName);
-      productsMap[collectionName] = products;
+    for (Category category in categories) {
+      List<Product> products = await getProductsFromApi(category.categoryid);
+      productsMap[category.categoryname] = products;
     }
     setState(() {});
   }
 
-  Future<List<Product>> getProductsFromApi(String selectedCategory) async {
+  Future<List<Product>> getProductsFromApi(String categoryid) async {
     try {
-      List<Product> products = await adminApi.getProducts(selectedCategory);
+      List<Product> products = await adminApi.getProducts(categoryid);
       return products.map((product) {
         return Product(
           productid: product.productid,
@@ -79,14 +76,16 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
         );
       }).toList();
     } catch (e) {
-      print('Error getting products from API for $selectedCategory: $e');
+      print('Error getting products from API for $categoryid: $e');
       return [];
     }
   }
 
-  void updateSelectedProducts(String selectedCollection) {
+  void updateSelectedProducts(String categoryid, String categoryname) {
     setState(() {
-      selectedCategory = selectedCollection;
+      selectedCategoryId = categoryid;
+      selectedCategoryName = categoryname;
+      loadData();
     });
   }
 
@@ -119,7 +118,6 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                   Navigator.pop(context);
                   showCustomAlertDialog(
                       context, 'Thông báo', 'Xóa sản phẩm thành công.');
-                  // Gọi hàm loadData() để cập nhật danh sách sản phẩm sau khi xóa
                   loadData();
                 } catch (e) {
                   print('Error deleting product: $e');
@@ -227,19 +225,21 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: collectionNames.map((category) {
-                      final bool isSelected = category == selectedCategory;
+                    children: categories.map((category) {
+                      final bool isSelected =
+                          category.categoryid == selectedCategoryId;
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                           onPressed: () {
-                            updateSelectedProducts(category);
+                            updateSelectedProducts(
+                                category.categoryid, category.categoryname);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isSelected ? primaryColors : white,
                           ),
                           child: Text(
-                            category,
+                            category.categoryname,
                             style: TextStyle(
                               color: isSelected ? white : black,
                             ),
@@ -264,8 +264,8 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
               itemCount: 1,
               itemBuilder: (context, index) {
                 // Lọc danh sách sản phẩm dựa trên danh mục được chọn
-                List<Product> products = selectedCategory.isNotEmpty
-                    ? productsMap[selectedCategory] ?? []
+                List<Product> products = selectedCategoryName.isNotEmpty
+                    ? productsMap[selectedCategoryName] ?? []
                     : [];
 
                 return Column(
@@ -274,10 +274,10 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        selectedCategory.isNotEmpty
-                            ? selectedCategory
-                            : collectionNames.isNotEmpty
-                                ? collectionNames[index]
+                        selectedCategoryName.isNotEmpty
+                            ? selectedCategoryName
+                            : categories.isNotEmpty
+                                ? categories[index].categoryname
                                 : '',
                         style: TextStyle(
                           fontSize: 20,
@@ -358,10 +358,8 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                                   color: red,
                                 ),
                                 onPressed: () async {
-                                  if (selectedCategory.isNotEmpty) {
-                                    // Lấy thông tin sản phẩm cần xóa
+                                  if (selectedCategoryName.isNotEmpty) {
                                     Product productToDelete = product;
-                                    // Gọi hàm xóa sản phẩm
                                     deleteProduct(productToDelete.productid);
                                   }
                                 },
