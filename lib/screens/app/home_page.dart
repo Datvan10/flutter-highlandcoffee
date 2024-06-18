@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   bool _isMicFormVisible = false;
   final _textSearchController = TextEditingController();
   List<Product> searchResults = [];
+  ProductApi productApi = ProductApi();
 
   //
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
@@ -77,7 +78,6 @@ class _HomePageState extends State<HomePage> {
 
   void performSearch(String query) async {
     try {
-      ProductApi productApi = ProductApi();
       List<Product> products = await productApi.getListProducts();
 
       List<Product> filteredProducts = products
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
         );
       }).toList();
 
-      print('Search results: $convertedResults');
+      // print('Search results: $convertedResults');
 
       Navigator.push(
         context,

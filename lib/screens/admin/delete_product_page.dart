@@ -23,6 +23,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
   final CategoryApi categoryApi = CategoryApi();
   List<Category> categories = [];
   Map<String, List<Product>> productsMap = {};
+  List<Product> searchResults = [];
   String selectedCategoryId = '';
   String selectedCategoryName = '';
 
@@ -30,6 +31,9 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
   void initState() {
     super.initState();
     _fetchCategories();
+    _textSearchProductController.addListener(() {
+      performSearch(_textSearchProductController.text);
+    });
   }
 
   Future<void> _fetchCategories() async {
@@ -142,8 +146,33 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
     );
   }
 
+  void performSearch(String query) async {
+    try {
+      if (query.isNotEmpty) {
+        List<Product> products = await adminApi.getListProducts();
+        List<Product> filteredProducts = products
+            .where((product) =>
+                product.productname.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+        setState(() {
+          searchResults = filteredProducts;
+        });
+      } else {
+        setState(() {
+          searchResults.clear();
+        });
+      }
+    } catch (error) {
+      print('Error searching products: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Product> productsToDisplay = searchResults.isNotEmpty
+        ? searchResults
+        : (productsMap[selectedCategoryName] ?? []);
+
     return Column(
       children: [
         SingleChildScrollView(
@@ -177,22 +206,24 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                       Icons.search,
                       size: 20,
                     ),
-                    //icon clear
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         width: 20,
                         height: 20,
                         decoration: BoxDecoration(
-                            color: background, shape: BoxShape.circle),
+                            color: white_grey, shape: BoxShape.circle),
                         child: Center(
                           child: IconButton(
                             icon: const Icon(
                               Icons.clear,
-                              size: 10,
+                              size: 15,
                             ),
                             onPressed: () {
                               _textSearchProductController.clear();
+                              setState(() {
+                                searchResults.clear();
+                              });
                             },
                           ),
                         ),
@@ -253,7 +284,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
             ),
           ),
         ),
-        // Hiển thị danh sách sản phẩm
+        // Hiển thị kết quả tìm kiếm sản phẩm hoặc danh sách sản phẩm theo danh mục
         Expanded(
           child: Padding(
             padding:
@@ -261,115 +292,85 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 1,
+              itemCount: productsToDisplay.length,
               itemBuilder: (context, index) {
-                // Lọc danh sách sản phẩm dựa trên danh mục được chọn
-                List<Product> products = selectedCategoryName.isNotEmpty
-                    ? productsMap[selectedCategoryName] ?? []
-                    : [];
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        selectedCategoryName.isNotEmpty
-                            ? selectedCategoryName
-                            : categories.isNotEmpty
-                                ? categories[index].categoryname
-                                : '',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: brown,
+                Product product = productsToDisplay[index];
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Image.memory(
+                          base64Decode(product.image),
+                          height: 80,
+                          width: 80,
                         ),
                       ),
-                    ),
-                    // Hiển thị danh sách sản phẩm trong danh mục
-                    ...products.map((product) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              flex: 1,
-                              child: Image.memory(
-                                base64Decode(product.image),
-                                height: 80,
-                                width: 80,
+                            Text(
+                              product.productname,
+                              style: GoogleFonts.arsenal(
+                                fontSize: 18,
+                                color: black,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product.productname,
-                                    style: GoogleFonts.arsenal(
-                                      fontSize: 18,
-                                      color: primaryColors,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    product.price.toStringAsFixed(3) + 'đ',
-                                    style: GoogleFonts.roboto(
-                                      color: primaryColors,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Size: ',
-                                        style: GoogleFonts.roboto(
-                                          color: primaryColors,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      Text(
-                                        product.size,
-                                        style: GoogleFonts.roboto(
-                                          color: primaryColors,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                            Text(
+                              product.price.toStringAsFixed(3) + 'đ',
+                              style: GoogleFonts.roboto(
+                                color: primaryColors,
+                                fontSize: 16,
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: red,
+                            Row(
+                              children: [
+                                Text(
+                                  'Size: ',
+                                  style: GoogleFonts.roboto(
+                                    color: primaryColors,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                                onPressed: () async {
-                                  if (selectedCategoryName.isNotEmpty) {
-                                    Product productToDelete = product;
-                                    deleteProduct(productToDelete.productid);
-                                  }
-                                },
-                              ),
-                            )
+                                Text(
+                                  product.size,
+                                  style: GoogleFonts.roboto(
+                                    color: primaryColors,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                      );
-                    }).toList(),
-                  ],
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: red,
+                          ),
+                          onPressed: () async {
+                            deleteProduct(product.productid);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 );
               },
             ),
@@ -385,7 +386,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
             },
             buttonColor: primaryColors,
           ),
-        )
+        ),
       ],
     );
   }

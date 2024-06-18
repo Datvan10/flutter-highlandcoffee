@@ -9,6 +9,7 @@ import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
 class DeleteCategoryPage extends StatefulWidget {
   static const String routeName = '/delete_category_page';
+
   const DeleteCategoryPage({Key? key}) : super(key: key);
 
   @override
@@ -18,6 +19,7 @@ class DeleteCategoryPage extends StatefulWidget {
 class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
   final AdminApi adminApi = AdminApi();
   List<Category> categories = [];
+  List<Category> filteredCategories = [];
   final _textSearchCategoryController = TextEditingController();
 
   @override
@@ -28,9 +30,10 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
 
   Future<void> _fetchCategories() async {
     try {
-      List<Category> fetchedCategories = await adminApi.getCategories();
+      List<Category> fetchedCategories = await adminApi.getListCategories();
       setState(() {
         categories = fetchedCategories;
+        filteredCategories = fetchedCategories;
       });
     } catch (e) {
       print('Error fetching categories: $e');
@@ -49,17 +52,15 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
               fontSize: 19,
             ),
           ),
-          content: Text("Bạn có chắc muốn xóa danh mục này không?",
-              style: GoogleFonts.roboto(
-                color: black,
-                fontSize: 16,
-              )),
+          content: Text(
+            "Bạn có chắc muốn xóa danh mục này không?",
+            style: GoogleFonts.roboto(
+              color: black,
+              fontSize: 16,
+            ),
+          ),
           actions: [
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              child: Text("OK",
-                  style: GoogleFonts.roboto(
-                      color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
+            TextButton(
               onPressed: () async {
                 try {
                   await adminApi.deleteCategory(categoryid);
@@ -74,20 +75,41 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                       context, 'Lỗi', 'Đã xảy ra lỗi khi xóa danh mục.');
                 }
               },
-            ),
-            CupertinoDialogAction(
               child: Text(
-                "Hủy",
-                style: GoogleFonts.roboto(color: blue, fontSize: 17),
+                'OK',
+                style: GoogleFonts.roboto(
+                  color: blue,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+            ),
+            TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
+              child: Text(
+                'Hủy',
+                style: GoogleFonts.roboto(
+                  color: blue,
+                  fontSize: 17,
+                ),
+              ),
             ),
           ],
         );
       },
     );
+  }
+
+  void performSearchCategory(String keyword) {
+    setState(() {
+      filteredCategories = categories
+          .where((category) => category.categoryname
+              .toLowerCase()
+              .contains(keyword.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -115,6 +137,9 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                 SizedBox(height: 15),
                 TextField(
                   controller: _textSearchCategoryController,
+                  onChanged: (value) {
+                    performSearchCategory(value);
+                  },
                   decoration: InputDecoration(
                     hintText: 'Tìm kiếm danh mục',
                     contentPadding: EdgeInsets.symmetric(),
@@ -131,15 +156,16 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                         width: 20,
                         height: 20,
                         decoration: BoxDecoration(
-                            color: background, shape: BoxShape.circle),
+                            color: white_grey, shape: BoxShape.circle),
                         child: Center(
                           child: IconButton(
                             icon: const Icon(
                               Icons.clear,
-                              size: 10,
+                              size: 15,
                             ),
                             onPressed: () {
                               _textSearchCategoryController.clear();
+                              performSearchCategory('');
                             },
                           ),
                         ),
@@ -179,9 +205,9 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: categories.length,
+              itemCount: filteredCategories.length,
               itemBuilder: (context, index) {
-                final category = categories[index];
+                final category = filteredCategories[index];
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                   padding: EdgeInsets.all(15),
@@ -193,12 +219,13 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                          flex: 1,
-                          child: Icon(
-                            Icons.category,
-                            color: green,
-                            size: 30,
-                          )),
+                        flex: 1,
+                        child: Icon(
+                          Icons.category,
+                          color: green,
+                          size: 30,
+                        ),
+                      ),
                       Expanded(
                         flex: 6,
                         child: Column(

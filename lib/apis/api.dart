@@ -416,6 +416,47 @@ class AdminApi {
       // Xử lý lỗi nếu cần thiết
     }
   }
+
+  // Get product for admin
+  Future<List<Product>> getListProducts() async {
+    try {
+      final response = await http.get(Uri.parse(productUrl));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Product> products = [];
+        for (var item in jsonData) {
+          Product product = Product.fromJson(item);
+          // Decode image and image detail
+          base64Decode(product.image);
+          base64Decode(product.imagedetail);
+
+          products.add(product);
+        }
+        return products;
+      } else {
+        throw Exception('Failed to load product products');
+      }
+    } catch (e) {
+      throw Exception('Failed to load product products');
+    }
+  }
+
+  // Get category for admin
+  Future<List<Category>> getListCategories() async {
+    try {
+      final response = await http.get(Uri.parse(categoryUrl));
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        List<Category> categories =
+            body.map((dynamic item) => Category.fromJson(item)).toList();
+        return categories;
+      } else {
+        throw Exception('Failed to load categories');
+      }
+    } catch (e) {
+      throw Exception('Failed to load categories');
+    }
+  }
 }
 
 // Customer API

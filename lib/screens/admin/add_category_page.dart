@@ -5,6 +5,7 @@ import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
+import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
 class AddCategoryPage extends StatefulWidget {
   static const String routeName = '/add_category_page';
@@ -97,6 +98,16 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                 ),
               ],
             ),
+            Padding(
+          padding: const EdgeInsets.only(top: 482.0 ,bottom: 25.0),
+          child: MyButton(
+            text: 'Hoàn thành',
+            onTap: () {
+              Navigator.pushNamed(context, '/admin_page');
+            },
+            buttonColor: primaryColors,
+          ),
+        )
           ],
         ),
       ),

@@ -18,6 +18,7 @@ class UpdateCategoryPage extends StatefulWidget {
 class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
   final AdminApi adminApi = AdminApi();
   List<Category> categories = [];
+  List<Category> filteredCategories = [];
   final _textSearchCategoryController = TextEditingController();
   TextEditingController _editCategoryNameController = TextEditingController();
   TextEditingController _editDescriptionController = TextEditingController();
@@ -33,6 +34,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
       List<Category> fetchedCategories = await adminApi.getCategories();
       setState(() {
         categories = fetchedCategories;
+        filteredCategories = fetchedCategories;
       });
     } catch (e) {
       print('Error fetching categories: $e');
@@ -127,7 +129,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                             // ),
                             Text(
                               'Lưu',
-                              style: TextStyle(color: white),
+                              style: GoogleFonts.roboto(color: white),
                             ),
                           ],
                         ),
@@ -139,6 +141,16 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
             ),
           );
         });
+  }
+
+  void performSearchCategory(String keyword) {
+    setState(() {
+      filteredCategories = categories
+          .where((category) => category.categoryname
+              .toLowerCase()
+              .contains(keyword.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -166,6 +178,9 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                 SizedBox(height: 15),
                 TextField(
                   controller: _textSearchCategoryController,
+                  onChanged: (value) {
+                    performSearchCategory(value);
+                  },
                   decoration: InputDecoration(
                     hintText: 'Tìm kiếm danh mục',
                     contentPadding: EdgeInsets.symmetric(),
@@ -182,15 +197,16 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                         width: 20,
                         height: 20,
                         decoration: BoxDecoration(
-                            color: background, shape: BoxShape.circle),
+                            color: white_grey, shape: BoxShape.circle),
                         child: Center(
                           child: IconButton(
                             icon: const Icon(
                               Icons.clear,
-                              size: 10,
+                              size: 15,
                             ),
                             onPressed: () {
                               _textSearchCategoryController.clear();
+                              performSearchCategory('');
                             },
                           ),
                         ),
@@ -230,9 +246,9 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: categories.length,
+              itemCount: filteredCategories.length,
               itemBuilder: (context, index) {
-                final category = categories[index];
+                final category = filteredCategories[index];
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                   padding: EdgeInsets.all(15),
@@ -244,12 +260,13 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                          flex: 1,
-                          child: Icon(
-                            Icons.category,
-                            color: green,
-                            size: 30,
-                          )),
+                        flex: 1,
+                        child: Icon(
+                          Icons.category,
+                          color: green,
+                          size: 30,
+                        ),
+                      ),
                       Expanded(
                         flex: 6,
                         child: Column(

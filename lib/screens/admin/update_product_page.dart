@@ -37,6 +37,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
   final AdminApi adminApi = AdminApi();
   final CategoryApi categoryApi = CategoryApi();
   List<Category> categories = [];
+  List<Product> searchResults = [];
   Map<String, List<Product>> productsMap = {};
   String selectedCategoryId = '';
   String selectedCategoryName = '';
@@ -45,6 +46,9 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
   void initState() {
     super.initState();
     _fetchCategories();
+    _textSearchProductController.addListener(() {
+      performSearch(_textSearchProductController.text);
+    });
   }
 
   Future<void> _fetchCategories() async {
@@ -144,6 +148,27 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
       setState(() {
         _imageDetailPath = File(pickedFile.path);
       });
+    }
+  }
+
+  void performSearch(String query) async {
+    try {
+      if (query.isNotEmpty) {
+        List<Product> products = await adminApi.getListProducts();
+        List<Product> filteredProducts = products
+            .where((product) =>
+                product.productname.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+        setState(() {
+          searchResults = filteredProducts;
+        });
+      } else {
+        setState(() {
+          searchResults.clear();
+        });
+      }
+    } catch (error) {
+      print('Error searching products: $error');
     }
   }
 
@@ -270,7 +295,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                         children: [
                           Text(
                             'Lưu',
-                            style: TextStyle(color: white),
+                            style: GoogleFonts.roboto(color: white),
                           ),
                         ],
                       ),
@@ -287,6 +312,9 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Product> productsToDisplay = searchResults.isNotEmpty
+        ? searchResults
+        : (productsMap[selectedCategoryName] ?? []);
     return Column(
       children: [
         SingleChildScrollView(
@@ -330,15 +358,18 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                         width: 20,
                         height: 20,
                         decoration: BoxDecoration(
-                            color: background, shape: BoxShape.circle),
+                            color: white_grey, shape: BoxShape.circle),
                         child: Center(
                           child: IconButton(
                             icon: const Icon(
                               Icons.clear,
-                              size: 10,
+                              size: 15,
                             ),
                             onPressed: () {
                               _textSearchProductController.clear();
+                              setState(() {
+                                searchResults.clear();
+                              });
                             },
                           ),
                         ),
@@ -405,110 +436,85 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 1,
+              itemCount: productsToDisplay.length,
               itemBuilder: (context, index) {
-                List<Product> products = selectedCategoryName.isNotEmpty
-                    ? productsMap[selectedCategoryName] ?? []
-                    : [];
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        selectedCategoryName.isNotEmpty
-                            ? selectedCategoryName
-                            : categories.isNotEmpty
-                                ? categories[index].categoryname
-                                : '',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: brown,
+                Product product = productsToDisplay[index];
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Image.memory(
+                          base64Decode(product.image),
+                          height: 80,
+                          width: 80,
                         ),
                       ),
-                    ),
-                    ...products.map((product) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              flex: 1,
-                              child: Image.memory(
-                                base64Decode(product.image),
-                                height: 80,
-                                width: 80,
+                            Text(
+                              product.productname,
+                              style: GoogleFonts.arsenal(
+                                fontSize: 18,
+                                color: black,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product.productname,
-                                    style: GoogleFonts.arsenal(
-                                      fontSize: 18,
-                                      color: primaryColors,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    product.price.toStringAsFixed(3) + 'đ',
-                                    style: GoogleFonts.roboto(
-                                      color: primaryColors,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Size: ',
-                                        style: GoogleFonts.roboto(
-                                          color: primaryColors,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      Text(
-                                        product.size,
-                                        style: GoogleFonts.roboto(
-                                          color: primaryColors,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                            Text(
+                              product.price.toStringAsFixed(3) + 'đ',
+                              style: GoogleFonts.roboto(
+                                color: primaryColors,
+                                fontSize: 16,
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: blue,
+                            Row(
+                              children: [
+                                Text(
+                                  'Size: ',
+                                  style: GoogleFonts.roboto(
+                                    color: primaryColors,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                                onPressed: () {
-                                  _showUpdateProductForm(context, product);
-                                },
-                              ),
-                            )
+                                Text(
+                                  product.size,
+                                  style: GoogleFonts.roboto(
+                                    color: primaryColors,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                      );
-                    }).toList(),
-                  ],
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.edit,
+                            color: blue,
+                          ),
+                          onPressed: () async {
+                            _showUpdateProductForm(context, product);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 );
               },
             ),
