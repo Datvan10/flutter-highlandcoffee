@@ -836,6 +836,32 @@ class StaffApi {
       throw Exception('Failed to load order detail');
     }
   }
+
+  // Print bill for Staff
+  Future<void> printBill(String orderid, String staffid) async {
+    final uri = Uri.parse('$billUrl/print');
+
+    try {
+      final response = await http.put(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'orderid': orderid,
+          'staffid': staffid,
+        }),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Bill printed successfully');
+      } else {
+        throw Exception('Failed to print bill: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to print bill: $e');
+    }
+  }
 }
 
 // Category API

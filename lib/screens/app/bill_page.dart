@@ -1,30 +1,28 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
-import 'package:highlandcoffeeapp/screens/app/bill_page.dart';
 import 'package:highlandcoffeeapp/screens/app/home_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:intl/intl.dart';
 
-class PreviewBillPage extends StatefulWidget {
+class BillDetailPage extends StatefulWidget {
   final String orderid;
 
-  const PreviewBillPage({Key? key, required this.orderid}) : super(key: key);
+  const BillDetailPage({Key? key, required this.orderid}) : super(key: key);
 
   @override
-  State<PreviewBillPage> createState() => _PreviewBillPageState();
+  State<BillDetailPage> createState() => _BillDetailPageState();
 }
 
-class _PreviewBillPageState extends State<PreviewBillPage> {
+class _BillDetailPageState extends State<BillDetailPage> {
   OrderDetailApi orderDetailApi = OrderDetailApi();
   StaffApi staffApi = StaffApi();
   late Future<List<OrderDetail>> futureOrderDetails;
+  late Future<List<Bill>> futureBillDetails;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
 
@@ -32,6 +30,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
   void initState() {
     super.initState();
     futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+    futureBillDetails = staffApi.getBillByOrderId(widget.orderid);
   }
 
   // function format date
@@ -39,42 +38,17 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
     return DateFormat('dd - MM - yyyy').format(isoDate);
   }
 
-  // function add bill
-  Future<void> addBill() async {
-    try {
-      List<OrderDetail> orderDetails = await futureOrderDetails;
-      int totalprice =
-          orderDetails.fold(0, (sum, item) => sum + item.intomoney);
+  // function to confirm order
+  void printBill(String orderid, String staffid) async {
+    await staffApi.printBill(orderid, staffid);
+    setState(() {
+      futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+      futureBillDetails = staffApi.getBillByOrderId(widget.orderid);
+    });
 
-      String paymentmethod = orderDetails.first.paymentmethod;
-      String address = orderDetails.first.address;
-      String staffname = loggedInStaff!.name;
-      String phonenumber = orderDetails.first.phonenumber;
-      String customername = loggedInCustomer?.name ?? '';
-
-      Bill newBill = Bill(
-        billid: '',
-        orderid: widget.orderid,
-        staffid: loggedInStaff!.staffid,
-        customerid: loggedInCustomer?.customerid ?? '',
-        totalprice: totalprice,
-        paymentmethod: paymentmethod,
-        date: DateTime.now(),
-        status: 0,
-        address: address,
-        discountcode: 0,
-        staffname: staffname,
-        phonenumber: phonenumber,
-        customername: customername,
-      );
-      print(newBill.totalprice);
-      await staffApi.addBill(newBill);
-      showCustomAlertDialog(context, 'Thông báo', 'Lập hóa đơn thành công');
-    } catch (e) {
-      showCustomAlertDialog(
-          context, 'Lỗi', 'Hóa đơn đã tồn tại, vui lòng tạo hóa đơn khác ');
-      print('Error adding bill: $e');
-    }
+    // show dialog
+    showCustomAlertDialog(
+        context, 'Thông báo', 'Thanh toán hóa đơn thành công.');
   }
 
   @override
@@ -89,59 +63,66 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
           },
           icon: Icon(Icons.arrow_back_ios, color: primaryColors),
         ),
-        actions: loggedInStaff != null
-            ? [
-                Container(
-                  margin: EdgeInsets.only(right: 8),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              BillDetailPage(orderid: widget.orderid),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.print, color: primaryColors),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            child: IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
                   ),
-                )
-              ]
-            : [],
-        title: Text('Preview hóa đơn',
+                );
+              },
+              icon: Icon(Icons.home, color: primaryColors),
+            ),
+          )
+        ],
+        title: Text('Hóa đơn',
             style: GoogleFonts.arsenal(
               color: primaryColors,
               fontWeight: FontWeight.bold,
             )),
       ),
-      body: FutureBuilder<List<OrderDetail>>(
-        future: futureOrderDetails,
-        builder: (context, snapshot) {
+      body: FutureBuilder(
+        future: Future.wait([futureOrderDetails, futureBillDetails]),
+        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(
-                child: Text(
-              'Không tìm thấy chi tiết đơn hàng',
-              style: GoogleFonts.roboto(fontSize: 17),
-            ));
+          } else if (!snapshot.hasData) {
+            return Center(child: Text('Không có dữ liệu'));
           } else {
-            List<OrderDetail> orderDetails = snapshot.data!;
+            List<OrderDetail> orderDetails = snapshot.data![0];
+            List<Bill> billDetails = snapshot.data![1];
+
+            if (orderDetails.isEmpty || billDetails.isEmpty) {
+              return Center(
+                  child: Text(
+                'Không tìm thấy chi tiết hóa đơn',
+                style: GoogleFonts.roboto(fontSize: 17),
+              ));
+            }
+
+            OrderDetail orderDetail = orderDetails[0];
+            Bill bill = billDetails[0];
+
             return Padding(
               padding: const EdgeInsets.only(
                   left: 18.0, right: 18.0, top: 18.0, bottom: 25),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Phần logo và thông tin cửa hàng
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            //logo highland đang bị thiếu.
+                            // Logo của cửa hàng
                             Column(
                               children: [
                                 Image.asset(
@@ -151,6 +132,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                 ),
                               ],
                             ),
+                            // Thông tin của hàng
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -161,7 +143,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                       color: brown,
                                     )),
                                 Text(
-                                    'Địa chỉ: 504 Đại lộ Bình Dương - Phường\n Hiệp Thành 3 - TP. Thủ Dầu Một',
+                                    'Địa chỉ: 504 Đại lộ Bình Dương - Phường\n Hiệp Thành, TP.Thủ Dầu Một',
                                     style: GoogleFonts.roboto(
                                       fontSize: 14,
                                     )),
@@ -174,6 +156,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                           ],
                         ),
                         Divider(),
+                        // Phần thông tin hóa đơn
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -187,12 +170,18 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                   ),
                                 ),
                                 Text(
-                                    'Số đơn hàng: ${widget.orderid} - [Đơn hàng online]',
+                                  'Nhân viên tạo hóa đơn: ${bill.staffname}',
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                    'Hóa đơn số: ${bill.billid} - [Đơn hàng online]',
                                     style: GoogleFonts.roboto(
                                       fontSize: 16,
                                     )),
                                 Text(
-                                  'Ngày: ${formatDate(orderDetails[0].date)}',
+                                  'Ngày: ${orderDetail.date}',
                                   style: GoogleFonts.roboto(
                                     fontSize: 16,
                                   ),
@@ -203,6 +192,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                         ),
                         SizedBox(height: 10.0),
                         Divider(),
+                        // Danh sách chi tiết đơn hàng
                         Row(
                           children: [
                             Expanded(
@@ -240,57 +230,55 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                           ],
                         ),
                         Divider(),
-                        LimitedBox(
-                          maxHeight: 300, // giới hạn chiều cao tối đa
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: min(orderDetails.length,
-                                5), // giới hạn số lượng sản phẩm tối đa là 5
-                            itemBuilder: (context, index) {
-                              var orderDetail = orderDetails[index];
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: Text(
-                                        '${index + 1}. ${orderDetail.productname}',
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 16,
-                                        ),
-                                        softWrap: true,
+                        // Danh sách chi tiết sản phẩm
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: orderDetails.length,
+                          itemBuilder: (context, index) {
+                            var orderDetail = orderDetails[index];
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                      '${index + 1}. ${orderDetail.productname}',
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 16,
                                       ),
+                                      softWrap: true,
                                     ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        orderDetail.quantity.toString(),
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 16,
-                                        ),
-                                        textAlign: TextAlign.center,
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      orderDetail.quantity.toString(),
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 16,
                                       ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(
-                                        '${orderDetail.intomoney.toStringAsFixed(3)}',
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 16,
-                                        ),
-                                        textAlign: TextAlign.right,
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      '${orderDetail.intomoney.toStringAsFixed(3)}',
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 16,
                                       ),
+                                      textAlign: TextAlign.right,
                                     ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                         Divider(),
+                        // Phần tổng cộng, chiết khấu và các thông tin khác
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -308,9 +296,10 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '${orderDetails.fold(0, (sum, item) => sum + item.intomoney).toStringAsFixed(3)}',
-                                style: GoogleFonts.roboto(
+                                '${bill.totalprice.toStringAsFixed(3)}',
+                                style: GoogleFonts.arsenal(
                                   fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.right,
                               ),
@@ -318,6 +307,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                           ],
                         ),
                         SizedBox(height: 10.0),
+                        // Chiết khấu
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -335,9 +325,10 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '0',
-                                style: GoogleFonts.roboto(
+                                '${bill.discountcode.toString()}',
+                                style: GoogleFonts.arsenal(
                                   fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.right,
                               ),
@@ -362,63 +353,10 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '${orderDetails.fold(0, (sum, item) => sum + item.intomoney).toStringAsFixed(3)}',
-                                style: GoogleFonts.roboto(
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(flex: 3, child: Text('')),
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                'Tiền khách đưa:',
+                                '${bill.totalprice.toStringAsFixed(3)}',
                                 style: GoogleFonts.arsenal(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                '0',
-                                style: GoogleFonts.roboto(
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(flex: 3, child: Text('')),
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                'Tiền thừa:',
-                                style: GoogleFonts.arsenal(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                '0',
-                                style: GoogleFonts.roboto(
-                                  fontSize: 16,
                                 ),
                                 textAlign: TextAlign.right,
                               ),
@@ -429,25 +367,23 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                     ),
                   ),
                   if (loggedInStaff != null)
-                    MyButton(
-                        text: 'Lập hóa đơn',
-                        onTap: () {
-                          addBill();
-                        },
-                        buttonColor: primaryColors,
-                        isDisabled: orderDetails[0].status != 1,
-                        )
+                    Positioned(
+                      bottom: 16,
+                      left: 16,
+                      right: 16,
+                      child: MyButton(
+                          text: 'In hóa đơn',
+                          onTap: () {
+                            printBill(widget.orderid, loggedInStaff!.staffid);
+                          },
+                          buttonColor: green,
+                          isDisabled: bill.status == 2
+                          ),
+                    )
                   else if (loggedInCustomer != null)
                     MyButton(
                         text: 'Hoàn thành',
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ),
-                          );
-                        },
+                        onTap: () {},
                         buttonColor: primaryColors),
                 ],
               ),

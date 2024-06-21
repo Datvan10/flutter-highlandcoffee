@@ -90,7 +90,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                             },
                             child: Container(
                               margin: EdgeInsets.only(bottom: 15.0),
-                              height: 100,
+                              height: 130,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.0),
                                 color: white,
@@ -122,13 +122,65 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                           ),
                                           Text(
                                             'Mã đơn hàng : ${order.orderid} ',
-                                            style: GoogleFonts.arsenal(
-                                                fontSize: 17),
+                                            style: GoogleFonts.roboto(
+                                                fontSize: 16),
                                           ),
                                           Text(
                                               'Tổng tiền : ${order.totalprice.toStringAsFixed(3) + ' VND'}',
-                                              style: GoogleFonts.arsenal(
-                                                  fontSize: 17)),
+                                              style: GoogleFonts.roboto(
+                                                  fontSize: 16)),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Trạng thái : ',
+                                                style: GoogleFonts.roboto(
+                                                    fontSize: 16),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width:
+                                                        10,
+                                                    height: 10,
+                                                    decoration: BoxDecoration(
+                                                      color: order.status == 0
+                                                          ? red
+                                                          : order.status == 1
+                                                              ? blue
+                                                              : order.status ==
+                                                                      2
+                                                                  ? green
+                                                                  : light_yellow,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      width:
+                                                          8),
+                                                  Text(
+                                                    order.status == 0
+                                                        ? '[Chưa xử lý]'
+                                                        : order.status == 1
+                                                            ? '[Đã xử lý]'
+                                                            : order.status == 2
+                                                                ? '[Đã thanh toán]'
+                                                                : 'Trạng thái không xác định',
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize: 18,
+                                                      color: order.status == 0
+                                                          ? red
+                                                          : order.status == 1
+                                                              ? blue
+                                                              : order.status ==
+                                                                      2
+                                                                  ? green
+                                                                  : light_yellow,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                       Icon(
@@ -146,17 +198,12 @@ class _ListOrderPageState extends State<ListOrderPage> {
                       },
                     ),
                   ),
-                  Positioned(
-                    bottom: 16,
-                    left: 16,
-                    right: 16,
-                    child: MyButton(
-                      text: 'Hoàn thành',
-                      onTap: () {
-                        Navigator.pushNamed(context, '/home_page');
-                      },
-                      buttonColor: primaryColors,
-                    ),
+                  MyButton(
+                    text: 'Hoàn thành',
+                    onTap: () {
+                      Navigator.pushNamed(context, '/home_page');
+                    },
+                    buttonColor: primaryColors,
                   ),
                 ],
               ),

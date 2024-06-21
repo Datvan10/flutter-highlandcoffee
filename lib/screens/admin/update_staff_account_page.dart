@@ -46,12 +46,12 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
     try {
       await adminApi.updateStaff(Staff);
       Navigator.pop(context);
-      showCustomAlertDialog(
-          context, 'Thông báo', 'Cập nhật sản thông tin tìa khoản nhân viên thành công');
+      showCustomAlertDialog(context, 'Thông báo',
+          'Cập nhật sản thông tin tài khoản nhân viên thành công');
       _fetchStaffs();
     } catch (e) {
-      showCustomAlertDialog(
-          context, 'Lỗi', 'Thông tin tài khoản nhân viên đã tồn tại. Vui lòng thử lại.');
+      showCustomAlertDialog(context, 'Lỗi',
+          'Thông tin tài khoản nhân viên đã tồn tại. Vui lòng thử lại.');
       print('Error updating Staff: $e');
     }
   }
@@ -106,11 +106,13 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
+                          int salary;
+                          salary = int.parse(_editSlaryController.text);
                           Staff updateNewStaff = Staff(
                             staffid: staff.staffid,
                             name: _editNameController.text,
                             phonenumber: _editPhoneNumberController.text,
-                            salary: int.parse(_editSlaryController.text),
+                            salary: salary,
                             startday: staff.startday,
                             password: _editPassWordController.text,
                           );
@@ -124,6 +126,15 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                             showCustomAlertDialog(context, 'Thông báo',
                                 'Mật khẩu không hợp lệ, phải có ít nhất 6 ký tự');
                             return;
+                          } else if(updateNewStaff.phonenumber.length < 10 || updateNewStaff.phonenumber.length > 10) {
+                            showCustomAlertDialog(context, 'Thông báo',
+                                'Số điện thoại không hợp lệ, phải có 10 số.');
+                            return;
+                          }
+                          else if (salary <= 0) {
+                            showCustomAlertDialog(context, 'Thông báo',
+                                'Lương không được là số âm hoặc bằng 0.');
+                                return;
                           }
                           // Xử lý khi nhấn nút
                           await updateStaff(updateNewStaff);

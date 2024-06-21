@@ -7,7 +7,7 @@ import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/screens/client/rate_comment_page.dart';
 import 'package:highlandcoffeeapp/screens/client/update_customer_profille_page.dart';
-import 'package:highlandcoffeeapp/screens/app/list_order_page.dart';
+import 'package:highlandcoffeeapp/screens/staff/list_order_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
 import 'package:highlandcoffeeapp/widgets/profile_menu.dart';

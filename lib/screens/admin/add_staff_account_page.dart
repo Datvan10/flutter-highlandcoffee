@@ -7,6 +7,7 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_number_field.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
+import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
 class AddStaffAccountPage extends StatefulWidget {
   static const String routeName = '/add_staff_account_page';
@@ -58,7 +59,8 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
         return;
       }
 
-      if (_phoneNumberController.text.length < 10 || _phoneNumberController.text.length > 10) {
+      if (_phoneNumberController.text.length < 10 ||
+          _phoneNumberController.text.length > 10) {
         showCustomAlertDialog(
             context, 'Thông báo', 'Số điện thoại không hợp lệ, phải có 10 số.');
         return;
@@ -74,7 +76,8 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
       await adminApi.addStaff(newStaff);
 
       // Show success message
-      showCustomAlertDialog(context, 'Thông báo', 'Thêm tài khoản nhân viên thành công.');
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Thêm tài khoản nhân viên thành công.');
 
       // Clear text fields
       _phoneNumberController.clear();
@@ -90,64 +93,78 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Thêm thông tin nhân viên',
-                style: GoogleFonts.arsenal(
-                    fontSize: 30, fontWeight: FontWeight.bold, color: brown),
-              ),
-            ),
-            SizedBox(height: 30),
-            LabeledTextField(
-                label: 'Tên nhân viên', controller: _nameController),
-            LabeledNumberField(
-              label: 'Số điện thoại',
-              controller: _phoneNumberController,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-              ],
-            ),
-            LabeledTextField(
-                label: 'Mật khẩu', controller: _passwordController),
-            LabeledTextField(
-                label: 'Lương cơ bản', controller: _salaryController),
-            SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+    return Padding(
+      padding: const EdgeInsets.only(
+          left: 18.0, top: 18.0, right: 18.0, bottom: 25),
+      child: Column(
+        children: [
+          Expanded(
+            child: Column(
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/admin_page');
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: red),
+                Container(
+                  alignment: Alignment.topLeft,
                   child: Text(
-                    'Hủy',
-                    style: TextStyle(color: white),
+                    'Thêm thông tin nhân viên',
+                    style: GoogleFonts.arsenal(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: brown),
                   ),
                 ),
-                SizedBox(
-                  width: 15,
+                SizedBox(height: 30),
+                LabeledTextField(
+                    label: 'Tên nhân viên', controller: _nameController),
+                LabeledNumberField(
+                  label: 'Số điện thoại',
+                  controller: _phoneNumberController,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    addStaff();
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: green),
-                  child: Text(
-                    'Thêm',
-                    style: TextStyle(color: white),
-                  ),
+                LabeledTextField(
+                    label: 'Mật khẩu', controller: _passwordController),
+                LabeledTextField(
+                    label: 'Lương cơ bản', controller: _salaryController),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/admin_page');
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: red),
+                      child: Text(
+                        'Hủy',
+                        style: TextStyle(color: white),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        addStaff();
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: green),
+                      child: Text(
+                        'Thêm',
+                        style: TextStyle(color: white),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          MyButton(
+            text: 'Hoàn thành',
+            onTap: () {
+              Navigator.pushNamed(context, '/admin_page');
+            },
+            buttonColor: primaryColors,
+          ),
+        ],
       ),
     );
   }

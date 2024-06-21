@@ -79,18 +79,18 @@ class _OrderPageState extends State<OrderPage> {
         orderid: '',
         staffid: '',
         customerid: loggedCustomer?.customerid ?? '',
-        productid: '', // Bổ sung giá trị mặc định
-        productname: '', // Bổ sung giá trị mặc định
-        quantity: 0, // Bổ sung giá trị mặc định
-        size: '', // Bổ sung giá trị mặc định
-        image: '', // Bổ sung giá trị mặc định
-        intomoney: 0, // Bổ sung giá trị mặc định
-        totalprice: 0, // Bổ sung giá trị mặc định
-        date: DateTime.now(), // Bổ sung giá trị mặc định
+        productid: '',
+        productname: '',
+        quantity: 0,
+        size: '',
+        image: '',
+        intomoney: 0,
+        totalprice: 0,
+        date: DateTime.now(),
         paymentmethod: selectedPaymentMethod,
         cartid:
             widget.cartItems.isNotEmpty ? widget.cartItems.first.cartid : '',
-        status: 0, // Bổ sung giá trị mặc định
+        status: 0,
         customername: loggedCustomer?.name ?? '',
         address: loggedCustomer?.address ?? '',
         phonenumber: loggedCustomer?.phonenumber ?? '',
@@ -180,7 +180,7 @@ class _OrderPageState extends State<OrderPage> {
                                 fontWeight: FontWeight.bold),
                           ),
                           Text('$totalQuantity',
-                              style: GoogleFonts.arsenal(
+                              style: GoogleFonts.roboto(
                                   color: primaryColors, fontSize: 16))
                         ],
                       ),
@@ -192,13 +192,13 @@ class _OrderPageState extends State<OrderPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Phương thức',
-                              style: GoogleFonts.arsenal(
+                              style: GoogleFonts.roboto(
                                   fontSize: 18.0,
                                   color: primaryColors,
                                   fontWeight: FontWeight.bold)),
                           Text(
                             '$selectedPaymentMethod',
-                            style: GoogleFonts.arsenal(
+                            style: GoogleFonts.roboto(
                                 color: primaryColors, fontSize: 16),
                           )
                         ],

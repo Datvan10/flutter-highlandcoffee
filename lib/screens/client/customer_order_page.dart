@@ -62,12 +62,17 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Chưa có đơn đặt hàng, mua sắm ngay'));
+            return Center(
+                child: Text(
+              'Chưa có đơn đặt hàng, mua sắm ngay',
+              style: GoogleFonts.roboto(fontSize: 17),
+            ));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             return Padding(
-              padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 18.0, bottom: 25),
+              padding: const EdgeInsets.only(
+                  left: 18.0, right: 18.0, top: 18.0, bottom: 25),
               child: Column(
                 children: [
                   Expanded(
@@ -91,7 +96,7 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
                             },
                             child: Container(
                               margin: EdgeInsets.only(bottom: 15.0),
-                              height: 100,
+                              height: 130,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.0),
                                 color: white,
@@ -104,11 +109,14 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
                                 title: Padding(
                                   padding: const EdgeInsets.only(bottom: 15.0),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             'Đơn hàng $orderNumber',
@@ -118,8 +126,64 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
                                               color: primaryColors,
                                             ),
                                           ),
-                                          Text('Mã đơn hàng : ${order.orderid} ', style: GoogleFonts.arsenal(fontSize : 17),),
-                                          Text('Tổng tiền : ${order.totalprice.toStringAsFixed(3) + ' VND'}',  style: GoogleFonts.arsenal(fontSize : 17)),
+                                          Text(
+                                            'Mã đơn hàng : ${order.orderid} ',
+                                            style: GoogleFonts.roboto(
+                                                fontSize: 16),
+                                          ),
+                                          Text(
+                                              'Tổng tiền : ${order.totalprice.toStringAsFixed(3) + ' VND'}',
+                                              style: GoogleFonts.roboto(
+                                                  fontSize: 16)),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Trạng thái : ',
+                                                style: GoogleFonts.roboto(
+                                                    fontSize: 16),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 10,
+                                                    height: 10,
+                                                    decoration: BoxDecoration(
+                                                      color: order.status == 0
+                                                          ? red
+                                                          : order.status == 1
+                                                              ? blue
+                                                              : order.status ==
+                                                                      2
+                                                                  ? green
+                                                                  : light_yellow,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 8),
+                                                  Text(
+                                                    order.status == 0
+                                                        ? '[Đang chờ duyệt]'
+                                                        : order.status == 1
+                                                            ? '[Đang giao hàng]'
+                                                            : order.status == 2
+                                                                ? '[Đã thanh toán]'
+                                                                : 'Trạng thái không xác định',
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize: 18,
+                                                      color: order.status == 0
+                                                          ? red
+                                                          : order.status == 1
+                                                              ? blue
+                                                              : order.status ==
+                                                                      2
+                                                                  ? green
+                                                                  : light_yellow,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                       Icon(

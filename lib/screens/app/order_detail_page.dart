@@ -10,6 +10,7 @@ import 'package:highlandcoffeeapp/screens/app/preview_bill_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
+import 'package:intl/intl.dart';
 
 enum UserRole { customer, staff }
 
@@ -45,6 +46,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         : AuthManager().loggedInStaff != null
             ? UserRole.staff
             : UserRole.customer;
+  }
+
+  // function format date
+  String formatDate(DateTime isoDate) {
+    return DateFormat('dd - MM - yyyy').format(isoDate);
   }
 
   // function to confirm order
@@ -163,264 +169,302 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             return Center(child: Text('No order details found'));
           } else {
             List<OrderDetail> orderDetails = snapshot.data!;
-            return Stack(
-              children: [
-                SingleChildScrollView(
-                  padding: EdgeInsets.all(18.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Mã đơn hàng: ${orderDetails[0].orderid}',
-                        style: GoogleFonts.arsenal(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 10.0),
-                      Text(
-                        'Ngày đặt: ${orderDetails[0].date}',
-                        style: GoogleFonts.roboto(
-                          fontSize: 14,
+            return Padding(
+              padding: const EdgeInsets.only(
+                  left: 18.0, right: 18.0, top: 18.0, bottom: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Mã đơn hàng: ${orderDetails[0].orderid}',
+                              style: GoogleFonts.arsenal(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Text(
-                        'Thông tin sản phẩm:',
-                        style: GoogleFonts.arsenal(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: primaryColors,
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Ngày đặt: ${formatDate(orderDetails[0].date)}',
+                              style: GoogleFonts.roboto(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 15.0),
-                      Divider(),
-                      SizedBox(height: 10.0),
-                      Container(
-                        height: orderDetails.length == 1
-                            ? 110.0
-                            : 220.0, // Giới hạn chiều cao để hiển thị 2 sản phẩm
-                        child: ListView.builder(
-                          itemCount: orderDetails.length,
-                          itemBuilder: (context, index) {
-                            var orderDetail = orderDetails[index];
-                            return Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    // Column 1: Image
-                                    Expanded(
-                                      flex: 2,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: white_grey,
-                                                  width: 1.0),
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: Image.memory(
-                                                base64Decode(orderDetail.image),
-                                                height: 100,
-                                                width: 100,
-                                                fit: BoxFit.cover,
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Thông tin sản phẩm:',
+                              style: GoogleFonts.arsenal(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColors,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15.0),
+                        Divider(),
+                        SizedBox(height: 10.0),
+                        Container(
+                          height: orderDetails.length == 1
+                              ? 110.0
+                              : 220.0, // Giới hạn chiều cao để hiển thị 2 sản phẩm
+                          child: ListView.builder(
+                            itemCount: orderDetails.length,
+                            itemBuilder: (context, index) {
+                              var orderDetail = orderDetails[index];
+                              return Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      // Column 1: Image
+                                      Expanded(
+                                        flex: 2,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: white_grey,
+                                                    width: 1.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                child: Image.memory(
+                                                  base64Decode(
+                                                      orderDetail.image),
+                                                  height: 100,
+                                                  width: 100,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(width: 16.0),
-                                    // Column 2: Product name and size
-                                    Expanded(
-                                      flex: 3,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            orderDetail.productname,
-                                            style: GoogleFonts.arsenal(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                      SizedBox(width: 16.0),
+                                      // Column 2: Product name and size
+                                      Expanded(
+                                        flex: 3,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              orderDetail.productname,
+                                              style: GoogleFonts.arsenal(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            'Size: ${orderDetail.size}',
-                                            style: GoogleFonts.roboto(
-                                              fontSize: 14,
+                                            Text(
+                                              'Size: ${orderDetail.size}',
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 14,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Spacer(), // Để tạo khoảng cách giữa cột 2 và 3
-                                    // Column 3: Quantity and price
-                                    Expanded(
-                                      flex: 2,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            '${orderDetail.intomoney.toStringAsFixed(3)} VND',
-                                            style: GoogleFonts.arsenal(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                      Spacer(), // Để tạo khoảng cách giữa cột 2 và 3
+                                      // Column 3: Quantity and price
+                                      Expanded(
+                                        flex: 2,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              '${orderDetail.intomoney.toStringAsFixed(3)} VND',
+                                              style: GoogleFonts.arsenal(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            'SL: ${orderDetail.quantity}',
-                                            style: GoogleFonts.roboto(
-                                              fontSize: 14,
+                                            Text(
+                                              'SL: ${orderDetail.quantity}',
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 14,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 15.0),
-                              ],
-                            );
-                          },
+                                    ],
+                                  ),
+                                  SizedBox(height: 15.0),
+                                ],
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Divider(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Tổng cộng: ${orderDetails[0].totalprice.toStringAsFixed(3)} VND',
-                            style: GoogleFonts.arsenal(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                        SizedBox(height: 10.0),
+                        Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Tổng cộng: ${orderDetails[0].totalprice.toStringAsFixed(3)} VND',
+                              style: GoogleFonts.arsenal(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Divider(),
-                      SizedBox(height: 15.0),
-                      Text(
-                        'Thông tin nhận hàng:',
-                        style: GoogleFonts.arsenal(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: primaryColors,
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Column Phương thức
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        Divider(),
+                        SizedBox(height: 15.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Thông tin nhận hàng:',
+                              style: GoogleFonts.arsenal(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColors,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Column Phương thức
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Phương thức',
+                                    style: GoogleFonts.arsenal(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5.0),
+                                  Text(
+                                    orderDetails[0].paymentmethod ?? '',
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            // Column Thông tin khách hàng
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Thông tin khách hàng:',
+                                    style: GoogleFonts.arsenal(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5.0),
+                                  Text(
+                                    'Tên khách hàng: ${orderDetails[0].customername ?? ''}',
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Số điện thoại: ${orderDetails[0].phonenumber ?? ''}',
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5.0),
+                                  Text(
+                                    'Địa chỉ: ${orderDetails[0].address ?? ''}',
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          children: [
+                            Text(
+                              'Trạng thái đơn hàng: ',
+                              style: GoogleFonts.arsenal(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: black,
+                              ),
+                            ),
+                            Spacer(),
+                            Row(
                               children: [
-                                Text(
-                                  'Phương thức',
-                                  style: GoogleFonts.arsenal(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color: orderDetails[0].status == 0
+                                        ? red
+                                        : orderDetails[0].status == 1
+                                            ? blue
+                                            : orderDetails[0].status == 2
+                                                ? green
+                                                : light_yellow,
+                                    shape: BoxShape.circle,
                                   ),
                                 ),
-                                SizedBox(height: 5.0),
+                                SizedBox(
+                                    width:
+                                        8),
                                 Text(
-                                  orderDetails[0].paymentmethod ?? '',
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 14,
+                                  orderDetails[0].status == 0
+                                      ? 'Đang chờ duyệt'
+                                      : orderDetails[0].status == 1
+                                          ? 'Đang giao hàng'
+                                          : orderDetails[0].status == 2
+                                              ? 'Đã thanh toán'
+                                              : 'Trạng thái không xác định',
+                                  style: GoogleFonts.arsenal(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: orderDetails[0].status == 0
+                                        ? red
+                                        : orderDetails[0].status == 1
+                                            ? blue
+                                            : orderDetails[0].status == 2
+                                                ? green
+                                                : light_yellow,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          SizedBox(width: 20),
-                          // Column Thông tin khách hàng
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Thông tin khách hàng:',
-                                  style: GoogleFonts.arsenal(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 5.0),
-                                Text(
-                                  'Tên khách hàng: ${orderDetails[0].customername ?? ''}',
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  'Số điện thoại: ${orderDetails[0].phonenumber ?? ''}',
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                SizedBox(height: 5.0),
-                                Text(
-                                  'Địa chỉ: ${orderDetails[0].address ?? ''}',
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10.0),
-                      Row(
-                        children: [
-                          Text(
-                            'Trạng thái đơn hàng: ',
-                            style: GoogleFonts.arsenal(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: black,
-                            ),
-                          ),
-                          Spacer(),
-                          Text(
-                            orderDetails[0].status == 0
-                                ? 'Đang chờ duyệt'
-                                : orderDetails[0].status == 1
-                                    ? 'Đang giao hàng'
-                                    : orderDetails[0].status == 2
-                                        ? 'Đã nhận hàng và thanh toán'
-                                    : 'Trạng thái không xác định',
-                            style: GoogleFonts.arsenal(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: orderDetails[0].status == 0
-                                  ? red
-                                  : orderDetails[0].status == 1
-                                      ? light_yellow
-                                      : orderDetails[0].status == 2
-                                          ? green
-                                      : Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 135.0),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
-                  child: currentUserRole ==
-                          UserRole.staff
+                  currentUserRole == UserRole.staff
                       ? MyButton(
                           text: 'Xác nhận đơn hàng',
                           onTap: orderDetails[0].status == 0
@@ -442,8 +486,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           buttonColor: primaryColors,
                           isDisabled: orderDetails[0].status != 0,
                         ),
-                ),
-              ],
+                ],
+              ),
             );
           }
         },
