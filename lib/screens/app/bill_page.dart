@@ -181,7 +181,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                                       fontSize: 16,
                                     )),
                                 Text(
-                                  'Ngày: ${orderDetail.date}',
+                                  'Ngày: ${formatDate(orderDetail.date)}',
                                   style: GoogleFonts.roboto(
                                     fontSize: 16,
                                   ),
