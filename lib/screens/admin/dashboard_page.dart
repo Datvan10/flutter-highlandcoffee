@@ -1,25 +1,208 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:intl/intl.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   static const String routeName = '/dashboard_page';
-  const DashboardPage({super.key});
+
+  const DashboardPage({Key? key}) : super(key: key);
+
+  @override
+  _DashboardPageState createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  final AdminApi adminApi = AdminApi();
+  List<DailyRevenue> _dailyRevenues = [];
+  bool _isLoading = false;
+  int? _touchedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDailyRevenues();
+  }
+
+  Future<void> _fetchDailyRevenues() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      DateTime now = DateTime.now();
+      DateFormat formatter = DateFormat('yyyy-MM-dd');
+      for (int i = 0; i < 7; i++) {
+        String formattedDate =
+            formatter.format(now.subtract(Duration(days: i)));
+        final dailyRevenue =
+            await adminApi.fetchDailyRevenue(DateTime.parse(formattedDate));
+        _dailyRevenues
+            .add(DailyRevenue(date: formattedDate, revenue: dailyRevenue));
+      }
+
+      _dailyRevenues.sort((a, b) => a.date.compareTo(b.date));
+    } catch (e) {
+      print('Error fetching daily revenues: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topLeft,
-              child: Text('Tổng quan', style: GoogleFonts.arsenal(fontSize: 30, color: primaryColors, fontWeight: FontWeight.bold),),
-            )
-          ],
-        ),
-      ),
+    return Scaffold(
+      backgroundColor: background,
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.only(
+                  top: 18.0, left: 18.0, right: 18.0, bottom: 25.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Tổng quan doanh thu 7 ngày gần nhất',
+                    style: GoogleFonts.arsenal(fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: brown),
+                  ),
+                  SizedBox(height: 20),
+                  Expanded(
+                    child: BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceAround,
+                        maxY: 10000,
+                        barTouchData: BarTouchData(
+                          touchTooltipData: BarTouchTooltipData(
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              String date = _dailyRevenues[groupIndex].date;
+                              return BarTooltipItem(
+                                '$date\n',
+                                TextStyle(
+                                  color: white,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: formatCurrency(rod.toY),
+                                    style: TextStyle(
+                                      color: white,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          touchCallback:
+                              (FlTouchEvent event, barTouchResponse) {
+                            setState(() {
+                              if (barTouchResponse != null &&
+                                  barTouchResponse.spot != null) {
+                                _touchedIndex =
+                                    barTouchResponse.spot!.touchedBarGroupIndex;
+                              } else {
+                                _touchedIndex = -1;
+                              }
+                            });
+                          },
+                        ),
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                DateTime date = DateTime.parse(
+                                    _dailyRevenues[value.toInt()].date);
+                                return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  child: Text(
+                                    DateFormat('dd-MM').format(date),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                );
+                              },
+                              interval: 1,
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                if ([100, 500, 1000, 2000, 5000, 10000]
+                                    .contains(value)) {
+                                  return SideTitleWidget(
+                                    axisSide: meta.axisSide,
+                                    child: Text(
+                                      value.toInt().toString(),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return const SizedBox.shrink();
+                                }
+                              },
+                              interval: 1,
+                              reservedSize: 40,
+                            ),
+                          ),
+                        ),
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border(
+                            bottom: BorderSide(
+                                color: Colors.grey.shade300, width: 1),
+                            left: BorderSide(
+                                color: Colors.grey.shade300, width: 1),
+                            right: BorderSide(color: Colors.transparent),
+                            top: BorderSide(color: Colors.transparent),
+                          ),
+                        ),
+                        barGroups: _buildBarGroups(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Center(
+                    child: Text('Biểu đồ doanh thu 7 ngày gần nhất',
+                        style: GoogleFonts.roboto(fontSize: 16, color : brown)),
+                  )
+                ],
+              ),
+            ),
     );
+  }
+
+  String formatCurrency(double value) {
+    final format = NumberFormat.currency(locale: 'vi', symbol: 'VND');
+    return format.format(value);
+  }
+
+  List<BarChartGroupData> _buildBarGroups() {
+    List<BarChartGroupData> bars = [];
+    for (int i = 0; i < _dailyRevenues.length; i++) {
+      bars.add(
+        BarChartGroupData(
+          x: i,
+          barRods: [
+            BarChartRodData(
+              toY: _dailyRevenues[i].revenue.toDouble(),
+              color: _touchedIndex == i ? green : blue,
+            ),
+          ],
+          showingTooltipIndicators: _touchedIndex == i ? [0] : [],
+        ),
+      );
+    }
+    return bars;
   }
 }

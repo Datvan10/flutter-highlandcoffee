@@ -12,8 +12,7 @@ import 'package:highlandcoffeeapp/screens/admin/delete_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_staff_account_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/feddback_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/order_list_page.dart';
-import 'package:highlandcoffeeapp/screens/admin/most_sold_product_page.dart';
-import 'package:highlandcoffeeapp/screens/admin/revenue_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/top_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_account_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
@@ -41,16 +40,16 @@ class _AdminPageState extends State<AdminPage> {
 
         break;
 
-      case RevenuePage.routeName:
-        setState(() {
-          _selectedItem = RevenuePage();
-        });
+      // case RevenuePage.routeName:
+      //   setState(() {
+      //     _selectedItem = RevenuePage();
+      //   });
 
-        break;
+      //   break;
 
-      case MostSoldProductPage.routeName:
+      case TopProductPage.routeName:
         setState(() {
-          _selectedItem = MostSoldProductPage();
+          _selectedItem = TopProductPage();
         });
 
         break;
@@ -139,7 +138,8 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   //
-  void _showConfirmExit() {
+  void _showConfirmExit(BuildContext context) {
+    print('show confirm exit');
     notificationDialog(
       context: context,
       title: "Đăng xuất khỏi tài khoản của bạn?",
@@ -194,14 +194,14 @@ class _AdminPageState extends State<AdminPage> {
                 icon: Icons.dashboard,
                 route: DashboardPage.routeName,
                 children: [
+                  // AdminMenuItem(
+                  //     title: 'Doanh số bán hàng',
+                  //     route: RevenuePage.routeName,
+                  //     icon: Icons.monetization_on_outlined),
                   AdminMenuItem(
-                      title: 'Doanh số bán hàng',
-                      route: RevenuePage.routeName,
-                      icon: Icons.monetization_on_outlined),
-                  AdminMenuItem(
-                      title: 'Sản phẩm bán chạy nhất',
+                      title: 'Thống kê sản phẩm',
                       icon: Icons.trending_up,
-                      route: MostSoldProductPage.routeName)
+                      route: TopProductPage.routeName)
                 ]),
             // manage account
             AdminMenuItem(
@@ -318,9 +318,10 @@ class _AdminPageState extends State<AdminPage> {
             AdminMenuItem(
               title: 'Đăng xuất',
               icon: Icons.logout,
+              onTap: () => _showConfirmExit(context),
             ),
           ],
-          selectedRoute: '', // Thêm selectedRoute vào đây
+          selectedRoute: '',
           onSelected: (item) {
             screenSlector(item);
           },

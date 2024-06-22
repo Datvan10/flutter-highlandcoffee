@@ -533,3 +533,10 @@ class Bill {
     };
   }
 }
+
+class DailyRevenue {
+  final String date;
+  final int revenue;
+
+  DailyRevenue({required this.date, required this.revenue});
+}

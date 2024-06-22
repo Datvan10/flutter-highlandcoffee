@@ -12,6 +12,7 @@ class AdminApi {
   final String categoryUrl = "http://localhost:5194/api/categories";
   final String customerUrl = "http://localhost:5194/api/customers";
   final String getProductUrl = 'http://localhost:5194/api/products/category';
+  final String baseUrl = 'http://localhost:5194/api/bills';
 
   // Read data from API
   Future<List<Admin>> getAdmins() async {
@@ -455,6 +456,36 @@ class AdminApi {
       }
     } catch (e) {
       throw Exception('Failed to load categories');
+    }
+  }
+
+  // fetch daily revenue
+  Future<int> fetchDailyRevenue(DateTime date) async {
+    try {
+      final response = await http.get(Uri.parse(
+          '$baseUrl/daily-revenue?date=${date.toString().substring(0, 10)}'));
+      if (response.statusCode == 200) {
+        return int.parse(response.body);
+      } else {
+        throw Exception('Failed to load daily revenue');
+      }
+    } catch (e) {
+      throw Exception('Failed to load daily revenue');
+    }
+  }
+
+  // fetch top products
+  Future<List<Map<String, dynamic>>> fetchTopProducts(DateTime date) async {
+    try {
+      final response = await http.get(Uri.parse(
+          '$baseUrl/top-products?date=${date.toString().substring(0, 10)}'));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body).cast<Map<String, dynamic>>();
+      } else {
+        throw Exception('Failed to load top products');
+      }
+    } catch (e) {
+      throw Exception('Failed to load top products');
     }
   }
 }
