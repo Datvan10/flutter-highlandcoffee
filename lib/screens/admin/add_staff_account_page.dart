@@ -31,6 +31,7 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
       int salary;
       try {
         salary = int.parse(_salaryController.text);
+        
         if (salary <= 0) {
           showCustomAlertDialog(
               context, 'Thông báo', 'Lương không được là số âm hoặc bằng 0.');

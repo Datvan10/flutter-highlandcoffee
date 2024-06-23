@@ -25,7 +25,7 @@ class LabeledTextField extends StatelessWidget {
             padding: EdgeInsets.only(right: 10),
             child: Text(
               label,
-              style: GoogleFonts.arsenal(
+              style: GoogleFonts.roboto(
                 fontSize: 20,
                 color: Colors.black,
               )

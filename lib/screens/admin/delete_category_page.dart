@@ -72,7 +72,7 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
                   print('Error deleting category: $e');
                   Navigator.pop(context);
                   showCustomAlertDialog(
-                      context, 'Lỗi', 'Đã xảy ra lỗi khi xóa danh mục.');
+                      context, 'Lỗi', 'Danh mục không thể bị xóa do liên quan đến dữ liệu khác trong hệ thống.');
                 }
               },
               child: Text(

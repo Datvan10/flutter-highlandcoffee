@@ -318,7 +318,6 @@ class _AdminPageState extends State<AdminPage> {
             AdminMenuItem(
               title: 'Đăng xuất',
               icon: Icons.logout,
-              onTap: () => _showConfirmExit(context),
             ),
           ],
           selectedRoute: '',

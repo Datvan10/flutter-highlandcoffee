@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -73,6 +72,12 @@ class _OrderPageState extends State<OrderPage> {
   // Hàm để lưu thông tin đơn hàng vào cơ sở dữ liệu
   Future<void> addOrder() async {
     try {
+      // Kiểm tra nếu giỏ hàng trống
+      if (widget.cartItems.isEmpty) {
+        showNotificationNavigate(context, 'Thông báo',
+            'Đặt hàng không thành công, giỏ hàng của bạn đang trống.', () {});
+        return;
+      }
       // Tạo đối tượng OrderDetail với các giá trị được truyền theo đúng định dạng
       OrderDetail newOrder = OrderDetail(
         orderdetailid: '',
@@ -95,6 +100,14 @@ class _OrderPageState extends State<OrderPage> {
         address: loggedCustomer?.address ?? '',
         phonenumber: loggedCustomer?.phonenumber ?? '',
       );
+      if (newOrder.paymentmethod == '') {
+        showNotificationNavigate(
+            context,
+            'Thông báo',
+            'Vui lòng chọn phương thức thanh toán',
+            () {});
+        return;
+      }
 
       // Gọi phương thức thêm đơn hàng từ API
       await orderApi.addOrder(newOrder);
@@ -292,6 +305,7 @@ class _OrderPageState extends State<OrderPage> {
                 controller: _textDiscountCodeController,
                 decoration: InputDecoration(
                     hintText: 'Nhập mã giảm giá',
+                    hintStyle: GoogleFonts.roboto(),
                     contentPadding: EdgeInsets.symmetric(),
                     alignLabelWithHint: true,
                     filled: true,
@@ -384,7 +398,7 @@ class _OrderPageState extends State<OrderPage> {
                 },
                 child: Text(
                   'Thay đổi',
-                  style: GoogleFonts.arsenal(color: light_blue, fontSize: 15),
+                  style: GoogleFonts.roboto(color: light_blue, fontSize: 15),
                 ),
               )
             ],
@@ -439,7 +453,7 @@ class _OrderPageState extends State<OrderPage> {
                 },
                 child: Text(
                   'Chọn khuyến mãi',
-                  style: GoogleFonts.arsenal(color: light_blue, fontSize: 15),
+                  style: GoogleFonts.roboto(color: light_blue, fontSize: 15),
                 ),
               )
             ],

@@ -124,11 +124,15 @@ class _TopProductPageState extends State<TopProductPage> {
                                 ],
                               ),
                               SizedBox(height: 10),
-                              Wrap(
-                                alignment: WrapAlignment.start,
-                                spacing: 20,
-                                runSpacing: 15,
-                                children: _buildLegend(),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: Wrap(
+                                    alignment: WrapAlignment.start,
+                                    spacing: 20,
+                                    runSpacing: 15,
+                                    children: _buildLegend(),
+                                  ),
+                                ),
                               ),
                               SizedBox(height: 10),
                               Row(

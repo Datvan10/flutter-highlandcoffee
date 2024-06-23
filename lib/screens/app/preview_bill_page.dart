@@ -70,6 +70,9 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
       print(newBill.totalprice);
       await staffApi.addBill(newBill);
       showCustomAlertDialog(context, 'Thông báo', 'Lập hóa đơn thành công');
+      setState(() {
+        futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+      });
     } catch (e) {
       showCustomAlertDialog(
           context, 'Lỗi', 'Hóa đơn đã tồn tại, vui lòng tạo hóa đơn khác ');
@@ -433,9 +436,13 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                         text: 'Lập hóa đơn',
                         onTap: () {
                           addBill();
+                          setState(() {
+                            futureOrderDetails =
+                                orderDetailApi.fetchOrderDetail(widget.orderid);
+                          });
                         },
                         buttonColor: primaryColors,
-                        isDisabled: orderDetails[0].status != 1,
+                        isDisabled: orderDetails[0].status != 0,
                         )
                   else if (loggedInCustomer != null)
                     MyButton(

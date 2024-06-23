@@ -37,7 +37,7 @@ class _PaymentMethodFormState extends State<PaymentMethodForm> {
     return ListTile(
       title: Text(
         title,
-        style: GoogleFonts.arsenal(fontSize: 17, color: black),
+        style: GoogleFonts.roboto(fontSize: 17, color: black),
       ),
       contentPadding: EdgeInsets.symmetric(horizontal: 9.0),
       leading: Radio(

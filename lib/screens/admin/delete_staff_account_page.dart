@@ -71,7 +71,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                   print('Error deleting staff: $e');
                   Navigator.pop(context);
                   showCustomAlertDialog(
-                      context, 'Lỗi', 'Đã xảy ra lỗi khi xóa nhân viên.');
+                      context, 'Lỗi', 'Nhân viên không thể bị xóa do liên quan đến dữ liệu khác trong hệ thống.');
                 }
               },
             ),
