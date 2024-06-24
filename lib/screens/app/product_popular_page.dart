@@ -20,7 +20,7 @@ class _ProductPopularPageState extends State<ProductPopularPage> {
   int _selectedIndexBottomBar = 1;
   Future<List<Product>>? productsFuture;
 
-  final PopularApi api = PopularApi();
+  final ProductApi productApi = ProductApi();
 
   //SelectedBottomBar
   void _selectedBottomBar(int index) {
@@ -32,17 +32,33 @@ class _ProductPopularPageState extends State<ProductPopularPage> {
   @override
   void initState() {
     super.initState();
-    productsFuture = api.getPopulars();
+    productsFuture = productApi.getListProducts();
   }
 
-  void _navigateToProductDetails(int index, List<Product> products) {
+  void _navigateToProductDetails(int index, List<Product> products) async {
+    List<Map<String, dynamic>> productSizes =
+        await _getProductSizes(products[index].productname);
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProductDetailPage(product: products[index]),
+        builder: (context) => ProductDetailPage(
+          product: products[index],
+          productSizes: productSizes,
+        ),
       ),
     );
   }
+
+  Future<List<Map<String, dynamic>>> _getProductSizes(String productname) async {
+  try {
+    List<Map<String, dynamic>> sizes = await productApi.getProductSizes(productname);
+    return sizes;
+  } catch (e) {
+    print("Error fetching product sizes: $e");
+    return [];
+  }
+}
 
   @override
   Widget build(BuildContext context) {

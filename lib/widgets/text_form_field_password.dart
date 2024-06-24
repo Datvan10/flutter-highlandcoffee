@@ -82,7 +82,7 @@ class _TextFormFieldPasswordState extends State<TextFormFieldPassword> {
             ? SizedBox()
             : Text(
                 'Mật khẩu phải có độ dài ít nhất 6 ký tự',
-                style:  GoogleFonts.arsenal(color: red, fontSize: 15),
+                style:  GoogleFonts.roboto(color: red, fontSize: 15),
               ),
       ],
     );

@@ -19,10 +19,12 @@ import 'package:highlandcoffeeapp/widgets/size_product.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
 
 class ProductDetailPage extends StatefulWidget {
+  final List<Map<String, dynamic>> productSizes;
   final Product product;
   const ProductDetailPage({
     super.key,
     required this.product,
+    required this.productSizes
   });
 
   @override
@@ -35,7 +37,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int quantityCount = 1;
   int totalPrice = 0;
   bool isFavorite = false;
-  String selectedSize = 'S';
+  String selectedSize = '';
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   final CartApi cartApi = CartApi();
   final FavoriteApi favoriteApi = FavoriteApi();
@@ -43,6 +45,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   void initState() {
     super.initState();
+    selectedSize = widget.product.size;
     updateTotalPrice();
   }
 
@@ -66,37 +69,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   void updateTotalPrice() {
     setState(() {
-      int productPrice;
-      switch (selectedSize) {
-        case 'S':
-          productPrice = widget.product.price;
-          break;
-        case 'M':
-          productPrice = widget.product.price;
-          break;
-        case 'L':
-          productPrice = widget.product.price;
-          break;
-        default:
-          productPrice = 0;
-      }
-      totalPrice = productPrice * quantityCount;
+      totalPrice = getPriceForSelectedSize() * quantityCount;
     });
   }
 
   //
   int getPriceForSelectedSize() {
-    // Dựa vào kích thước đã chọn, trả về giá tương ứng
-    switch (selectedSize) {
-      case 'S':
-        return widget.product.price;
-      case 'M':
-        return widget.product.price;
-      case 'L':
-        return widget.product.price;
-      default:
-        return 0;
+    for (var size in widget.productSizes) {
+      if (size['size'] == selectedSize) {
+        return size['price'];
+      }
     }
+    return 0;
   }
 
   //

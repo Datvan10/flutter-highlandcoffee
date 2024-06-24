@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class ImagePickerWidget extends StatelessWidget {
@@ -30,7 +31,7 @@ class ImagePickerWidget extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: TextStyle(fontSize: 20),
+                    style: GoogleFonts.roboto(fontSize: 20, color : black),
                   ),
                   SizedBox(height: 40),
                   ElevatedButton(
@@ -38,7 +39,7 @@ class ImagePickerWidget extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Chọn file', style: TextStyle(color: blue, fontSize: 16)),
+                        Text('Chọn file', style: GoogleFonts.roboto(color: blue, fontSize: 16)),
                         Icon(Icons.upload, color: blue),
                       ],
                     ),

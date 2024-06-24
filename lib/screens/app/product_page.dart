@@ -48,14 +48,30 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
-  void _navigateToProductDetails(int index, List<Product> products) {
+  void _navigateToProductDetails(int index, List<Product> products) async {
+    List<Map<String, dynamic>> productSizes = await _getProductSizes(products[index].productname);
+    
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProductDetailPage(product: products[index]),
+        builder: (context) => ProductDetailPage(
+          product: products[index],
+          productSizes: productSizes,
+        ),
       ),
     );
   }
+
+  Future<List<Map<String, dynamic>>> _getProductSizes(String productname) async {
+  try {
+    List<Map<String, dynamic>> sizes = await productApi.getProductSizes(productname);
+    return sizes;
+  } catch (e) {
+    print("Error fetching product sizes: $e");
+    return [];
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +85,7 @@ class _ProductPageState extends State<ProductPage> {
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => CartPage(),
-              )
-              );
+              ));
             },
           ),
         ],

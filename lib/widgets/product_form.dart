@@ -6,7 +6,7 @@ import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class ProductForm extends StatelessWidget {
-  final Product product; // Thay đổi từ Products sang Popular
+  final Product product;
   final VoidCallback onTap;
 
   const ProductForm({required this.product, required this.onTap});

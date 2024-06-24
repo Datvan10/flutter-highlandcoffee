@@ -1042,6 +1042,32 @@ class ProductApi {
       throw Exception('Failed to delete product');
     }
   }
+
+  // New method: Fetch product sizes and prices by product ID
+  Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
+  final String productSizesUrl = "http://localhost:5194/api/products/sizes/$productname";
+
+  try {
+    final response = await http.get(Uri.parse(productSizesUrl));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = json.decode(response.body);
+      List<Map<String, dynamic>> sizes = [];
+      for (var item in jsonData) {
+        sizes.add({
+          "size": item["size"],
+          "price": item["price"],
+        });
+      }
+      return sizes;
+    } else {
+      throw Exception('Failed to load product sizes');
+    }
+  } catch (e) {
+    throw Exception('Failed to load product sizes');
+  }
+}
+
 }
 
 // API for popular products
@@ -1122,6 +1148,31 @@ class PopularApi {
       throw Exception('Failed to delete popular product');
     }
   }
+
+  //
+  Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
+  final String productSizesUrl = "http://localhost:5194/api/products/sizes/$productname";
+
+  try {
+    final response = await http.get(Uri.parse(productSizesUrl));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = json.decode(response.body);
+      List<Map<String, dynamic>> sizes = [];
+      for (var item in jsonData) {
+        sizes.add({
+          "size": item["size"],
+          "price": item["price"],
+        });
+      }
+      return sizes;
+    } else {
+      throw Exception('Failed to load product sizes');
+    }
+  } catch (e) {
+    throw Exception('Failed to load product sizes');
+  }
+}
 }
 
 // API for favorite products
@@ -1226,6 +1277,31 @@ class BestSaleApi {
       throw Exception('Failed to load bestsale products');
     }
   }
+
+  //
+  Future<List<Map<String, dynamic>>> getProductSizes(String productId) async {
+  final String productSizesUrl = "http://localhost:5194/api/products/sizes/$productId";
+
+  try {
+    final response = await http.get(Uri.parse(productSizesUrl));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = json.decode(response.body);
+      List<Map<String, dynamic>> sizes = [];
+      for (var item in jsonData) {
+        sizes.add({
+          "size": item["size"],
+          "price": item["price"],
+        });
+      }
+      return sizes;
+    } else {
+      throw Exception('Failed to load product sizes');
+    }
+  } catch (e) {
+    throw Exception('Failed to load product sizes');
+  }
+}
 }
 
 // API for Coffee
