@@ -35,7 +35,7 @@ class InformationCustomerForm extends StatelessWidget {
                   Text(
                     userName,
                     style: GoogleFonts.roboto(
-                      fontSize: 18,
+                      fontSize: 17,
                       color: black,
                     ),
                   ),
@@ -49,7 +49,7 @@ class InformationCustomerForm extends StatelessWidget {
                   ),
                   Text(address,
                       style: GoogleFonts.roboto(
-                        fontSize: 18,
+                        fontSize: 17,
                         color: black,
                       )),
                 ],
@@ -62,7 +62,7 @@ class InformationCustomerForm extends StatelessWidget {
                   ),
                   Text(phoneNumber,
                       style: GoogleFonts.roboto(
-                        fontSize: 18,
+                        fontSize: 17,
                         color: black,
                       )),
                 ],

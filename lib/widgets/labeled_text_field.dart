@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class LabeledTextField extends StatelessWidget {
   final String label;
@@ -27,7 +28,7 @@ class LabeledTextField extends StatelessWidget {
               label,
               style: GoogleFonts.roboto(
                 fontSize: 20,
-                color: Colors.black,
+                color: black,
               )
             ),
           ),

@@ -189,7 +189,8 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
       ),
       builder: (BuildContext context) {
         return Container(
-          height: 830,
+          // color: background,
+          height: 835,
           width: MediaQuery.of(context).size.width,
           child: Padding(
             padding: const EdgeInsets.only(
@@ -210,6 +211,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                 ),
                 SizedBox(height: 10),
                 CategoryDropdown(
+                  // backGroundColor: white,
                   categories: _categories,
                   selectedCategory: selectedCategoryName,
                   onChanged: (String? value) {
@@ -283,8 +285,16 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                             updateNewProduct.imagedetail.isEmpty) {
                           showCustomAlertDialog(
                             context,
-                            'Lỗi',
+                            'Thông báo',
                             'Vui lòng nhập đầy đủ thông tin sản phẩm.',
+                          );
+                          return;
+                        }
+                        if(updateNewProduct.price <= 0) {
+                          showCustomAlertDialog(
+                            context,
+                            'Thông báo',
+                            'Giá không được là số âm hoặc bằng 0.',
                           );
                           return;
                         }
@@ -295,7 +305,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                         children: [
                           Text(
                             'Lưu',
-                            style: GoogleFonts.roboto(color: white),
+                            style: GoogleFonts.roboto(fontSize: 18, color: white),
                           ),
                         ],
                       ),

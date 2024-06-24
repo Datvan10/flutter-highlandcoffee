@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_search_bar.dart' as custom_widgets;
@@ -24,16 +25,32 @@ class ResultSearchProductWithKeyword extends StatefulWidget {
 
 class _ResultSearchProductWithKeywordState
     extends State<ResultSearchProductWithKeyword> {
+      final productApi = ProductApi();
   final TextEditingController _textSearchController = TextEditingController();
 
-  void _navigateToProductDetails(int index, List<Product> products) {
+  void _navigateToProductDetails(int index, List<Product> products) async {
+    List<Map<String, dynamic>> productSizes = await _getProductSizes(products[index].productname);
+    
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProductDetailPage(product: products[index]),
+        builder: (context) => ProductDetailPage(
+          product: products[index],
+          productSizes: productSizes,
+        ),
       ),
     );
   }
+
+  Future<List<Map<String, dynamic>>> _getProductSizes(String productname) async {
+  try {
+    List<Map<String, dynamic>> sizes = await productApi.getProductSizes(productname);
+    return sizes;
+  } catch (e) {
+    print("Error fetching product sizes: $e");
+    return [];
+  }
+}
 
   @override
   Widget build(BuildContext context) {

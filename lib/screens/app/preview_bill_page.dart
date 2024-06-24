@@ -442,7 +442,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                           });
                         },
                         buttonColor: primaryColors,
-                        isDisabled: orderDetails[0].status != 0,
+                        isDisabled: orderDetails[0].status != 1,
                         )
                   else if (loggedInCustomer != null)
                     MyButton(

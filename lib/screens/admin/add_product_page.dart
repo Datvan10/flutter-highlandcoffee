@@ -25,7 +25,7 @@ class _AddProductPageState extends State<AddProductPage> {
   late final Product product;
   final AdminApi adminApi = AdminApi();
   final CategoryApi categoryApi = CategoryApi();
-  String _selectedCategoryController = 'Coffee';
+  String _selectedCategoryController = '';
   List<Category> _categoryList = [];
   List<String> _categories = [];
 
@@ -51,7 +51,8 @@ class _AddProductPageState extends State<AddProductPage> {
         _categoryList = categories;
         _categories =
             categories.map((category) => category.categoryname).toList();
-        _selectedCategoryController = _categories.isNotEmpty ? _categories[0] : '';
+        _selectedCategoryController =
+            _categories.isNotEmpty ? _categories[0] : '';
       });
     } catch (e) {
       print('Error fetching categories: $e');
@@ -124,12 +125,6 @@ class _AddProductPageState extends State<AddProductPage> {
         throw Exception('Selected category not found');
       }
 
-      if(price <= 0) {
-        showCustomAlertDialog(
-            context, 'Thông báo', 'Giá sản phẩm không hợp lệ, vui lòng nhập lại.');
-        return;
-      }
-
       final bytesImage = _imageController!.readAsBytesSync();
       final bytesImageDetail = _imageDetailController!.readAsBytesSync();
       final String base64Image = base64Encode(bytesImage);
@@ -158,6 +153,12 @@ class _AddProductPageState extends State<AddProductPage> {
         return;
       }
 
+      if (price <= 0) {
+        showCustomAlertDialog(
+            context, 'Thông báo', 'Giá không được là số âm hoặc bằng 0.');
+        return;
+      }
+
       await adminApi.addProduct(newProduct);
       // print(newProduct.categoryid);
       // print('Product add successfully');
@@ -176,7 +177,7 @@ class _AddProductPageState extends State<AddProductPage> {
     } catch (e) {
       print('Error adding product to Database: $e');
       showCustomAlertDialog(
-          context, 'Lỗi', 'Thêm sản phẩm thất bại, vui lòng thử lại.');
+          context, 'Thông báo', 'Sản phẩm đã tồn tại, vui lòng thử lại.');
     }
   }
 
@@ -197,6 +198,7 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
             SizedBox(height: 10),
             CategoryDropdown(
+              backGroundColor : background,
               categories: _categories,
               selectedCategory: _selectedCategoryController,
               onChanged: (String? value) {
@@ -209,7 +211,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 label: 'Tên sản phẩm', controller: _productNameController),
             LabeledTextField(
                 label: 'Mô tả sản phẩm', controller: _descriptionController),
-            LabeledTextField(label: 'Size', controller: _sizeController),
+            LabeledTextField(label: 'Size (S-M-L)', controller: _sizeController),
             LabeledTextField(label: 'Giá', controller: _priceController),
             LabeledTextField(label: 'Đơn vị tính', controller: _unitController),
             SizedBox(height: 10),
@@ -234,7 +236,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   style: ElevatedButton.styleFrom(backgroundColor: red),
                   child: Text(
                     'Hủy',
-                    style: TextStyle(color: white),
+                    style: GoogleFonts.roboto(fontSize: 18, color: white),
                   ),
                 ),
                 SizedBox(width: 15),
@@ -245,7 +247,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   style: ElevatedButton.styleFrom(backgroundColor: green),
                   child: Text(
                     'Thêm',
-                    style: TextStyle(color: white),
+                    style: GoogleFonts.roboto(fontSize: 18, color: white),
                   ),
                 ),
               ],

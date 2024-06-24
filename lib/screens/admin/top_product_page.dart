@@ -1,4 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
@@ -145,16 +146,19 @@ class _TopProductPageState extends State<TopProductPage> {
                                       '${_topProducts.fold(0, (sum, product) => sum + product['quantitysold'] as int)}', style: GoogleFonts.roboto(fontSize : 15, color : red),)
                                 ],
                               ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Sản phẩm bán chạy nhất: ',
-                                      style: GoogleFonts.roboto(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(
-                                      '${_topProducts[0]['productname']} \n(${_topProducts[0]['quantitysold']})', style: GoogleFonts.roboto(fontSize : 15, color : red))
-                                ],
+                              SizedBox(height: 10),
+                              Expanded(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Sản phẩm bán chạy nhất: ',
+                                        style: GoogleFonts.roboto(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(
+                                        '${_topProducts[0]['productname']} \n(${_topProducts[0]['quantitysold']})', style: GoogleFonts.roboto(fontSize : 15, color : red))
+                                  ],
+                                ),
                               ),
                             ],
                           ),
