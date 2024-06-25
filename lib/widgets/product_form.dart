@@ -31,7 +31,7 @@ class ProductForm extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  product.productname,
+                  product.productname.toUpperCase(),
                   style: GoogleFonts.arsenal(
                       color: black, fontSize: 19, fontWeight: FontWeight.bold),
                 ),

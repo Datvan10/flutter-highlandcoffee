@@ -52,7 +52,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
       showCustomAlertDialog(context, 'Thông báo', 'Cập nhật hồ sơ thành công.');
     } catch (e) {
       showCustomAlertDialog(
-          context, 'Lỗi', 'Cập nhật hồ sơ thất bại. Vui lòng thử lại.');
+          context, 'Thông báo', 'Cập nhật hồ sơ thất bại. Vui lòng thử lại.');
       print('Error updating customer: $e');
     }
   }

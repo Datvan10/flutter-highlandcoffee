@@ -21,11 +21,8 @@ import 'package:highlandcoffeeapp/widgets/notification.dart';
 class ProductDetailPage extends StatefulWidget {
   final List<Map<String, dynamic>> productSizes;
   final Product product;
-  const ProductDetailPage({
-    super.key,
-    required this.product,
-    required this.productSizes
-  });
+  const ProductDetailPage(
+      {super.key, required this.product, required this.productSizes});
 
   @override
   State<ProductDetailPage> createState() => _ProductDetailPageState();
@@ -238,7 +235,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 //product name and icon favorite
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
-                    widget.product.productname,
+                    widget.product.productname.toUpperCase(),
                     style: GoogleFonts.arsenal(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -270,9 +267,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         fit: BoxFit.cover,
                       ),
                       Expanded(
-                        child: Text(
-                          widget.product.description,
-                          style: GoogleFonts.roboto(fontSize: 17, color: black),
+                        // chưa fix lỗi này
+                        child: SizedBox(
+                          height: 95,
+                          child: Text(
+                            widget.product.description,
+                            style:
+                                GoogleFonts.roboto(fontSize: 17, color: black),
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       )
                     ],
@@ -456,10 +460,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           },
                         ),
                         VerticalDivider(
-                          color: light_grey,
+                          color: light_brown,
                           thickness: 1,
                         ),
-                        ButtonBuyNow(text: 'Mua ngay', onTap: () {}),
+                        ButtonBuyNow(
+                            text: 'Mua ngay',
+                            onTap: () {
+                              addToCart();
+                            }),
                       ],
                     ),
                   ),

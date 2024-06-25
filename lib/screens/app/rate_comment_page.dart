@@ -150,7 +150,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
                     style: ElevatedButton.styleFrom(backgroundColor: red),
                     child: Text(
                       'Hủy',
-                      style: TextStyle(color: white),
+                      style: GoogleFonts.roboto(fontSize: 18 ,color: white),
                     ),
                   ),
                   SizedBox(width: 15),
@@ -161,7 +161,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
                     style: ElevatedButton.styleFrom(backgroundColor: green),
                     child: Text(
                       'Gửi',
-                      style: TextStyle(color: white),
+                      style: GoogleFonts.roboto(fontSize: 18 ,color: white),
                     ),
                   ),
                 ],

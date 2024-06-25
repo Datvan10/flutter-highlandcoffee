@@ -20,6 +20,7 @@ class _DashboardPageState extends State<DashboardPage> {
   List<DailyRevenue> _dailyRevenues = [];
   bool _isLoading = false;
   int? _touchedIndex;
+  DateTime _currentStartDate = DateTime.now().subtract(Duration(days: 6));
 
   @override
   void initState() {
@@ -32,17 +33,16 @@ class _DashboardPageState extends State<DashboardPage> {
       _isLoading = true;
     });
     try {
-      DateTime now = DateTime.now();
+      _dailyRevenues.clear(); // Clear previous data
       DateFormat formatter = DateFormat('yyyy-MM-dd');
       for (int i = 0; i < 7; i++) {
         String formattedDate =
-            formatter.format(now.subtract(Duration(days: i)));
+            formatter.format(_currentStartDate.add(Duration(days: i)));
         final dailyRevenue =
             await adminApi.fetchDailyRevenue(DateTime.parse(formattedDate));
         _dailyRevenues
             .add(DailyRevenue(date: formattedDate, revenue: dailyRevenue));
       }
-
       _dailyRevenues.sort((a, b) => a.date.compareTo(b.date));
     } catch (e) {
       print('Error fetching daily revenues: $e');
@@ -53,8 +53,28 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
+  void _loadPreviousWeek() {
+    setState(() {
+      _currentStartDate = _currentStartDate.subtract(Duration(days: 7));
+    });
+    _fetchDailyRevenues();
+  }
+
+  void _loadNextWeek() {
+    if (_currentStartDate.add(Duration(days: 7)).isBefore(DateTime.now())) {
+      setState(() {
+        _currentStartDate = _currentStartDate.add(Duration(days: 7));
+      });
+      _fetchDailyRevenues();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    DateTime endDate = _currentStartDate.add(Duration(days: 6));
+    String startDateStr = DateFormat('dd-MM').format(_currentStartDate);
+    String endDateStr = DateFormat('dd-MM').format(endDate);
+
     return Scaffold(
       backgroundColor: background,
       body: _isLoading
@@ -66,12 +86,53 @@ class _DashboardPageState extends State<DashboardPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Tổng quan doanh thu 7 ngày gần nhất',
-                    style: GoogleFonts.arsenal(fontSize: 30,
+                    'Tổng quan doanh thu 7 ngày',
+                    style: GoogleFonts.arsenal(
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: brown),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              _loadPreviousWeek();
+                            },
+                            icon: Icon(Icons.chevron_left, size: 30,color: brown,),
+                          ),
+                          Text(
+                            'Trước',
+                            style:
+                                GoogleFonts.roboto(fontSize: 15, color: black),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              _loadNextWeek();
+                            },
+                            icon: Icon(
+                              Icons.chevron_right,
+                              size: 30,
+                              color: brown,
+                            ),
+                          ),
+                          Text(
+                            'Sau',
+                            style:
+                                GoogleFonts.roboto(fontSize: 15, color: black),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
                   Expanded(
                     child: BarChart(
                       BarChartData(
@@ -173,9 +234,11 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                   SizedBox(height: 30),
                   Center(
-                    child: Text('Biểu đồ doanh thu 7 ngày gần nhất',
-                        style: GoogleFonts.roboto(fontSize: 16, color : brown)),
-                  )
+                    child: Text(
+                      'Biểu đồ doanh thu từ $startDateStr đến $endDateStr',
+                      style: GoogleFonts.roboto(fontSize: 16, color: brown),
+                    ),
+                  ),
                 ],
               ),
             ),
