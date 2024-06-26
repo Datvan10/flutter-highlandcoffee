@@ -492,6 +492,7 @@ class AdminApi {
 
 // Customer API
 class CustomerApi {
+  final String accountUrl = "http://localhost:5194/api/accounts";
   final String customerUrl = "http://localhost:5194/api/customers";
   final String orderUrl = "http://localhost:5194/api/orders";
   final String commentUrl = "http://localhost:5194/api/comments";
@@ -628,9 +629,9 @@ class CustomerApi {
   }
 
   // Authenticate account
-  Future<bool> authenticateAccountCustomer(
+  Future<String> authenticateAccountCustomer(
       String identifier, String password) async {
-    final uri = Uri.parse(customerUrl);
+    final uri = Uri.parse(accountUrl);
 
     try {
       final response = await http.get(uri);
@@ -638,21 +639,22 @@ class CustomerApi {
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
 
-        for (var customerData in jsonResponse) {
-          Customer customer = Customer.fromJson(customerData);
-          if ((customer.name == identifier ||
-                  customer.phonenumber == identifier) &&
-              (customer.status == 0) &&
-              customer.password == password) {
-            return true;
+        for (var accountData in jsonResponse) {
+          Account account = Account.fromJson(accountData);
+          if (account.username == identifier) {
+            if (account.status == 1) {
+              return 'locked';
+            } else if (account.status == 0 && account.password == password) {
+              return 'authenticated';
+            }
           }
         }
-        return false;
+        return 'not_authenticated';
       } else {
-        return false;
+        return 'not_authenticated';
       }
     } catch (e) {
-      return false;
+      return 'not_authenticated';
     }
   }
 
@@ -669,8 +671,7 @@ class CustomerApi {
         for (var userData in responseData) {
           Customer customer = Customer.fromJson(userData);
 
-          if (customer.name == identifier ||
-              customer.phonenumber == identifier) {
+          if (customer.phonenumber == identifier) {
             return customer;
           }
         }
@@ -731,6 +732,7 @@ class CustomerApi {
 }
 
 class StaffApi {
+  final String accountUrl = "http://localhost:5194/api/accounts";
   final String staffUrl = "http://localhost:5194/api/staffs";
   final String orderUrl = "http://localhost:5194/api/orders";
   final String billUrl = "http://localhost:5194/api/bills";
@@ -738,7 +740,7 @@ class StaffApi {
   // Authenticate account
   Future<bool> authenticateAccountStaffs(
       String identifier, String password) async {
-    final uri = Uri.parse(staffUrl);
+    final uri = Uri.parse(accountUrl);
 
     try {
       final response = await http.get(uri);
@@ -746,10 +748,10 @@ class StaffApi {
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
 
-        for (var staffData in jsonResponse) {
-          Staff staff = Staff.fromJson(staffData);
-          if ((staff.name == identifier || staff.phonenumber == identifier) &&
-              staff.password == password) {
+        for (var accountData in jsonResponse) {
+          Account account = Account.fromJson(accountData);
+          if ((account.username == identifier) &&
+              account.password == password) {
             return true;
           }
         }
@@ -775,7 +777,7 @@ class StaffApi {
         for (var staffData in responseData) {
           Staff staff = Staff.fromJson(staffData);
 
-          if (staff.name == identifier || staff.phonenumber == identifier) {
+          if (staff.phonenumber == identifier) {
             return staff;
           }
         }
@@ -1045,29 +1047,29 @@ class ProductApi {
 
   // New method: Fetch product sizes and prices by product ID
   Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
-  final String productSizesUrl = "http://localhost:5194/api/products/sizes/$productname";
+    final String productSizesUrl =
+        "http://localhost:5194/api/products/sizes/$productname";
 
-  try {
-    final response = await http.get(Uri.parse(productSizesUrl));
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      List<dynamic> jsonData = json.decode(response.body);
-      List<Map<String, dynamic>> sizes = [];
-      for (var item in jsonData) {
-        sizes.add({
-          "size": item["size"],
-          "price": item["price"],
-        });
+    try {
+      final response = await http.get(Uri.parse(productSizesUrl));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = json.decode(response.body);
+        List<Map<String, dynamic>> sizes = [];
+        for (var item in jsonData) {
+          sizes.add({
+            "size": item["size"],
+            "price": item["price"],
+          });
+        }
+        return sizes;
+      } else {
+        throw Exception('Failed to load product sizes');
       }
-      return sizes;
-    } else {
+    } catch (e) {
       throw Exception('Failed to load product sizes');
     }
-  } catch (e) {
-    throw Exception('Failed to load product sizes');
   }
-}
-
 }
 
 // API for popular products
@@ -1151,28 +1153,29 @@ class PopularApi {
 
   //
   Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
-  final String productSizesUrl = "http://localhost:5194/api/products/sizes/$productname";
+    final String productSizesUrl =
+        "http://localhost:5194/api/products/sizes/$productname";
 
-  try {
-    final response = await http.get(Uri.parse(productSizesUrl));
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      List<dynamic> jsonData = json.decode(response.body);
-      List<Map<String, dynamic>> sizes = [];
-      for (var item in jsonData) {
-        sizes.add({
-          "size": item["size"],
-          "price": item["price"],
-        });
+    try {
+      final response = await http.get(Uri.parse(productSizesUrl));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = json.decode(response.body);
+        List<Map<String, dynamic>> sizes = [];
+        for (var item in jsonData) {
+          sizes.add({
+            "size": item["size"],
+            "price": item["price"],
+          });
+        }
+        return sizes;
+      } else {
+        throw Exception('Failed to load product sizes');
       }
-      return sizes;
-    } else {
+    } catch (e) {
       throw Exception('Failed to load product sizes');
     }
-  } catch (e) {
-    throw Exception('Failed to load product sizes');
   }
-}
 }
 
 // API for favorite products
@@ -1280,28 +1283,29 @@ class BestSaleApi {
 
   //
   Future<List<Map<String, dynamic>>> getProductSizes(String productId) async {
-  final String productSizesUrl = "http://localhost:5194/api/products/sizes/$productId";
+    final String productSizesUrl =
+        "http://localhost:5194/api/products/sizes/$productId";
 
-  try {
-    final response = await http.get(Uri.parse(productSizesUrl));
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      List<dynamic> jsonData = json.decode(response.body);
-      List<Map<String, dynamic>> sizes = [];
-      for (var item in jsonData) {
-        sizes.add({
-          "size": item["size"],
-          "price": item["price"],
-        });
+    try {
+      final response = await http.get(Uri.parse(productSizesUrl));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = json.decode(response.body);
+        List<Map<String, dynamic>> sizes = [];
+        for (var item in jsonData) {
+          sizes.add({
+            "size": item["size"],
+            "price": item["price"],
+          });
+        }
+        return sizes;
+      } else {
+        throw Exception('Failed to load product sizes');
       }
-      return sizes;
-    } else {
+    } catch (e) {
       throw Exception('Failed to load product sizes');
     }
-  } catch (e) {
-    throw Exception('Failed to load product sizes');
   }
-}
 }
 
 // API for Coffee

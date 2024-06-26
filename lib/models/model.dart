@@ -1,5 +1,30 @@
-import 'dart:typed_data';
+// Model account
+class Account{
+  String username;
+  String password;
+  String personid;
+  int status;
 
+  Account({required this.username, required this.password, required this.personid, required this.status});
+
+  factory Account.fromJson(Map<String, dynamic> json) {
+    return Account(
+      username: json['username'],
+      password: json['password'],
+      personid: json['personid'],
+      status: json['status'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'password': password,
+      'personid': personid,
+      'status': status,
+    };
+  }
+}
 // Model admin
 class Admin {
   String? adminid;

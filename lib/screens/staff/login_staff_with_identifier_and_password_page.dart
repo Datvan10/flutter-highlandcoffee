@@ -13,7 +13,8 @@ import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
 class LoginStaffWithIdentifierAndPasswordPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginStaffWithIdentifierAndPasswordPage({super.key, required this.onTap});
+  const LoginStaffWithIdentifierAndPasswordPage(
+      {super.key, required this.onTap});
 
   @override
   State<LoginStaffWithIdentifierAndPasswordPage> createState() =>
@@ -36,24 +37,26 @@ class _LoginStaffWithIdentifierAndPasswordPageState
   }
 
   // Function login customer with indentifier and password
-  void loginCustomer() async {
+  void loginStaff() async {
     String identifier = _identifierController.text.trim();
     String password = _passWordController.text.trim();
 
     if (identifier.isEmpty || password.isEmpty) {
       showCustomAlertDialog(
           context, 'Thông báo', 'Vui lòng nhập đầy đủ thông tin đăng nhập');
+    } else if (identifier.length < 10 || identifier.length > 10) {
+      showCustomAlertDialog(context, 'Thông báo',
+          'Số điện thoại không hợp lệ, phải có 10 chữ số');
     } else if (password.length < 6) {
       showCustomAlertDialog(
-          context, 'Lỗi', 'Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
+          context, 'Thông báo', 'Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
     } else {
       try {
         bool isAuthenticated =
             await api.authenticateAccountStaffs(identifier, password);
 
         if (isAuthenticated) {
-          Staff loggedInStaff =
-              await api.getStaffByIdentifier(identifier);
+          Staff loggedInStaff = await api.getStaffByIdentifier(identifier);
           AuthManager().setLoggedInStaff(loggedInStaff);
           Navigator.pushReplacementNamed(context, '/home_page');
           showCustomAlertDialog(context, 'Thông báo', 'Đăng nhập thành công');
@@ -64,7 +67,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
       } catch (e) {
         print("Authentication Error: $e");
         showCustomAlertDialog(
-            context, 'Lỗi', 'Không thể xác thực tài khoản, vui lòng thử lại');
+            context, 'Thông báo', 'Không thể xác thực tài khoản, vui lòng thử lại');
       }
     }
   }
@@ -92,7 +95,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
             ),
             //form email
             MyTextFormField(
-              hintText: 'Tên hoặc số điện thoại',
+              hintText: 'Số điện thoại',
               prefixIconData: Icons.person,
               suffixIcon: GestureDetector(
                 onTap: () {
@@ -156,7 +159,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
             //button login
             MyButton(
               text: 'Đăng nhập',
-              onTap: loginCustomer,
+              onTap: loginStaff,
               buttonColor: primaryColors,
             ),
             SizedBox(

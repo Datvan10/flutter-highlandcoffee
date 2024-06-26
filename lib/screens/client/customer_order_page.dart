@@ -162,7 +162,7 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
                                                   SizedBox(width: 8),
                                                   Text(
                                                     order.status == 0
-                                                        ? '[Đang chờ duyệt]'
+                                                        ? '[Đang chờ xác nhận]'
                                                         : order.status == 1
                                                             ? '[Đang giao hàng]'
                                                             : order.status == 2

@@ -60,7 +60,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Khônng có đơn hàng nào cần xử lý'));
+            return Center(child: Text('Không có đơn hàng nào cần xử lý',style: GoogleFonts.roboto(fontSize: 17)));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
