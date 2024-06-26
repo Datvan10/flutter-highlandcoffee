@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
@@ -78,7 +79,7 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
             );
           } else if (snapshot.data == null || snapshot.data!.isEmpty) {
             return Center(
-              child: Text('Sản phẩm yêu thích trống'),
+              child: Text('Sản phẩm yêu thích trống',style: GoogleFonts.roboto(fontSize: 17)),
             );
           } else {
             List<Favorite> favorite = snapshot.data ?? [];

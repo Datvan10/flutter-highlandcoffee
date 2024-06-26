@@ -13,7 +13,8 @@ import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
 class LoginCustomerWithIdentifierAndPassWordPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginCustomerWithIdentifierAndPassWordPage({super.key, required this.onTap});
+  const LoginCustomerWithIdentifierAndPassWordPage(
+      {super.key, required this.onTap});
 
   @override
   State<LoginCustomerWithIdentifierAndPassWordPage> createState() =>
@@ -43,28 +44,34 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
     if (identifier.isEmpty || password.isEmpty) {
       showCustomAlertDialog(
           context, 'Thông báo', 'Vui lòng nhập đầy đủ thông tin đăng nhập');
+    } else if (identifier.length < 10 || identifier.length > 10) {
+      showCustomAlertDialog(context, 'Thông báo',
+          'Số điện thoại không hợp lệ, phải có 10 chữ số');
     } else if (password.length < 6) {
-      showCustomAlertDialog(
-          context, 'Lỗi', 'Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
+      showCustomAlertDialog(context, 'Thông báo',
+          'Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
     } else {
       try {
-        bool isAuthenticated =
+        String authStatus =
             await api.authenticateAccountCustomer(identifier, password);
 
-        if (isAuthenticated) {
+        if (authStatus == 'authenticated') {
           Customer loggedInCustomer =
               await api.getCustomerByIdentifier(identifier);
           AuthManager().setLoggedInCustomer(loggedInCustomer);
           Navigator.pushReplacementNamed(context, '/home_page');
           showCustomAlertDialog(context, 'Thông báo', 'Đăng nhập thành công');
+        } else if (authStatus == 'locked') {
+          showCustomAlertDialog(
+              context, 'Thông báo', 'Tài khoản đã bị khóa vui lòng liên hệ người quản trị để mở khóa');
         } else {
           showCustomAlertDialog(context, 'Thông báo',
               'Tài khoản hoặc mật khẩu không đúng, vui lòng thử lại');
         }
       } catch (e) {
         print("Authentication Error: $e");
-        showCustomAlertDialog(
-            context, 'Lỗi', 'Không thể xác thực tài khoản, vui lòng thử lại');
+        showCustomAlertDialog(context, 'Thông báo',
+            'Không thể xác thực tài khoản, vui lòng thử lại');
       }
     }
   }
@@ -92,7 +99,7 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
             ),
             //form email
             MyTextFormField(
-              hintText: 'Tên hoặc số điện thoại',
+              hintText: 'Số điện thoại',
               prefixIconData: Icons.person,
               suffixIcon: GestureDetector(
                 onTap: () {

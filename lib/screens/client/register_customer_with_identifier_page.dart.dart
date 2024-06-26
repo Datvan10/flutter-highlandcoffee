@@ -39,7 +39,7 @@ class _RegisterCustomerWithIdentifierPageState
     if (_phoneNumberController.text.length < 10 ||
         _phoneNumberController.text.length > 10) {
       showCustomAlertDialog(
-          context, 'Thông báo', 'Số điện thoại không hợp lệ, phải có 10 số.');
+          context, 'Thông báo', 'Số điện thoại không hợp lệ, phải có 10 chữ số.');
       return;
     }
     String phonenumber = _phoneNumberController.text.trim();
