@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:highlandcoffeeapp/screens/client/login_customer_with_identifier_and_password_page.dart';
-import 'package:highlandcoffeeapp/screens/client/register_customer_with_identifier_page.dart.dart';
+import 'package:highlandcoffeeapp/screens/app/login_customer_with_identifier_and_password_page.dart';
+import 'package:highlandcoffeeapp/screens/app/register_customer_with_identifier_page.dart.dart';
 
 class LoginRegisterSwitcherCustomerPage extends StatefulWidget {
   const LoginRegisterSwitcherCustomerPage({super.key});

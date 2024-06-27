@@ -27,14 +27,14 @@ class Account{
 }
 // Model admin
 class Admin {
-  String? adminid;
+  final String adminid;
   final String name;
   final String phonenumber;
   int? shift;
   final String password;
 
   Admin({
-    this.adminid,
+    required this.adminid,
     required this.name,
     required this.phonenumber,
     required this.shift,

@@ -11,7 +11,7 @@ import 'package:highlandcoffeeapp/screens/admin/delete_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_staff_account_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/feddback_page.dart';
-import 'package:highlandcoffeeapp/screens/admin/order_list_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/list_order_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/top_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_account_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_category_page.dart';

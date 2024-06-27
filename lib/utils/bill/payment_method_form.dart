@@ -27,7 +27,7 @@ class _PaymentMethodFormState extends State<PaymentMethodForm> {
           buildPaymentOption('Thanh toán khi nhận hàng', 'Thanh toán khi nhận hàng'),
           buildPaymentOption('Thanh toán bằng thẻ tín dụng', 'Thanh toán bằng thẻ tín dụng'),
           buildPaymentOption('Chuyển khoản ngân hàng', 'Chuyển khoản ngân hàng'),
-          buildPaymentOption('Ví điện tử', 'Ví điện tử'),
+          buildPaymentOption('Thanh toán VNPAY-QR', 'Thanh toán VNPAY-QR'),
         ],
       ),
     );
