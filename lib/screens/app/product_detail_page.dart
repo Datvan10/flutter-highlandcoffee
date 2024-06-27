@@ -256,7 +256,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ]),
                 //product image and description
                 Padding(
-                  padding: const EdgeInsets.only(right: 18),
+                  padding: const EdgeInsets.only(left : 18, right: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -267,14 +267,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         fit: BoxFit.cover,
                       ),
                       Expanded(
-                        // chưa fix lỗi này
                         child: SizedBox(
-                          height: 95,
+                          height: 120,
                           child: Text(
                             widget.product.description,
                             style:
                                 GoogleFonts.roboto(fontSize: 17, color: black),
-                            maxLines: 4,
+                            maxLines: 5,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -444,7 +443,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ),
                 SizedBox(
-                  height: 60,
+                  height: 50,
                 ),
                 //button add to cart and buy now
                 Padding(

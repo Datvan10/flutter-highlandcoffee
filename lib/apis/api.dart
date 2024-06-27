@@ -10,6 +10,7 @@ class AdminApi {
   final String staffUrl = "http://localhost:5194/api/staffs";
   final String productUrl = "http://localhost:5194/api/products";
   final String categoryUrl = "http://localhost:5194/api/categories";
+  final String orderUrl = "http://localhost:5194/api/orders";
   final String customerUrl = "http://localhost:5194/api/customers";
   final String getProductUrl = 'http://localhost:5194/api/products/category';
   final String baseUrl = 'http://localhost:5194/api/bills';
@@ -488,6 +489,20 @@ class AdminApi {
       throw Exception('Failed to load top products');
     }
   }
+
+  // Delete order
+  Future<void> deleteOrder(String orderid) async {
+    try {
+      final response = await http.delete(Uri.parse('$orderUrl/$orderid'));
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        print('Order deleted successfully');
+      } else {
+        throw Exception('Failed to delete Order');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete Order');
+    }
+  }
 }
 
 // Customer API
@@ -947,9 +962,9 @@ class ProductApi {
   }
 
   //
-  Future<Category> getCategoryById(String categoryId) async {
+  Future<Category> getCategoryById(String categoryid) async {
     // Giả sử bạn có một API endpoint để lấy danh mục theo ID
-    final response = await http.get(Uri.parse('$categoryUrl/$categoryId'));
+    final response = await http.get(Uri.parse('$categoryUrl/$categoryid'));
     if (response.statusCode == 200) {
       return Category.fromJson(jsonDecode(response.body));
     } else {

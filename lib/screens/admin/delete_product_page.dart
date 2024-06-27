@@ -127,7 +127,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                   print('Error deleting product: $e');
                   Navigator.pop(context);
                   showCustomAlertDialog(
-                      context, 'Lỗi', 'Sản phẩm không thể bị xóa do liên quan đến dữ liệu khác trong hệ thống.');
+                      context, 'Thông báo', 'Không thể xóa sản phẩm. Vui lòng xóa các đơn hàng liên quan trước.');
                 }
               },
             ),

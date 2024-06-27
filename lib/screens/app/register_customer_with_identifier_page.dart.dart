@@ -90,7 +90,7 @@ class _RegisterCustomerWithIdentifierPageState
           context, '/login_register_switcher_customer_page');
       // Show success alert
       showCustomAlertDialog(
-          context, 'Thông báo', 'Đăng ký thành công, đăng nhập ngay!');
+          context, 'Thông báo', 'Đăng ký thành công, đăng nhập ngay');
       // Clear input fields
       _nameController.clear();
       // emailController.clear();

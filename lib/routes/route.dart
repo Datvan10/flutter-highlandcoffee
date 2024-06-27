@@ -5,7 +5,7 @@ import 'package:highlandcoffeeapp/screens/app/profile_page.dart';
 import 'package:highlandcoffeeapp/screens/app/choose_login_type_page%20.dart';
 import 'package:highlandcoffeeapp/screens/app/list_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/forgot_password_admin_page.dart';
-import 'package:highlandcoffeeapp/screens/client/forgot_password_customer_page.dart';
+import 'package:highlandcoffeeapp/screens/app/forgot_password_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/app/order_result_page.dart';
 import 'package:highlandcoffeeapp/widgets/best_sale_product_item.dart';
 import 'package:highlandcoffeeapp/screens/app/favorite_product_page.dart';

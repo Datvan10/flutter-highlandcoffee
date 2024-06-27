@@ -12,7 +12,7 @@ import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:intl/intl.dart';
 
-enum UserRole { customer, staff }
+enum UserRole { customer, staff , admin}
 
 late UserRole currentUserRole;
 
@@ -32,6 +32,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   late Future<List<OrderDetail>> futureOrderDetails;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
+  Admin? loggedInAdmin = AuthManager().loggedInAdmin;
 
   @override
   void initState() {
@@ -45,6 +46,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         ? UserRole.customer
         : AuthManager().loggedInStaff != null
             ? UserRole.staff
+            : AuthManager().loggedInAdmin != null
+                ? UserRole.admin
             : UserRole.customer;
   }
 
@@ -55,6 +58,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   // function to confirm order
   void confirmOrder(String orderid, String staffid) async {
+    
     await staffApi.confirmOrder(orderid, staffid);
     setState(() {
       futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
@@ -281,7 +285,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                           ],
                                         ),
                                       ),
-                                      Spacer(), // Để tạo khoảng cách giữa cột 2 và 3
+                                      Spacer(),
                                       // Column 3: Quantity and price
                                       Expanded(
                                         flex: 2,
@@ -476,6 +480,18 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           buttonColor: green,
                           isDisabled: orderDetails[0].status != 0,
                         )
+                        // : currentUserRole == UserRole.admin
+                        // ? MyButton(
+                        //   text: 'Xác nhận đơn hàng',
+                        //   onTap: orderDetails[0].status == 0
+                        //       ? () {
+                        //           confirmOrder(orderDetails[0].orderid,
+                        //               loggedInAdmin!.adminid);
+                        //         }
+                        //       : null,
+                        //   buttonColor: green,
+                        //   isDisabled: orderDetails[0].status != 0,
+                        // )
                       : MyButton(
                           text: 'Hủy đơn hàng',
                           onTap: orderDetails[0].status == 0
