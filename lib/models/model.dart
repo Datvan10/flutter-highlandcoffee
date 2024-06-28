@@ -183,14 +183,14 @@ class Order {
 class OrderDetail {
   final String orderdetailid;
   final String orderid;
-  final String? cartid; // Allowing null values
+  final String? cartid;
   final String staffid;
   final String customerid;
   final String productid;
   final String productname;
   final int quantity;
   final String size;
-  final String image; // Assuming image is a base64 encoded string
+  final String image;
   final int intomoney;
   final int totalprice;
   final DateTime date;

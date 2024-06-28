@@ -170,7 +170,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No order details found'));
+            return Center(child: Text('Không tìm thấy chi tiết đơn hàng'));
           } else {
             List<OrderDetail> orderDetails = snapshot.data!;
             return Padding(
@@ -443,7 +443,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                         8),
                                 Text(
                                   orderDetails[0].status == 0
-                                      ? 'Đang chờ duyệt'
+                                      ? 'Đang chờ xác nhận'
                                       : orderDetails[0].status == 1
                                           ? 'Đang giao hàng'
                                           : orderDetails[0].status == 2

@@ -19,14 +19,16 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/welcome-logo/background_login.jpg'),
+              image:
+                  AssetImage('assets/images/welcome-logo/background_login.jpg'),
               fit: BoxFit.cover,
             ),
           ),
         ),
         // Các nút đăng nhập
         Padding(
-          padding: const EdgeInsets.only(left: 18, top: 150, right: 18, bottom: 18.0),
+          padding: const EdgeInsets.only(
+              left: 18, top: 150, right: 18, bottom: 18.0),
           child: Column(
             children: [
               Text(
@@ -36,25 +38,34 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                     fontSize: 50.0,
                     decoration: TextDecoration.none),
               ),
-              SizedBox(height: 220,),
+              SizedBox(
+                height: 220,
+              ),
               ElevatedButton(
                 onPressed: () {
                   // Di chuyển đến trang đăng nhập User
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginRegisterSwitcherCustomerPage()),
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            LoginRegisterSwitcherCustomerPage()),
                   );
                 },
                 child: Container(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(Icons.login, color: blue,),
-                      
-                      Text('Đăng nhập khách hàng', style: GoogleFonts.roboto(color: black, fontSize : 16),),
-                    ],
-                  )),
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                          Icons.login,
+                          color: blue,
+                        ),
+                        Text(
+                          'Đăng nhập khách hàng',
+                          style: GoogleFonts.roboto(color: black, fontSize: 16),
+                        ),
+                      ],
+                    )),
               ),
               SizedBox(height: 30),
               ElevatedButton(
@@ -62,19 +73,25 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                   // Di chuyển đến trang đăng nhập Staff
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginRegisterSwitcherStaffPage()),
+                    MaterialPageRoute(
+                        builder: (context) => LoginRegisterSwitcherStaffPage()),
                   );
                 },
                 child: Container(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(Icons.login, color: blue,),
-                      
-                      Text('Đăng nhập nhân viên bán hàng', style: GoogleFonts.roboto(color: black, fontSize : 16),),
-                    ],
-                  )),
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                          Icons.login,
+                          color: blue,
+                        ),
+                        Text(
+                          'Đăng nhập nhân viên bán hàng',
+                          style: GoogleFonts.roboto(color: black, fontSize: 16),
+                        ),
+                      ],
+                    )),
               ),
               SizedBox(height: 30),
               ElevatedButton(
@@ -82,21 +99,29 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                   // Di chuyển đến trang đăng nhập Admin
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginRegisterSwitcherAdminPage()),
+                    MaterialPageRoute(
+                        builder: (context) => LoginRegisterSwitcherAdminPage()),
                   );
                 },
                 child: Container(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(Icons.login, color: blue,),
-                      
-                      Text('Đăng nhập Admin', style: GoogleFonts.roboto(color: black, fontSize : 16),),
-                    ],
-                  )),
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                          Icons.login,
+                          color: blue,
+                        ),
+                        Text(
+                          'Đăng nhập Admin',
+                          style: GoogleFonts.roboto(color: black, fontSize: 16),
+                        ),
+                      ],
+                    )),
               ),
-              SizedBox(height: 100,),
+              SizedBox(
+                height: 100,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -106,7 +131,11 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                       Navigator.of(context).pop();
                     },
                     child: Container(
-                      child: Text('Quay lại', textAlign: TextAlign.center, style: GoogleFonts.roboto(color: black, fontSize : 16),)),
+                        child: Text(
+                      'Quay lại',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(color: black, fontSize: 16),
+                    )),
                   ),
                 ],
               ),

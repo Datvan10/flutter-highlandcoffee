@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,7 @@ import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
+import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/models/tickets.dart';
@@ -74,8 +76,8 @@ class _OrderPageState extends State<OrderPage> {
     try {
       // Kiểm tra nếu giỏ hàng trống
       if (widget.cartItems.isEmpty) {
-        showNotificationNavigate(context, 'Thông báo',
-            'Đặt hàng không thành công, giỏ hàng của bạn đang trống.', () {});
+        showCustomAlertDialog(context, 'Thông báo',
+            'Đặt hàng không thành công, giỏ hàng của bạn đang trống.');
         return;
       }
       // Tạo đối tượng OrderDetail với các giá trị được truyền theo đúng định dạng
@@ -101,11 +103,11 @@ class _OrderPageState extends State<OrderPage> {
         phonenumber: loggedCustomer?.phonenumber ?? '',
       );
       if (newOrder.paymentmethod == '') {
-        showNotificationNavigate(
-            context,
-            'Thông báo',
-            'Vui lòng chọn phương thức thanh toán',
-            () {});
+        showCustomAlertDialog(
+          context,
+          'Thông báo',
+          'Vui lòng chọn phương thức thanh toán',
+        );
         return;
       }
 
@@ -273,6 +275,24 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   //
+  void _showEditCustomerInfoForm(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return EditCustomerInfoForm(
+          customer: loggedCustomer,
+          onSave: (updatedCustomer) {
+            setState(() {
+              loggedCustomer = updatedCustomer;
+            });
+          },
+        );
+      },
+    );
+  }
+
+  //
   void _showConfirmForm(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -282,11 +302,11 @@ class _OrderPageState extends State<OrderPage> {
       ),
       builder: (BuildContext context) {
         return Container(
-          height: 750,
+          height: 740,
           width: MediaQuery.of(context).size.width,
           // Nội dung của form sẽ ở đây
           padding:
-              EdgeInsets.only(left: 18.0, top: 50.0, right: 18.0, bottom: 18.0),
+              EdgeInsets.only(left: 18.0, top: 30.0, right: 18.0, bottom: 18.0),
           child: Column(
             children: [
               //
@@ -304,7 +324,7 @@ class _OrderPageState extends State<OrderPage> {
               TextField(
                 controller: _textDiscountCodeController,
                 decoration: InputDecoration(
-                    hintText: 'Nhập mã giảm giá',
+                    hintText: 'Tìm mã giảm giá',
                     hintStyle: GoogleFonts.roboto(),
                     contentPadding: EdgeInsets.symmetric(),
                     alignLabelWithHint: true,
@@ -395,10 +415,11 @@ class _OrderPageState extends State<OrderPage> {
               GestureDetector(
                 onTap: () {
                   // Change information user
+                  _showEditCustomerInfoForm(context);
                 },
                 child: Text(
                   'Thay đổi',
-                  style: GoogleFonts.roboto(color: light_blue, fontSize: 15),
+                  style: GoogleFonts.roboto(color: light_blue, fontSize: 16),
                 ),
               )
             ],
@@ -453,7 +474,7 @@ class _OrderPageState extends State<OrderPage> {
                 },
                 child: Text(
                   'Chọn khuyến mãi',
-                  style: GoogleFonts.roboto(color: light_blue, fontSize: 15),
+                  style: GoogleFonts.roboto(color: light_blue, fontSize: 16),
                 ),
               )
             ],
@@ -485,6 +506,136 @@ class _OrderPageState extends State<OrderPage> {
             buttonColor: primaryColors,
           )
         ]),
+      ),
+    );
+  }
+}
+
+class EditCustomerInfoForm extends StatefulWidget {
+  final Customer? customer;
+  final Function(Customer) onSave;
+
+  EditCustomerInfoForm({required this.customer, required this.onSave});
+
+  @override
+  _EditCustomerInfoFormState createState() => _EditCustomerInfoFormState();
+}
+
+class _EditCustomerInfoFormState extends State<EditCustomerInfoForm> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _nameController;
+  late TextEditingController _addressController;
+  late TextEditingController _phoneController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.customer?.name);
+    _addressController = TextEditingController(text: widget.customer?.address);
+    _phoneController =
+        TextEditingController(text: widget.customer?.phonenumber.toString());
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _addressController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+  void saveChangeInfor() {
+    if (_formKey.currentState?.validate() ?? false) {
+      Customer updatedCustomer = Customer(
+        customerid: widget.customer?.customerid ?? '',
+        name: _nameController.text,
+        address: _addressController.text,
+        phonenumber: _phoneController.text,
+        point: widget.customer?.point ?? 0,
+        password: widget.customer?.password ?? '',
+        status: widget.customer?.status ?? 0,
+      );
+      widget.onSave(updatedCustomer);
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:
+          EdgeInsets.only(top: 18.0, bottom: 25.0, right: 18.0, left: 18.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Thay đổi thông tin nhận hàng',
+                style: GoogleFonts.arsenal(
+                    fontSize: 22,
+                    color: primaryColors,
+                    fontWeight: FontWeight.bold)),
+            TextFormField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                  labelText: 'Tên',
+                  hintText: 'Nhập tên',
+                  labelStyle: GoogleFonts.arsenal(
+                      fontSize: 18,
+                      color: primaryColors,
+                      fontWeight: FontWeight.bold),
+                  hintStyle: GoogleFonts.roboto()),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Vui lòng nhập tên';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: _addressController,
+              decoration: InputDecoration(
+                  labelText: 'Địa chỉ',
+                  hintText: 'Nhập địa chỉ',
+                  labelStyle: GoogleFonts.arsenal(
+                      fontSize: 18,
+                      color: primaryColors,
+                      fontWeight: FontWeight.bold),
+                  hintStyle: GoogleFonts.roboto()),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Vui lòng nhập địa chỉ';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: _phoneController,
+              decoration: InputDecoration(
+                  labelText: 'Số điện thoại',
+                  hintText: 'Nhập số điện thoại',
+                  labelStyle: GoogleFonts.arsenal(
+                      fontSize: 18,
+                      color: primaryColors,
+                      fontWeight: FontWeight.bold),
+                  hintStyle: GoogleFonts.roboto()),
+              keyboardType: TextInputType.phone,
+              inputFormatters : <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Vui lòng nhập số điện thoại';
+                }else if(value.length < 10 || value.length > 10){
+                  return 'Số điện thoại phải có 10 số';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 20),
+            MyButton(text: 'Lưu', onTap: saveChangeInfor, buttonColor: green)
+          ],
+        ),
       ),
     );
   }

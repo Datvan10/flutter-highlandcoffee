@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/auth/auth_manage.dart'; // Import AuthManager
 
 class InformationCustomerForm extends StatelessWidget {
   final Customer? loggedInUser; // Thêm thuộc tính loggedInUser
