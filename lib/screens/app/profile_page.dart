@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/screens/app/rate_comment_page.dart';
 import 'package:highlandcoffeeapp/screens/client/update_customer_profille_page.dart';
+import 'package:highlandcoffeeapp/screens/staff/add_categoty_page.dart';
+import 'package:highlandcoffeeapp/screens/staff/add_product_page.dart';
 import 'package:highlandcoffeeapp/screens/staff/list_order_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
 import 'package:highlandcoffeeapp/widgets/notification.dart';
@@ -25,9 +28,30 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndexBottomBar = 4;
+  final staffApi = StaffApi();
   // Lấy thông tin người dùng từ AuthManager
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
+  String? role;
+
+  //
+  @override
+  void initState() {
+    super.initState();
+    if (loggedInStaff != null) {
+      _fetchRole();
+    }
+  }
+
+  //
+  Future<void> _fetchRole() async {
+    final fetchedRole =
+        await staffApi.getRoleByPersonId(loggedInStaff!.staffid);
+    setState(() {
+      role = fetchedRole;
+    });
+  }
+
   //
   void _selectedBottomBar(int index) {
     setState(() {
@@ -295,35 +319,64 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                     textColor: grey),
-            ProfileMenu(
-                title: 'Phản hồi',
-                startIcon: Icons.mark_email_unread,
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RateCommentPage(),
-                    ),
-                  );
-                },
-                textColor: grey),
-            ProfileMenu(
-                title: 'Phương thức thanh toán',
-                startIcon: LineAwesomeIcons.wallet,
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PaymentMethodPage(),
-                    ),
-                  );
-                },
-                textColor: grey),
-            // ProfileMenu(
-            //     title: 'Quản lý tài khoản',
-            //     startIcon: LineAwesomeIcons.user_check,
-            //     onPress: () {},
-            //     textColor: grey),
+            loggedInCustomer != null
+                ? ProfileMenu(
+                    title: 'Phản hồi',
+                    startIcon: Icons.mark_email_unread,
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RateCommentPage(),
+                        ),
+                      );
+                    },
+                    textColor: grey)
+                : ProfileMenu(
+                    title: 'Thêm danh mục',
+                    startIcon: Icons.category,
+                    onPress: role == '0'
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddCategoryPage(),
+                              ),
+                            );
+                          }
+                        : null,
+                        textColor: grey,
+                    titleColor: role == '0' ? black : light_grey,
+                  ),
+            loggedInCustomer != null
+                ? ProfileMenu(
+                    title: 'Phương thức thanh toán',
+                    startIcon: LineAwesomeIcons.wallet,
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PaymentMethodPage(),
+                        ),
+                      );
+                    },
+                    textColor: grey)
+                : ProfileMenu(
+                    title: 'Thêm sản phẩm',
+                    startIcon: Icons.restaurant,
+                    onPress: role == '0'
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddProductPage(),
+                              ),
+                            );
+                          }
+                        : null,
+                        textColor: grey,
+                    titleColor: role == '0' ? black : light_grey,
+                  ),
             ProfileMenu(
                 title: 'Về chúng tôi',
                 startIcon: LineAwesomeIcons.info,

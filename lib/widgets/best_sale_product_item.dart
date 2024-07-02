@@ -67,6 +67,7 @@ class _BestSaleProductItemState extends State<BestSaleProductItem> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 18.0,
+                mainAxisSpacing: 18.0,
                 childAspectRatio: 0.64,
               ),
               itemCount: productPopular.length,

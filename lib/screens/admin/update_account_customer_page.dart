@@ -44,24 +44,63 @@ class _UpdateAccountCustomerPageState extends State<UpdateAccountCustomerPage> {
       await adminApi.activateAccountCustomer(customerid);
       showCustomAlertDialog(
           context, 'Thông báo', 'Kích hoạt tài khoản khách hàng thành công');
-          fetchCustomers();
+      fetchCustomers();
     } catch (e) {
-      showCustomAlertDialog(context, 'Lỗi',
-          'Cập nhật tài khoản khách hàng thật bại. Vui lòng thử lại.');
+      showCustomAlertDialog(context, 'Thông báo',
+          'Cập nhật tài khoản khách hàng thất bại. Vui lòng thử lại.');
     }
   }
 
   // function block account
   Future<void> blockAccountCustomer(String customerid) async {
-    try {
-      await adminApi.blockAccountCustomer(customerid);
-      showCustomAlertDialog(
-          context, 'Thông báo', 'Chặn tài khoản khách hàng thành công');
-          fetchCustomers();
-    } catch (e) {
-      showCustomAlertDialog(context, 'Lỗi',
-          'Cập nhật tài khoản khách hàng thất bại. Vui lòng thử lại.');
-    }
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(
+              'Thông báo',
+              style: GoogleFonts.roboto(
+                color: primaryColors,
+                fontSize: 19,
+              ),
+            ),
+            content:
+                Text('Bạn có chắc muốn chặn tài khoản của khác hàng này không?',
+                    style: GoogleFonts.roboto(
+                      color: black,
+                      fontSize: 16,
+                    )),
+            actions: [
+              CupertinoDialogAction(
+                isDestructiveAction: true,
+                child: Text('OK',
+                    style: GoogleFonts.roboto(
+                        color: blue,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold)),
+                onPressed: () async {
+                  try {
+                    await adminApi.blockAccountCustomer(customerid);
+                    Navigator.pop(context);
+                    showCustomAlertDialog(context, 'Thông báo',
+                        'Chặn tài khoản khách hàng thành công');
+                    fetchCustomers();
+                  } catch (e) {
+                    showCustomAlertDialog(context, 'Thông báo',
+                        'Cập nhật tài khoản khách hàng thất bại. Vui lòng thử lại.');
+                  }
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('Hủy',
+                    style: GoogleFonts.roboto(color: blue, fontSize: 17)),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
   }
 
   @override
@@ -188,7 +227,7 @@ class _UpdateAccountCustomerPageState extends State<UpdateAccountCustomerPage> {
                             ),
                             Text(
                               customer.address,
-                              style: GoogleFonts.arsenal(
+                              style: GoogleFonts.roboto(
                                 fontSize: 16,
                                 color: brown,
                               ),
@@ -222,7 +261,7 @@ class _UpdateAccountCustomerPageState extends State<UpdateAccountCustomerPage> {
                         flex: 1,
                         child: IconButton(
                           icon: Icon(
-                            Icons.task_alt,
+                            Icons.how_to_reg,
                             color: green,
                           ),
                           onPressed: () {

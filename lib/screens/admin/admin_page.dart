@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:highlandcoffeeapp/screens/admin/access_and_cancel_role_staff_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_staff_account_page.dart';
@@ -128,6 +129,16 @@ class _AdminPageState extends State<AdminPage> {
 
         break;
 
+      case AccessAndCancelRoleStaffPage.routeName:
+        setState(() {
+          _selectedItem = AccessAndCancelRoleStaffPage();
+        });
+
+      // case AccessAddProductPage.routeName:
+      // setState(() {
+      //   _selectedItem = AccessAddProductPage();
+      // });
+
       case FeddBackPage.routeName:
         setState(() {
           _selectedItem = FeddBackPage();
@@ -149,7 +160,7 @@ class _AdminPageState extends State<AdminPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("Hủy", style: TextStyle(color: Colors.red)),
+          child: Text("Hủy", style: TextStyle(color: red)),
         ),
         TextButton(
           onPressed: () {
@@ -299,20 +310,15 @@ class _AdminPageState extends State<AdminPage> {
                       icon: Icons.poll,
                       route: FeddBackPage.routeName)
                 ]),
-            // //
-            // AdminMenuItem(
-            //   title: 'Dữ liệu',
-            //   route: '/',
-            //   icon: Icons.storage,
-            // ),
-            //
             AdminMenuItem(
-                title: 'Cài đặt',
-                icon: Icons.miscellaneous_services,
+                title: 'Phân quyền nhân viên',
+                icon: Icons.supervisor_account,
                 children: [
                   AdminMenuItem(
-                      title: 'Chỉnh sửa trang các nhân',
-                      icon: Icons.manage_accounts)
+                    title: 'Thêm danh mục, sản phẩm',
+                    route: AccessAndCancelRoleStaffPage.routeName,
+                    icon: Icons.person_add,
+                  ),
                 ]),
             //
             AdminMenuItem(
@@ -337,19 +343,6 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ),
           ),
-          // footer: Container(
-          //   height: 50,
-          //   width: double.infinity,
-          //   color: const Color(0xff444444),
-          //   child: const Center(
-          //     child: Text(
-          //       'footer',
-          //       style: TextStyle(
-          //         color: Colors.white,
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ),
         body: _selectedItem);
   }

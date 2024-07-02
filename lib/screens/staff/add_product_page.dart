@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/category_dropdown.dart';
@@ -184,77 +185,107 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Thêm sản phẩm',
-                style: GoogleFonts.arsenal(
-                    fontSize: 30, fontWeight: FontWeight.bold, color: brown),
+    return Scaffold(
+      backgroundColor: background,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.arrow_back_ios, color: primaryColors)),
+        title: Text(
+          'Thêm sản phẩm',
+          style: GoogleFonts.arsenal(
+              color: primaryColors, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/home_page');
+                },
+                icon: Icon(
+                  Icons.home,
+                  color: primaryColors,
+                )),
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Thêm sản phẩm',
+                  style: GoogleFonts.arsenal(
+                      fontSize: 30, fontWeight: FontWeight.bold, color: brown),
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            CategoryDropdown(
-              backGroundColor: background,
-              categories: _categories,
-              selectedCategory: _selectedCategoryController,
-              onChanged: (String? value) {
-                setState(() {
-                  _selectedCategoryController = value ?? '';
-                });
-              },
-            ),
-            LabeledTextField(
-                label: 'Tên sản phẩm', controller: _productNameController),
-            LabeledTextField(
-                label: 'Mô tả sản phẩm', controller: _descriptionController),
-            LabeledTextField(
-                label: 'Size (S-M-L)', controller: _sizeController),
-            LabeledTextField(label: 'Giá', controller: _priceController),
-            LabeledTextField(label: 'Đơn vị tính', controller: _unitController),
-            SizedBox(height: 10),
-            ImagePickerWidget(
-              imagePath: _imageController,
-              onPressed: _pickImage,
-              label: 'Hình ảnh sản phẩm',
-            ),
-            ImagePickerWidget(
-              imagePath: _imageDetailController,
-              onPressed: _pickImageDetail,
-              label: 'Hình ảnh chi tiết sản phẩm',
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/admin_page');
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: red),
-                  child: Text(
-                    'Hủy',
-                    style: GoogleFonts.roboto(fontSize: 18, color: white),
+              SizedBox(height: 10),
+              CategoryDropdown(
+                backGroundColor: background,
+                categories: _categories,
+                selectedCategory: _selectedCategoryController,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedCategoryController = value ?? '';
+                  });
+                },
+              ),
+              LabeledTextField(
+                  label: 'Tên sản phẩm', controller: _productNameController),
+              LabeledTextField(
+                  label: 'Mô tả sản phẩm', controller: _descriptionController),
+              LabeledTextField(
+                  label: 'Size (S-M-L)', controller: _sizeController),
+              LabeledTextField(label: 'Giá', controller: _priceController),
+              LabeledTextField(
+                  label: 'Đơn vị tính', controller: _unitController),
+              SizedBox(height: 10),
+              ImagePickerWidget(
+                imagePath: _imageController,
+                onPressed: _pickImage,
+                label: 'Hình ảnh sản phẩm',
+              ),
+              ImagePickerWidget(
+                imagePath: _imageDetailController,
+                onPressed: _pickImageDetail,
+                label: 'Hình ảnh chi tiết sản phẩm',
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: red),
+                    child: Text(
+                      'Hủy',
+                      style: GoogleFonts.roboto(fontSize: 18, color: white),
+                    ),
                   ),
-                ),
-                SizedBox(width: 15),
-                ElevatedButton(
-                  onPressed: () {
-                    addProduct();
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: green),
-                  child: Text(
-                    'Thêm',
-                    style: GoogleFonts.roboto(fontSize: 18, color: white),
+                  SizedBox(width: 15),
+                  ElevatedButton(
+                    onPressed: () {
+                      addProduct();
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: green),
+                    child: Text(
+                      'Thêm',
+                      style: GoogleFonts.roboto(fontSize: 18, color: white),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

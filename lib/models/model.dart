@@ -1,11 +1,15 @@
 // Model account
-class Account{
+class Account {
   String username;
   String password;
   String personid;
   int status;
 
-  Account({required this.username, required this.password, required this.personid, required this.status});
+  Account(
+      {required this.username,
+      required this.password,
+      required this.personid,
+      required this.status});
 
   factory Account.fromJson(Map<String, dynamic> json) {
     return Account(
@@ -25,6 +29,36 @@ class Account{
     };
   }
 }
+
+// Model person
+class Person {
+  final String personid;
+  final String name;
+  final String role;
+  final String phonenumber;
+
+  Person({
+    required this.personid,
+    required this.name,
+    required this.role,
+    required this.phonenumber,
+  });
+
+  factory Person.fromJson(Map<String, dynamic> json) => Person(
+        personid: json['personid'],
+        name: json['name'],
+        role: json['role'],
+        phonenumber: json['phonenumber'],
+      );
+
+  Map<String, dynamic> toJson() => {
+        'personid': personid,
+        'role': role,
+        'name': name,
+        'phonenumber': phonenumber,
+      };
+}
+
 // Model admin
 class Admin {
   final String adminid;
@@ -505,7 +539,6 @@ class Bill {
   String address;
   int discountcode;
   String phonenumber;
-  
 
   Bill({
     required this.billid,

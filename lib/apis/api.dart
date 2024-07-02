@@ -12,6 +12,7 @@ class AdminApi {
   final String categoryUrl = "http://localhost:5194/api/categories";
   final String orderUrl = "http://localhost:5194/api/orders";
   final String customerUrl = "http://localhost:5194/api/customers";
+  final String personUrl = "http://localhost:5194/api/persons";
   final String getProductUrl = 'http://localhost:5194/api/products/category';
   final String baseUrl = 'http://localhost:5194/api/bills';
 
@@ -419,6 +420,42 @@ class AdminApi {
     }
   }
 
+  // function access role staff
+  Future<void> accessRoleStaff(String staffid) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$personUrl/access-role/$staffid'),
+      );
+
+      if (response.statusCode == 200) {
+        print('Account access successfully');
+      } else {
+        print('Failed to access account: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error access account: $e');
+      // Xử lý lỗi nếu cần thiết
+    }
+  }
+
+  // function cancel role staff
+  Future<void> cancelRoleStaff(String staffid) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$personUrl/cancel-role/$staffid'),
+      );
+
+      if (response.statusCode == 200) {
+        print('Account canceled successfully');
+      } else {
+        print('Failed to cancel account: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error cancel account: $e');
+      // Xử lý lỗi nếu cần thiết
+    }
+  }
+
   // Get product for admin
   Future<List<Product>> getListProducts() async {
     try {
@@ -579,9 +616,9 @@ class CustomerApi {
   }
 
   // Delete data from API
-  Future<void> deleteCustomer(int id) async {
+  Future<void> deleteCustomer(int customerid) async {
     try {
-      final response = await http.delete(Uri.parse('$customerUrl/$id'));
+      final response = await http.delete(Uri.parse('$customerUrl/$customerid'));
       if (response.statusCode != 204) {
         throw Exception('Failed to delete customer');
       }
@@ -751,6 +788,7 @@ class StaffApi {
   final String staffUrl = "http://localhost:5194/api/staffs";
   final String orderUrl = "http://localhost:5194/api/orders";
   final String billUrl = "http://localhost:5194/api/bills";
+  final String personUrl = "http://localhost:5194/api/persons";
 
   // Authenticate account
   Future<bool> authenticateAccountStaffs(
@@ -909,6 +947,27 @@ class StaffApi {
     } catch (e) {
       throw Exception('Failed to print bill: $e');
     }
+  }
+
+  // function getRoleByPersonId
+  Future<String?> getRoleByPersonId(String personid) async {
+    try {
+      final response = await http.get(Uri.parse('$personUrl/$personid'));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data != null && data is Map<String, dynamic>) {
+          return data['role'] as String?;
+        }
+      } else {
+        print('Failed to load role. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching role: $e');
+    }
+
+    return null;
   }
 }
 

@@ -8,6 +8,7 @@ import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
+import 'package:highlandcoffeeapp/screens/app/payment_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/custom_app_bar.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
@@ -17,6 +18,7 @@ import 'package:highlandcoffeeapp/utils/bill/discount_code_form.dart';
 import 'package:highlandcoffeeapp/utils/bill/information_customer_form.dart';
 import 'package:highlandcoffeeapp/utils/bill/payment_method_form.dart';
 import 'package:highlandcoffeeapp/widgets/show_notification_navigate.dart';
+import 'package:vnpay_flutter/vnpay_flutter.dart';
 
 class OrderPage extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -33,6 +35,7 @@ class _OrderPageState extends State<OrderPage> {
   Customer? loggedCustomer = AuthManager().loggedInCustomer;
   OrderApi orderApi = OrderApi();
   String selectedPaymentMethod = '';
+  String responseCode = '';
   //
   final _textDiscountCodeController = TextEditingController();
 
@@ -390,6 +393,26 @@ class _OrderPageState extends State<OrderPage> {
     );
   }
 
+  //
+  void onPayment() {
+  final paymentUrl = VNPAYFlutter.instance.generatePaymentUrl(
+    url: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+    version: '2.0.1',
+    tmnCode: 'QHAKQR32',
+    txnRef: DateTime.now().millisecondsSinceEpoch.toString(),
+    orderInfo: 'Thanh toán đơn hàng',
+    amount: totalPrice * 100,
+    returnUrl: 'https://yourwebsite.com/return',
+    ipAdress: '172.28.0.1',
+    vnpayHashKey: '26SSODTEW1KR2VF2TP935ZBSSYUM5BTF',
+    vnPayHashType: VNPayHashType.HMACSHA512,
+  );
+  Navigator.of(context).push(MaterialPageRoute(
+    builder: (context) => PaymentPage(paymentUrl: paymentUrl),
+  ));
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -501,7 +524,11 @@ class _OrderPageState extends State<OrderPage> {
           MyButton(
             text: 'Xác nhận',
             onTap: () {
-              _showPayForm(context);
+              if (selectedPaymentMethod == 'Thanh toán VNPAY-QR') {
+                onPayment();
+              } else {
+                _showPayForm(context);
+              }
             },
             buttonColor: primaryColors,
           )

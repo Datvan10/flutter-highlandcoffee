@@ -46,7 +46,6 @@ class _PaymentMethodFormState extends State<PaymentMethodForm> {
         onChanged: (String? newValue) {
           setState(() {
             selectedPaymentOption = newValue!;
-            // Call the callback function with the selected payment option
             widget.onPaymentMethodSelected(selectedPaymentOption);
           });
         },
