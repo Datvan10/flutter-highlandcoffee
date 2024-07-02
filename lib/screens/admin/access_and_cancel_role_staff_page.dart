@@ -7,15 +7,17 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class DeleteStaffAccountPage extends StatefulWidget {
-  static const String routeName = '/delete_staff_account_page';
-  const DeleteStaffAccountPage({super.key});
+class AccessAndCancelRoleStaffPage extends StatefulWidget {
+  static const String routeName = '/access_and_cancel_role_staff_page';
+  const AccessAndCancelRoleStaffPage({super.key});
 
   @override
-  State<DeleteStaffAccountPage> createState() => _DeleteStaffAccountPageState();
+  State<AccessAndCancelRoleStaffPage> createState() =>
+      _AccessAndCancelRoleStaffPageState();
 }
 
-class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
+class _AccessAndCancelRoleStaffPageState
+    extends State<AccessAndCancelRoleStaffPage> {
   final AdminApi adminApi = AdminApi();
   List<Staff> staffs = [];
   final _textSearchStaffController = TextEditingController();
@@ -23,10 +25,10 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
   @override
   void initState() {
     super.initState();
-    _fetchStaffs();
+    fetchStaffs();
   }
 
-  Future<void> _fetchStaffs() async {
+  Future<void> fetchStaffs() async {
     try {
       List<Staff> fetchedStaffs = await adminApi.getAllStaffs();
       setState(() {
@@ -37,55 +39,69 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
     }
   }
 
-  Future<void> deleteStaff(String categoryId) async {
+  // function active account
+  Future<void> accessRoleStaff(String staffid) async {
+    try {
+      await adminApi.accessRoleStaff(staffid);
+      showCustomAlertDialog(
+          context, 'Thông báo', 'Cấp quyền cho tài khoản nhân viên thành công');
+      fetchStaffs();
+    } catch (e) {
+      showCustomAlertDialog(context, 'Thông báo',
+          'Cấp quyền cho tài khoản nhân viên thất bại. Vui lòng thử lại.');
+    }
+  }
+
+  // function block account
+  Future<void> cancelRoleStaff(String staffid) async {
     showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            "Thông báo",
-            style: GoogleFonts.roboto(
-              color: primaryColors,
-              fontSize: 19,
-            ),
-          ),
-          content: Text("Bạn có chắc muốn xóa nhân viên này không?",
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(
+              'Thông báo',
               style: GoogleFonts.roboto(
-                color: black,
-                fontSize: 16,
-              )),
-          actions: [
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              child: Text('OK',
-                  style: GoogleFonts.roboto(
-                      color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
-              onPressed: () async {
-                try {
-                  await adminApi.deleteStaff(categoryId);
-                  Navigator.pop(context);
-                  showCustomAlertDialog(
-                      context, 'Thông báo', 'Xóa thông tin tài khoản nhân viên thành công');
-                  _fetchStaffs();
-                } catch (e) {
-                  print('Error deleting staff: $e');
-                  Navigator.pop(context);
-                  showCustomAlertDialog(
-                      context, 'Thông báo', 'Không thể xóa nhân viên. Vui lòng xóa các đơn hàng và hóa đơn liên quan trước');
-                }
-              },
+                color: primaryColors,
+                fontSize: 19,
+              ),
             ),
-            CupertinoDialogAction(
-              child: Text('Hủy',
-                  style: GoogleFonts.roboto(color: blue, fontSize: 17)),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+            content:
+                Text('Bạn có chắc muốn hủy quyền của tài khoản nhân viên này không?',
+                    style: GoogleFonts.roboto(
+                      color: black,
+                      fontSize: 16,
+                    )),
+            actions: [
+              CupertinoDialogAction(
+                isDestructiveAction: true,
+                child: Text('OK',
+                    style: GoogleFonts.roboto(
+                        color: blue,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold)),
+                onPressed: () async {
+                  try {
+                    await adminApi.cancelRoleStaff(staffid);
+                    Navigator.pop(context);
+                    showCustomAlertDialog(context, 'Thông báo',
+                        'Hủy quyền tài khoản nhân viên thành công');
+                    fetchStaffs();
+                  } catch (e) {
+                    showCustomAlertDialog(context, 'Thông báo',
+                        'Cập nhật tài khoản khách hàng thất bại. Vui lòng thử lại.');
+                  }
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('Hủy',
+                    style: GoogleFonts.roboto(color: blue, fontSize: 17)),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
   }
 
   @override
@@ -102,7 +118,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Xóa thông tin tài khoản nhân viên',
+                    'Cấp quyền thêm danh mục và sản phẩm cho nhân viên',
                     style: GoogleFonts.arsenal(
                       fontSize: 30,
                       color: brown,
@@ -224,11 +240,23 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                         flex: 1,
                         child: IconButton(
                           icon: Icon(
-                            Icons.delete,
+                            Icons.block,
                             color: red,
                           ),
                           onPressed: () {
-                            deleteStaff(staff.staffid);
+                            cancelRoleStaff(staff.staffid);
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.how_to_reg,
+                            color: green,
+                          ),
+                          onPressed: () {
+                            accessRoleStaff(staff.staffid);
                           },
                         ),
                       )

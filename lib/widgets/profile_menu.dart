@@ -11,14 +11,15 @@ class ProfileMenu extends StatelessWidget {
     required this.onPress,
     this.endIcon = true,
     required this.textColor,
+    this.titleColor = Colors.black,
   });
 
   final String title;
   final IconData startIcon;
-  final Function() onPress; // Thay đổi kiểu từ VoidCallback? sang Function()?
+  final Function()? onPress;
   final bool endIcon;
   final Color? textColor;
-
+  final Color titleColor;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -35,7 +36,10 @@ class ProfileMenu extends StatelessWidget {
           color: primaryColors,
         ),
       ),
-      title: Text(title, style: GoogleFonts.roboto(color: black, fontSize : 16),),
+      title: Text(
+        title,
+        style: GoogleFonts.roboto(color: titleColor, fontSize: 16), // Use titleColor
+      ),
       trailing: endIcon
           ? Container(
               width: 30,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class PaymentPage extends StatefulWidget {
   final String paymentUrl;
@@ -16,10 +18,12 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   void initState() {
     super.initState();
-    if (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS) {
-      // Đảm bảo rằng WebView được khởi tạo đúng cách trên các nền tảng này
-       var WebView;
-       WebView.platform = SurfaceAndroidWebView();
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      // Set the WebView platform to Android WebView
+      // WebView.platform = SurfaceAndroidWebView();
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      // Set the WebView platform to iOS WebView
+      // WebView.platform = WebKitWebView();
     }
     _initializeWebView();
   }
@@ -54,18 +58,7 @@ class _PaymentPageState extends State<PaymentPage> {
       appBar: AppBar(
         title: const Text('VNPAY Payment'),
       ),
-      body: _buildWebView(),
+      body: WebViewWidget(controller: _controller),
     );
   }
-
-  Widget _buildWebView() {
-    if (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS) {
-      return WebViewWidget(controller: _controller);
-    } else {
-      return const Center(
-        child: Text('WebView không được hỗ trợ trên nền tảng này.'),
-      );
-    }
-  }
-  SurfaceAndroidWebView() {}
 }

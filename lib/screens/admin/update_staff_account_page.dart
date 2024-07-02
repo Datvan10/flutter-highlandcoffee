@@ -290,7 +290,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                             ),
                             Text(
                               staff.salary.toString() + ' VND',
-                              style: GoogleFonts.arsenal(
+                              style: GoogleFonts.roboto(
                                 fontSize: 16,
                                 color: brown,
                               ),
