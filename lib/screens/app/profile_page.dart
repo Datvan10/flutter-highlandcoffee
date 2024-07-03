@@ -39,12 +39,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     if (loggedInStaff != null) {
-      _fetchRole();
+      fetchRole();
     }
   }
 
-  //
-  Future<void> _fetchRole() async {
+  // function fetch role
+  Future<void> fetchRole() async {
     final fetchedRole =
         await staffApi.getRoleByPersonId(loggedInStaff!.staffid);
     setState(() {

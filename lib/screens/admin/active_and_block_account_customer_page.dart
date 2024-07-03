@@ -7,16 +7,16 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
-class UpdateAccountCustomerPage extends StatefulWidget {
+class ActiveAndBlockAccountCustomerPage extends StatefulWidget {
   static const String routeName = '/update_account_customer_page';
-  const UpdateAccountCustomerPage({super.key});
+  const ActiveAndBlockAccountCustomerPage({super.key});
 
   @override
-  State<UpdateAccountCustomerPage> createState() =>
-      _UpdateAccountCustomerPageState();
+  State<ActiveAndBlockAccountCustomerPage> createState() =>
+      _ActiveAndBlockAccountCustomerPageState();
 }
 
-class _UpdateAccountCustomerPageState extends State<UpdateAccountCustomerPage> {
+class _ActiveAndBlockAccountCustomerPageState extends State<ActiveAndBlockAccountCustomerPage> {
   final AdminApi adminApi = AdminApi();
   List<Customer> customers = [];
   final _textSearchCustomerController = TextEditingController();
@@ -232,14 +232,27 @@ class _UpdateAccountCustomerPageState extends State<UpdateAccountCustomerPage> {
                                 color: brown,
                               ),
                             ),
-                            Text(
-                              customer.status == 0
-                                  ? 'Đang hoạt động'
-                                  : 'Đã bị chặn',
-                              style: GoogleFonts.roboto(
-                                fontSize: 16,
-                                color: customer.status == 0 ? green : red,
-                              ),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color: customer.status == 0 ? green : red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  customer.status == 0
+                                      ? 'Đang hoạt động'
+                                      : 'Đã bị chặn',
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16,
+                                    color: customer.status == 0 ? green : red,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

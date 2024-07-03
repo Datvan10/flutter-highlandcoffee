@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
+import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
@@ -19,8 +20,10 @@ class AccessAndCancelRoleStaffPage extends StatefulWidget {
 class _AccessAndCancelRoleStaffPageState
     extends State<AccessAndCancelRoleStaffPage> {
   final AdminApi adminApi = AdminApi();
+  final staffApi = StaffApi();
   List<Staff> staffs = [];
   final _textSearchStaffController = TextEditingController();
+  String? role;
 
   @override
   void initState() {
@@ -28,9 +31,13 @@ class _AccessAndCancelRoleStaffPageState
     fetchStaffs();
   }
 
+  //
   Future<void> fetchStaffs() async {
     try {
       List<Staff> fetchedStaffs = await adminApi.getAllStaffs();
+      for (var staff in fetchedStaffs) {
+        role = await staffApi.getRoleByPersonId(staff.staffid);
+      }
       setState(() {
         staffs = fetchedStaffs;
       });
@@ -65,12 +72,12 @@ class _AccessAndCancelRoleStaffPageState
                 fontSize: 19,
               ),
             ),
-            content:
-                Text('Bạn có chắc muốn hủy quyền của tài khoản nhân viên này không?',
-                    style: GoogleFonts.roboto(
-                      color: black,
-                      fontSize: 16,
-                    )),
+            content: Text(
+                'Bạn có chắc muốn hủy quyền của tài khoản nhân viên này không?',
+                style: GoogleFonts.roboto(
+                  color: black,
+                  fontSize: 16,
+                )),
             actions: [
               CupertinoDialogAction(
                 isDestructiveAction: true,
@@ -209,7 +216,7 @@ class _AccessAndCancelRoleStaffPageState
                       Expanded(
                           flex: 1,
                           child: Icon(
-                            Icons.person,
+                            Icons.manage_accounts,
                             color: grey,
                             size: 30,
                           )),
@@ -232,6 +239,28 @@ class _AccessAndCancelRoleStaffPageState
                                 fontSize: 16,
                                 color: brown,
                               ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color: role == '0' ? green : red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  role == '0'
+                                      ? 'Đang cấp quyền'
+                                      : 'Chưa cấp quyền',
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16,
+                                    color: role == '0' ? green : red,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
