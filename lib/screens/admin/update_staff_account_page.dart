@@ -18,6 +18,7 @@ class UpdateStaffAccountPage extends StatefulWidget {
 class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
   final AdminApi adminApi = AdminApi();
   List<Staff> staffs = [];
+  List<Staff> filteredStaffs = [];
   final _textSearchStaffController = TextEditingController();
   TextEditingController _editNameController = TextEditingController();
   TextEditingController _editPhoneNumberController = TextEditingController();
@@ -35,6 +36,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
       List<Staff> fetchedStaffs = await adminApi.getAllStaffs();
       setState(() {
         staffs = fetchedStaffs;
+        filteredStaffs = fetchedStaffs;
       });
     } catch (e) {
       print('Error fetching staffs: $e');
@@ -166,6 +168,16 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
         });
   }
 
+  void performSearchStaff(String keyword) {
+    setState(() {
+      filteredStaffs = staffs
+          .where((staff) => staff.name
+              .toLowerCase()
+              .contains(keyword.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -191,6 +203,9 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                 SizedBox(height: 15),
                 TextField(
                   controller: _textSearchStaffController,
+                  onChanged: (value) {
+                    performSearchStaff(value);
+                  },
                   decoration: InputDecoration(
                     hintText: 'Tìm kiếm nhân viên',
                     contentPadding: EdgeInsets.symmetric(),
@@ -216,6 +231,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                             ),
                             onPressed: () {
                               _textSearchStaffController.clear();
+                              performSearchStaff('');
                             },
                           ),
                         ),
@@ -255,9 +271,9 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: staffs.length,
+              itemCount: filteredStaffs.length,
               itemBuilder: (context, index) {
-                final staff = staffs[index];
+                final staff = filteredStaffs[index];
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                   padding: EdgeInsets.all(15),

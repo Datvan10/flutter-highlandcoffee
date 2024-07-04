@@ -18,13 +18,13 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   void initState() {
     super.initState();
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      // Set the WebView platform to Android WebView
-      // WebView.platform = SurfaceAndroidWebView();
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      // Set the WebView platform to iOS WebView
-      // WebView.platform = WebKitWebView();
-    }
+    // if (defaultTargetPlatform == TargetPlatform.android) {
+    //   // Set the WebView platform to Android WebView
+    //   WebView.platform = SurfaceAndroidWebView();
+    // } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+    //   // Set the WebView platform to iOS WebView
+    //   WebView.platform = WebKitWebView();
+    // }
     _initializeWebView();
   }
 

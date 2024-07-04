@@ -39,7 +39,7 @@ class _OrderResultPageState extends State<OrderResultPage> {
               child: Text(
                 'Xong',
                 style: GoogleFonts.roboto(
-                    color: blue, fontSize: 17, fontWeight: FontWeight.bold)
+                    color: blue, fontSize: 17)
               ),
             ),
           ),

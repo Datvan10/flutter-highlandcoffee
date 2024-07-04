@@ -16,22 +16,25 @@ class ActiveAndBlockAccountCustomerPage extends StatefulWidget {
       _ActiveAndBlockAccountCustomerPageState();
 }
 
-class _ActiveAndBlockAccountCustomerPageState extends State<ActiveAndBlockAccountCustomerPage> {
+class _ActiveAndBlockAccountCustomerPageState
+    extends State<ActiveAndBlockAccountCustomerPage> {
   final AdminApi adminApi = AdminApi();
   List<Customer> customers = [];
-  final _textSearchCustomerController = TextEditingController();
+  List<Customer> filteredCustomers = [];
+  final _textSearchAccountCustomerController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    fetchCustomers();
+    fetchAccountCustomers();
   }
 
-  Future<void> fetchCustomers() async {
+  Future<void> fetchAccountCustomers() async {
     try {
       List<Customer> fetchedCustomers = await adminApi.getAllCustomers();
       setState(() {
         customers = fetchedCustomers;
+        filteredCustomers = fetchedCustomers;
       });
     } catch (e) {
       print('Error fetching customers: $e');
@@ -44,7 +47,7 @@ class _ActiveAndBlockAccountCustomerPageState extends State<ActiveAndBlockAccoun
       await adminApi.activateAccountCustomer(customerid);
       showCustomAlertDialog(
           context, 'Thông báo', 'Kích hoạt tài khoản khách hàng thành công');
-      fetchCustomers();
+      fetchAccountCustomers();
     } catch (e) {
       showCustomAlertDialog(context, 'Thông báo',
           'Cập nhật tài khoản khách hàng thất bại. Vui lòng thử lại.');
@@ -84,7 +87,7 @@ class _ActiveAndBlockAccountCustomerPageState extends State<ActiveAndBlockAccoun
                     Navigator.pop(context);
                     showCustomAlertDialog(context, 'Thông báo',
                         'Chặn tài khoản khách hàng thành công');
-                    fetchCustomers();
+                    fetchAccountCustomers();
                   } catch (e) {
                     showCustomAlertDialog(context, 'Thông báo',
                         'Cập nhật tài khoản khách hàng thất bại. Vui lòng thử lại.');
@@ -101,6 +104,15 @@ class _ActiveAndBlockAccountCustomerPageState extends State<ActiveAndBlockAccoun
             ],
           );
         });
+  }
+
+  void performSearchAccountCustomer(String keyword) {
+    setState(() {
+      filteredCustomers = customers
+          .where((customer) =>
+              customer.name.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -127,9 +139,12 @@ class _ActiveAndBlockAccountCustomerPageState extends State<ActiveAndBlockAccoun
                 ),
                 SizedBox(height: 15),
                 TextField(
-                  controller: _textSearchCustomerController,
+                  controller: _textSearchAccountCustomerController,
+                  onChanged: (value) {
+                    performSearchAccountCustomer(value);
+                  },
                   decoration: InputDecoration(
-                    hintText: 'Tìm kiếm khách hàng',
+                    hintText: 'Tìm kiếm tài khoản khách hàng',
                     contentPadding: EdgeInsets.symmetric(),
                     alignLabelWithHint: true,
                     filled: true,
@@ -152,7 +167,8 @@ class _ActiveAndBlockAccountCustomerPageState extends State<ActiveAndBlockAccoun
                               size: 10,
                             ),
                             onPressed: () {
-                              _textSearchCustomerController.clear();
+                              _textSearchAccountCustomerController.clear();
+                              performSearchAccountCustomer('');
                             },
                           ),
                         ),
@@ -192,9 +208,9 @@ class _ActiveAndBlockAccountCustomerPageState extends State<ActiveAndBlockAccoun
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: customers.length,
+              itemCount: filteredCustomers.length,
               itemBuilder: (context, index) {
-                final customer = customers[index];
+                final customer = filteredCustomers[index];
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                   padding: EdgeInsets.all(15),
