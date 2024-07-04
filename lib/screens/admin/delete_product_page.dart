@@ -146,13 +146,13 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
     );
   }
 
-  void performSearch(String query) async {
+  void performSearch(String keyword) async {
     try {
-      if (query.isNotEmpty) {
+      if (keyword.isNotEmpty) {
         List<Product> products = await adminApi.getListProducts();
         List<Product> filteredProducts = products
             .where((product) =>
-                product.productname.toLowerCase().contains(query.toLowerCase()))
+                product.productname.toLowerCase().contains(keyword.toLowerCase()))
             .toList();
         setState(() {
           searchResults = filteredProducts;

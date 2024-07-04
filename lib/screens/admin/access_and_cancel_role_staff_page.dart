@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
-import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
@@ -17,13 +16,13 @@ class AccessAndCancelRoleStaffPage extends StatefulWidget {
       _AccessAndCancelRoleStaffPageState();
 }
 
-class _AccessAndCancelRoleStaffPageState
-    extends State<AccessAndCancelRoleStaffPage> {
+class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffPage> {
   final AdminApi adminApi = AdminApi();
   final staffApi = StaffApi();
   List<Staff> staffs = [];
+  List<Staff> filteredStaffs = [];
+  Map<String, String?> staffRoles = {};
   final _textSearchStaffController = TextEditingController();
-  String? role;
 
   @override
   void initState() {
@@ -31,22 +30,22 @@ class _AccessAndCancelRoleStaffPageState
     fetchStaffs();
   }
 
-  //
   Future<void> fetchStaffs() async {
     try {
       List<Staff> fetchedStaffs = await adminApi.getAllStaffs();
       for (var staff in fetchedStaffs) {
-        role = await staffApi.getRoleByPersonId(staff.staffid);
+        String? role = await staffApi.getRoleByPersonId(staff.staffid);
+        staffRoles[staff.staffid] = role;
       }
       setState(() {
         staffs = fetchedStaffs;
+        filteredStaffs = fetchedStaffs;
       });
     } catch (e) {
       print('Error fetching staffs: $e');
     }
   }
 
-  // function active account
   Future<void> accessRoleStaff(String staffid) async {
     try {
       await adminApi.accessRoleStaff(staffid);
@@ -59,7 +58,6 @@ class _AccessAndCancelRoleStaffPageState
     }
   }
 
-  // function block account
   Future<void> cancelRoleStaff(String staffid) async {
     showDialog(
         context: context,
@@ -111,6 +109,16 @@ class _AccessAndCancelRoleStaffPageState
         });
   }
 
+  void performSearchStaff(String keyword) {
+    setState(() {
+      filteredStaffs = staffs
+          .where((staff) => staff.name
+              .toLowerCase()
+              .contains(keyword.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -136,6 +144,9 @@ class _AccessAndCancelRoleStaffPageState
                 SizedBox(height: 15),
                 TextField(
                   controller: _textSearchStaffController,
+                  onChanged: (value) {
+                    performSearchStaff(value);
+                  },
                   decoration: InputDecoration(
                     hintText: 'Tìm kiếm nhân viên',
                     contentPadding: EdgeInsets.symmetric(),
@@ -161,6 +172,7 @@ class _AccessAndCancelRoleStaffPageState
                             ),
                             onPressed: () {
                               _textSearchStaffController.clear();
+                              performSearchStaff('');
                             },
                           ),
                         ),
@@ -200,9 +212,10 @@ class _AccessAndCancelRoleStaffPageState
             child: ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: staffs.length,
+              itemCount: filteredStaffs.length,
               itemBuilder: (context, index) {
-                final staff = staffs[index];
+                final staff = filteredStaffs[index];
+                final role = staffRoles[staff.staffid];
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                   padding: EdgeInsets.all(15),
@@ -310,3 +323,4 @@ class _AccessAndCancelRoleStaffPageState
     );
   }
 }
+
