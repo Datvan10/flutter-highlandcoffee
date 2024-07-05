@@ -278,7 +278,7 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   //
-  void _showEditCustomerInfoForm(BuildContext context) {
+  void showEditCustomerInfoForm(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -438,7 +438,7 @@ class _OrderPageState extends State<OrderPage> {
               GestureDetector(
                 onTap: () {
                   // Change information user
-                  _showEditCustomerInfoForm(context);
+                  showEditCustomerInfoForm(context);
                 },
                 child: Text(
                   'Thay đổi',
@@ -451,7 +451,6 @@ class _OrderPageState extends State<OrderPage> {
             height: 15,
           ),
           //
-          // Trong OrderPage, tại nơi sử dụng InformationForm
           InformationCustomerForm(loggedInUser: loggedCustomer),
 
           SizedBox(

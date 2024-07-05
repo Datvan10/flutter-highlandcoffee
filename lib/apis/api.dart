@@ -6,15 +6,16 @@ import 'package:http/http.dart' as http;
 
 // Admin API
 class AdminApi {
-  final String adminUrl = "http://192.168.110.226:1001/api/admins";
-  final String staffUrl = "http://192.168.110.226:1001/api/staffs";
-  final String productUrl = "http://192.168.110.226:1001/api/products";
-  final String categoryUrl = "http://192.168.110.226:1001/api/categories";
-  final String orderUrl = "http://192.168.110.226:1001/api/orders";
-  final String customerUrl = "http://192.168.110.226:1001/api/customers";
-  final String personUrl = "http://192.168.110.226:1001/api/persons";
-  final String getProductUrl = 'http://192.168.110.226:1001/api/products/category';
-  final String baseUrl = 'http://192.168.110.226:1001/api/bills';
+  final String adminUrl = "http://localhost:5194/api/admins";
+  final String staffUrl = "http://localhost:5194/api/staffs";
+  final String productUrl = "http://localhost:5194/api/products";
+  final String categoryUrl = "http://localhost:5194/api/categories";
+  final String orderUrl = "http://localhost:5194/api/orders";
+  final String customerUrl = "http://localhost:5194/api/customers";
+  final String personUrl = "http://localhost:5194/api/persons";
+  final String getProductUrl = 'http://localhost:5194/api/products/category';
+  final String billUrl = 'http://localhost:5194/api/bills';
+  final String commentUrl = 'http://localhost:5194/api/comments';
 
   // Read data from API
   Future<List<Admin>> getAdmins() async {
@@ -370,7 +371,6 @@ class AdminApi {
 
   // Get all customer
   Future<List<Customer>> getAllCustomers() async {
-    final customerUrl = "http://192.168.110.226:1001/api/customers";
     try {
       final response = await http.get(Uri.parse(customerUrl));
       if (response.statusCode == 200) {
@@ -434,7 +434,6 @@ class AdminApi {
       }
     } catch (e) {
       print('Error access account: $e');
-      // Xử lý lỗi nếu cần thiết
     }
   }
 
@@ -452,7 +451,6 @@ class AdminApi {
       }
     } catch (e) {
       print('Error cancel account: $e');
-      // Xử lý lỗi nếu cần thiết
     }
   }
 
@@ -501,7 +499,7 @@ class AdminApi {
   Future<int> fetchDailyRevenue(DateTime date) async {
     try {
       final response = await http.get(Uri.parse(
-          '$baseUrl/daily-revenue?date=${date.toString().substring(0, 10)}'));
+          '$billUrl/daily-revenue?date=${date.toString().substring(0, 10)}'));
       if (response.statusCode == 200) {
         return int.parse(response.body);
       } else {
@@ -516,7 +514,7 @@ class AdminApi {
   Future<List<Map<String, dynamic>>> fetchTopProducts(DateTime date) async {
     try {
       final response = await http.get(Uri.parse(
-          '$baseUrl/top-products?date=${date.toString().substring(0, 10)}'));
+          '$billUrl/top-products?date=${date.toString().substring(0, 10)}'));
       if (response.statusCode == 200) {
         return jsonDecode(response.body).cast<Map<String, dynamic>>();
       } else {
@@ -540,14 +538,74 @@ class AdminApi {
       throw Exception('Failed to delete Order');
     }
   }
+
+  // fetch all comment
+  Future<List<Comment>> fetchAllComment() async {
+    try {
+      final response = await http.get(Uri.parse(commentUrl));
+      print('Response status: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        // print('Response body: $jsonData');
+        List<Comment> comments =
+            jsonData.map((data) => Comment.fromJson(data)).toList();
+        // print('Parsed comments: $comments');
+        return comments;
+      } else {
+        throw Exception('Failed to load comments');
+      }
+    } catch (e) {
+      throw Exception('Failed to load comments');
+    }
+  }
+
+  // function publish comment
+  Future<void> publishComment(String commentid) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$commentUrl/publish-comment/$commentid'),
+      );
+
+      if (response.statusCode == 200) {
+        print('Comment published successfully');
+      } else {
+        print('Failed to publish comment: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error publish comment: $e');
+      // Xử lý lỗi nếu cần thiết
+    }
+  }
+
+  //
+  Future<void> cancelComment(String commentid) async {}
+
+  //
+  Future<List<Comment>> fetchPublishedComments() async {
+    try {
+      final response = await http.get(Uri.parse(commentUrl));
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        List<Comment> comments = jsonData
+            .where((comment) => comment['status'] == 1)
+            .map((data) => Comment.fromJson(data))
+            .toList();
+        return comments;
+      } else {
+        throw Exception('Failed to load published comments');
+      }
+    } catch (e) {
+      throw Exception('Failed to load published comments: $e');
+    }
+  }
 }
 
 // Customer API
 class CustomerApi {
-  final String accountUrl = "http://192.168.110.226:1001/api/accounts";
-  final String customerUrl = "http://192.168.110.226:1001/api/customers";
-  final String orderUrl = "http://192.168.110.226:1001/api/orders";
-  final String commentUrl = "http://192.168.110.226:1001/api/comments";
+  final String accountUrl = "http://localhost:5194/api/accounts";
+  final String customerUrl = "http://localhost:5194/api/customers";
+  final String orderUrl = "http://localhost:5194/api/orders";
+  final String commentUrl = "http://localhost:5194/api/comments";
   // Read data from API
   Future<List<Customer>> getCustomers() async {
     try {
@@ -784,11 +842,11 @@ class CustomerApi {
 }
 
 class StaffApi {
-  final String accountUrl = "http://192.168.110.226:1001/api/accounts";
-  final String staffUrl = "http://192.168.110.226:1001/api/staffs";
-  final String orderUrl = "http://192.168.110.226:1001/api/orders";
-  final String billUrl = "http://192.168.110.226:1001/api/bills";
-  final String personUrl = "http://192.168.110.226:1001/api/persons";
+  final String accountUrl = "http://localhost:5194/api/accounts";
+  final String staffUrl = "http://localhost:5194/api/staffs";
+  final String orderUrl = "http://localhost:5194/api/orders";
+  final String billUrl = "http://localhost:5194/api/bills";
+  final String personUrl = "http://localhost:5194/api/persons";
 
   // Authenticate account
   Future<bool> authenticateAccountStaffs(
@@ -973,7 +1031,7 @@ class StaffApi {
 
 // Category API
 class CategoryApi {
-  final String categoryUrl = "http://192.168.110.226:1001/api/categories";
+  final String categoryUrl = "http://localhost:5194/api/categories";
   // Read data from API
   Future<List<Category>> getCategories() async {
     try {
@@ -994,8 +1052,8 @@ class CategoryApi {
 
 // Product API
 class ProductApi {
-  final String productUrl = "http://192.168.110.226:1001/api/products";
-  final String categoryUrl = "http://192.168.110.226:1001/api/categories";
+  final String productUrl = "http://localhost:5194/api/products";
+  final String categoryUrl = "http://localhost:5194/api/categories";
   // Read data from API
   Future<List<Product>> getListProducts() async {
     try {
@@ -1051,7 +1109,7 @@ class ProductApi {
   //
   Future<List<Product>> getProductsByCategory(String categoryid) async {
     final String productUrl =
-        "http://192.168.110.226:1001/api/products/category/$categoryid";
+        "http://localhost:5194/api/products/category/$categoryid";
     try {
       final response = await http.get(Uri.parse(productUrl));
       if (response.statusCode == 200) {
@@ -1122,7 +1180,7 @@ class ProductApi {
   // New method: Fetch product sizes and prices by product ID
   Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
     final String productSizesUrl =
-        "http://192.168.110.226:1001/api/products/sizes/$productname";
+        "http://localhost:5194/api/products/sizes/$productname";
 
     try {
       final response = await http.get(Uri.parse(productSizesUrl));
@@ -1148,7 +1206,7 @@ class ProductApi {
 
 // API for popular products
 class PopularApi {
-  final String popularUrl = "http://192.168.110.226:1001/api/products/category/dm030";
+  final String popularUrl = "http://localhost:5194/api/products/category/dm030";
   // Read data from API
   Future<List<Product>> getPopulars() async {
     try {
@@ -1228,7 +1286,7 @@ class PopularApi {
   //
   Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
     final String productSizesUrl =
-        "http://192.168.110.226:1001/api/products/sizes/$productname";
+        "http://localhost:5194/api/products/sizes/$productname";
 
     try {
       final response = await http.get(Uri.parse(productSizesUrl));
@@ -1254,7 +1312,7 @@ class PopularApi {
 
 // API for favorite products
 class FavoriteApi {
-  final String favoriteUrl = "http://192.168.110.226:1001/api/favorites";
+  final String favoriteUrl = "http://localhost:5194/api/favorites";
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   // Read data from API
   Future<List<Favorite>> getFavoritesByCustomerId() async {
@@ -1330,7 +1388,7 @@ class FavoriteApi {
 // API fo best sale
 class BestSaleApi {
   final String bestSaleUrl =
-      "http://192.168.110.226:1001/api/products/category/dm029";
+      "http://localhost:5194/api/products/category/dm029";
   // Read data from API
   Future<List<Product>> getBestSales() async {
     try {
@@ -1358,7 +1416,7 @@ class BestSaleApi {
   //
   Future<List<Map<String, dynamic>>> getProductSizes(String productId) async {
     final String productSizesUrl =
-        "http://192.168.110.226:1001/api/products/sizes/$productId";
+        "http://localhost:5194/api/products/sizes/$productId";
 
     try {
       final response = await http.get(Uri.parse(productSizesUrl));
@@ -1384,7 +1442,7 @@ class BestSaleApi {
 
 // API for Coffee
 class CoffeeApi {
-  final String coffeeUrl = "http://192.168.110.226:1001/api/products/category/dm001";
+  final String coffeeUrl = "http://localhost:5194/api/products/category/dm001";
   // Read data from API
   Future<List<Product>> getCoffees() async {
     try {
@@ -1412,7 +1470,7 @@ class CoffeeApi {
 
 // API for Freeze
 class FreezeApi {
-  final String freezeUrl = "http://192.168.110.226:1001/api/products/category/dm002";
+  final String freezeUrl = "http://localhost:5194/api/products/category/dm002";
   // Read data from API
   Future<List<Product>> getFreezes() async {
     try {
@@ -1440,7 +1498,7 @@ class FreezeApi {
 
 // API for Tea
 class TeaApi {
-  final String teaUrl = "http://192.168.110.226:1001/api/products/category/dm003";
+  final String teaUrl = "http://localhost:5194/api/products/category/dm003";
   // Read data from API
   Future<List<Product>> getTeas() async {
     try {
@@ -1468,7 +1526,7 @@ class TeaApi {
 
 // API for bread
 class BreadApi {
-  final String breadUrl = "http://192.168.110.226:1001/api/breads";
+  final String breadUrl = "http://localhost:5194/api/breads";
   // Read data from API
   Future<List<Product>> getBreads() async {
     try {
@@ -1548,7 +1606,7 @@ class BreadApi {
 
 // API for food
 class FoodApi {
-  final String foodUrl = "http://192.168.110.226:1001/api/products/category/dm004";
+  final String foodUrl = "http://localhost:5194/api/products/category/dm004";
   // Read data from API
   Future<List<Product>> getFoods() async {
     try {
@@ -1576,7 +1634,7 @@ class FoodApi {
 
 // API for Other
 class OtherApi {
-  final String otherUrl = "http://192.168.110.226:1001/api/others";
+  final String otherUrl = "http://localhost:5194/api/others";
   // Read data from API
   Future<List<Product>> getOthers() async {
     try {
@@ -1604,8 +1662,8 @@ class OtherApi {
 
 // API for Cart
 class CartApi {
-  final String cartUrl = "http://192.168.110.226:1001/api/carts";
-  final String cartDetailUrl = "http://192.168.110.226:1001/api/cartdetails";
+  final String cartUrl = "http://localhost:5194/api/carts";
+  final String cartDetailUrl = "http://localhost:5194/api/cartdetails";
   // Read data from API
   Future<List<Cart>> getCarts() async {
     try {
@@ -1690,7 +1748,7 @@ class CartApi {
 
 // API for CartDetail
 class CartDetailApi {
-  final String cartDetailUrl = "http://192.168.110.226:1001/api/cartdetails";
+  final String cartDetailUrl = "http://localhost:5194/api/cartdetails";
 
   Future<List<dynamic>> fetchCartDetails() async {
     try {
@@ -1709,7 +1767,7 @@ class CartDetailApi {
 
 /// API for Order
 class OrderApi {
-  final String orderUrl = "http://192.168.110.226:1001/api/orders";
+  final String orderUrl = "http://localhost:5194/api/orders";
 
   // fetch order by customer
   Future<List<Order>> fetchCustomerOrder(String customerid) async {
@@ -1776,7 +1834,7 @@ class OrderApi {
 
 //
 class OrderDetailApi {
-  final String orderDetailUrl = "http://192.168.110.226:1001/api/orderdetails";
+  final String orderDetailUrl = "http://localhost:5194/api/orderdetails";
 
   // fetch order by customer
   Future<List<OrderDetail>> fetchOrderDetail(String orderid) async {

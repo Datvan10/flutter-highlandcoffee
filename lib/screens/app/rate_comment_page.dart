@@ -13,6 +13,7 @@ import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/image_picker_widget.dart';
 import 'package:highlandcoffeeapp/widgets/labeled_text_field.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
+import 'package:highlandcoffeeapp/widgets/build_star_rating.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RateCommentPage extends StatefulWidget {
@@ -29,6 +30,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
   TextEditingController _titleCommentController = TextEditingController();
   TextEditingController _contentCommentController = TextEditingController();
   File? _imageController;
+  int _rating = 0;
 
   // Function to pick an image from the gallery
   Future<void> _pickImage() async {
@@ -44,6 +46,12 @@ class _RateCommentPageState extends State<RateCommentPage> {
   //
   Future<void> addComment() async {
     try {
+      if (_titleCommentController.text.isEmpty ||
+          _contentCommentController.text.isEmpty || _rating == 0  || _imageController == null) {
+        showCustomAlertDialog(
+            context, 'Thông báo', 'Vui lòng điền đầy đủ thông tin đánh giá.');
+        return;
+      }
       final bytesImage = _imageController!.readAsBytesSync();
       final imageBase64 = base64Encode(bytesImage);
       Comment customerComment = Comment(
@@ -55,13 +63,8 @@ class _RateCommentPageState extends State<RateCommentPage> {
         image: imageBase64,
         date: DateTime.now(),
         status: 0,
+        rating: _rating, // Sử dụng giá trị rating
       );
-      if (_titleCommentController.text.isEmpty ||
-          _contentCommentController.text.isEmpty) {
-        showCustomAlertDialog(
-            context, 'Thông báo', 'Vui lòng điền đầy đủ thông tin đánh giá.');
-        return;
-      }
       // Call API to add comment
       await customerApi.addComment(customerComment);
       showCustomAlertDialog(
@@ -70,9 +73,9 @@ class _RateCommentPageState extends State<RateCommentPage> {
       _contentCommentController.clear();
       setState(() {
         _imageController = null;
+        _rating = 0;
       });
     } catch (e) {
-      // showCustomAlertDialog(context, 'Lỗi', '');
       print('Error adding comment: $e');
     }
   }
@@ -110,72 +113,95 @@ class _RateCommentPageState extends State<RateCommentPage> {
               color: primaryColors, fontWeight: FontWeight.bold),
         ),
       ),
-      body: Container(
-        child: Padding(
-          padding: EdgeInsets.all(18.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Cảm ơn những ý kiến bình luận quý giá của khách hàng!',
-                    style: GoogleFonts.arsenal(
-                        color: brown,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-              SizedBox(height: 30),
-              LabeledTextField(
-                  label: 'Tiêu đề', controller: _titleCommentController),
-              SizedBox(height: 10),
-              LabeledTextField(
-                  label: 'Nội dung', controller: _contentCommentController),
-              SizedBox(height: 15),
-              ImagePickerWidget(
-                imagePath: _imageController,
-                onPressed: _pickImage,
-                label: 'Hình ảnh sản phẩm',
-              ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(backgroundColor: red),
-                    child: Text(
-                      'Hủy',
-                      style: GoogleFonts.roboto(fontSize: 18 ,color: white),
+      body: Padding(
+        padding: const EdgeInsets.only(
+            left: 18.0, right: 18.0, top: 18.0, bottom: 25),
+        child: Column(
+          children: [
+            Expanded(
+                child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Cảm ơn những ý kiến bình luận quý giá của khách hàng!',
+                      style: GoogleFonts.arsenal(
+                          color: brown,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+                SizedBox(height: 30),
+                LabeledTextField(
+                    label: 'Tiêu đề', controller: _titleCommentController),
+                SizedBox(height: 10),
+                LabeledTextField(
+                    label: 'Nội dung', controller: _contentCommentController),
+                SizedBox(height: 15),
+                ImagePickerWidget(
+                  imagePath: _imageController,
+                  onPressed: _pickImage,
+                  label: 'Hình ảnh sản phẩm',
+                ),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Xếp hạng',
+                        style: GoogleFonts.roboto(
+                          fontSize: 20,
+                          color: black,
+                        )),
+                    BuildStarRating(
+                      onRatingChanged: (rating) {
+                        setState(() {
+                          _rating = rating;
+                        });
+                      },
+                      currentRating: _rating,
                     ),
-                  ),
-                  SizedBox(width: 15),
-                  ElevatedButton(
-                    onPressed: () {
-                      addComment();
-                    },
-                    style: ElevatedButton.styleFrom(backgroundColor: green),
-                    child: Text(
-                      'Gửi',
-                      style: GoogleFonts.roboto(fontSize: 18 ,color: white),
+                  ],
+                ),
+                SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   style: ElevatedButton.styleFrom(backgroundColor: red),
+                    //   child: Text(
+                    //     'Hủy',
+                    //     style: GoogleFonts.roboto(fontSize: 18, color: white),
+                    //   ),
+                    // ),
+                    SizedBox(width: 15),
+                    ElevatedButton(
+                      onPressed: () {
+                        addComment();
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: green),
+                      child: Text(
+                        'Gửi',
+                        style: GoogleFonts.roboto(fontSize: 18, color: white),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 300),
-              MyButton(
-            text: 'Hoàn thành',
-            onTap: () {
-              Navigator.pushNamed(context, '/home_page');
-            },
-            buttonColor: primaryColors,
-          ),
-            ],
-          ),
+                  ],
+                ),
+                SizedBox(height: 30),
+              ],
+            )),
+            MyButton(
+              text: 'Hoàn thành',
+              onTap: () {
+                Navigator.pushNamed(context, '/home_page');
+              },
+              buttonColor: primaryColors,
+            ),
+          ],
         ),
       ),
     );
