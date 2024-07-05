@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
+import 'package:highlandcoffeeapp/screens/app/about_us_page.dart';
 import 'package:highlandcoffeeapp/screens/app/rate_comment_page.dart';
 import 'package:highlandcoffeeapp/screens/client/update_customer_profille_page.dart';
 import 'package:highlandcoffeeapp/screens/staff/add_categoty_page.dart';
@@ -131,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   //
-  void _showConfirmExit() {
+  void showConfirmExit() {
     notificationDialog(
       context: context,
       title: "Đăng xuất khỏi tài khoản của bạn?",
@@ -380,13 +381,20 @@ class _ProfilePageState extends State<ProfilePage> {
             ProfileMenu(
                 title: 'Về chúng tôi',
                 startIcon: LineAwesomeIcons.info,
-                onPress: () {},
+                onPress: () {
+                  Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AboutUsPage(),
+                              ),
+                            );
+                },
                 textColor: grey),
             ProfileMenu(
                 title: 'Đăng xuất',
                 startIcon: Icons.logout,
                 onPress: () {
-                  _showConfirmExit();
+                  showConfirmExit();
                 },
                 endIcon: false,
                 textColor: grey)

@@ -4,14 +4,13 @@ import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class InformationCustomerForm extends StatelessWidget {
-  final Customer? loggedInUser; // Thêm thuộc tính loggedInUser
-  const InformationCustomerForm({Key? key, required this.loggedInUser}) : super(key: key);
+  final Customer? loggedInUser;
+  const InformationCustomerForm({Key? key, required this.loggedInUser})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Kiểm tra nếu người dùng đã đăng nhập
     if (loggedInUser != null) {
-      // Trích xuất thông tin từ loggedInUser
       String userName = loggedInUser!.name;
       String address = loggedInUser!.address;
       String phoneNumber = loggedInUser!.phonenumber.toString();
@@ -46,11 +45,16 @@ class InformationCustomerForm extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(address,
+                  Flexible(
+                    child: Text(
+                      address,
                       style: GoogleFonts.roboto(
                         fontSize: 17,
                         color: black,
-                      )),
+                      ),
+                      overflow: TextOverflow.clip,
+                    ),
+                  ),
                 ],
               ),
               Row(

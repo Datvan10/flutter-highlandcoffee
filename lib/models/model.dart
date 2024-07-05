@@ -406,8 +406,9 @@ class Comment {
   final String titlecomment;
   final String contentcomment;
   final DateTime date;
-  String image;
-  int status;
+  final String image;
+  final int status;
+  final int rating;
 
   Comment({
     required this.commentid,
@@ -418,6 +419,7 @@ class Comment {
     required this.date,
     required this.image,
     required this.status,
+    required this.rating,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
@@ -427,9 +429,10 @@ class Comment {
       customername: json['customername'],
       titlecomment: json['titlecomment'],
       contentcomment: json['contentcomment'],
-      date: json['date'],
+      date: DateTime.parse(json['date']),
       image: json['image'],
       status: json['status'],
+      rating: json['rating'],
     );
   }
 
@@ -442,6 +445,7 @@ class Comment {
         'date': date.toIso8601String(),
         'image': image,
         'status': status,
+        'rating': rating,
       };
 }
 

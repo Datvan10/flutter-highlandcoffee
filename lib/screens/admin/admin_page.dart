@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/screens/admin/access_and_cancel_role_staff_page.dart';
@@ -11,7 +13,8 @@ import 'package:highlandcoffeeapp/screens/admin/dashboard_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_staff_account_page.dart';
-import 'package:highlandcoffeeapp/screens/admin/feddback_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/logout_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/publish_and_cancel_comment_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/list_order_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/top_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/active_and_block_account_customer_page.dart';
@@ -30,9 +33,15 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   //
+  void handleLogout() {
+    print('Logout');
+    showConfirmExit(context);
+  }
+
+  //
   Widget _selectedItem = DashboardPage();
 
-  screenSlector(item) {
+  void screenSlector(item) {
     switch (item.route) {
       case DashboardPage.routeName:
         setState(() {
@@ -134,14 +143,20 @@ class _AdminPageState extends State<AdminPage> {
           _selectedItem = AccessAndCancelRoleStaffPage();
         });
 
+      case LogoutPage.routeName:
+        setState(() {
+          _selectedItem = LogoutPage();
+        });
+        break;
+
       // case AccessAddProductPage.routeName:
       // setState(() {
       //   _selectedItem = AccessAddProductPage();
       // });
 
-      case FeddBackPage.routeName:
+      case PublishAndCancelCommentPage.routeName:
         setState(() {
-          _selectedItem = FeddBackPage();
+          _selectedItem = PublishAndCancelCommentPage();
         });
 
         break;
@@ -149,7 +164,7 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   //
-  void _showConfirmExit(BuildContext context) {
+  void showConfirmExit(BuildContext context) {
     print('show confirm exit');
     notificationDialog(
       context: context,
@@ -183,7 +198,7 @@ class _AdminPageState extends State<AdminPage> {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: IconButton(
-                  onPressed: () {}, icon: Icon(Icons.account_circle)),
+                  onPressed: () {Get.toNamed('/home_page');}, icon: Icon(Icons.account_circle)),
             )
           ],
           backgroundColor: Colors.transparent,
@@ -300,7 +315,7 @@ class _AdminPageState extends State<AdminPage> {
                   AdminMenuItem(
                       title: 'Đánh giá, bình luận',
                       icon: Icons.poll,
-                      route: FeddBackPage.routeName)
+                      route: PublishAndCancelCommentPage.routeName)
                 ]),
             AdminMenuItem(
                 title: 'Phân quyền nhân viên',
@@ -313,10 +328,14 @@ class _AdminPageState extends State<AdminPage> {
                   ),
                 ]),
             //
-            AdminMenuItem(
-              title: 'Đăng xuất',
-              icon: Icons.logout,
-            ),
+            AdminMenuItem(title: 'Đăng xuất', icon: Icons.logout, children: [
+              AdminMenuItem(
+                title: 'Đăng xuất',
+                route: LogoutPage.routeName,
+                icon: Icons.logout,
+                onPressed: () => handleLogout,
+              ),
+            ]),
           ],
           selectedRoute: '',
           onSelected: (item) {
