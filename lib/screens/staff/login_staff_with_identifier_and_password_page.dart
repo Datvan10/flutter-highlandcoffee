@@ -23,7 +23,7 @@ class LoginStaffWithIdentifierAndPasswordPage extends StatefulWidget {
 
 class _LoginStaffWithIdentifierAndPasswordPageState
     extends State<LoginStaffWithIdentifierAndPasswordPage> {
-  final StaffApi api = StaffApi();
+  final SystemApi systemApi = SystemApi();
   final _identifierController = TextEditingController();
   final _passWordController = TextEditingController();
   bool isLoggedIn = false;
@@ -53,10 +53,10 @@ class _LoginStaffWithIdentifierAndPasswordPageState
     } else {
       try {
         bool isAuthenticated =
-            await api.authenticateAccountStaffs(identifier, password);
+            await systemApi.authenticateAccountStaffs(identifier, password);
 
         if (isAuthenticated) {
-          Staff loggedInStaff = await api.getStaffByIdentifier(identifier);
+          Staff loggedInStaff = await systemApi.getStaffByIdentifier(identifier);
           AuthManager().setLoggedInStaff(loggedInStaff);
           Navigator.pushReplacementNamed(context, '/home_page');
           showCustomAlertDialog(context, 'Thông báo', 'Đăng nhập thành công');

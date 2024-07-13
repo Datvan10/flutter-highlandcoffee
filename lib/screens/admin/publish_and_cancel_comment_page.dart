@@ -19,7 +19,7 @@ class PublishAndCancelCommentPage extends StatefulWidget {
 
 class _PublishAndCancelCommentPageState
     extends State<PublishAndCancelCommentPage> {
-  final AdminApi adminApi = AdminApi();
+  final SystemApi systemApi = SystemApi();
   late Future<List<Comment>> futureComments;
   List<Comment> searchResults = [];
   final _textSearchCommentController = TextEditingController();
@@ -27,7 +27,7 @@ class _PublishAndCancelCommentPageState
   @override
   void initState() {
     super.initState();
-    futureComments = adminApi.fetchAllComment();
+    futureComments = systemApi.fetchAllComment();
   }
 
   Future<void> publishComment(String commentid) async {
@@ -55,12 +55,12 @@ class _PublishAndCancelCommentPageState
                       color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
               onPressed: () async {
                 try {
-                  await adminApi.publishComment(commentid);
+                  await systemApi.publishComment(commentid);
                   Navigator.pop(context);
                   showCustomAlertDialog(
                       context, 'Thông báo', 'Publish bình luận thành công.');
                   setState(() {
-                    futureComments = adminApi.fetchAllComment();
+                    futureComments = systemApi.fetchAllComment();
                   });
                 } catch (e) {
                   print('Error deleting product: $e');
@@ -88,7 +88,7 @@ class _PublishAndCancelCommentPageState
   void performSearch(String query) async {
     try {
       if (query.isNotEmpty) {
-        List<Comment> comments = await adminApi.fetchAllComment();
+        List<Comment> comments = await systemApi.fetchAllComment();
         List<Comment> filteredComments = comments
             .where((comment) => comment.customername
                 .toLowerCase()

@@ -20,7 +20,7 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
   int _selectedIndexBottomBar = 2;
   Future<List<Favorite>>? productsFuture;
 
-  final FavoriteApi favoriteApi = FavoriteApi();
+  final SystemApi systemApi = SystemApi();
 
   void _selectedBottomBar(int index) {
     setState(() {
@@ -36,7 +36,7 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
 
   void _loadFavorites() {
     setState(() {
-      productsFuture = favoriteApi.getFavoritesByCustomerId();
+      productsFuture = systemApi.getFavoritesByCustomerId();
     });
   }
 

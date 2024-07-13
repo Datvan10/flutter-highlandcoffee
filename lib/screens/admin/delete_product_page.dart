@@ -19,8 +19,7 @@ class DeleteProductPage extends StatefulWidget {
 
 class _DeleteProductPageState extends State<DeleteProductPage> {
   final _textSearchProductController = TextEditingController();
-  final AdminApi adminApi = AdminApi();
-  final CategoryApi categoryApi = CategoryApi();
+  final SystemApi systemApi = SystemApi();
   List<Category> categories = [];
   Map<String, List<Product>> productsMap = {};
   List<Product> searchResults = [];
@@ -38,7 +37,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
 
   Future<void> _fetchCategories() async {
     try {
-      categories = await categoryApi.getCategories();
+      categories = await systemApi.getCategories();
       setState(() {
         if (categories.isNotEmpty) {
           selectedCategoryId = categories.first.categoryid;
@@ -65,7 +64,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
 
   Future<List<Product>> getProductsFromApi(String categoryid) async {
     try {
-      List<Product> products = await adminApi.getProducts(categoryid);
+      List<Product> products = await systemApi.getProducts(categoryid);
       return products.map((product) {
         return Product(
           productid: product.productid,
@@ -118,7 +117,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
                       color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
               onPressed: () async {
                 try {
-                  await adminApi.deleteProduct(productid);
+                  await systemApi.deleteProduct(productid);
                   Navigator.pop(context);
                   showCustomAlertDialog(
                       context, 'Thông báo', 'Xóa sản phẩm thành công.');
@@ -149,7 +148,7 @@ class _DeleteProductPageState extends State<DeleteProductPage> {
   void performSearch(String keyword) async {
     try {
       if (keyword.isNotEmpty) {
-        List<Product> products = await adminApi.getListProducts();
+        List<Product> products = await systemApi.getListProducts();
         List<Product> filteredProducts = products
             .where((product) =>
                 product.productname.toLowerCase().contains(keyword.toLowerCase()))

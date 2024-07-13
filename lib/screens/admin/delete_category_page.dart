@@ -17,7 +17,7 @@ class DeleteCategoryPage extends StatefulWidget {
 }
 
 class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
-  final AdminApi adminApi = AdminApi();
+  final SystemApi systemApi = SystemApi();
   List<Category> categories = [];
   List<Category> filteredCategories = [];
   final _textSearchCategoryController = TextEditingController();
@@ -30,7 +30,7 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
 
   Future<void> _fetchCategories() async {
     try {
-      List<Category> fetchedCategories = await adminApi.getListCategories();
+      List<Category> fetchedCategories = await systemApi.getListCategories();
       setState(() {
         categories = fetchedCategories;
         filteredCategories = fetchedCategories;
@@ -63,7 +63,7 @@ class _DeleteCategoryPageState extends State<DeleteCategoryPage> {
             TextButton(
               onPressed: () async {
                 try {
-                  await adminApi.deleteCategory(categoryid);
+                  await systemApi.deleteCategory(categoryid);
                   Navigator.pop(context);
                   showCustomAlertDialog(
                       context, 'Thông báo', 'Xóa danh mục thành công.');

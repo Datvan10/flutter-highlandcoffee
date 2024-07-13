@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   bool _isMicFormVisible = false;
   final _textSearchController = TextEditingController();
   List<Product> searchResults = [];
-  ProductApi productApi = ProductApi();
+  SystemApi systemApi = SystemApi();
 
   //
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
 
   void performSearch(String query) async {
     try {
-      List<Product> products = await productApi.getListProducts();
+      List<Product> products = await systemApi.getListProducts();
 
       List<Product> filteredProducts = products
           .where((product) =>

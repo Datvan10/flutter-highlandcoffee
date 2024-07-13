@@ -29,7 +29,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndexBottomBar = 4;
-  final staffApi = StaffApi();
+  final SystemApi systemApi = SystemApi();
   // Lấy thông tin người dùng từ AuthManager
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
   // function fetch role
   Future<void> fetchRole() async {
     final fetchedRole =
-        await staffApi.getRoleByPersonId(loggedInStaff!.staffid);
+        await systemApi.getRoleByPersonId(loggedInStaff!.staffid);
     setState(() {
       role = fetchedRole;
     });

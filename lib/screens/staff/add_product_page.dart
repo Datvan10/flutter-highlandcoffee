@@ -24,8 +24,7 @@ class AddProductPage extends StatefulWidget {
 
 class _AddProductPageState extends State<AddProductPage> {
   late final Product product;
-  final AdminApi adminApi = AdminApi();
-  final CategoryApi categoryApi = CategoryApi();
+  final SystemApi systemApi = SystemApi();
   String _selectedCategoryController = '';
   List<Category> _categoryList = [];
   List<String> _categories = [];
@@ -47,7 +46,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
   Future<void> _fetchCategories() async {
     try {
-      List<Category> categories = await categoryApi.getCategories();
+      List<Category> categories = await systemApi.getCategories();
       setState(() {
         _categoryList = categories;
         _categories =
@@ -162,7 +161,7 @@ class _AddProductPageState extends State<AddProductPage> {
         imagedetail: base64ImageDetail,
       );
 
-      await adminApi.addProduct(newProduct);
+      await systemApi.addProduct(newProduct);
 
       showCustomAlertDialog(
           context, 'Thông báo', 'Thêm sản phẩm vào cơ sở dữ liệu thành công.');

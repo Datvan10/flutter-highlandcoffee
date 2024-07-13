@@ -21,7 +21,7 @@ class _ProductPageState extends State<ProductPage> {
   int _selectedIndexBottomBar = 1;
   Future<List<Product>>? productsFuture;
   Future<String>? categoryNameFuture;
-  final productApi = ProductApi();
+  final SystemApi systemApi = SystemApi();
 
   @override
   void initState() {
@@ -32,13 +32,13 @@ class _ProductPageState extends State<ProductPage> {
 
   void _loadProducts() {
     setState(() {
-      productsFuture = productApi.getProductsByCategory(widget.categoryid);
+      productsFuture = systemApi.getProductsByCategory(widget.categoryid);
     });
   }
 
   void _loadCategoryName() {
     setState(() {
-      categoryNameFuture = productApi.getCategoryById(widget.categoryid).then((category) => category.categoryname);
+      categoryNameFuture = systemApi.getCategoryById(widget.categoryid).then((category) => category.categoryname);
     });
   }
 
@@ -64,7 +64,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Future<List<Map<String, dynamic>>> _getProductSizes(String productname) async {
   try {
-    List<Map<String, dynamic>> sizes = await productApi.getProductSizes(productname);
+    List<Map<String, dynamic>> sizes = await systemApi.getProductSizes(productname);
     return sizes;
   } catch (e) {
     print("Error fetching product sizes: $e");

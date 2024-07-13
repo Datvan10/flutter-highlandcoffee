@@ -36,8 +36,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   bool isFavorite = false;
   String selectedSize = '';
   Customer? loggedInUser = AuthManager().loggedInCustomer;
-  final CartApi cartApi = CartApi();
-  final FavoriteApi favoriteApi = FavoriteApi();
+  final SystemApi systemApi = SystemApi();
 
   @override
   void initState() {
@@ -141,7 +140,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         imagedetail: base64ImageDetail,
       );
 
-      await favoriteApi.addFavorite(favorite);
+      await systemApi.addFavorite(favorite);
       showCustomAlertDialog(
           context, 'Thành công', 'Đã thêm sản phẩm vào danh sách yêu thích');
     } catch (e) {
@@ -169,7 +168,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           totalprice: totalPrice,
           size: selectedSize);
 
-      await cartApi.addCart(newCart);
+      await systemApi.addCart(newCart);
       showCustomAlertDialog(
           context, 'Thành công', 'Đã thêm sản phẩm vào giỏ hàng');
     } catch (e) {

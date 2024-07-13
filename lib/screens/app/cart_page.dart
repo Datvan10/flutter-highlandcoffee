@@ -22,8 +22,7 @@ class _CartPageState extends State<CartPage> {
   Future<String> categoryNameFuture = Future.value('Giỏ hàng');
   int _selectedIndexBottomBar = 3;
   late List<CartItem> cartItems = [];
-  CartApi api = CartApi();
-  CartDetailApi cartDetailApi = CartDetailApi();
+  SystemApi systemApi = SystemApi();
   Customer? loggedInUser = AuthManager().loggedInCustomer;
 
   void _selectedBottomBar(int index) {
@@ -53,7 +52,7 @@ class _CartPageState extends State<CartPage> {
   // Hàm để gọi API lấy dữ liệu giỏ hàng
   Future<void> fetchCartItems() async {
     try {
-      List<dynamic> jsonResponse = await cartDetailApi.fetchCartDetails();
+      List<dynamic> jsonResponse = await systemApi.fetchCartDetails();
       List<dynamic> items = jsonResponse.map((data) {
         if (data['customerid'] == loggedInUser?.customerid) {
           return CartItem(

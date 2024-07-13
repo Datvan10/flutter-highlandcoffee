@@ -25,7 +25,7 @@ class ResultSearchProductWithKeyword extends StatefulWidget {
 
 class _ResultSearchProductWithKeywordState
     extends State<ResultSearchProductWithKeyword> {
-      final productApi = ProductApi();
+      final SystemApi systemApi = SystemApi();
   final TextEditingController _textSearchController = TextEditingController();
 
   void _navigateToProductDetails(int index, List<Product> products) async {
@@ -44,7 +44,7 @@ class _ResultSearchProductWithKeywordState
 
   Future<List<Map<String, dynamic>>> _getProductSizes(String productname) async {
   try {
-    List<Map<String, dynamic>> sizes = await productApi.getProductSizes(productname);
+    List<Map<String, dynamic>> sizes = await systemApi.getProductSizes(productname);
     return sizes;
   } catch (e) {
     print("Error fetching product sizes: $e");

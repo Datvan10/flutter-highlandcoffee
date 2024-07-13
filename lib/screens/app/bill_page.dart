@@ -19,8 +19,7 @@ class BillDetailPage extends StatefulWidget {
 }
 
 class _BillDetailPageState extends State<BillDetailPage> {
-  OrderDetailApi orderDetailApi = OrderDetailApi();
-  StaffApi staffApi = StaffApi();
+  SystemApi systemApi = SystemApi();
   late Future<List<OrderDetail>> futureOrderDetails;
   late Future<List<Bill>> futureBillDetails;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
@@ -29,8 +28,8 @@ class _BillDetailPageState extends State<BillDetailPage> {
   @override
   void initState() {
     super.initState();
-    futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
-    futureBillDetails = staffApi.getBillByOrderId(widget.orderid);
+    futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
+    futureBillDetails = systemApi.getBillByOrderId(widget.orderid);
   }
 
   // function format date
@@ -40,10 +39,10 @@ class _BillDetailPageState extends State<BillDetailPage> {
 
   // function to confirm order
   void printBill(String orderid, String staffid) async {
-    await staffApi.printBill(orderid, staffid);
+    await systemApi.printBill(orderid, staffid);
     setState(() {
-      futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
-      futureBillDetails = staffApi.getBillByOrderId(widget.orderid);
+      futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
+      futureBillDetails = systemApi.getBillByOrderId(widget.orderid);
     });
 
     // show dialog

@@ -19,7 +19,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   TextEditingController _categoryNameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
 
-  AdminApi adminApi = AdminApi();
+  SystemApi systemApi = SystemApi();
 
   //
   Future<void> addCategory() async {
@@ -36,7 +36,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         return;
       }
       // Add category
-      await adminApi.addCategory(newCategory);
+      await systemApi.addCategory(newCategory);
       // Show success message
       showCustomAlertDialog(context, 'Thông báo', 'Thêm danh mục thành công.');
       // Clear text field

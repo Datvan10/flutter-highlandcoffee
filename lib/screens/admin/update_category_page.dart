@@ -16,7 +16,7 @@ class UpdateCategoryPage extends StatefulWidget {
 }
 
 class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
-  final AdminApi adminApi = AdminApi();
+  final SystemApi systemApi = SystemApi();
   List<Category> categories = [];
   List<Category> filteredCategories = [];
   final _textSearchCategoryController = TextEditingController();
@@ -31,7 +31,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
 
   Future<void> _fetchCategories() async {
     try {
-      List<Category> fetchedCategories = await adminApi.getCategories();
+      List<Category> fetchedCategories = await systemApi.getCategories();
       setState(() {
         categories = fetchedCategories;
         filteredCategories = fetchedCategories;
@@ -44,7 +44,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
   // Tạo một hàm để cập nhật danh mục
   Future<void> updateCategory(Category category) async {
     try {
-      await adminApi.updateCategory(category);
+      await systemApi.updateCategory(category);
       Navigator.pop(context);
       showCustomAlertDialog(
           context, 'Thông báo', 'Cập nhật danh mục thành công');

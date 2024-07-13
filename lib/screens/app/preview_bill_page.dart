@@ -22,8 +22,7 @@ class PreviewBillPage extends StatefulWidget {
 }
 
 class _PreviewBillPageState extends State<PreviewBillPage> {
-  OrderDetailApi orderDetailApi = OrderDetailApi();
-  StaffApi staffApi = StaffApi();
+  SystemApi systemApi = SystemApi();
   late Future<List<OrderDetail>> futureOrderDetails;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
@@ -31,7 +30,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
   @override
   void initState() {
     super.initState();
-    futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+    futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
   }
 
   // function format date
@@ -68,10 +67,10 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
         customername: customername,
       );
       print(newBill.totalprice);
-      await staffApi.addBill(newBill);
+      await systemApi.addBill(newBill);
       showCustomAlertDialog(context, 'Thông báo', 'Lập hóa đơn thành công');
       setState(() {
-        futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+        futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
       });
     } catch (e) {
       showCustomAlertDialog(
@@ -438,7 +437,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                           addBill();
                           setState(() {
                             futureOrderDetails =
-                                orderDetailApi.fetchOrderDetail(widget.orderid);
+                                systemApi.fetchOrderDetail(widget.orderid);
                           });
                         },
                         buttonColor: primaryColors,

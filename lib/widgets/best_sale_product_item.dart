@@ -12,14 +12,14 @@ class BestSaleProductItem extends StatefulWidget {
 }
 
 class _BestSaleProductItemState extends State<BestSaleProductItem> {
-  final BestSaleApi bestSaleApi = BestSaleApi();
+  final SystemApi systemApi = SystemApi();
   late Future<List<Product>> productsFuture; // Thay đổi từ Stream sang Future
 
   @override
   void initState() {
     super.initState();
     // Gọi phương thức để lấy dữ liệu từ API trong hàm initState
-    productsFuture = bestSaleApi.getBestSales();
+    productsFuture = systemApi.getBestSales();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) async {
@@ -38,7 +38,7 @@ class _BestSaleProductItemState extends State<BestSaleProductItem> {
 
   Future<List<Map<String, dynamic>>> _getProductSizes(String productname) async {
   try {
-    List<Map<String, dynamic>> sizes = await bestSaleApi.getProductSizes(productname);
+    List<Map<String, dynamic>> sizes = await systemApi.getProductSizes(productname);
     return sizes;
   } catch (e) {
     print("Error fetching product sizes: $e");

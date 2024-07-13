@@ -19,7 +19,7 @@ class TopProductPage extends StatefulWidget {
 class _TopProductPageState extends State<TopProductPage> {
   List<Map<String, dynamic>> _topProducts = [];
   final TextEditingController _dateController = TextEditingController();
-  AdminApi adminApi = AdminApi();
+  SystemApi systemApi = SystemApi();
   DateTime? _selectedDate;
 
   @override
@@ -32,7 +32,7 @@ class _TopProductPageState extends State<TopProductPage> {
 
   Future<void> _fetchTopProducts(DateTime date) async {
     try {
-      final topProducts = await adminApi.fetchTopProducts(date);
+      final topProducts = await systemApi.fetchTopProducts(date);
       setState(() {
         _topProducts = topProducts;
       });

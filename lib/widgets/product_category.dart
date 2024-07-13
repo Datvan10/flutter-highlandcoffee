@@ -12,7 +12,7 @@ class ProductCategory extends StatefulWidget {
 }
 
 class _ProductCategoryState extends State<ProductCategory> {
-  final CategoryApi categoryApi = CategoryApi();
+  final SystemApi systemApi = SystemApi();
   String selectedCategory = '';
   List<Category> categories = [];
   bool isLoading = true;
@@ -26,7 +26,7 @@ class _ProductCategoryState extends State<ProductCategory> {
   Future<void> fetchCategories() async {
     try {
       // Call your API function to get categories
-      List<Category> fetchedCategories = await categoryApi.getCategories();
+      List<Category> fetchedCategories = await systemApi.getCategories();
       setState(() {
         categories = fetchedCategories.take(5).toList();
         isLoading = false;

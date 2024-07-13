@@ -16,7 +16,7 @@ class UpdateStaffAccountPage extends StatefulWidget {
 }
 
 class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
-  final AdminApi adminApi = AdminApi();
+  final SystemApi systemApi = SystemApi();
   List<Staff> staffs = [];
   List<Staff> filteredStaffs = [];
   final _textSearchStaffController = TextEditingController();
@@ -33,7 +33,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
 
   Future<void> _fetchStaffs() async {
     try {
-      List<Staff> fetchedStaffs = await adminApi.getAllStaffs();
+      List<Staff> fetchedStaffs = await systemApi.getAllStaffs();
       setState(() {
         staffs = fetchedStaffs;
         filteredStaffs = fetchedStaffs;
@@ -46,7 +46,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
   // Tạo một hàm để cập nhật danh mục
   Future<void> updateStaff(Staff Staff) async {
     try {
-      await adminApi.updateStaff(Staff);
+      await systemApi.updateStaff(Staff);
       Navigator.pop(context);
       showCustomAlertDialog(context, 'Thông báo',
           'Cập nhật sản thông tin tài khoản nhân viên thành công');

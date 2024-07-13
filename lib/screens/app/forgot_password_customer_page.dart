@@ -18,7 +18,7 @@ class ForgotPasswordCustomerPage extends StatefulWidget {
 
 class _ForgotPasswordCustomerPageState
     extends State<ForgotPasswordCustomerPage> {
-  final CustomerApi api = CustomerApi();
+  final SystemApi systemApi = SystemApi();
   final identifierController = TextEditingController();
   final newPassWordController = TextEditingController();
   bool isLoggedIn = false;
@@ -35,7 +35,7 @@ class _ForgotPasswordCustomerPageState
       return;
     }
 
-    bool isUpdated = await api.updateCustomerPassword(identifier, newPassword);
+    bool isUpdated = await systemApi.updateCustomerPassword(identifier, newPassword);
 
     if (isUpdated) {
       showNotification('Cập nhật mật khẩu thành công, vui lòng đăng nhập lại');

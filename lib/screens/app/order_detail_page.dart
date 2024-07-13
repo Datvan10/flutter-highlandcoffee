@@ -26,9 +26,7 @@ class OrderDetailPage extends StatefulWidget {
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
-  OrderDetailApi orderDetailApi = OrderDetailApi();
-  StaffApi staffApi = StaffApi();
-  CustomerApi customerApi = CustomerApi();
+  SystemApi systemApi = SystemApi();
   late Future<List<OrderDetail>> futureOrderDetails;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
@@ -38,7 +36,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   void initState() {
     super.initState();
     _initializeUserRole();
-    futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+    futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
   }
 
   void _initializeUserRole() {
@@ -59,9 +57,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   // function to confirm order
   void confirmOrder(String orderid, String staffid) async {
     
-    await staffApi.confirmOrder(orderid, staffid);
+    await systemApi.confirmOrder(orderid, staffid);
     setState(() {
-      futureOrderDetails = orderDetailApi.fetchOrderDetail(widget.orderid);
+      futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
     });
 
     // show dialog
@@ -97,7 +95,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   try {
-                    await customerApi.cancelOrder(orderid);
+                    await systemApi.cancelOrder(orderid);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

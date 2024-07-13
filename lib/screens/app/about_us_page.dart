@@ -18,13 +18,13 @@ class AboutUsPage extends StatefulWidget {
 }
 
 class _AboutUsPageState extends State<AboutUsPage> {
-  final AdminApi adminApi = AdminApi();
+  final SystemApi systemApi = SystemApi();
   late Future<List<Comment>> futurePublishedComments;
 
   @override
   void initState() {
     super.initState();
-    futurePublishedComments = adminApi.fetchPublishedComments();
+    futurePublishedComments = systemApi.fetchPublishedComments();
   }
 
   void showImagePreview(BuildContext context, String imageData) {

@@ -17,8 +17,7 @@ class AccessAndCancelRoleStaffPage extends StatefulWidget {
 }
 
 class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffPage> {
-  final AdminApi adminApi = AdminApi();
-  final staffApi = StaffApi();
+  final SystemApi systemApi = SystemApi();
   List<Staff> staffs = [];
   List<Staff> filteredStaffs = [];
   Map<String, String?> staffRoles = {};
@@ -32,9 +31,9 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
 
   Future<void> fetchStaffs() async {
     try {
-      List<Staff> fetchedStaffs = await adminApi.getAllStaffs();
+      List<Staff> fetchedStaffs = await systemApi.getAllStaffs();
       for (var staff in fetchedStaffs) {
-        String? role = await staffApi.getRoleByPersonId(staff.staffid);
+        String? role = await systemApi.getRoleByPersonId(staff.staffid);
         staffRoles[staff.staffid] = role;
       }
       setState(() {
@@ -48,7 +47,7 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
 
   Future<void> accessRoleStaff(String staffid) async {
     try {
-      await adminApi.accessRoleStaff(staffid);
+      await systemApi.accessRoleStaff(staffid);
       showCustomAlertDialog(
           context, 'Thông báo', 'Cấp quyền cho tài khoản nhân viên thành công');
       fetchStaffs();
@@ -86,7 +85,7 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
                         fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   try {
-                    await adminApi.cancelRoleStaff(staffid);
+                    await systemApi.cancelRoleStaff(staffid);
                     Navigator.pop(context);
                     showCustomAlertDialog(context, 'Thông báo',
                         'Hủy quyền tài khoản nhân viên thành công');

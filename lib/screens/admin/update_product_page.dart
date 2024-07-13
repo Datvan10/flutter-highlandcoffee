@@ -34,8 +34,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
   File? _imagePath;
   File? _imageDetailPath;
 
-  final AdminApi adminApi = AdminApi();
-  final CategoryApi categoryApi = CategoryApi();
+  final SystemApi systemApi = SystemApi();
   List<Category> categories = [];
   List<Product> searchResults = [];
   Map<String, List<Product>> productsMap = {};
@@ -53,7 +52,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
 
   Future<void> _fetchCategories() async {
     try {
-      categories = await categoryApi.getCategories();
+      categories = await systemApi.getCategories();
       setState(() {
         if (categories.isNotEmpty) {
           selectedCategoryId = categories.first.categoryid;
@@ -83,7 +82,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
 
   Future<List<Product>> getProductsFromApi(String categoryid) async {
     try {
-      List<Product> products = await adminApi.getProducts(categoryid);
+      List<Product> products = await systemApi.getProducts(categoryid);
       return products.map((product) {
         return Product(
           productid: product.productid,
@@ -113,7 +112,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
 
   Future<void> updateProduct(Product product) async {
     try {
-      await adminApi.updateProduct(product);
+      await systemApi.updateProduct(product);
       Navigator.pop(context);
       showCustomAlertDialog(
         context,
@@ -154,7 +153,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
   void performSearch(String query) async {
     try {
       if (query.isNotEmpty) {
-        List<Product> products = await adminApi.getListProducts();
+        List<Product> products = await systemApi.getListProducts();
         List<Product> filteredProducts = products
             .where((product) =>
                 product.productname.toLowerCase().contains(query.toLowerCase()))

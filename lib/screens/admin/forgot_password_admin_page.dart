@@ -20,7 +20,7 @@ class ForgotPasswordAdminPage extends StatefulWidget {
 
 class _ForgotPasswordAdminPageState
     extends State<ForgotPasswordAdminPage> {
-  final AdminApi api = AdminApi();
+  final SystemApi api = SystemApi();
   final emailController = TextEditingController();
   final newPassWordController = TextEditingController();
   bool isLoggedIn = false;

@@ -4,18 +4,29 @@ import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:http/http.dart' as http;
 
-// Admin API
-class AdminApi {
-  final String adminUrl = "http://localhost:5194/api/admins";
-  final String staffUrl = "http://localhost:5194/api/staffs";
-  final String productUrl = "http://localhost:5194/api/products";
-  final String categoryUrl = "http://localhost:5194/api/categories";
-  final String orderUrl = "http://localhost:5194/api/orders";
-  final String customerUrl = "http://localhost:5194/api/customers";
-  final String personUrl = "http://localhost:5194/api/persons";
-  final String getProductUrl = 'http://localhost:5194/api/products/category';
-  final String billUrl = 'http://localhost:5194/api/bills';
-  final String commentUrl = 'http://localhost:5194/api/comments';
+// System API
+class SystemApi {
+  final String adminUrl = "http://192.168.1.11:6886/api/admins";
+  final String staffUrl = "http://192.168.1.11:6886/api/staffs";
+  final String productUrl = "http://192.168.1.11:6886/api/products";
+  final String categoryUrl = "http://192.168.1.11:6886/api/categories";
+  final String orderUrl = "http://192.168.1.11:6886/api/orders";
+  final String customerUrl = "http://192.168.1.11:6886/api/customers";
+  final String personUrl = "http://192.168.1.11:6886/api/persons";
+  final String getProductUrl = 'http://192.168.1.11:6886/api/products/category';
+  final String billUrl = 'http://192.168.1.11:6886/api/bills';
+  final String commentUrl = 'http://192.168.1.11:6886/api/comments';
+  final String accountUrl = "http://192.168.1.11:6886/api/accounts";
+  final String popularUrl =
+      "http://192.168.1.11:6886/api/products/category/dm030";
+  final String favoriteUrl = "http://192.168.1.11:6886/api/favorites";
+  final String bestSaleUrl =
+      "http://192.168.1.11:6886/api/products/category/dm029";
+  final String cartUrl = "http://192.168.1.11:6886/api/carts";
+  final String cartDetailUrl = "http://192.168.1.11:6886/api/cartdetails";
+  final String orderDetailUrl = "http://192.168.1.11:6886/api/orderdetails";
+
+  /// Method for actor Admin
 
   // Read data from API
   Future<List<Admin>> getAdmins() async {
@@ -245,22 +256,6 @@ class AdminApi {
       throw Exception('Failed to add category: $e');
     }
   }
-
-  // Get category for admin
-  Future<List<Category>> getCategories() async {
-    try {
-      final response = await http.get(Uri.parse(categoryUrl));
-      if (response.statusCode == 200) {
-        List jsonResponse = json.decode(response.body);
-        return jsonResponse.map((data) => new Category.fromJson(data)).toList();
-      } else {
-        throw Exception('Failed to load categories');
-      }
-    } catch (e) {
-      throw Exception('Failed to load categories');
-    }
-  }
-
   // Delete category for admin
   Future<void> deleteCategory(String categoryid) async {
     try {
@@ -598,14 +593,191 @@ class AdminApi {
       throw Exception('Failed to load published comments: $e');
     }
   }
-}
 
-// Customer API
-class CustomerApi {
-  final String accountUrl = "http://localhost:5194/api/accounts";
-  final String customerUrl = "http://localhost:5194/api/customers";
-  final String orderUrl = "http://localhost:5194/api/orders";
-  final String commentUrl = "http://localhost:5194/api/comments";
+  /// Method for actor Staff
+
+  // Authenticate account
+  Future<bool> authenticateAccountStaffs(
+      String identifier, String password) async {
+    final uri = Uri.parse(accountUrl);
+
+    try {
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+
+        for (var accountData in jsonResponse) {
+          Account account = Account.fromJson(accountData);
+          if ((account.username == identifier) &&
+              account.password == password) {
+            return true;
+          }
+        }
+        return false;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Function to get staff by identifier
+  Future<Staff> getStaffByIdentifier(String identifier) async {
+    final uri = Uri.parse(staffUrl);
+
+    try {
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        List<dynamic> responseData = json.decode(response.body);
+
+        for (var staffData in responseData) {
+          Staff staff = Staff.fromJson(staffData);
+
+          if (staff.phonenumber == identifier) {
+            return staff;
+          }
+        }
+
+        throw Exception('Staff data not found for identifier: $identifier');
+      } else {
+        throw Exception('Failed to load staff data');
+      }
+    } catch (e) {
+      throw Exception('Error fetching staff data: $e');
+    }
+  }
+
+  // Confirm order
+  Future<void> confirmOrder(String orderid, String staffid) async {
+    final uri = Uri.parse('$orderUrl/confirm');
+
+    try {
+      final response = await http.put(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'orderid': orderid,
+          'staffid': staffid,
+        }),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Order confirmed successfully');
+      } else {
+        throw Exception('Failed to confirm order: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to confirm order: $e');
+    }
+  }
+
+  // Add bill
+  Future<void> addBill(Bill bill) async {
+    final uri = Uri.parse(billUrl);
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(bill.toJson()),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Bill added successfully');
+      } else {
+        throw Exception('Failed to add bill: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add bill: $e');
+    }
+  }
+
+  // Get bill by orderid for Staff
+  Future<List<Bill>> getBillByOrderId(String orderid) async {
+    try {
+      final response = await http.get(Uri.parse('$billUrl/bill/$orderid'));
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+
+        // Kiểm tra xem có dữ liệu được trả về không
+        if (jsonData.isNotEmpty) {
+          List<Bill> billDetails =
+              jsonData.map((item) => Bill.fromJson(item)).toList();
+          return billDetails;
+        } else {
+          // Nếu không có dữ liệu, trả về một danh sách trống
+          return [];
+        }
+      } else if (response.statusCode == 404) {
+        throw Exception('Bill detail not found');
+      } else {
+        throw Exception(
+            'Failed to load Bill detail with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to load order detail');
+    }
+  }
+
+  // Print bill for Staff
+  Future<void> printBill(String orderid, String staffid) async {
+    final uri = Uri.parse('$billUrl/print');
+
+    try {
+      final response = await http.put(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'orderid': orderid,
+          'staffid': staffid,
+        }),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Bill printed successfully');
+      } else {
+        throw Exception('Failed to print bill: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to print bill: $e');
+    }
+  }
+
+  // function getRoleByPersonId
+  Future<String?> getRoleByPersonId(String personid) async {
+    try {
+      final response = await http.get(Uri.parse('$personUrl/$personid'));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data != null && data is Map<String, dynamic>) {
+          return data['role'] as String?;
+        }
+      } else {
+        print('Failed to load role. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching role: $e');
+    }
+
+    return null;
+  }
+
+  /// Method for actor Customer
+
   // Read data from API
   Future<List<Customer>> getCustomers() async {
     try {
@@ -626,8 +798,6 @@ class CustomerApi {
     final uri = Uri.parse(customerUrl);
 
     try {
-      // final customerJson = jsonEncode(customer.toJson());
-      // print('Customer JSON: $customerJson'); // In ra dữ liệu để kiểm tra
       final response = await http.post(
         uri,
         headers: <String, String>{
@@ -839,244 +1009,6 @@ class CustomerApi {
       throw Exception('Failed to cancel order: $e');
     }
   }
-}
-
-class StaffApi {
-  final String accountUrl = "http://localhost:5194/api/accounts";
-  final String staffUrl = "http://localhost:5194/api/staffs";
-  final String orderUrl = "http://localhost:5194/api/orders";
-  final String billUrl = "http://localhost:5194/api/bills";
-  final String personUrl = "http://localhost:5194/api/persons";
-
-  // Authenticate account
-  Future<bool> authenticateAccountStaffs(
-      String identifier, String password) async {
-    final uri = Uri.parse(accountUrl);
-
-    try {
-      final response = await http.get(uri);
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = json.decode(response.body);
-
-        for (var accountData in jsonResponse) {
-          Account account = Account.fromJson(accountData);
-          if ((account.username == identifier) &&
-              account.password == password) {
-            return true;
-          }
-        }
-        return false;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      return false;
-    }
-  }
-
-  // Function to get staff by identifier
-  Future<Staff> getStaffByIdentifier(String identifier) async {
-    final uri = Uri.parse(staffUrl);
-
-    try {
-      final response = await http.get(uri);
-
-      if (response.statusCode == 200) {
-        List<dynamic> responseData = json.decode(response.body);
-
-        for (var staffData in responseData) {
-          Staff staff = Staff.fromJson(staffData);
-
-          if (staff.phonenumber == identifier) {
-            return staff;
-          }
-        }
-
-        throw Exception('Staff data not found for identifier: $identifier');
-      } else {
-        throw Exception('Failed to load staff data');
-      }
-    } catch (e) {
-      throw Exception('Error fetching staff data: $e');
-    }
-  }
-
-  // Confirm order
-  Future<void> confirmOrder(String orderid, String staffid) async {
-    final uri = Uri.parse('$orderUrl/confirm');
-
-    try {
-      final response = await http.put(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'orderid': orderid,
-          'staffid': staffid,
-        }),
-      );
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        print('Order confirmed successfully');
-      } else {
-        throw Exception('Failed to confirm order: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to confirm order: $e');
-    }
-  }
-
-  // Add bill
-  Future<void> addBill(Bill bill) async {
-    final uri = Uri.parse(billUrl);
-
-    try {
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(bill.toJson()),
-      );
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        print('Bill added successfully');
-      } else {
-        throw Exception('Failed to add bill: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to add bill: $e');
-    }
-  }
-
-  // Get bill by orderid for Staff
-  Future<List<Bill>> getBillByOrderId(String orderid) async {
-    try {
-      final response = await http.get(Uri.parse('$billUrl/bill/$orderid'));
-      print(response.statusCode);
-
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-
-        // Kiểm tra xem có dữ liệu được trả về không
-        if (jsonData.isNotEmpty) {
-          List<Bill> billDetails =
-              jsonData.map((item) => Bill.fromJson(item)).toList();
-          return billDetails;
-        } else {
-          // Nếu không có dữ liệu, trả về một danh sách trống
-          return [];
-        }
-      } else if (response.statusCode == 404) {
-        throw Exception('Bill detail not found');
-      } else {
-        throw Exception(
-            'Failed to load Bill detail with status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error: $e');
-      throw Exception('Failed to load order detail');
-    }
-  }
-
-  // Print bill for Staff
-  Future<void> printBill(String orderid, String staffid) async {
-    final uri = Uri.parse('$billUrl/print');
-
-    try {
-      final response = await http.put(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'orderid': orderid,
-          'staffid': staffid,
-        }),
-      );
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        print('Bill printed successfully');
-      } else {
-        throw Exception('Failed to print bill: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to print bill: $e');
-    }
-  }
-
-  // function getRoleByPersonId
-  Future<String?> getRoleByPersonId(String personid) async {
-    try {
-      final response = await http.get(Uri.parse('$personUrl/$personid'));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        if (data != null && data is Map<String, dynamic>) {
-          return data['role'] as String?;
-        }
-      } else {
-        print('Failed to load role. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error fetching role: $e');
-    }
-
-    return null;
-  }
-}
-
-// Category API
-class CategoryApi {
-  final String categoryUrl = "http://localhost:5194/api/categories";
-  // Read data from API
-  Future<List<Category>> getCategories() async {
-    try {
-      final response = await http.get(Uri.parse(categoryUrl));
-      if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        List<Category> categories =
-            body.map((dynamic item) => Category.fromJson(item)).toList();
-        return categories;
-      } else {
-        throw Exception('Failed to load categories');
-      }
-    } catch (e) {
-      throw Exception('Failed to load categories');
-    }
-  }
-}
-
-// Product API
-class ProductApi {
-  final String productUrl = "http://localhost:5194/api/products";
-  final String categoryUrl = "http://localhost:5194/api/categories";
-  // Read data from API
-  Future<List<Product>> getListProducts() async {
-    try {
-      final response = await http.get(Uri.parse(productUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        List<Product> products = [];
-        for (var item in jsonData) {
-          Product product = Product.fromJson(item);
-          // Decode image and image detail
-          base64Decode(product.image);
-          base64Decode(product.imagedetail);
-
-          products.add(product);
-        }
-        return products;
-      } else {
-        throw Exception('Failed to load product products');
-      }
-    } catch (e) {
-      throw Exception('Failed to load product products');
-    }
-  }
 
   //
   Future<Category> getCategoryById(String categoryid) async {
@@ -1109,7 +1041,7 @@ class ProductApi {
   //
   Future<List<Product>> getProductsByCategory(String categoryid) async {
     final String productUrl =
-        "http://localhost:5194/api/products/category/$categoryid";
+        "http://192.168.1.11:6886/api/products/category/$categoryid";
     try {
       final response = await http.get(Uri.parse(productUrl));
       if (response.statusCode == 200) {
@@ -1125,62 +1057,10 @@ class ProductApi {
     }
   }
 
-  // Add data to API
-  Future<void> addProduct(Product product) async {
-    final uri = Uri.parse(productUrl);
-
-    try {
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(product.toJson()),
-      );
-      if (response.statusCode == 200) {
-        print('Product added successfully');
-      } else {
-        throw Exception('Failed to add product: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to add product: $e');
-    }
-  }
-
-  // Update data to API
-  Future<Product> updateProduct(Product product) async {
-    try {
-      final response = await http.put(Uri.parse('$productUrl/${product}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(product.toJson()));
-      if (response.statusCode == 200) {
-        return Product.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to update product');
-      }
-    } catch (e) {
-      throw Exception('Failed to update product');
-    }
-  }
-
-  // Delete data from API
-  Future<void> deleteProduct(int id) async {
-    try {
-      final response = await http.delete(Uri.parse('$productUrl/$id'));
-      if (response.statusCode != 204) {
-        throw Exception('Failed to delete product');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete product');
-    }
-  }
-
-  // New method: Fetch product sizes and prices by product ID
+  // Fetch product sizes and prices by product ID
   Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
     final String productSizesUrl =
-        "http://localhost:5194/api/products/sizes/$productname";
+        "http://192.168.1.11:6886/api/products/sizes/$productname";
 
     try {
       final response = await http.get(Uri.parse(productSizesUrl));
@@ -1202,11 +1082,7 @@ class ProductApi {
       throw Exception('Failed to load product sizes');
     }
   }
-}
 
-// API for popular products
-class PopularApi {
-  final String popularUrl = "http://localhost:5194/api/products/category/dm030";
   // Read data from API
   Future<List<Product>> getPopulars() async {
     try {
@@ -1283,36 +1159,6 @@ class PopularApi {
     }
   }
 
-  //
-  Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
-    final String productSizesUrl =
-        "http://localhost:5194/api/products/sizes/$productname";
-
-    try {
-      final response = await http.get(Uri.parse(productSizesUrl));
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        List<dynamic> jsonData = json.decode(response.body);
-        List<Map<String, dynamic>> sizes = [];
-        for (var item in jsonData) {
-          sizes.add({
-            "size": item["size"],
-            "price": item["price"],
-          });
-        }
-        return sizes;
-      } else {
-        throw Exception('Failed to load product sizes');
-      }
-    } catch (e) {
-      throw Exception('Failed to load product sizes');
-    }
-  }
-}
-
-// API for favorite products
-class FavoriteApi {
-  final String favoriteUrl = "http://localhost:5194/api/favorites";
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   // Read data from API
   Future<List<Favorite>> getFavoritesByCustomerId() async {
@@ -1383,12 +1229,7 @@ class FavoriteApi {
       throw Exception('Failed to delete favorite product');
     }
   }
-}
 
-// API fo best sale
-class BestSaleApi {
-  final String bestSaleUrl =
-      "http://localhost:5194/api/products/category/dm029";
   // Read data from API
   Future<List<Product>> getBestSales() async {
     try {
@@ -1413,257 +1254,6 @@ class BestSaleApi {
     }
   }
 
-  //
-  Future<List<Map<String, dynamic>>> getProductSizes(String productId) async {
-    final String productSizesUrl =
-        "http://localhost:5194/api/products/sizes/$productId";
-
-    try {
-      final response = await http.get(Uri.parse(productSizesUrl));
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        List<dynamic> jsonData = json.decode(response.body);
-        List<Map<String, dynamic>> sizes = [];
-        for (var item in jsonData) {
-          sizes.add({
-            "size": item["size"],
-            "price": item["price"],
-          });
-        }
-        return sizes;
-      } else {
-        throw Exception('Failed to load product sizes');
-      }
-    } catch (e) {
-      throw Exception('Failed to load product sizes');
-    }
-  }
-}
-
-// API for Coffee
-class CoffeeApi {
-  final String coffeeUrl = "http://localhost:5194/api/products/category/dm001";
-  // Read data from API
-  Future<List<Product>> getCoffees() async {
-    try {
-      final response = await http.get(Uri.parse(coffeeUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        List<Product> coffees = [];
-        for (var item in jsonData) {
-          Product coffee = Product.fromJson(item);
-          // Decode image and image detail
-          base64Decode(coffee.image);
-          base64Decode(coffee.imagedetail);
-
-          coffees.add(coffee);
-        }
-        return coffees;
-      } else {
-        throw Exception('Failed to load bestsale products');
-      }
-    } catch (e) {
-      throw Exception('Failed to load bestsale products');
-    }
-  }
-}
-
-// API for Freeze
-class FreezeApi {
-  final String freezeUrl = "http://localhost:5194/api/products/category/dm002";
-  // Read data from API
-  Future<List<Product>> getFreezes() async {
-    try {
-      final response = await http.get(Uri.parse(freezeUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        List<Product> freezes = [];
-        for (var item in jsonData) {
-          Product freeze = Product.fromJson(item);
-          // Decode image and image detail
-          base64Decode(freeze.image);
-          base64Decode(freeze.imagedetail);
-
-          freezes.add(freeze);
-        }
-        return freezes;
-      } else {
-        throw Exception('Failed to load freeze products');
-      }
-    } catch (e) {
-      throw Exception('Failed to load freeze products');
-    }
-  }
-}
-
-// API for Tea
-class TeaApi {
-  final String teaUrl = "http://localhost:5194/api/products/category/dm003";
-  // Read data from API
-  Future<List<Product>> getTeas() async {
-    try {
-      final response = await http.get(Uri.parse(teaUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        List<Product> teas = [];
-        for (var item in jsonData) {
-          Product tea = Product.fromJson(item);
-          // Decode image and image detail
-          base64Decode(tea.image);
-          base64Decode(tea.imagedetail);
-
-          teas.add(tea);
-        }
-        return teas;
-      } else {
-        throw Exception('Failed to load tea products');
-      }
-    } catch (e) {
-      throw Exception('Failed to load tea products');
-    }
-  }
-}
-
-// API for bread
-class BreadApi {
-  final String breadUrl = "http://localhost:5194/api/breads";
-  // Read data from API
-  Future<List<Product>> getBreads() async {
-    try {
-      final response = await http.get(Uri.parse(breadUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        List<Product> breads = [];
-        for (var item in jsonData) {
-          Product bread = Product.fromJson(item);
-          // Decode image and image detail
-          base64Decode(bread.image);
-          base64Decode(bread.imagedetail);
-
-          breads.add(bread);
-        }
-        return breads;
-      } else {
-        throw Exception('Failed to load bread products');
-      }
-    } catch (e) {
-      throw Exception('Failed to load bread products');
-    }
-  }
-
-  // Add data to API
-  Future<void> addBread(Product bread) async {
-    final uri = Uri.parse(breadUrl);
-
-    try {
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(bread.toJson()),
-      );
-      if (response.statusCode == 200) {
-        print('Bread added successfully');
-      } else {
-        throw Exception('Failed to add bread: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to add bread: $e');
-    }
-  }
-
-  // Update data to API
-  Future<Product> updateBread(Product bread) async {
-    try {
-      final response = await http.put(Uri.parse('$breadUrl/${bread}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(bread.toJson()));
-      if (response.statusCode == 200) {
-        return Product.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to update bread');
-      }
-    } catch (e) {
-      throw Exception('Failed to update bread');
-    }
-  }
-
-  // Delete data from API
-  Future<void> deleteBread(int id) async {
-    try {
-      final response = await http.delete(Uri.parse('$breadUrl/$id'));
-      if (response.statusCode != 204) {
-        throw Exception('Failed to delete bread');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete bread');
-    }
-  }
-}
-
-// API for food
-class FoodApi {
-  final String foodUrl = "http://localhost:5194/api/products/category/dm004";
-  // Read data from API
-  Future<List<Product>> getFoods() async {
-    try {
-      final response = await http.get(Uri.parse(foodUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        List<Product> foods = [];
-        for (var item in jsonData) {
-          Product food = Product.fromJson(item);
-          // Decode image and image detail
-          base64Decode(food.image);
-          base64Decode(food.imagedetail);
-
-          foods.add(food);
-        }
-        return foods;
-      } else {
-        throw Exception('Failed to load food products');
-      }
-    } catch (e) {
-      throw Exception('Failed to load food products');
-    }
-  }
-}
-
-// API for Other
-class OtherApi {
-  final String otherUrl = "http://localhost:5194/api/others";
-  // Read data from API
-  Future<List<Product>> getOthers() async {
-    try {
-      final response = await http.get(Uri.parse(otherUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        List<Product> others = [];
-        for (var item in jsonData) {
-          Product other = Product.fromJson(item);
-          // Decode image and image detail
-          base64Decode(other.image);
-          base64Decode(other.imagedetail);
-
-          others.add(other);
-        }
-        return others;
-      } else {
-        throw Exception('Failed to load other products');
-      }
-    } catch (e) {
-      throw Exception('Failed to load other products');
-    }
-  }
-}
-
-// API for Cart
-class CartApi {
-  final String cartUrl = "http://localhost:5194/api/carts";
-  final String cartDetailUrl = "http://localhost:5194/api/cartdetails";
   // Read data from API
   Future<List<Cart>> getCarts() async {
     try {
@@ -1744,11 +1334,6 @@ class CartApi {
       print('Product removal failed: $e');
     }
   }
-}
-
-// API for CartDetail
-class CartDetailApi {
-  final String cartDetailUrl = "http://localhost:5194/api/cartdetails";
 
   Future<List<dynamic>> fetchCartDetails() async {
     try {
@@ -1763,11 +1348,6 @@ class CartDetailApi {
       throw Exception('Error fetching cart details: $e');
     }
   }
-}
-
-/// API for Order
-class OrderApi {
-  final String orderUrl = "http://localhost:5194/api/orders";
 
   // fetch order by customer
   Future<List<Order>> fetchCustomerOrder(String customerid) async {
@@ -1830,11 +1410,6 @@ class OrderApi {
       throw Exception('Failed to load orders');
     }
   }
-}
-
-//
-class OrderDetailApi {
-  final String orderDetailUrl = "http://localhost:5194/api/orderdetails";
 
   // fetch order by customer
   Future<List<OrderDetail>> fetchOrderDetail(String orderid) async {

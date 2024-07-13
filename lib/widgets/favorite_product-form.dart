@@ -24,7 +24,7 @@ class FavoriteProductForm extends StatefulWidget {
 }
 
 class _FavoriteProductFormState extends State<FavoriteProductForm> {
-  final FavoriteApi favoriteApi = FavoriteApi();
+  final SystemApi systemApi = SystemApi();
   bool isFavorite = false;
 
   void _showConfirmationDialog() {
@@ -55,7 +55,7 @@ class _FavoriteProductFormState extends State<FavoriteProductForm> {
 
   void _deleteFavorites() async {
     try {
-      await favoriteApi.deleteFavorite(widget.favorite.favoriteid!);
+      await systemApi.deleteFavorite(widget.favorite.favoriteid!);
       showNotification(context, "Thành công",
           "Sản phẩm đã được xóa khỏi danh sách yêu thích");
       widget.onDeleteSuccess(); // Gọi hàm callback khi xóa thành công

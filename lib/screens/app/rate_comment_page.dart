@@ -25,7 +25,7 @@ class RateCommentPage extends StatefulWidget {
 
 class _RateCommentPageState extends State<RateCommentPage> {
   Customer? loggedInUser = AuthManager().loggedInCustomer;
-  CustomerApi customerApi = CustomerApi();
+  SystemApi systemApi = SystemApi();
 
   TextEditingController _titleCommentController = TextEditingController();
   TextEditingController _contentCommentController = TextEditingController();
@@ -66,7 +66,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
         rating: _rating, // Sử dụng giá trị rating
       );
       // Call API to add comment
-      await customerApi.addComment(customerComment);
+      await systemApi.addComment(customerComment);
       showCustomAlertDialog(
           context, 'Thông báo', 'Gửi ý kiến phản hồi thành công.');
       _titleCommentController.clear();
