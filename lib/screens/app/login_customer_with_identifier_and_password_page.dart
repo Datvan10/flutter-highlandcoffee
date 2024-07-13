@@ -23,7 +23,7 @@ class LoginCustomerWithIdentifierAndPassWordPage extends StatefulWidget {
 
 class _LoginCustomerWithIdentifierAndPassWordPageState
     extends State<LoginCustomerWithIdentifierAndPassWordPage> {
-  final CustomerApi api = CustomerApi();
+  final SystemApi systemApi = SystemApi();
   final _identifierController = TextEditingController();
   final _passWordController = TextEditingController();
   bool isLoggedIn = false;
@@ -53,11 +53,11 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
     } else {
       try {
         String authStatus =
-            await api.authenticateAccountCustomer(identifier, password);
+            await systemApi.authenticateAccountCustomer(identifier, password);
 
         if (authStatus == 'authenticated') {
           Customer loggedInCustomer =
-              await api.getCustomerByIdentifier(identifier);
+              await systemApi.getCustomerByIdentifier(identifier);
           AuthManager().setLoggedInCustomer(loggedInCustomer);
           Navigator.pushReplacementNamed(context, '/home_page');
           showCustomAlertDialog(context, 'Thông báo', 'Đăng nhập thành công');

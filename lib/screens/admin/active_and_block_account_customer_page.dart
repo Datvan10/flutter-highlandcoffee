@@ -18,7 +18,7 @@ class ActiveAndBlockAccountCustomerPage extends StatefulWidget {
 
 class _ActiveAndBlockAccountCustomerPageState
     extends State<ActiveAndBlockAccountCustomerPage> {
-  final AdminApi adminApi = AdminApi();
+  final SystemApi systemApi = SystemApi();
   List<Customer> customers = [];
   List<Customer> filteredCustomers = [];
   final _textSearchAccountCustomerController = TextEditingController();
@@ -31,7 +31,7 @@ class _ActiveAndBlockAccountCustomerPageState
 
   Future<void> fetchAccountCustomers() async {
     try {
-      List<Customer> fetchedCustomers = await adminApi.getAllCustomers();
+      List<Customer> fetchedCustomers = await systemApi.getAllCustomers();
       setState(() {
         customers = fetchedCustomers;
         filteredCustomers = fetchedCustomers;
@@ -44,7 +44,7 @@ class _ActiveAndBlockAccountCustomerPageState
   // function active account
   Future<void> activeAccountCustomer(String customerid) async {
     try {
-      await adminApi.activateAccountCustomer(customerid);
+      await systemApi.activateAccountCustomer(customerid);
       showCustomAlertDialog(
           context, 'Thông báo', 'Kích hoạt tài khoản khách hàng thành công');
       fetchAccountCustomers();
@@ -83,7 +83,7 @@ class _ActiveAndBlockAccountCustomerPageState
                         fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   try {
-                    await adminApi.blockAccountCustomer(customerid);
+                    await systemApi.blockAccountCustomer(customerid);
                     Navigator.pop(context);
                     showCustomAlertDialog(context, 'Thông báo',
                         'Chặn tài khoản khách hàng thành công');

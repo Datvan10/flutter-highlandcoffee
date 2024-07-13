@@ -12,13 +12,13 @@ class ProductPopularItem extends StatefulWidget {
 }
 
 class _ProductPopularItemState extends State<ProductPopularItem> {
-  final PopularApi popularApi = PopularApi();
+  final SystemApi systemApi = SystemApi();
   late Future<List<Product>> productsFuture;
 
   @override
   void initState() {
     super.initState();
-    productsFuture = popularApi.getPopulars();
+    productsFuture = systemApi.getPopulars();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) async {
@@ -37,7 +37,7 @@ class _ProductPopularItemState extends State<ProductPopularItem> {
 
   Future<List<Map<String, dynamic>>> _getProductSizes(String productname) async {
   try {
-    List<Map<String, dynamic>> sizes = await popularApi.getProductSizes(productname);
+    List<Map<String, dynamic>> sizes = await systemApi.getProductSizes(productname);
     return sizes;
   } catch (e) {
     print("Error fetching product sizes: $e");

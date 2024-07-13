@@ -23,7 +23,7 @@ class UpdateCustomerProfilePage extends StatefulWidget {
 
 class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
   bool isObsecure = false;
-  CustomerApi customerApi = CustomerApi();
+  final SystemApi systemApi = SystemApi();
   // Get information of the logged in
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   //
@@ -46,7 +46,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
   // Feature update customer profile
   Future<void> updateCustomer(Customer customer) async {
     try {
-      await customerApi.updateCustomer(customer);
+      await systemApi.updateCustomer(customer);
       AuthManager().loggedInCustomer = customer;
       Get.back(result: true);
       showCustomAlertDialog(context, 'Thông báo', 'Cập nhật hồ sơ thành công.');

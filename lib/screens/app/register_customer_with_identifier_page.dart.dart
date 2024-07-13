@@ -21,7 +21,7 @@ class RegisterCustomerWithIdentifierPage extends StatefulWidget {
 
 class _RegisterCustomerWithIdentifierPageState
     extends State<RegisterCustomerWithIdentifierPage> {
-  final CustomerApi customerApi = CustomerApi();
+  final SystemApi systemApi = SystemApi();
   // final TextEditingController emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -85,7 +85,7 @@ class _RegisterCustomerWithIdentifierPageState
         status: 0,
       );
       // Call API to register user
-      await customerApi.addCustomer(newCustomer);
+      await systemApi.addCustomer(newCustomer);
       Navigator.pushReplacementNamed(
           context, '/login_register_switcher_customer_page');
       // Show success alert

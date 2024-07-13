@@ -17,8 +17,7 @@ class ListOrderPage extends StatefulWidget {
 }
 
 class _ListOrderPageState extends State<ListOrderPage> {
-  final OrderApi orderApi = OrderApi();
-  final AdminApi adminApi = AdminApi();
+  final SystemApi systemApi = SystemApi();
   late Future<List<Order>> futureOrders;
   List<Product> searchResults = [];
   final _textSearchOrderController = TextEditingController();
@@ -26,7 +25,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
   @override
   void initState() {
     super.initState();
-    futureOrders = orderApi.fetchAllOrder();
+    futureOrders = systemApi.fetchAllOrder();
   }
 
   Future<void> deleteOrder(String orderid) async {
@@ -55,12 +54,12 @@ class _ListOrderPageState extends State<ListOrderPage> {
                       color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
               onPressed: () async {
                 try {
-                  await adminApi.deleteOrder(orderid);
+                  await systemApi.deleteOrder(orderid);
                   Navigator.pop(context);
                   showCustomAlertDialog(
                       context, 'Thông báo', 'Xóa đơn hàng thành công.');
                   setState(() {
-                    futureOrders = orderApi.fetchAllOrder();
+                    futureOrders = systemApi.fetchAllOrder();
                   });
                 } catch (e) {
                   print('Error deleting product: $e');
@@ -88,7 +87,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
   void performSearch(String query) async {
     try {
       if (query.isNotEmpty) {
-        List<Product> products = await adminApi.getListProducts();
+        List<Product> products = await systemApi.getListProducts();
         List<Product> filteredProducts = products
             .where((product) =>
                 product.productname.toLowerCase().contains(query.toLowerCase()))

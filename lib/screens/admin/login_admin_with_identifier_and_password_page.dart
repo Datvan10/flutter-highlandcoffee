@@ -21,7 +21,7 @@ class LoginAdminWithIdentifierAndPassWordPage extends StatefulWidget {
 
 class _LoginAdminWithIdentifierAndPassWordPageState
     extends State<LoginAdminWithIdentifierAndPassWordPage> {
-  final AdminApi api = AdminApi();
+  final SystemApi systemApi = SystemApi();
   final identifierController = TextEditingController();
   final passWordController = TextEditingController();
   bool isObsecure = false;
@@ -40,7 +40,7 @@ class _LoginAdminWithIdentifierAndPassWordPageState
     } else {
       try {
         bool isAuthenticated =
-            await api.authenticateAccountAdmin(identifier, password);
+            await systemApi.authenticateAccountAdmin(identifier, password);
 
         if (isAuthenticated) {
           Navigator.pushReplacementNamed(context, '/admin_page');

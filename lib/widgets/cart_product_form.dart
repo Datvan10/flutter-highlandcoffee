@@ -23,7 +23,7 @@ class CartProductForm extends StatefulWidget {
 }
 
 class _CartProductFormState extends State<CartProductForm> {
-  CartApi cartApi = CartApi();
+  SystemApi systemApi = SystemApi();
   // Hàm show notification xóa sản phẩm từ giỏ hàng
   void deleteProductFromCart(String cartdetailid) async {
     showCupertinoDialog(
@@ -51,7 +51,7 @@ class _CartProductFormState extends State<CartProductForm> {
                   style: GoogleFonts.roboto(
                       color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
               onPressed: () async {
-                await cartApi.deleteCart(cartdetailid);
+                await systemApi.deleteCart(cartdetailid);
                 Navigator.pop(context);
                 showCustomAlertDialog(context, 'Thông báo',
                     'Xóa sản phẩm khỏi giỏ hàng thành công.');

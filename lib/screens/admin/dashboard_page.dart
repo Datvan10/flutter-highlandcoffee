@@ -16,7 +16,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final AdminApi adminApi = AdminApi();
+  final SystemApi systemApi = SystemApi();
   List<DailyRevenue> _dailyRevenues = [];
   bool _isLoading = false;
   int? _touchedIndex;
@@ -39,7 +39,7 @@ class _DashboardPageState extends State<DashboardPage> {
         String formattedDate =
             formatter.format(_currentStartDate.add(Duration(days: i)));
         final dailyRevenue =
-            await adminApi.fetchDailyRevenue(DateTime.parse(formattedDate));
+            await systemApi.fetchDailyRevenue(DateTime.parse(formattedDate));
         _dailyRevenues
             .add(DailyRevenue(date: formattedDate, revenue: dailyRevenue));
       }

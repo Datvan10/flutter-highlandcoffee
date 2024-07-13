@@ -16,7 +16,7 @@ class DeleteStaffAccountPage extends StatefulWidget {
 }
 
 class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
-  final AdminApi adminApi = AdminApi();
+  final SystemApi systemApi = SystemApi();
   List<Staff> staffs = [];
   List<Staff> filteredStaffs = [];
   final _textSearchStaffController = TextEditingController();
@@ -29,7 +29,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
 
   Future<void> _fetchStaffs() async {
     try {
-      List<Staff> fetchedStaffs = await adminApi.getAllStaffs();
+      List<Staff> fetchedStaffs = await systemApi.getAllStaffs();
       setState(() {
         staffs = fetchedStaffs;
         filteredStaffs = fetchedStaffs;
@@ -64,7 +64,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                       color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
               onPressed: () async {
                 try {
-                  await adminApi.deleteStaff(categoryId);
+                  await systemApi.deleteStaff(categoryId);
                   Navigator.pop(context);
                   showCustomAlertDialog(
                       context, 'Thông báo', 'Xóa thông tin tài khoản nhân viên thành công');

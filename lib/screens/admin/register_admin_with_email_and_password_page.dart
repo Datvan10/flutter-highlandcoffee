@@ -21,7 +21,7 @@ class RegisterAdminWithEmailAndPasswordPage extends StatefulWidget {
 
 class _RegisterAdminWithEmailAndPasswordPageState
     extends State<RegisterAdminWithEmailAndPasswordPage> {
-      final AdminApi api = AdminApi();
+      final SystemApi api = SystemApi();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 

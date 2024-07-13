@@ -17,14 +17,14 @@ class CustomerOrderPage extends StatefulWidget {
 }
 
 class _CustomerOrderPageState extends State<CustomerOrderPage> {
-  final OrderApi orderApi = OrderApi();
+  final SystemApi systemApi = SystemApi();
   late Future<List<Order>> futureOrders;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
 
   @override
   void initState() {
     super.initState();
-    futureOrders = orderApi.fetchCustomerOrder(loggedInCustomer!.customerid!);
+    futureOrders = systemApi.fetchCustomerOrder(loggedInCustomer!.customerid!);
   }
 
   @override

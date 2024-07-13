@@ -33,7 +33,7 @@ class _OrderPageState extends State<OrderPage> {
   int totalQuantity = 0;
   late int totalPrice = 0;
   Customer? loggedCustomer = AuthManager().loggedInCustomer;
-  OrderApi orderApi = OrderApi();
+  SystemApi systemApi = SystemApi();
   String selectedPaymentMethod = '';
   String responseCode = '';
   //
@@ -115,7 +115,7 @@ class _OrderPageState extends State<OrderPage> {
       }
 
       // Gọi phương thức thêm đơn hàng từ API
-      await orderApi.addOrder(newOrder);
+      await systemApi.addOrder(newOrder);
 
       // Hiển thị thông báo khi đặt hàng thành công
       showNotificationNavigate(

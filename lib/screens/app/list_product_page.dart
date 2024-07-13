@@ -20,7 +20,7 @@ class _ListProductPageState extends State<ListProductPage> {
   int _selectedIndexBottomBar = 1;
   Future<List<Product>>? productsFuture;
 
-  final ProductApi productApi = ProductApi();
+  final SystemApi systemApi = SystemApi();
 
   //SelectedBottomBar
   void _selectedBottomBar(int index) {
@@ -32,7 +32,7 @@ class _ListProductPageState extends State<ListProductPage> {
   @override
   void initState() {
     super.initState();
-    productsFuture = productApi.getListProducts();
+    productsFuture = systemApi.getListProducts();
   }
 
   void _navigateToProductDetails(int index, List<Product> products) async {
@@ -52,7 +52,7 @@ class _ListProductPageState extends State<ListProductPage> {
 
   Future<List<Map<String, dynamic>>> _getProductSizes(String productname) async {
   try {
-    List<Map<String, dynamic>> sizes = await productApi.getProductSizes(productname);
+    List<Map<String, dynamic>> sizes = await systemApi.getProductSizes(productname);
     return sizes;
   } catch (e) {
     print("Error fetching product sizes: $e");

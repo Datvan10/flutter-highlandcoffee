@@ -16,13 +16,13 @@ class ListOrderPage extends StatefulWidget {
 }
 
 class _ListOrderPageState extends State<ListOrderPage> {
-  final OrderApi orderApi = OrderApi();
+  final SystemApi systemApi = SystemApi();
   late Future<List<Order>> futureOrders;
 
   @override
   void initState() {
     super.initState();
-    futureOrders = orderApi.fetchAllOrder();
+    futureOrders = systemApi.fetchAllOrder();
   }
 
   @override

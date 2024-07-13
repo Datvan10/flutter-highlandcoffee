@@ -23,7 +23,7 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _salaryController = TextEditingController();
 
-  AdminApi adminApi = AdminApi();
+  SystemApi systemApi = SystemApi();
 
   //
   Future<void> addStaff() async {
@@ -31,7 +31,7 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
       int salary;
       try {
         salary = int.parse(_salaryController.text);
-        
+
         if (salary <= 0) {
           showCustomAlertDialog(
               context, 'Thông báo', 'Lương không được là số âm hoặc bằng 0.');
@@ -74,7 +74,7 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
       }
 
       // Add staff using admin API
-      await adminApi.addStaff(newStaff);
+      await systemApi.addStaff(newStaff);
 
       // Show success message
       showCustomAlertDialog(
@@ -95,8 +95,8 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          left: 18.0, top: 18.0, right: 18.0, bottom: 25),
+      padding:
+          const EdgeInsets.only(left: 18.0, top: 18.0, right: 18.0, bottom: 25),
       child: Column(
         children: [
           Expanded(
