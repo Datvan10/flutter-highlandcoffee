@@ -62,7 +62,6 @@ class _AddProductPageState extends State<AddProductPage> {
     }
   }
 
-  // Function to pick an image from the gallery
   Future<void> _pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -73,7 +72,6 @@ class _AddProductPageState extends State<AddProductPage> {
     }
   }
 
-  // Function to pick an image detail from the gallery
   Future<void> _pickImageDetail() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -86,9 +84,8 @@ class _AddProductPageState extends State<AddProductPage> {
 
   Future<String> uploadImage(File? imageFile) async {
     if (imageFile == null)
-      return ''; // Return empty string if no image is selected
+      return '';
 
-    // Use runOnUiThread to ensure the Firebase Storage operation runs on the main thread
     Completer<String> completer = Completer();
     await Future(() async {
       try {
@@ -107,10 +104,8 @@ class _AddProductPageState extends State<AddProductPage> {
     return completer.future;
   }
 
-  // Function to add a product to database
   Future<void> addProduct() async {
     try {
-      // Check if all the required fields are filled
       if (_productNameController.text.isEmpty ||
           _descriptionController.text.isEmpty ||
           _sizeController.text.isEmpty ||
@@ -130,7 +125,6 @@ class _AddProductPageState extends State<AddProductPage> {
         return;
       }
 
-      // Find the selected category's ID
       String? selectedCategoryId;
       for (var category in _categoryList) {
         if (category.categoryname == _selectedCategoryController) {
@@ -164,7 +158,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
       showCustomAlertDialog(
           context, 'Thông báo', 'Thêm sản phẩm vào cơ sở dữ liệu thành công.');
-      // Reset text controllers
+
       _productNameController.clear();
       _descriptionController.clear();
       _sizeController.clear();

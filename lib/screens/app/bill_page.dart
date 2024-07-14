@@ -32,12 +32,10 @@ class _BillDetailPageState extends State<BillDetailPage> {
     futureBillDetails = systemApi.getBillByOrderId(widget.orderid);
   }
 
-  // function format date
   String formatDate(DateTime isoDate) {
     return DateFormat('dd - MM - yyyy').format(isoDate);
   }
 
-  // function to confirm order
   void printBill(String orderid, String staffid) async {
     await systemApi.printBill(orderid, staffid);
     setState(() {
@@ -45,7 +43,6 @@ class _BillDetailPageState extends State<BillDetailPage> {
       futureBillDetails = systemApi.getBillByOrderId(widget.orderid);
     });
 
-    // show dialog
     showCustomAlertDialog(
         context, 'Thông báo', 'Thanh toán hóa đơn thành công.');
   }
@@ -117,11 +114,9 @@ class _BillDetailPageState extends State<BillDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Phần logo và thông tin cửa hàng
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            // Logo của cửa hàng
                             Column(
                               children: [
                                 Image.asset(
@@ -131,7 +126,6 @@ class _BillDetailPageState extends State<BillDetailPage> {
                                 ),
                               ],
                             ),
-                            // Thông tin của hàng
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -155,7 +149,6 @@ class _BillDetailPageState extends State<BillDetailPage> {
                           ],
                         ),
                         Divider(),
-                        // Phần thông tin hóa đơn
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -191,7 +184,6 @@ class _BillDetailPageState extends State<BillDetailPage> {
                         ),
                         SizedBox(height: 10.0),
                         Divider(),
-                        // Danh sách chi tiết đơn hàng
                         Row(
                           children: [
                             Expanded(
@@ -229,7 +221,6 @@ class _BillDetailPageState extends State<BillDetailPage> {
                           ],
                         ),
                         Divider(),
-                        // Danh sách chi tiết sản phẩm
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -277,7 +268,6 @@ class _BillDetailPageState extends State<BillDetailPage> {
                           },
                         ),
                         Divider(),
-                        // Phần tổng cộng, chiết khấu và các thông tin khác
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

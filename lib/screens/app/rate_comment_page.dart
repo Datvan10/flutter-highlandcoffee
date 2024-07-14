@@ -32,7 +32,6 @@ class _RateCommentPageState extends State<RateCommentPage> {
   File? _imageController;
   int _rating = 0;
 
-  // Function to pick an image from the gallery
   Future<void> _pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -43,7 +42,6 @@ class _RateCommentPageState extends State<RateCommentPage> {
     }
   }
 
-  //
   Future<void> addComment() async {
     try {
       if (_titleCommentController.text.isEmpty ||
@@ -63,9 +61,9 @@ class _RateCommentPageState extends State<RateCommentPage> {
         image: imageBase64,
         date: DateTime.now(),
         status: 0,
-        rating: _rating, // Sử dụng giá trị rating
+        rating: _rating,
       );
-      // Call API to add comment
+
       await systemApi.addComment(customerComment);
       showCustomAlertDialog(
           context, 'Thông báo', 'Gửi ý kiến phản hồi thành công.');

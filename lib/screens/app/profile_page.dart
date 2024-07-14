@@ -30,12 +30,10 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndexBottomBar = 4;
   final SystemApi systemApi = SystemApi();
-  // Lấy thông tin người dùng từ AuthManager
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
   String? role;
 
-  //
   @override
   void initState() {
     super.initState();
@@ -44,7 +42,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  // function fetch role
   Future<void> fetchRole() async {
     final fetchedRole =
         await systemApi.getRoleByPersonId(loggedInStaff!.staffid);
@@ -53,7 +50,6 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  //
   void _selectedBottomBar(int index) {
     setState(() {
       _selectedIndexBottomBar = index;
@@ -61,7 +57,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void showImage(BuildContext context) {
-    // Tạm thời sử dụng đường dẫn ảnh cố định, bạn có thể thay thế bằng đường dẫn thực tế của ảnh bạn muốn hiển thị.
     String imagePath = 'assets/images/profile/customer-default.jpeg';
 
     showCupertinoModalPopup(
@@ -73,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
           actions: [
             CupertinoDialogAction(
               onPressed: () {
-                Navigator.pop(context); // Đóng dialog khi nhấn OK
+                Navigator.pop(context);
               },
               child: Text(
                 'Xong',
@@ -96,23 +91,19 @@ class _ProfilePageState extends State<ProfilePage> {
           actions: [
             CupertinoActionSheetAction(
               onPressed: () {
-                // Xử lý khi người dùng chọn chụp ảnh
                 Navigator.pop(context);
-                // Gọi hàm để hiển thị ảnh
                 showImage(context);
               },
               child: Text('Xem ảnh', style: TextStyle(color: blue)),
             ),
             CupertinoActionSheetAction(
               onPressed: () {
-                // Xử lý khi người dùng chọn chụp ảnh
                 Navigator.pop(context);
               },
               child: Text('Chụp ảnh', style: TextStyle(color: blue)),
             ),
             CupertinoActionSheetAction(
               onPressed: () {
-                // Xử lý khi người dùng chọn ảnh từ thư viện
                 Navigator.pop(context);
               },
               child:
@@ -121,7 +112,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
           cancelButton: CupertinoActionSheetAction(
             onPressed: () {
-              // Xử lý khi người dùng nhấn nút hủy bỏ
               Navigator.pop(context);
             },
             child: Text('Hủy', style: TextStyle(color: blue)),
@@ -131,8 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  //
-  void showConfirmExit() {
+  void showConfirmLogout() {
     notificationDialog(
       context: context,
       title: "Đăng xuất khỏi tài khoản của bạn?",
@@ -394,7 +383,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: 'Đăng xuất',
                 startIcon: Icons.logout,
                 onPress: () {
-                  showConfirmExit();
+                  showConfirmLogout();
                 },
                 endIcon: false,
                 textColor: grey)

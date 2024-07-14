@@ -13,12 +13,11 @@ class BestSaleProductItem extends StatefulWidget {
 
 class _BestSaleProductItemState extends State<BestSaleProductItem> {
   final SystemApi systemApi = SystemApi();
-  late Future<List<Product>> productsFuture; // Thay đổi từ Stream sang Future
+  late Future<List<Product>> productsFuture;
 
   @override
   void initState() {
     super.initState();
-    // Gọi phương thức để lấy dữ liệu từ API trong hàm initState
     productsFuture = systemApi.getBestSales();
   }
 
@@ -49,7 +48,7 @@ class _BestSaleProductItemState extends State<BestSaleProductItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300, // Set a fixed height for GridView
+      height: 300,
       child: FutureBuilder<List<Product>>(
         future: productsFuture,
         builder: (context, snapshot) {

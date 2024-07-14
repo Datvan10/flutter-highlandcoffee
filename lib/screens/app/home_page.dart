@@ -35,11 +35,9 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
-  //SelectedBottomBar
   void _selectedBottomBar(int index) {
     if (index == 0) {
-      // Check if the home icon is pressed
-      _refreshData(); // Perform the refresh logic
+      _refreshData();
     } else {
       setState(() {
         _selectedIndexBottomBar = index;
@@ -47,14 +45,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  //
   Future<void> _refreshData() async {
     await Future.delayed(Duration(seconds: 5));
 
     setState(() {});
   }
 
-  //
   Future<void> _requestMicrophonePermission() async {
     var status = await Permission.microphone.status;
     if (status.isDenied) {
@@ -98,8 +94,6 @@ class _HomePageState extends State<HomePage> {
           categoryid: product.categoryid,
         );
       }).toList();
-
-      // print('Search results: $convertedResults');
 
       Navigator.push(
         context,

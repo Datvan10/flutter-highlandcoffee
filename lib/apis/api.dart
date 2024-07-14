@@ -170,7 +170,7 @@ class SystemApi {
         },
         body: jsonEncode(product.toJson()),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         print('Product added successfully');
       } else {
@@ -206,7 +206,7 @@ class SystemApi {
   Future<void> deleteProduct(String productid) async {
     try {
       final response = await http.delete(Uri.parse('$productUrl/$productid'));
-      // print(response.statusCode);
+      print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 204) {
         print('Product deleted successfully');
       } else {
@@ -302,7 +302,7 @@ class SystemApi {
         },
         body: jsonEncode(staff.toJson()),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         print('Staff added successfully');
       } else {
@@ -332,7 +332,7 @@ class SystemApi {
   Future<void> deleteStaff(String staffid) async {
     try {
       final response = await http.delete(Uri.parse('$staffUrl/$staffid'));
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 204) {
         print('Staff deleted successfully');
       } else {
@@ -353,7 +353,7 @@ class SystemApi {
         },
         body: jsonEncode(staff.toJson()),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         print('Staff updated successfully');
       } else {
@@ -538,7 +538,7 @@ class SystemApi {
   Future<List<Comment>> fetchAllComment() async {
     try {
       final response = await http.get(Uri.parse(commentUrl));
-      print('Response status: ${response.statusCode}');
+      // print('Response status: ${response.statusCode}');
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         // print('Response body: $jsonData');
@@ -665,7 +665,7 @@ class SystemApi {
           'staffid': staffid,
         }),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         print('Order confirmed successfully');
       } else {
@@ -688,7 +688,7 @@ class SystemApi {
         },
         body: jsonEncode(bill.toJson()),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         print('Bill added successfully');
       } else {
@@ -703,7 +703,7 @@ class SystemApi {
   Future<List<Bill>> getBillByOrderId(String orderid) async {
     try {
       final response = await http.get(Uri.parse('$billUrl/bill/$orderid'));
-      print(response.statusCode);
+      // print(response.statusCode);
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
@@ -744,7 +744,7 @@ class SystemApi {
           'staffid': staffid,
         }),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         print('Bill printed successfully');
       } else {
@@ -805,7 +805,7 @@ class SystemApi {
         },
         body: jsonEncode(customer.toJson()),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         print('Customer added successfully');
       } else {
@@ -826,7 +826,7 @@ class SystemApi {
               },
               body: jsonEncode(customer.toJson()));
       print(response.statusCode);
-      print('Response body: ${response.body}');
+      // print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         print('Customer updated successfully');
@@ -999,7 +999,7 @@ class SystemApi {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         print('Order cancelled successfully');
       } else {
@@ -1064,7 +1064,7 @@ class SystemApi {
 
     try {
       final response = await http.get(Uri.parse(productSizesUrl));
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
         List<Map<String, dynamic>> sizes = [];
@@ -1165,7 +1165,7 @@ class SystemApi {
     // print(loggedInUser?.customerid);
     try {
       final response = await http.get(Uri.parse('$favoriteUrl'));
-      // print(response.statusCode);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         final List<dynamic> jsonResponse = json.decode(response.body);
         List<Favorite> favorites = [];
@@ -1324,7 +1324,7 @@ class SystemApi {
       final response = await http.delete(
         Uri.parse('$cartDetailUrl/$cartdetailid'),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         print('Product removed successfully!');
       } else {
@@ -1355,7 +1355,7 @@ class SystemApi {
       final response =
           await http.get(Uri.parse('$orderUrl/customer/$customerid'));
       print(response.body);
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         List<Order> orders =
@@ -1381,7 +1381,7 @@ class SystemApi {
         },
         body: jsonEncode(orderdetail.toJson()),
       );
-      print(response.statusCode);
+      // print(response.statusCode);
       print(orderdetail.productid);
       if (response.statusCode == 200) {
         print('Order added successfully');
@@ -1397,7 +1397,7 @@ class SystemApi {
   Future<List<Order>> fetchAllOrder() async {
     try {
       final response = await http.get(Uri.parse(orderUrl));
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
         List<Order> orders =
@@ -1416,7 +1416,7 @@ class SystemApi {
     try {
       final response =
           await http.get(Uri.parse('$orderDetailUrl/order/$orderid'));
-      print(response.statusCode);
+      // print(response.statusCode);
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);

@@ -34,12 +34,9 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
-    // Gọi hàm lấy dữ liệu từ API
     fetchCartItems();
   }
 
-  //
-  // Hàm kiểm tra xem một chuỗi có đúng định dạng base64 hay không
   bool isValidBase64(String value) {
     try {
       base64.decode(value);
@@ -49,12 +46,13 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  // Hàm để gọi API lấy dữ liệu giỏ hàng
   Future<void> fetchCartItems() async {
     try {
       List<dynamic> jsonResponse = await systemApi.fetchCartDetails();
       List<dynamic> items = jsonResponse.map((data) {
+
         if (data['customerid'] == loggedInUser?.customerid) {
+
           return CartItem(
             data['cartdetailid'],
             data['cartid'],
@@ -100,14 +98,12 @@ class _CartPageState extends State<CartPage> {
               ));
             },
           ),
-          // Add more actions here if needed
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 18.0, top: 18.0, right: 18.0),
         child: Column(
           children: [
-            //text notification
             Center(
               child: Text(
                 'Miễn phí vận chuyển với đơn hàng trên 500.000đ',
@@ -120,7 +116,6 @@ class _CartPageState extends State<CartPage> {
             const SizedBox(
               height: 20,
             ),
-            // Kiểm tra xem giỏ hàng có trống hay không
             cartItems.isEmpty
                 ? Column(
                     children: [
@@ -167,7 +162,6 @@ class _CartPageState extends State<CartPage> {
   }
 }
 
-//
 class CartItem {
   final String cartdetailid;
   final String cartid;

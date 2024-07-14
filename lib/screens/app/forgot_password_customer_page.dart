@@ -5,6 +5,7 @@ import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
+import 'package:highlandcoffeeapp/widgets/notification_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
 
 class ForgotPasswordCustomerPage extends StatefulWidget {
@@ -24,52 +25,23 @@ class _ForgotPasswordCustomerPageState
   bool isLoggedIn = false;
   bool isObsecure = false;
 
-  // Function login customer with indentifier and password
   // Chua lamf phan nay
   void resetPasswordCustomer() async {
     String identifier = identifierController.text.trim();
     String newPassword = newPassWordController.text.trim();
 
     if (identifier.isEmpty || newPassword.isEmpty) {
-      showNotification('Vui lòng nhập đầy đủ thông tin đặt lại mật khẩu');
+      NotificationDialog(title : 'Thông báo', content :'Vui lòng nhập đầy đủ thông tin đặt lại mật khẩu');
       return;
     }
 
     bool isUpdated = await systemApi.updateCustomerPassword(identifier, newPassword);
 
     if (isUpdated) {
-      showNotification('Cập nhật mật khẩu thành công, vui lòng đăng nhập lại');
+      NotificationDialog(title : 'Thông báo', content :'Cập nhật mật khẩu thành công, vui lòng đăng nhập lại');
     } else {
-      showNotification('Tài khoản không tồn tại, vui lòng thử lại');
+      NotificationDialog(title : 'Thông báo', content :'Tài khoản không tồn tại, vui lòng thử lại');
     }
-  }
-
-  // Show notification dialog
-  void showNotification(String message) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            "Thông báo",
-            style: GoogleFonts.arsenal(
-              color: primaryColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          content: Text(message),
-          actions: [
-            CupertinoDialogAction(
-              child: Text("OK", style: TextStyle(color: blue)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override

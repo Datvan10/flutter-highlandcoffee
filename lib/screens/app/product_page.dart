@@ -50,7 +50,6 @@ class _ProductPageState extends State<ProductPage> {
 
   void _navigateToProductDetails(int index, List<Product> products) async {
     List<Map<String, dynamic>> productSizes = await _getProductSizes(products[index].productname);
-    
     Navigator.push(
       context,
       MaterialPageRoute(

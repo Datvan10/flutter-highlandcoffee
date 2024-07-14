@@ -1,4 +1,3 @@
-// notification_helper.dart
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';

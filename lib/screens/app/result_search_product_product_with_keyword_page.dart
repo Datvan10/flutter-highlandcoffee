@@ -64,10 +64,8 @@ class _ResultSearchProductWithKeywordState
           child: custom_widgets.CustomSearchBar(
             textSearchController: _textSearchController,
             performSearch: (query) {
-              // Implement search logic here
             },
             startListening: () {
-              // Implement voice search logic here
             },
             onBackButtonPressed: () {
               Navigator.pop(context);

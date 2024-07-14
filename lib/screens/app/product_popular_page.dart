@@ -22,7 +22,6 @@ class _ProductPopularPageState extends State<ProductPopularPage> {
 
   final SystemApi systemApi = SystemApi();
 
-  //SelectedBottomBar
   void _selectedBottomBar(int index) {
     setState(() {
       _selectedIndexBottomBar = index;

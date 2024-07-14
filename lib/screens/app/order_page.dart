@@ -49,8 +49,7 @@ class _OrderPageState extends State<OrderPage> {
   //
   Future<void> getTotalQuantity() async {
     int total = 0;
-
-    // Loop through each cart item and sum up the total quantity
+    
     widget.cartItems.forEach((CartItem cartItem) {
       total += cartItem.quantity;
     });
@@ -64,7 +63,6 @@ class _OrderPageState extends State<OrderPage> {
   Future<void> fetchTotalPrice() async {
     int total = 0;
 
-    // Loop through each cart item and sum up the total price
     widget.cartItems.forEach((CartItem cartItem) {
       total += cartItem.totalprice;
     });
@@ -74,16 +72,14 @@ class _OrderPageState extends State<OrderPage> {
     });
   }
 
-  // Hàm để lưu thông tin đơn hàng vào cơ sở dữ liệu
   Future<void> addOrder() async {
     try {
-      // Kiểm tra nếu giỏ hàng trống
       if (widget.cartItems.isEmpty) {
         showCustomAlertDialog(context, 'Thông báo',
             'Đặt hàng không thành công, giỏ hàng của bạn đang trống.');
         return;
       }
-      // Tạo đối tượng OrderDetail với các giá trị được truyền theo đúng định dạng
+
       OrderDetail newOrder = OrderDetail(
         orderdetailid: '',
         orderid: '',
@@ -114,10 +110,8 @@ class _OrderPageState extends State<OrderPage> {
         return;
       }
 
-      // Gọi phương thức thêm đơn hàng từ API
       await systemApi.addOrder(newOrder);
 
-      // Hiển thị thông báo khi đặt hàng thành công
       showNotificationNavigate(
           context, 'Thông báo', 'Đơn hàng được đặt thành công.', () {
         Get.toNamed('/order_result_page');
@@ -277,7 +271,6 @@ class _OrderPageState extends State<OrderPage> {
         });
   }
 
-  //
   void showEditCustomerInfoForm(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -295,11 +288,10 @@ class _OrderPageState extends State<OrderPage> {
     );
   }
 
-  //
   void _showConfirmForm(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Chiều dài có thể được cuộn
+      isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
@@ -307,7 +299,6 @@ class _OrderPageState extends State<OrderPage> {
         return Container(
           height: 740,
           width: MediaQuery.of(context).size.width,
-          // Nội dung của form sẽ ở đây
           padding:
               EdgeInsets.only(left: 18.0, top: 30.0, right: 18.0, bottom: 18.0),
           child: Column(
@@ -437,7 +428,6 @@ class _OrderPageState extends State<OrderPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Change information user
                   showEditCustomerInfoForm(context);
                 },
                 child: Text(
@@ -470,7 +460,6 @@ class _OrderPageState extends State<OrderPage> {
           //
           PaymentMethodForm(
             onPaymentMethodSelected: (method) {
-              // Update the selected payment method
               setState(() {
                 selectedPaymentMethod = method;
               });

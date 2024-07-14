@@ -13,7 +13,6 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
-    // TODO: implement initState
     var d = Duration(seconds: 5);
     Future.delayed(d, () {
       Get.offAll(() => const IntroducePage1());

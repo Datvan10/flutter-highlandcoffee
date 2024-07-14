@@ -32,7 +32,6 @@ class EditTextFormField extends StatelessWidget {
         suffixIcon: suffixIconData != null
             ? IconButton(
                 onPressed: () {
-                  // Xử lý khi nhấn nút clear
                   controller.clear();
                 },
                 icon: Icon(

@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/routes/route.dart';
-import 'package:highlandcoffeeapp/screens/app/webview_page.dart';
 import 'package:highlandcoffeeapp/screens/app/welcome_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 

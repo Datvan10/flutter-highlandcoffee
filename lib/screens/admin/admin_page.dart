@@ -32,13 +32,11 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  //
   void handleLogout() {
     print('Logout');
     showConfirmExit(context);
   }
 
-  //
   Widget _selectedItem = DashboardPage();
 
   void screenSlector(item) {
@@ -49,13 +47,6 @@ class _AdminPageState extends State<AdminPage> {
         });
 
         break;
-
-      // case RevenuePage.routeName:
-      //   setState(() {
-      //     _selectedItem = RevenuePage();
-      //   });
-
-      //   break;
 
       case TopProductPage.routeName:
         setState(() {
@@ -149,11 +140,6 @@ class _AdminPageState extends State<AdminPage> {
         });
         break;
 
-      // case AccessAddProductPage.routeName:
-      // setState(() {
-      //   _selectedItem = AccessAddProductPage();
-      // });
-
       case PublishAndCancelCommentPage.routeName:
         setState(() {
           _selectedItem = PublishAndCancelCommentPage();
@@ -213,17 +199,12 @@ class _AdminPageState extends State<AdminPage> {
         sideBar: SideBar(
           iconColor: primaryColors,
           activeIconColor: blue,
-          // activeTextStyle: TextStyle(color: primaryColors),
           items: [
             AdminMenuItem(
                 title: 'Tổng quan',
                 icon: Icons.dashboard,
                 route: DashboardPage.routeName,
                 children: [
-                  // AdminMenuItem(
-                  //     title: 'Doanh số bán hàng',
-                  //     route: RevenuePage.routeName,
-                  //     icon: Icons.monetization_on_outlined),
                   AdminMenuItem(
                       title: 'Thống kê sản phẩm',
                       icon: Icons.trending_up,

@@ -74,7 +74,6 @@ class _RegisterCustomerWithIdentifierPageState
     // }
 
     try {
-      // Create new customer object
       Customer newCustomer = Customer(
         customerid: '',
         name: name,
@@ -84,14 +83,12 @@ class _RegisterCustomerWithIdentifierPageState
         point: 0,
         status: 0,
       );
-      // Call API to register user
       await systemApi.addCustomer(newCustomer);
       Navigator.pushReplacementNamed(
           context, '/login_register_switcher_customer_page');
-      // Show success alert
       showCustomAlertDialog(
           context, 'Thông báo', 'Đăng ký thành công, đăng nhập ngay');
-      // Clear input fields
+          
       _nameController.clear();
       // emailController.clear();
       _phoneNumberController.clear();
@@ -100,7 +97,6 @@ class _RegisterCustomerWithIdentifierPageState
       // confirm__passwordController.clear();
     } catch (e) {
       // print("Error adding customer: $e");
-      // Show alert for error
       showCustomAlertDialog(context, 'Thông báo',
           'Tài khoản đã tồn tại, vui lòng thử lại một tài khoản khác.');
     }

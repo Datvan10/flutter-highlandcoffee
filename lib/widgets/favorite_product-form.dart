@@ -6,13 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/widgets/notification.dart';
 import 'package:highlandcoffeeapp/widgets/notification_dialog.dart';
 
 class FavoriteProductForm extends StatefulWidget {
   final Favorite favorite;
   final VoidCallback onTap;
-  final VoidCallback onDeleteSuccess; // Thêm callback khi xóa thành công
+  final VoidCallback onDeleteSuccess;
 
   const FavoriteProductForm(
       {required this.favorite,
@@ -28,28 +27,49 @@ class _FavoriteProductFormState extends State<FavoriteProductForm> {
   bool isFavorite = false;
 
   void _showConfirmationDialog() {
-    notificationDialog(
+    showCupertinoDialog(
       context: context,
-      title: "Xóa khỏi danh sách sản phẩm yêu thích?",
-      onConfirm: () {},
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text("Hủy", style: TextStyle(color: Colors.red)),
-        ),
-        TextButton(
-          onPressed: () {
-            _deleteFavorites();
-            setState(() {
-              isFavorite = !isFavorite;
-            });
-            Navigator.pop(context);
-          },
-          child: Text("Đồng ý", style: TextStyle(color: Colors.blue)),
-        ),
-      ],
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.roboto(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 19,
+            ),
+          ),
+          content: Text("Xóa sản phẩm này khỏi danh sách sản phẩm yêu thích?",
+              style: GoogleFonts.roboto(
+                color: black,
+                fontSize: 16,
+              )),
+          actions: [
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text("OK",
+                  style: GoogleFonts.roboto(
+                      color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                _deleteFavorites();
+                setState(() {
+                  isFavorite = !isFavorite;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(
+                "Hủy",
+                style: GoogleFonts.roboto(color: blue, fontSize: 17),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -58,7 +78,7 @@ class _FavoriteProductFormState extends State<FavoriteProductForm> {
       await systemApi.deleteFavorite(widget.favorite.favoriteid!);
       showNotification(context, "Thành công",
           "Sản phẩm đã được xóa khỏi danh sách yêu thích");
-      widget.onDeleteSuccess(); // Gọi hàm callback khi xóa thành công
+      widget.onDeleteSuccess();
     } catch (e) {
       showNotification(
           context, "Lỗi", "Không thể xóa sản phẩm khỏi danh sách yêu thích");
@@ -128,12 +148,11 @@ class _FavoriteProductFormState extends State<FavoriteProductForm> {
                 ),
                 IconButton(
                     onPressed: () {
-                      // Remove favorite product
                       _showConfirmationDialog();
                     },
                     icon: Icon(
-                      Icons.delete,
-                      color: primaryColors,
+                      Icons.delete_forever,
+                      color: red,
                     ))
               ],
             )

@@ -15,7 +15,6 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Hình nền
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -43,7 +42,6 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // Di chuyển đến trang đăng nhập User
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -70,7 +68,6 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  // Di chuyển đến trang đăng nhập Staff
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -96,7 +93,6 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  // Di chuyển đến trang đăng nhập Admin
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -127,7 +123,6 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Di chuyển đến trang đăng nhập Admin
                       Navigator.of(context).pop();
                     },
                     child: Container(

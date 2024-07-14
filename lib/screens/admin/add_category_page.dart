@@ -21,7 +21,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
 
   SystemApi systemApi = SystemApi();
 
-  //
   Future<void> addCategory() async {
     try {
       Category newCategory = Category(
@@ -30,20 +29,15 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         description: _descriptionController.text,
       );
       if (newCategory.categoryname.isEmpty || newCategory.description.isEmpty) {
-        // Show error message
         showCustomAlertDialog(
             context, 'Thông báo', 'Vui lòng nhập đầy đủ thông tin.');
         return;
       }
-      // Add category
       await systemApi.addCategory(newCategory);
-      // Show success message
       showCustomAlertDialog(context, 'Thông báo', 'Thêm danh mục thành công.');
-      // Clear text field
       _categoryNameController.clear();
       _descriptionController.clear();
     } catch (e) {
-      // Show error message
       showCustomAlertDialog(
           context, 'Lỗi', 'Danh mục đã tồn tại vui lòng thử lại.');
     }

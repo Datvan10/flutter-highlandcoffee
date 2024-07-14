@@ -49,25 +49,20 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             : UserRole.customer;
   }
 
-  // function format date
   String formatDate(DateTime isoDate) {
     return DateFormat('dd - MM - yyyy').format(isoDate);
   }
 
-  // function to confirm order
   void confirmOrder(String orderid, String staffid) async {
-    
     await systemApi.confirmOrder(orderid, staffid);
     setState(() {
       futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
     });
 
-    // show dialog
     showCustomAlertDialog(
         context, 'Thông báo', 'Xác nhận đơn hàng thành công.');
   }
 
-  // function to cancel order
   void cancelOrder(String orderid) async {
     showDialog(
         context: context,
@@ -222,7 +217,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         Container(
                           height: orderDetails.length == 1
                               ? 110.0
-                              : 220.0, // Giới hạn chiều cao để hiển thị 2 sản phẩm
+                              : 220.0,
                           child: ListView.builder(
                             itemCount: orderDetails.length,
                             itemBuilder: (context, index) {
@@ -231,7 +226,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 children: [
                                   Row(
                                     children: [
-                                      // Column 1: Image
                                       Expanded(
                                         flex: 2,
                                         child: Column(
@@ -260,7 +254,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                         ),
                                       ),
                                       SizedBox(width: 16.0),
-                                      // Column 2: Product name and size
                                       Expanded(
                                         flex: 3,
                                         child: Column(
@@ -284,7 +277,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                         ),
                                       ),
                                       Spacer(),
-                                      // Column 3: Quantity and price
                                       Expanded(
                                         flex: 2,
                                         child: Column(
@@ -348,7 +340,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Column Phương thức
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,7 +362,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               ),
                             ),
                             SizedBox(width: 20),
-                            // Column Thông tin khách hàng
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

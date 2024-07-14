@@ -96,7 +96,7 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
                 itemBuilder: (context, index) => FavoriteProductForm(
                   favorite: favorite[index],
                   onTap: () => _navigateToProductDetails(index, favorite),
-                  onDeleteSuccess: _loadFavorites, // Truyền phương thức để tải lại danh sách
+                  onDeleteSuccess: _loadFavorites,
                 ),
               ),
             );

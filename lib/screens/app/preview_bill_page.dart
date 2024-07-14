@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
@@ -33,12 +34,10 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
     futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
   }
 
-  // function format date
   String formatDate(DateTime isoDate) {
     return DateFormat('dd - MM - yyyy').format(isoDate);
   }
 
-  // function add bill
   Future<void> addBill() async {
     try {
       List<OrderDetail> orderDetails = await futureOrderDetails;
@@ -87,7 +86,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
           },
           icon: Icon(Icons.arrow_back_ios, color: primaryColors),
         ),
@@ -143,7 +142,6 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            //logo highland đang bị thiếu.
                             Column(
                               children: [
                                 Image.asset(
@@ -243,12 +241,11 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                         ),
                         Divider(),
                         LimitedBox(
-                          maxHeight: 300, // giới hạn chiều cao tối đa
+                          maxHeight: 300,
                           child: ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: min(orderDetails.length,
-                                5), // giới hạn số lượng sản phẩm tối đa là 5
+                            itemCount: min(orderDetails.length, 5),
                             itemBuilder: (context, index) {
                               var orderDetail = orderDetails[index];
                               return Padding(
@@ -432,17 +429,17 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                   ),
                   if (loggedInStaff != null)
                     MyButton(
-                        text: 'Lập hóa đơn',
-                        onTap: () {
-                          addBill();
-                          setState(() {
-                            futureOrderDetails =
-                                systemApi.fetchOrderDetail(widget.orderid);
-                          });
-                        },
-                        buttonColor: primaryColors,
-                        isDisabled: orderDetails[0].status != 1,
-                        )
+                      text: 'Lập hóa đơn',
+                      onTap: () {
+                        addBill();
+                        setState(() {
+                          futureOrderDetails =
+                              systemApi.fetchOrderDetail(widget.orderid);
+                        });
+                      },
+                      buttonColor: primaryColors,
+                      isDisabled: orderDetails[0].status != 1,
+                    )
                   else if (loggedInCustomer != null)
                     MyButton(
                         text: 'Hoàn thành',

@@ -41,7 +41,6 @@ class _ActiveAndBlockAccountCustomerPageState
     }
   }
 
-  // function active account
   Future<void> activeAccountCustomer(String customerid) async {
     try {
       await systemApi.activateAccountCustomer(customerid);
@@ -54,7 +53,6 @@ class _ActiveAndBlockAccountCustomerPageState
     }
   }
 
-  // function block account
   Future<void> blockAccountCustomer(String customerid) async {
     showDialog(
         context: context,

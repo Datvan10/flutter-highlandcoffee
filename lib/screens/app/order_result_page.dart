@@ -18,17 +18,6 @@ class _OrderResultPageState extends State<OrderResultPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        // title: Text(
-        //   'Kết quả thanh toán',
-        //   style: GoogleFonts.arsenal(
-        //       color: primaryColors, fontSize: 20, fontWeight: FontWeight.bold),
-        // ),
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back_ios, color: primaryColors,),
-        //   onPressed: () {
-        //     Get.back();
-        //   },
-        // ),
         actions: [
           GestureDetector(
             onTap: () {
@@ -50,7 +39,6 @@ class _OrderResultPageState extends State<OrderResultPage> {
             left: 18.0, top: 18.0, right: 18.0, bottom: 30.0),
         child: Stack(
           children: [
-            // Text notification
             Padding(
               padding: EdgeInsets.only(top: 100.0),
               child: Row(
@@ -70,7 +58,6 @@ class _OrderResultPageState extends State<OrderResultPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [],
             ),
-            // Image money
             Center(
               child: Image.asset(
                 'assets/images/icons/order.png',
@@ -78,7 +65,6 @@ class _OrderResultPageState extends State<OrderResultPage> {
                 width: 350,
               ),
             ),
-            // Text notification
             Padding(
               padding: const EdgeInsets.only(top : 580.0),
               child: Row(
@@ -90,7 +76,6 @@ class _OrderResultPageState extends State<OrderResultPage> {
                 ],
               ),
             ),
-            // Button back to home page
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

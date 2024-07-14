@@ -24,9 +24,7 @@ class UpdateCustomerProfilePage extends StatefulWidget {
 class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
   bool isObsecure = false;
   final SystemApi systemApi = SystemApi();
-  // Get information of the logged in
   Customer? loggedInUser = AuthManager().loggedInCustomer;
-  //
   // final _editEmailController = TextEditingController();
   final _editPhoneNumberController = TextEditingController();
   final _editUserNameController = TextEditingController();
@@ -36,14 +34,12 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
   //
   initState() {
     super.initState();
-    // _editEmailController.text = loggedInUser!.email;
     _editPhoneNumberController.text = loggedInUser!.phonenumber.toString();
     _editUserNameController.text = loggedInUser!.name;
     _editAdressController.text = loggedInUser!.address;
     _editPasswordController.text = loggedInUser!.password;
   }
 
-  // Feature update customer profile
   Future<void> updateCustomer(Customer customer) async {
     try {
       await systemApi.updateCustomer(customer);
@@ -57,7 +53,6 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
     }
   }
 
-  //
   void _showCameraModal(BuildContext context) {
     showCupertinoModalPopup(
       context: context,
@@ -67,21 +62,18 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
           actions: [
             CupertinoActionSheetAction(
               onPressed: () {
-                // Xử lý khi người dùng chọn ảnh từ thư viện
                 Navigator.pop(context);
               },
               child: Text('Xóa ảnh', style: TextStyle(color: blue)),
             ),
             CupertinoActionSheetAction(
               onPressed: () {
-                // Xử lý khi người dùng chọn chụp ảnh
                 Navigator.pop(context);
               },
               child: Text('Chụp ảnh', style: TextStyle(color: blue)),
             ),
             CupertinoActionSheetAction(
               onPressed: () {
-                // Xử lý khi người dùng chọn ảnh từ thư viện
                 Navigator.pop(context);
               },
               child:
@@ -90,7 +82,6 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
           ],
           cancelButton: CupertinoActionSheetAction(
             onPressed: () {
-              // Xử lý khi người dùng nhấn nút hủy bỏ
               Navigator.pop(context);
             },
             child: Text('Hủy',
@@ -284,7 +275,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                         status: 0,
                         );
                         if(_editUserNameController.text.isEmpty || _editAdressController.text.isEmpty || _editPhoneNumberController.text.isEmpty || _editPasswordController.text.isEmpty){
-                          showCustomAlertDialog(context, 'Lỗi', 'Vui lòng nhập đầy đủ thông tin.');
+                          showCustomAlertDialog(context, 'Thông báo', 'Vui lòng nhập đầy đủ thông tin.');
                           return;
                         }
                     updateCustomer(updateNewCustomer);

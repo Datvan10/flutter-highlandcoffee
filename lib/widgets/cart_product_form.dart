@@ -88,7 +88,7 @@ class _CartProductFormState extends State<CartProductForm> {
                 startActionPane: ActionPane(motion: StretchMotion(), children: [
                   SlidableAction(
                     onPressed: ((context) {
-                      Get.toNamed('/home_page');
+                      Get.toNamed('/list_product_page');
                     }),
                     borderRadius: BorderRadius.circular(18.0),
                     backgroundColor: Colors.transparent,
@@ -100,7 +100,6 @@ class _CartProductFormState extends State<CartProductForm> {
                 endActionPane: ActionPane(motion: StretchMotion(), children: [
                   SlidableAction(
                     onPressed: ((context) {
-                      //command delete
                       deleteProductFromCart(item.cartdetailid);
                     }),
                     borderRadius: BorderRadius.circular(18.0),
@@ -113,7 +112,7 @@ class _CartProductFormState extends State<CartProductForm> {
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: white,
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                   child: Padding(
@@ -123,11 +122,11 @@ class _CartProductFormState extends State<CartProductForm> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                          flex: 1,
+                          flex: 2,
                           child: Image.memory(
                             base64Decode(item.image),
-                            width: 85,
-                            height: 85,
+                            width: 80,
+                            height: 80,
                           ),
                         ),
                         Expanded(
@@ -138,8 +137,8 @@ class _CartProductFormState extends State<CartProductForm> {
                               Text(
                                 item.productname,
                                 style: GoogleFonts.arsenal(
-                                    fontSize: 18,
-                                    color: primaryColors,
+                                    fontSize: 16,
+                                    color: black,
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
@@ -165,7 +164,6 @@ class _CartProductFormState extends State<CartProductForm> {
                                           shape: BoxShape.circle),
                                       child: GestureDetector(
                                         onTap: () {
-                                          // Xử lý khi nhấn nút giảm
                                         },
                                         child: Icon(
                                           Icons.remove,
@@ -191,7 +189,6 @@ class _CartProductFormState extends State<CartProductForm> {
                                           shape: BoxShape.circle),
                                       child: GestureDetector(
                                         onTap: () {
-                                          // Xử lý khi nhấn nút thêm
                                         },
                                         child: Icon(
                                           Icons.add,
@@ -205,7 +202,7 @@ class _CartProductFormState extends State<CartProductForm> {
                           ),
                         ),
                         Expanded(
-                          flex: 1,
+                          flex: 2,
                           child: Column(
                             children: [
                               Container(

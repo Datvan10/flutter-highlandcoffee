@@ -73,20 +73,16 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
         return;
       }
 
-      // Add staff using admin API
       await systemApi.addStaff(newStaff);
 
-      // Show success message
       showCustomAlertDialog(
           context, 'Thông báo', 'Thêm tài khoản nhân viên thành công.');
 
-      // Clear text fields
       _phoneNumberController.clear();
       _nameController.clear();
       _passwordController.clear();
       _salaryController.clear();
     } catch (e) {
-      // Show error message
       showCustomAlertDialog(
           context, 'Lỗi', 'Nhân viên đã tồn tại vui lòng thử lại.');
     }
