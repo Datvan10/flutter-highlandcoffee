@@ -13,7 +13,6 @@ import 'package:highlandcoffeeapp/screens/admin/dashboard_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_staff_account_page.dart';
-import 'package:highlandcoffeeapp/screens/admin/logout_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/publish_and_cancel_comment_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/list_order_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/top_product_page.dart';
@@ -134,12 +133,6 @@ class _AdminPageState extends State<AdminPage> {
           _selectedItem = AccessAndCancelRoleStaffPage();
         });
 
-      case LogoutPage.routeName:
-        setState(() {
-          _selectedItem = LogoutPage();
-        });
-        break;
-
       case PublishAndCancelCommentPage.routeName:
         setState(() {
           _selectedItem = PublishAndCancelCommentPage();
@@ -151,7 +144,7 @@ class _AdminPageState extends State<AdminPage> {
 
   //
   void showConfirmExit(BuildContext context) {
-    print('show confirm exit');
+    // print('show confirm exit');
     notificationDialog(
       context: context,
       title: "Đăng xuất khỏi tài khoản của bạn?",
@@ -184,7 +177,13 @@ class _AdminPageState extends State<AdminPage> {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: IconButton(
-                  onPressed: () {Get.toNamed('/home_page');}, icon: Icon(Icons.account_circle)),
+                  onPressed: () {
+                    showConfirmExit(context);
+                    // print('Logout');
+                    // // Get.toNamed('/home_page');
+                  },
+                  icon: Icon(Icons.login_outlined)),
+                  // icon: Icon(Icons.account_circle)),
             )
           ],
           backgroundColor: Colors.transparent,
@@ -309,14 +308,14 @@ class _AdminPageState extends State<AdminPage> {
                   ),
                 ]),
             //
-            AdminMenuItem(title: 'Đăng xuất', icon: Icons.logout, children: [
-              AdminMenuItem(
-                title: 'Đăng xuất',
-                route: LogoutPage.routeName,
-                icon: Icons.logout,
-                onPressed: () => handleLogout,
-              ),
-            ]),
+            // AdminMenuItem(title: 'Đăng xuất', icon: Icons.logout, children: [
+            //   AdminMenuItem(
+            //     title: 'Đăng xuất',
+            //     route: LogoutPage.routeName,
+            //     icon: Icons.logout,
+            //     onPressed: () => handleLogout,
+            //   ),
+            // ]),
           ],
           selectedRoute: '',
           onSelected: (item) {

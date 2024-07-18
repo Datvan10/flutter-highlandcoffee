@@ -6,25 +6,25 @@ import 'package:http/http.dart' as http;
 
 // System API
 class SystemApi {
-  final String adminUrl = "http://192.168.1.11:6886/api/admins";
-  final String staffUrl = "http://192.168.1.11:6886/api/staffs";
-  final String productUrl = "http://192.168.1.11:6886/api/products";
-  final String categoryUrl = "http://192.168.1.11:6886/api/categories";
-  final String orderUrl = "http://192.168.1.11:6886/api/orders";
-  final String customerUrl = "http://192.168.1.11:6886/api/customers";
-  final String personUrl = "http://192.168.1.11:6886/api/persons";
-  final String getProductUrl = 'http://192.168.1.11:6886/api/products/category';
-  final String billUrl = 'http://192.168.1.11:6886/api/bills';
-  final String commentUrl = 'http://192.168.1.11:6886/api/comments';
-  final String accountUrl = "http://192.168.1.11:6886/api/accounts";
+  final String adminUrl = "http://192.168.1.4:6886/api/admins";
+  final String staffUrl = "http://192.168.1.4:6886/api/staffs";
+  final String productUrl = "http://192.168.1.4:6886/api/products";
+  final String categoryUrl = "http://192.168.1.4:6886/api/categories";
+  final String orderUrl = "http://192.168.1.4:6886/api/orders";
+  final String customerUrl = "http://192.168.1.4:6886/api/customers";
+  final String personUrl = "http://192.168.1.4:6886/api/persons";
+  final String getProductUrl = 'http://192.168.1.4:6886/api/products/category';
+  final String billUrl = 'http://192.168.1.4:6886/api/bills';
+  final String commentUrl = 'http://192.168.1.4:6886/api/comments';
+  final String accountUrl = "http://192.168.1.4:6886/api/accounts";
   final String popularUrl =
-      "http://192.168.1.11:6886/api/products/category/dm030";
-  final String favoriteUrl = "http://192.168.1.11:6886/api/favorites";
+      "http://192.168.1.4:6886/api/products/category/dm030";
+  final String favoriteUrl = "http://192.168.1.4:6886/api/favorites";
   final String bestSaleUrl =
-      "http://192.168.1.11:6886/api/products/category/dm029";
-  final String cartUrl = "http://192.168.1.11:6886/api/carts";
-  final String cartDetailUrl = "http://192.168.1.11:6886/api/cartdetails";
-  final String orderDetailUrl = "http://192.168.1.11:6886/api/orderdetails";
+      "http://192.168.1.4:6886/api/products/category/dm029";
+  final String cartUrl = "http://192.168.1.4:6886/api/carts";
+  final String cartDetailUrl = "http://192.168.1.4:6886/api/cartdetails";
+  final String orderDetailUrl = "http://192.168.1.4:6886/api/orderdetails";
 
   /// Method for actor Admin
 
@@ -1041,7 +1041,7 @@ class SystemApi {
   //
   Future<List<Product>> getProductsByCategory(String categoryid) async {
     final String productUrl =
-        "http://192.168.1.11:6886/api/products/category/$categoryid";
+        "http://192.168.1.4:6886/api/products/category/$categoryid";
     try {
       final response = await http.get(Uri.parse(productUrl));
       if (response.statusCode == 200) {
@@ -1060,7 +1060,7 @@ class SystemApi {
   // Fetch product sizes and prices by product ID
   Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
     final String productSizesUrl =
-        "http://192.168.1.11:6886/api/products/sizes/$productname";
+        "http://192.168.1.4:6886/api/products/sizes/$productname";
 
     try {
       final response = await http.get(Uri.parse(productSizesUrl));

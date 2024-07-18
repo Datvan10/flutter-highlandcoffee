@@ -219,9 +219,16 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 10,
             ),
             //name
-            Text(
-              loggedInCustomer?.name ?? loggedInStaff?.name ?? '',
-              style: GoogleFonts.roboto(color: black, fontSize: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  loggedInCustomer?.name ?? loggedInStaff?.name ?? '',
+                  style: GoogleFonts.roboto(color: black, fontSize: 20),
+                ),
+                SizedBox(width: 5.0,),
+                Icon(Icons.verified, color : blue, size: 20,)
+              ],
             ),
             SizedBox(
               height: 10.0,
