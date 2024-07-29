@@ -23,7 +23,7 @@ class _ProductPopularItemState extends State<ProductPopularItem> {
 
   void _navigateToProductDetails(int index, List<Product> products) async {
     List<Map<String, dynamic>> productSizes = await _getProductSizes(products[index].productname);
-    
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -54,7 +54,7 @@ class _ProductPopularItemState extends State<ProductPopularItem> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: const CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
             return Center(
@@ -63,7 +63,7 @@ class _ProductPopularItemState extends State<ProductPopularItem> {
           } else {
             List<Product> productPopular = snapshot.data ?? [];
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 18.0,
                 mainAxisSpacing: 18.0,

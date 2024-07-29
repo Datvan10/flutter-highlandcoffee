@@ -12,7 +12,7 @@ import 'package:highlandcoffeeapp/widgets/product_category.dart';
 import 'package:highlandcoffeeapp/widgets/product_popular_item.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/utils/mic/mic_form.dart';
-import 'package:highlandcoffeeapp/widgets/slide_image.dart';
+import 'package:highlandcoffeeapp/widgets/carousel.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:highlandcoffeeapp/widgets/custom_search_bar.dart';
 
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SlideImage(
+              Carousel(
                 height: 180,
               ),
               SizedBox(height: 15),

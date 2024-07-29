@@ -90,16 +90,16 @@ class _DiscountCodeFormState extends State<DiscountCodeForm> {
                         context: context,
                         builder: (BuildContext context) {
                           return CupertinoAlertDialog(
-                            title: Text("Thông báo", style: GoogleFonts.arsenal(color: primaryColors,
-                                  fontWeight: FontWeight.bold, fontSize: 18),),
-                            content: Text("Sử dụng mã giảm giá thành công!", style: TextStyle(fontSize: 16),),
+                            title: Text("Thông báo", style: GoogleFonts.roboto(color: primaryColors,
+                                  fontWeight: FontWeight.bold, fontSize: 19),),
+                            content: Text("Sử dụng mã giảm giá thành công", style: GoogleFonts.roboto(fontSize: 16),),
                             actions: [
                               CupertinoDialogAction(
                                 onPressed: () {
                                   Navigator.of(context)
                                       .pop(); // Close the dialog
                                 },
-                                child: Text("OK",style: TextStyle(color: blue, ),),
+                                child: Text("OK",style: GoogleFonts.roboto(color: blue, fontWeight: FontWeight.bold),),
                               ),
                             ],
                           );

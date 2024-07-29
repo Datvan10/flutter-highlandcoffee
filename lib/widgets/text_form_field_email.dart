@@ -76,8 +76,8 @@ class _TextFormFieldEmailState extends State<TextFormFieldEmail> {
             ),
           ),
         ),
-        SizedBox(height: 5),
-        _isValid ? SizedBox() : Text('Email chưa hợp lệ', style: GoogleFonts.arsenal(color: red, fontSize: 15)),
+        const SizedBox(height: 5),
+        _isValid ? const SizedBox() : Text('Email chưa hợp lệ', style: GoogleFonts.arsenal(color: red, fontSize: 15)),
       ],
     );
   }

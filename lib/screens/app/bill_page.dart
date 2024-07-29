@@ -148,7 +148,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             )
                           ],
                         ),
-                        Divider(),
+                        const Divider(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -182,8 +182,8 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             )
                           ],
                         ),
-                        SizedBox(height: 10.0),
-                        Divider(),
+                        const SizedBox(height: 10.0),
+                        const Divider(),
                         Row(
                           children: [
                             Expanded(
@@ -220,7 +220,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             ),
                           ],
                         ),
-                        Divider(),
+                        const Divider(),
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -267,7 +267,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             );
                           },
                         ),
-                        Divider(),
+                        const Divider(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -295,7 +295,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         // Chiết khấu
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -324,11 +324,11 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -366,8 +366,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             printBill(widget.orderid, loggedInStaff!.staffid);
                           },
                           buttonColor: green,
-                          isDisabled: bill.status == 2
-                          ),
+                          isDisabled: bill.status == 2),
                     )
                   else if (loggedInCustomer != null)
                     MyButton(

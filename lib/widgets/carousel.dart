@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class SlideImage extends StatefulWidget {
+class Carousel extends StatefulWidget {
   final double? height;
 
-  SlideImage({Key? key, required this.height}) : super(key: key);
+  const Carousel({Key? key, required this.height}) : super(key: key);
 
   @override
-  State<SlideImage> createState() => _SlideImageState();
+  State<Carousel> createState() => _CarouselState();
 }
 
-class _SlideImageState extends State<SlideImage> {
+class _CarouselState extends State<Carousel> {
   int activeIndex = 0;
   final controller = CarouselController();
   final imagePaths = [
@@ -36,15 +36,15 @@ class _SlideImageState extends State<SlideImage> {
             return buildImage(imagePath, index);
           },
           options: CarouselOptions(
-            height: widget.height ?? 200.0, // Sử dụng widget.height hoặc giá trị mặc định
+            height: widget.height ?? 200.0,
             autoPlay: true,
             enableInfiniteScroll: false,
-            autoPlayAnimationDuration: Duration(seconds: 3),
+            autoPlayAnimationDuration: const Duration(seconds: 3),
             enlargeCenterPage: true,
             onPageChanged: (index, reason) => setState(() => activeIndex = index),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         buildIndicator()
       ],
     );
