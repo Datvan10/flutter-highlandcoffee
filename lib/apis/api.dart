@@ -145,7 +145,6 @@ class SystemApi {
 
         for (var adminData in jsonResponse) {
           Admin admin = Admin.fromJson(adminData);
-          // Kiểm tra `name` hoặc `phonenumber` và `password`
           if ((admin.name == identifier || admin.phonenumber == identifier) &&
               admin.password == password) {
             return true;

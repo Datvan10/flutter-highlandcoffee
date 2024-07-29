@@ -288,7 +288,7 @@ class _OrderPageState extends State<OrderPage> {
     );
   }
 
-  void _showConfirmForm(BuildContext context) {
+  void showDiscountForm(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -481,7 +481,7 @@ class _OrderPageState extends State<OrderPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  _showConfirmForm(context);
+                  showDiscountForm(context);
                 },
                 child: Text(
                   'Chọn khuyến mãi',
