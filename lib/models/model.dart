@@ -449,6 +449,29 @@ class Comment {
       };
 }
 
+// Model carousel
+class Carousel {
+  final String carouselid;
+  String image;
+
+  Carousel({
+    required this.carouselid,
+    required this.image,
+  });
+
+  factory Carousel.fromJson(Map<String, dynamic> json) {
+    return Carousel(
+      carouselid: json['carouselid'],
+      image: json['image'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'carouselid': carouselid,
+        'image': image,
+      };
+}
+
 // Model category
 class Category {
   final String categoryid;
