@@ -24,101 +24,101 @@ class AddProductPage extends StatefulWidget {
 class _AddProductPageState extends State<AddProductPage> {
   late final Product product;
   final SystemApi systemApi = SystemApi();
-  String _selectedCategoryController = '';
-  List<Category> _categoryList = [];
-  List<String> _categories = [];
+  String selectedCategoryController = '';
+  List<Category> categoryList = [];
+  List<String> listCategories = [];
 
-  TextEditingController _productNameController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _sizeController = TextEditingController();
-  TextEditingController _priceController = TextEditingController();
-  TextEditingController _unitController = TextEditingController();
+  TextEditingController productNameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController sizeController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController unitController = TextEditingController();
 
-  File? _imageController;
-  File? _imageDetailController;
+  File? imageController;
+  File? imageDetailController;
 
   @override
   void initState() {
     super.initState();
-    _fetchCategories();
+    fetchCategories();
   }
 
-  Future<void> _fetchCategories() async {
+  Future<void> fetchCategories() async {
     try {
       List<Category> categories = await systemApi.getCategories();
       setState(() {
-        _categoryList = categories;
-        _categories =
+        categoryList = categories;
+        listCategories =
             categories.map((category) => category.categoryname).toList();
-        _selectedCategoryController =
-            _categories.isNotEmpty ? _categories[0] : '';
+        selectedCategoryController =
+            listCategories.isNotEmpty ? listCategories[0] : '';
       });
     } catch (e) {
       print('Error fetching categories: $e');
       setState(() {
-        _categories = ['Coffee', 'Freeze', 'Trà', 'Đồ ăn', 'Khác'];
-        _selectedCategoryController = 'Coffee';
+        listCategories = ['Coffee', 'Freeze', 'Trà', 'Đồ ăn', 'Khác'];
+        selectedCategoryController = 'Coffee';
       });
     }
   }
 
-  Future<void> _pickImage() async {
+  Future<void> pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _imageController = File(pickedFile.path);
+        imageController = File(pickedFile.path);
       });
     }
   }
 
-  Future<void> _pickImageDetail() async {
+  Future<void> pickImageDetail() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _imageDetailController = File(pickedFile.path);
+        imageDetailController = File(pickedFile.path);
       });
     }
   }
 
-  Future<String> uploadImage(File? imageFile) async {
-    if (imageFile == null)
-      return '';
+  // Future<String> uploadImage(File? imageFile) async {
+  //   if (imageFile == null)
+  //     return '';
 
-    Completer<String> completer = Completer();
-    await Future(() async {
-      try {
-        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-        Reference ref =
-            FirebaseStorage.instance.ref().child('images/$fileName.jpg');
-        await ref.putFile(imageFile);
-        String downloadURL = await ref.getDownloadURL();
-        completer.complete(downloadURL);
-      } catch (e) {
-        print('Error uploading image: $e');
-        completer.complete('');
-      }
-    });
+  //   Completer<String> completer = Completer();
+  //   await Future(() async {
+  //     try {
+  //       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+  //       Reference ref =
+  //           FirebaseStorage.instance.ref().child('images/$fileName.jpg');
+  //       await ref.putFile(imageFile);
+  //       String downloadURL = await ref.getDownloadURL();
+  //       completer.complete(downloadURL);
+  //     } catch (e) {
+  //       print('Error uploading image: $e');
+  //       completer.complete('');
+  //     }
+  //   });
 
-    return completer.future;
-  }
+  //   return completer.future;
+  // }
 
   Future<void> addProduct() async {
     try {
-      if (_productNameController.text.isEmpty ||
-          _descriptionController.text.isEmpty ||
-          _sizeController.text.isEmpty ||
-          _priceController.text.isEmpty ||
-          _unitController.text.isEmpty ||
-          _imageController == null ||
-          _imageDetailController == null) {
+      if (productNameController.text.isEmpty ||
+          descriptionController.text.isEmpty ||
+          sizeController.text.isEmpty ||
+          priceController.text.isEmpty ||
+          unitController.text.isEmpty ||
+          imageController == null ||
+          imageDetailController == null) {
         showCustomAlertDialog(
             context, 'Thông báo', 'Vui lòng điền đầy đủ thông tin sản phẩm.');
         return;
       }
 
-      int? price = int.tryParse(_priceController.text);
+      int? price = int.tryParse(priceController.text);
       if (price == null || price <= 0) {
         showCustomAlertDialog(
             context, 'Thông báo', 'Giá không được là số âm hoặc bằng 0.');
@@ -126,8 +126,8 @@ class _AddProductPageState extends State<AddProductPage> {
       }
 
       String? selectedCategoryId;
-      for (var category in _categoryList) {
-        if (category.categoryname == _selectedCategoryController) {
+      for (var category in categoryList) {
+        if (category.categoryname == selectedCategoryController) {
           selectedCategoryId = category.categoryid;
           break;
         }
@@ -137,19 +137,19 @@ class _AddProductPageState extends State<AddProductPage> {
         throw Exception('Selected category not found');
       }
 
-      final bytesImage = _imageController!.readAsBytesSync();
-      final bytesImageDetail = _imageDetailController!.readAsBytesSync();
+      final bytesImage = imageController!.readAsBytesSync();
+      final bytesImageDetail = imageDetailController!.readAsBytesSync();
       final String base64Image = base64Encode(bytesImage);
       final String base64ImageDetail = base64Encode(bytesImageDetail);
 
       Product newProduct = Product(
         productid: '',
         categoryid: selectedCategoryId,
-        productname: _productNameController.text,
-        description: _descriptionController.text,
-        size: _sizeController.text,
+        productname: productNameController.text,
+        description: descriptionController.text,
+        size: sizeController.text,
         price: price,
-        unit: _unitController.text,
+        unit: unitController.text,
         image: base64Image,
         imagedetail: base64ImageDetail,
       );
@@ -159,14 +159,14 @@ class _AddProductPageState extends State<AddProductPage> {
       showCustomAlertDialog(
           context, 'Thông báo', 'Thêm sản phẩm vào cơ sở dữ liệu thành công.');
 
-      _productNameController.clear();
-      _descriptionController.clear();
-      _sizeController.clear();
-      _priceController.clear();
-      _unitController.clear();
+      productNameController.clear();
+      descriptionController.clear();
+      sizeController.clear();
+      priceController.clear();
+      unitController.clear();
       setState(() {
-        _imageController = null;
-        _imageDetailController = null;
+        imageController = null;
+        imageDetailController = null;
       });
     } catch (e) {
       print('Error adding product to Database: $e');
@@ -193,31 +193,31 @@ class _AddProductPageState extends State<AddProductPage> {
             SizedBox(height: 10),
             CategoryDropdown(
               backGroundColor: background,
-              categories: _categories,
-              selectedCategory: _selectedCategoryController,
+              categories: listCategories,
+              selectedCategory: selectedCategoryController,
               onChanged: (String? value) {
                 setState(() {
-                  _selectedCategoryController = value ?? '';
+                  selectedCategoryController = value ?? '';
                 });
               },
             ),
             LabeledTextField(
-                label: 'Tên sản phẩm', controller: _productNameController),
+                label: 'Tên sản phẩm', controller: productNameController),
             LabeledTextField(
-                label: 'Mô tả sản phẩm', controller: _descriptionController),
+                label: 'Mô tả sản phẩm', controller: descriptionController),
             LabeledTextField(
-                label: 'Size (S-M-L)', controller: _sizeController),
-            LabeledTextField(label: 'Giá', controller: _priceController),
-            LabeledTextField(label: 'Đơn vị tính', controller: _unitController),
+                label: 'Size (S-M-L)', controller: sizeController),
+            LabeledTextField(label: 'Giá', controller: priceController),
+            LabeledTextField(label: 'Đơn vị tính', controller: unitController),
             SizedBox(height: 10),
             ImagePickerWidget(
-              imagePath: _imageController,
-              onPressed: _pickImage,
+              imagePath: imageController,
+              onPressed: pickImage,
               label: 'Hình ảnh sản phẩm',
             ),
             ImagePickerWidget(
-              imagePath: _imageDetailController,
-              onPressed: _pickImageDetail,
+              imagePath: imageDetailController,
+              onPressed: pickImageDetail,
               label: 'Hình ảnh chi tiết sản phẩm',
             ),
             SizedBox(height: 10),

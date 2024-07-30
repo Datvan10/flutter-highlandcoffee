@@ -6,6 +6,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/screens/admin/access_and_cancel_role_staff_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/add_carousel_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/add_staff_account_page.dart';
@@ -17,6 +18,7 @@ import 'package:highlandcoffeeapp/screens/admin/publish_and_cancel_comment_page.
 import 'package:highlandcoffeeapp/screens/admin/list_order_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/top_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/active_and_block_account_customer_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/update_carousel_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_staff_account_page.dart';
@@ -81,6 +83,21 @@ class _AdminPageState extends State<AdminPage> {
         });
 
         break;
+
+      case AddCarouselPage.routeName:
+        setState(() {
+          _selectedItem = AddCarouselPage();
+        });
+
+        break;
+
+        case UpdateCarouselPage.routeName:
+        setState(() {
+          _selectedItem = UpdateCarouselPage();
+        });
+
+        break;
+
       case AddCategoryPage.routeName:
         setState(() {
           _selectedItem = AddCategoryPage();
@@ -145,25 +162,47 @@ class _AdminPageState extends State<AdminPage> {
   //
   void showConfirmExit(BuildContext context) {
     // print('show confirm exit');
-    notificationDialog(
+    showCupertinoDialog(
       context: context,
-      title: "Đăng xuất khỏi tài khoản của bạn?",
-      onConfirm: () {},
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text("Hủy", style: TextStyle(color: red)),
-        ),
-        TextButton(
-          onPressed: () {
-            AuthManager().logoutAdmin();
-            Navigator.pushReplacementNamed(context, '/choose_login_type_page');
-          },
-          child: Text("Đồng ý", style: TextStyle(color: Colors.blue)),
-        ),
-      ],
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.roboto(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 19,
+            ),
+          ),
+          content: Text("Đăng xuất khỏi tài khoản Admin?",
+              style: GoogleFonts.roboto(
+                color: black,
+                fontSize: 16,
+              )),
+          actions: [
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text("OK",
+                  style: GoogleFonts.roboto(
+                      color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                AuthManager().logoutAdmin();
+                Navigator.pushReplacementNamed(
+                    context, '/choose_login_type_page');
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(
+                "Hủy",
+                style: GoogleFonts.roboto(color: blue, fontSize: 17),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -179,11 +218,9 @@ class _AdminPageState extends State<AdminPage> {
               child: IconButton(
                   onPressed: () {
                     showConfirmExit(context);
-                    // print('Logout');
-                    // // Get.toNamed('/home_page');
                   },
                   icon: Icon(Icons.login_outlined)),
-                  // icon: Icon(Icons.account_circle)),
+              // icon: Icon(Icons.account_circle)),
             )
           ],
           backgroundColor: Colors.transparent,
@@ -237,6 +274,25 @@ class _AdminPageState extends State<AdminPage> {
                     title: 'Cập nhật  khoản khách hàng',
                     route: ActiveAndBlockAccountCustomerPage.routeName,
                     icon: Icons.person_add_disabled),
+              ],
+            ),
+            // manager carousel
+            AdminMenuItem(
+              title: 'Quản lý băng chuyển',
+              icon: Icons.widgets,
+              children: [
+                AdminMenuItem(
+                    title: 'Thêm băng chuyển',
+                    route: AddCarouselPage.routeName,
+                    icon: Icons.topic),
+                // AdminMenuItem(
+                //     title: 'Xóa băng chuyển',
+                //     route: DeleteCategoryPage.routeName,
+                //     icon: Icons.remove),
+                AdminMenuItem(
+                    title: 'Quản lý băng chuyển',
+                    route: UpdateCarouselPage.routeName,
+                    icon: Icons.view_carousel),
               ],
             ),
             // manage category

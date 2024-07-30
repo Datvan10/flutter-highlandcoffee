@@ -122,28 +122,47 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void showConfirmLogout() {
-    notificationDialog(
+    showCupertinoDialog(
       context: context,
-      title: "Đăng xuất khỏi tài khoản của bạn?",
-      onConfirm: () {},
-      actions: [
-        TextButton(
-          onPressed: () {
-            AuthManager().logoutCustomer();
-            Navigator.pushReplacementNamed(context, '/choose_login_type_page');
-          },
-          child: Text("OK",
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.roboto(
+              color: primaryColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 19,
+            ),
+          ),
+          content: Text("Đăng xuất khỏi tài khoản của bạn?",
               style: GoogleFonts.roboto(
-                  color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child:
-              Text("Hủy", style: GoogleFonts.roboto(color: blue, fontSize: 17)),
-        ),
-      ],
+                color: black,
+                fontSize: 16,
+              )),
+          actions: [
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text("OK",
+                  style: GoogleFonts.roboto(
+                      color: blue, fontSize: 17, fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                AuthManager().logoutCustomer();
+                Navigator.pushReplacementNamed(
+                    context, '/choose_login_type_page');
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(
+                "Hủy",
+                style: GoogleFonts.roboto(color: blue, fontSize: 17),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -226,8 +245,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   loggedInCustomer?.name ?? loggedInStaff?.name ?? '',
                   style: GoogleFonts.roboto(color: black, fontSize: 20),
                 ),
-                SizedBox(width: 5.0,),
-                Icon(Icons.verified, color : blue, size: 20,)
+                SizedBox(
+                  width: 5.0,
+                ),
+                Icon(
+                  Icons.verified,
+                  color: blue,
+                  size: 20,
+                )
               ],
             ),
             SizedBox(
@@ -342,7 +367,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             );
                           }
                         : null,
-                        textColor: grey,
+                    textColor: grey,
                     titleColor: role == '0' ? black : light_grey,
                   ),
             loggedInCustomer != null
@@ -371,7 +396,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             );
                           }
                         : null,
-                        textColor: grey,
+                    textColor: grey,
                     titleColor: role == '0' ? black : light_grey,
                   ),
             ProfileMenu(
@@ -379,11 +404,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 startIcon: LineAwesomeIcons.info,
                 onPress: () {
                   Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AboutUsPage(),
-                              ),
-                            );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AboutUsPage(),
+                    ),
+                  );
                 },
                 textColor: grey),
             ProfileMenu(

@@ -6,25 +6,25 @@ import 'package:http/http.dart' as http;
 
 // System API
 class SystemApi {
-  final String adminUrl = "http://192.168.1.4:6886/api/admins";
-  final String staffUrl = "http://192.168.1.4:6886/api/staffs";
-  final String productUrl = "http://192.168.1.4:6886/api/products";
-  final String categoryUrl = "http://192.168.1.4:6886/api/categories";
-  final String orderUrl = "http://192.168.1.4:6886/api/orders";
-  final String customerUrl = "http://192.168.1.4:6886/api/customers";
-  final String personUrl = "http://192.168.1.4:6886/api/persons";
-  final String getProductUrl = 'http://192.168.1.4:6886/api/products/category';
-  final String billUrl = 'http://192.168.1.4:6886/api/bills';
-  final String commentUrl = 'http://192.168.1.4:6886/api/comments';
-  final String accountUrl = "http://192.168.1.4:6886/api/accounts";
-  final String popularUrl =
-      "http://192.168.1.4:6886/api/products/category/dm030";
-  final String favoriteUrl = "http://192.168.1.4:6886/api/favorites";
+  final String personUrl = "http://localhost:5194/api/persons";
+  final String accountUrl = "http://localhost:5194/api/accounts";
+  final String adminUrl = "http://localhost:5194/api/admins";
+  final String staffUrl = "http://localhost:5194/api/staffs";
+  final String customerUrl = "http://localhost:5194/api/customers";
+  final String carouselUrl = "http://localhost:5194/api/carousels";
+  final String productUrl = "http://localhost:5194/api/products";
+  final String categoryUrl = "http://localhost:5194/api/categories";
+  final String orderUrl = "http://localhost:5194/api/orders";
+  final String getProductUrl = 'http://localhost:5194/api/products/category';
+  final String billUrl = 'http://localhost:5194/api/bills';
+  final String commentUrl = 'http://localhost:5194/api/comments';
+  final String popularUrl = "http://localhost:5194/api/products/category/dm030";
+  final String favoriteUrl = "http://localhost:5194/api/favorites";
   final String bestSaleUrl =
-      "http://192.168.1.4:6886/api/products/category/dm029";
-  final String cartUrl = "http://192.168.1.4:6886/api/carts";
-  final String cartDetailUrl = "http://192.168.1.4:6886/api/cartdetails";
-  final String orderDetailUrl = "http://192.168.1.4:6886/api/orderdetails";
+      "http://localhost:5194/api/products/category/dm029";
+  final String cartUrl = "http://localhost:5194/api/carts";
+  final String cartDetailUrl = "http://localhost:5194/api/cartdetails";
+  final String orderDetailUrl = "http://localhost:5194/api/orderdetails";
 
   /// Method for actor Admin
 
@@ -255,6 +255,7 @@ class SystemApi {
       throw Exception('Failed to add category: $e');
     }
   }
+
   // Delete category for admin
   Future<void> deleteCategory(String categoryid) async {
     try {
@@ -286,6 +287,62 @@ class SystemApi {
       }
     } catch (e) {
       throw Exception('Failed to update category: $e');
+    }
+  }
+
+  // Get Carousel
+  Future<List<Carousel>> getCarousels() async {
+    try {
+      final response = await http.get(Uri.parse(carouselUrl));
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        List<Carousel> carousels =
+            body.map((dynamic item) => Carousel.fromJson(item)).toList();
+        return carousels;
+      } else {
+        throw Exception('Failed to load Carousels');
+      }
+    } catch (e) {
+      throw Exception('Failed to load Carousels');
+    }
+  }
+
+  Future<void> addCarousel(Carousel carousel) async {
+    try {
+      final response = await http.post(
+        Uri.parse(carouselUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(carousel.toJson()),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Carousel added successfully');
+      } else {
+        throw Exception('Failed to add carousel: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add carousel: $e');
+    }
+  }
+
+  Future<void> updateCarousel(Carousel carousel) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$carouselUrl/${carousel.carouselid}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(carousel.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Carousel updated successfully');
+      } else {
+        throw Exception('Failed to update carousel: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update carousel: $e');
     }
   }
 
@@ -593,8 +650,6 @@ class SystemApi {
     }
   }
 
-  /// Method for actor Staff
-
   // Authenticate account
   Future<bool> authenticateAccountStaffs(
       String identifier, String password) async {
@@ -622,7 +677,6 @@ class SystemApi {
     }
   }
 
-  // Function to get staff by identifier
   Future<Staff> getStaffByIdentifier(String identifier) async {
     final uri = Uri.parse(staffUrl);
 
@@ -1040,7 +1094,7 @@ class SystemApi {
   //
   Future<List<Product>> getProductsByCategory(String categoryid) async {
     final String productUrl =
-        "http://192.168.1.4:6886/api/products/category/$categoryid";
+        "http://localhost:5194/api/products/category/$categoryid";
     try {
       final response = await http.get(Uri.parse(productUrl));
       if (response.statusCode == 200) {
@@ -1059,7 +1113,7 @@ class SystemApi {
   // Fetch product sizes and prices by product ID
   Future<List<Map<String, dynamic>>> getProductSizes(String productname) async {
     final String productSizesUrl =
-        "http://192.168.1.4:6886/api/products/sizes/$productname";
+        "http://localhost:5194/api/products/sizes/$productname";
 
     try {
       final response = await http.get(Uri.parse(productSizesUrl));
