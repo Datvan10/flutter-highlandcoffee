@@ -278,7 +278,7 @@ class _AdminPageState extends State<AdminPage> {
             ),
             // manager carousel
             AdminMenuItem(
-              title: 'Quản lý băng chuyển',
+              title: 'Quản lý băng chuyền',
               icon: Icons.widgets,
               children: [
                 AdminMenuItem(
@@ -290,7 +290,7 @@ class _AdminPageState extends State<AdminPage> {
                 //     route: DeleteCategoryPage.routeName,
                 //     icon: Icons.remove),
                 AdminMenuItem(
-                    title: 'Quản lý băng chuyển',
+                    title: 'Hiển thị, ẩn hoặc xóa băng chuyền',
                     route: UpdateCarouselPage.routeName,
                     icon: Icons.view_carousel),
               ],

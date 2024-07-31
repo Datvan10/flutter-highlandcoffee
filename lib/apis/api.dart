@@ -327,22 +327,44 @@ class SystemApi {
     }
   }
 
-  Future<void> updateCarousel(Carousel carousel) async {
+  Future<void> cancelCarousel(String carouselid) async {
     try {
       final response = await http.put(
-        Uri.parse('$carouselUrl/${carousel.carouselid}'),
+        Uri.parse(
+            '$carouselUrl/$carouselid/cancel'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(carousel.toJson()),
       );
+      // print(response.statusCode);
+
       if (response.statusCode == 200) {
-        print('Carousel updated successfully');
+        // print('Carousel cancelled successfully');
       } else {
-        throw Exception('Failed to update carousel: ${response.body}');
+        throw Exception('Failed to cancel carousel: ${response.body}');
       }
     } catch (e) {
-      throw Exception('Failed to update carousel: $e');
+      throw Exception('Failed to cancel carousel: $e');
+    }
+  }
+
+  Future<void> activateCarousel(String carouselid) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$carouselUrl/$carouselid/activate'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      // print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        // print('Carousel activated successfully');
+      } else {
+        throw Exception('Failed to activate carousel: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to activate carousel: $e');
     }
   }
 
