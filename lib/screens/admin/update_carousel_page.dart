@@ -36,7 +36,11 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
       List<Carousel> fetchedCarousels = await systemApi.getCarousels();
       setState(() {
         carousels = fetchedCarousels;
-        selectedCarousels = List<bool>.filled(carousels.length, false);
+        selectedCarousels = carousels.map((carousel) {
+          print(
+              'Carousel ID: ${carousel.carouselid}, Status: ${carousel.status}');
+          return carousel.status == 1;
+        }).toList();
       });
     } catch (e) {
       print('Failed to load carousels: $e');
@@ -55,22 +59,19 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
 
   Future<void> updateCarousel() async {
     try {
-      if (imageController == null) {
-        showCustomAlertDialog(context, 'Thông báo',
-            'Vui lòng điền đầy đủ thông tin băng chuyền.');
-        return;
+      print('Starting to update carousel...');
+
+      for (int i = 0; i < carousels.length; i++) {
+        if (selectedCarousels[i]) {
+          // print('Activating carousel ${carousels[i].carouselid}');
+          await systemApi.activateCarousel(carousels[i].carouselid);
+        } else {
+          // print('Cancelling carousel ${carousels[i].carouselid}');
+          await systemApi.cancelCarousel(carousels[i].carouselid);
+        }
       }
 
-      final bytesImage = imageController!.readAsBytesSync();
-      final String base64Image = base64Encode(bytesImage);
-
-      Carousel updatedCarousel = Carousel(
-        carouselid: '',
-        image: base64Image,
-      );
-
-      await systemApi.updateCarousel(updatedCarousel);
-
+      // print('Carousel update completed successfully.');
       showCustomAlertDialog(context, 'Thông báo',
           'Cập nhật băng chuyền vào cơ sở dữ liệu thành công.');
 
@@ -78,7 +79,7 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
         imageController = null;
       });
     } catch (e) {
-      print('Error updating carousel in Database: $e');
+      // print('Error updating carousel in Database: $e');
       showCustomAlertDialog(context, 'Thông báo',
           'Không thể cập nhật băng chuyền, vui lòng thử lại.');
     }
@@ -110,14 +111,22 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                         color: brown),
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 10),
+                Text(
+                  '*Tip : hiển thị và ẩn băng chuyền bằng cách chọn hoặc bỏ chọn vào ô checkbox sau đó nhấn nút "Cập nhật"',
+                  style: GoogleFonts.roboto(fontSize: 17, color: grey),
+                ),
+                SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
                     itemCount: carousels.length,
                     itemBuilder: (context, index) {
-                      final imageUrl = carousels[index].image;
+                      final images = carousels[index].image;
                       return ListTile(
+                        contentPadding: EdgeInsets.zero,
                         leading: Checkbox(
+                          activeColor: primaryColors,
+                          checkColor: white,
                           value: selectedCarousels[index],
                           onChanged: (bool? value) {
                             setState(() {
@@ -125,11 +134,24 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                             });
                           },
                         ),
-                        title: Image.memory(
-                          base64Decode(imageUrl),
-                          fit: BoxFit.cover,
-                          height: 120,
-                          width: 120,
+                        title: Row(
+                          children: [
+                            Expanded(
+                              child: Image.memory(
+                                base64Decode(images),
+                                fit: BoxFit.cover,
+                                height: 120,
+                                width: 120,
+                              ),
+                            ),
+                            SizedBox(width: 15.0),
+                            IconButton(
+                              icon:
+                                  Icon(Icons.delete_sweep_rounded, color: red),
+                              //Xu ly delete carousel
+                              onPressed: () {},
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -138,7 +160,9 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                 SizedBox(height: 15),
                 Row(
                   children: [
-                    Text('Hiển thị số lượng băng chuyền', style : GoogleFonts.roboto(color: black, fontSize: 16)),
+                    // Chua xu ly setting show carousel theo so luong
+                    Text('Hiển thị số lượng băng chuyền',
+                        style: GoogleFonts.roboto(color: black, fontSize: 16)),
                     Spacer(),
                     IconButton(
                       icon: Icon(Icons.remove),
@@ -148,7 +172,8 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                         }
                       },
                     ),
-                    Text('$displayCount'),
+                    Text('$displayCount',
+                        style: GoogleFonts.roboto(color: black, fontSize: 16)),
                     IconButton(
                       icon: Icon(Icons.add),
                       onPressed: () {
@@ -162,17 +187,6 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/admin_page');
-                      },
-                      style: ElevatedButton.styleFrom(backgroundColor: red),
-                      child: Text(
-                        'Hủy',
-                        style: TextStyle(color: white),
-                      ),
-                    ),
-                    SizedBox(width: 10,),
-                    ElevatedButton(
                       onPressed: updateCarousel,
                       style: ElevatedButton.styleFrom(backgroundColor: green),
                       child: Text(
@@ -182,7 +196,9 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
               ],
             ),
           ),

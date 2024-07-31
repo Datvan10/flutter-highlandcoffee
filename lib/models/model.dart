@@ -453,22 +453,26 @@ class Comment {
 class Carousel {
   final String carouselid;
   String image;
+  int status;
 
   Carousel({
     required this.carouselid,
     required this.image,
+     this.status = 1,
   });
 
   factory Carousel.fromJson(Map<String, dynamic> json) {
     return Carousel(
       carouselid: json['carouselid'],
       image: json['image'],
+      status: json['status'] ?? 1,
     );
   }
 
   Map<String, dynamic> toJson() => {
         'carouselid': carouselid,
         'image': image,
+        'status': status,
       };
 }
 
