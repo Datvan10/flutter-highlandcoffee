@@ -33,7 +33,6 @@ class _CarouselSlideState extends State<CarouselSlide> {
   Future<void> fetchCarousels() async {
     try {
       List<Carousel> fetchedCarousels = await systemApi.getCarousels();
-      // Lọc những carousel có status = 1
       List<Uint8List> images = fetchedCarousels
           .where((carousel) => carousel.status == 1)
           .map((carousel) => base64Decode(carousel.image))
@@ -42,7 +41,6 @@ class _CarouselSlideState extends State<CarouselSlide> {
         carouselImages = images;
       });
     } catch (e) {
-      // Xử lý lỗi
       print('Failed to load carousels: $e');
     }
   }

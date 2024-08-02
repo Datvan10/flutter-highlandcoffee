@@ -290,7 +290,7 @@ class _AdminPageState extends State<AdminPage> {
                 //     route: DeleteCategoryPage.routeName,
                 //     icon: Icons.remove),
                 AdminMenuItem(
-                    title: 'Hiển thị, ẩn hoặc xóa băng chuyền',
+                    title: 'Thiết lập băng chuyền',
                     route: UpdateCarouselPage.routeName,
                     icon: Icons.view_carousel),
               ],

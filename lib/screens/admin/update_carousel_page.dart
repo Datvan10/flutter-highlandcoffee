@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
@@ -37,8 +38,8 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
       setState(() {
         carousels = fetchedCarousels;
         selectedCarousels = carousels.map((carousel) {
-          print(
-              'Carousel ID: ${carousel.carouselid}, Status: ${carousel.status}');
+          // print(
+          //     'Carousel ID: ${carousel.carouselid}, Status: ${carousel.status}');
           return carousel.status == 1;
         }).toList();
       });
@@ -85,6 +86,69 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
     }
   }
 
+  Future<void> deleteCarousel(BuildContext context, int index) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(
+            "Thông báo",
+            style: GoogleFonts.roboto(
+              color: primaryColors,
+              fontSize: 19,
+            ),
+          ),
+          content: Text(
+            "Bạn có chắc muốn xóa băng chuyền này không?",
+            style: GoogleFonts.roboto(
+              color: black,
+              fontSize: 16,
+            ),
+          ),
+          actions: [
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              child: Text(
+                'OK',
+                style: GoogleFonts.roboto(
+                  color: blue,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () async {
+                try {
+                  await systemApi.deleteCarousel(carousels[index].carouselid);
+                  setState(() {
+                    carousels.removeAt(index);
+                    selectedCarousels.removeAt(index);
+                  });
+                  Navigator.pop(context);
+                  showCustomAlertDialog(
+                      context, 'Thông báo', 'Xóa băng chuyền thành công.');
+                } catch (e) {
+                  print('Error deleting product: $e');
+                  Navigator.pop(context);
+                  showCustomAlertDialog(
+                      context, 'Thông báo', 'Không thể xóa băng chuyền.');
+                }
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text(
+                "Hủy",
+                style: GoogleFonts.roboto(color: blue, fontSize: 17),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void updateDisplayCount(int count) {
     setState(() {
       displayCount = count;
@@ -113,7 +177,7 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  '*Tip : hiển thị và ẩn băng chuyền bằng cách chọn hoặc bỏ chọn vào ô checkbox sau đó nhấn nút "Cập nhật"',
+                  '*Tip : hiển thị, ẩn và xóa băng chuyền bằng cách chọn hoặc bỏ chọn vào ô checkbox sau đó nhấn nút "Cập nhật" hoặc nhấn vào Icon Xóa',
                   style: GoogleFonts.roboto(fontSize: 17, color: grey),
                 ),
                 SizedBox(height: 10),
@@ -149,7 +213,9 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                               icon:
                                   Icon(Icons.delete_sweep_rounded, color: red),
                               //Xu ly delete carousel
-                              onPressed: () {},
+                              onPressed: () {
+                                deleteCarousel(context, index);
+                              },
                             ),
                           ],
                         ),

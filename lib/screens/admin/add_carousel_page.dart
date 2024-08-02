@@ -85,6 +85,15 @@ class _AddCarouselPageState extends State<AddCarouselPage> {
                         color: brown),
                   ),
                 ),
+                SizedBox(height: 15),
+                SizedBox(
+                  child: Text(
+                    '* Bạn nên chọn hình ảnh với kích cỡ 2000 x 878 pixels để tương xứng với giao diện',
+                    style: GoogleFonts.roboto(fontSize: 17, color: grey),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
                 SizedBox(height: 30),
                 ImagePickerWidget(
                   imagePath: imageController,
