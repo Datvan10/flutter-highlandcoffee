@@ -327,11 +327,29 @@ class SystemApi {
     }
   }
 
+  Future<void> deleteCarousel(String carouselid) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('$carouselUrl/$carouselid'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Carousel deleted successfully');
+      } else {
+        throw Exception('Failed to delete carousel: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete carousel: $e');
+    }
+  }
+
   Future<void> cancelCarousel(String carouselid) async {
     try {
       final response = await http.put(
-        Uri.parse(
-            '$carouselUrl/$carouselid/cancel'),
+        Uri.parse('$carouselUrl/$carouselid/cancel'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
