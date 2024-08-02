@@ -18,6 +18,7 @@ import 'package:highlandcoffeeapp/screens/admin/publish_and_cancel_comment_page.
 import 'package:highlandcoffeeapp/screens/admin/list_order_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/top_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/active_and_block_account_customer_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/active_and_cancel_carousel_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_carousel_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
@@ -91,7 +92,14 @@ class _AdminPageState extends State<AdminPage> {
 
         break;
 
-        case UpdateCarouselPage.routeName:
+      case ActiveAndCancelCarouselPage.routeName:
+        setState(() {
+          _selectedItem = ActiveAndCancelCarouselPage();
+        });
+
+        break;
+
+      case UpdateCarouselPage.routeName:
         setState(() {
           _selectedItem = UpdateCarouselPage();
         });
@@ -291,8 +299,12 @@ class _AdminPageState extends State<AdminPage> {
                 //     icon: Icons.remove),
                 AdminMenuItem(
                     title: 'Thiết lập băng chuyền',
-                    route: UpdateCarouselPage.routeName,
+                    route: ActiveAndCancelCarouselPage.routeName,
                     icon: Icons.view_carousel),
+                AdminMenuItem(
+                    title: 'Sửa băng chuyền',
+                    route: UpdateCarouselPage.routeName,
+                    icon: Icons.sort_outlined),
               ],
             ),
             // manage category

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
+import 'package:highlandcoffeeapp/widgets/image_picker_widget.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,8 +25,8 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
   final SystemApi systemApi = SystemApi();
   List<Carousel> carousels = [];
   List<bool> selectedCarousels = [];
-  int displayCount = 0;
   File? imageController;
+  File? _imagePath;
 
   @override
   void initState() {
@@ -58,101 +60,103 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
     }
   }
 
-  Future<void> activeAndCancelCarousel() async {
+  Future<void> updateCarousel(Carousel carousel) async {
     try {
-      print('Starting to update carousel...');
-
-      for (int i = 0; i < carousels.length; i++) {
-        if (selectedCarousels[i]) {
-          // print('Activating carousel ${carousels[i].carouselid}');
-          await systemApi.activateCarousel(carousels[i].carouselid);
-        } else {
-          // print('Cancelling carousel ${carousels[i].carouselid}');
-          await systemApi.cancelCarousel(carousels[i].carouselid);
-        }
+      if (_imagePath != null) {
+        Uint8List imageBytes = await _imagePath!.readAsBytes();
+        carousel.image = base64Encode(imageBytes);
       }
-
-      // print('Carousel update completed successfully.');
-      showCustomAlertDialog(context, 'Thông báo',
-          'Cập nhật băng chuyền vào cơ sở dữ liệu thành công.');
-
+      await systemApi.updateCarousel(carousel);
+      Navigator.pop(context);
+      showCustomAlertDialog(
+        context,
+        'Thông báo',
+        'Cập nhật sản phẩm thành công.',
+      );
       setState(() {
-        imageController = null;
+        fetchCarousels();
       });
     } catch (e) {
-      // print('Error updating carousel in Database: $e');
-      showCustomAlertDialog(context, 'Thông báo',
-          'Không thể cập nhật băng chuyền, vui lòng thử lại.');
+      showCustomAlertDialog(
+        context,
+        'Lỗi',
+        'Cập nhật sản phẩm thất bại. Vui lòng thử lại.',
+      );
+      print('Error updating product: $e');
     }
   }
 
-  Future<void> deleteCarousel(BuildContext context, int index) async {
-    showDialog(
+  void showUpdateCarouselForm(BuildContext context, Carousel carousel) {
+    showModalBottomSheet(
       context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            "Thông báo",
-            style: GoogleFonts.roboto(
-              color: primaryColors,
-              fontSize: 19,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          height: 350,
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 18.0,
+              top: 30.0,
+              right: 18.0,
+              bottom: 18.0,
             ),
-          ),
-          content: Text(
-            "Bạn có chắc muốn xóa băng chuyền này không?",
-            style: GoogleFonts.roboto(
-              color: black,
-              fontSize: 16,
-            ),
-          ),
-          actions: [
-            CupertinoDialogAction(
-              isDestructiveAction: true,
-              child: Text(
-                'OK',
-                style: GoogleFonts.roboto(
-                  color: blue,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
+            child: Column(
+              children: [
+                Text(
+                  'Cập nhật băng chuyền',
+                  style: GoogleFonts.arsenal(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColors,
+                  ),
                 ),
-              ),
-              onPressed: () async {
-                try {
-                  await systemApi.deleteCarousel(carousels[index].carouselid);
-                  setState(() {
-                    carousels.removeAt(index);
-                    selectedCarousels.removeAt(index);
-                  });
-                  Navigator.pop(context);
-                  showCustomAlertDialog(
-                      context, 'Thông báo', 'Xóa băng chuyền thành công.');
-                } catch (e) {
-                  print('Error deleting product: $e');
-                  Navigator.pop(context);
-                  showCustomAlertDialog(
-                      context, 'Thông báo', 'Không thể xóa băng chuyền.');
-                }
-              },
+                SizedBox(height: 10),
+                ImagePickerWidget(
+                  imagePath: _imagePath,
+                  onPressed: _pickImage,
+                  label: 'Hình ảnh băng chuyền',
+                ),
+                SizedBox(height: 15.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        await updateCarousel(carousel);
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: green),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Lưu',
+                            style:
+                                GoogleFonts.roboto(fontSize: 18, color: white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            CupertinoDialogAction(
-              child: Text(
-                "Hủy",
-                style: GoogleFonts.roboto(color: blue, fontSize: 17),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+          ),
         );
       },
     );
   }
 
-  void updateDisplayCount(int count) {
-    setState(() {
-      displayCount = count;
-    });
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imagePath = File(pickedFile.path);
+      });
+    }
   }
 
   @override
@@ -176,11 +180,6 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                   ),
                 ),
                 SizedBox(height: 10),
-                Text(
-                  '*Tip : hiển thị, ẩn và xóa băng chuyền bằng cách chọn hoặc bỏ chọn vào ô checkbox sau đó nhấn nút "Cập nhật" hoặc nhấn vào Icon Xóa',
-                  style: GoogleFonts.roboto(fontSize: 17, color: grey),
-                ),
-                SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
                     itemCount: carousels.length,
@@ -188,16 +187,6 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                       final images = carousels[index].image;
                       return ListTile(
                         contentPadding: EdgeInsets.zero,
-                        leading: Checkbox(
-                          activeColor: primaryColors,
-                          checkColor: white,
-                          value: selectedCarousels[index],
-                          onChanged: (bool? value) {
-                            setState(() {
-                              selectedCarousels[index] = value!;
-                            });
-                          },
-                        ),
                         title: Row(
                           children: [
                             Expanded(
@@ -208,13 +197,12 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                                 width: 120,
                               ),
                             ),
-                            SizedBox(width: 15.0),
+                            SizedBox(width: 5.0),
                             IconButton(
-                              icon:
-                                  Icon(Icons.delete_sweep_rounded, color: red),
-                              //Xu ly delete carousel
+                              icon: Icon(Icons.mode_edit_outlined, color: blue),
                               onPressed: () {
-                                deleteCarousel(context, index);
+                                showUpdateCarouselForm(
+                                    context, carousels[index]);
                               },
                             ),
                           ],
@@ -222,48 +210,6 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                       );
                     },
                   ),
-                ),
-                SizedBox(height: 15),
-                Row(
-                  children: [
-                    // Chua xu ly setting show carousel theo so luong
-                    Text('Hiển thị số lượng băng chuyền',
-                        style: GoogleFonts.roboto(color: black, fontSize: 16)),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        if (displayCount > 0) {
-                          updateDisplayCount(displayCount - 1);
-                        }
-                      },
-                    ),
-                    Text('$displayCount',
-                        style: GoogleFonts.roboto(color: black, fontSize: 16)),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        updateDisplayCount(displayCount + 1);
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: activeAndCancelCarousel,
-                      style: ElevatedButton.styleFrom(backgroundColor: green),
-                      child: Text(
-                        'Cập nhật',
-                        style: TextStyle(color: white),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15,
                 ),
               ],
             ),
