@@ -58,7 +58,7 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
     }
   }
 
-  Future<void> updateCarousel() async {
+  Future<void> activeAndCancelCarousel() async {
     try {
       print('Starting to update carousel...');
 
@@ -253,7 +253,7 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
-                      onPressed: updateCarousel,
+                      onPressed: activeAndCancelCarousel,
                       style: ElevatedButton.styleFrom(backgroundColor: green),
                       child: Text(
                         'Cập nhật',
