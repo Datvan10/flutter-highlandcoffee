@@ -130,7 +130,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     }
   }
 
-  Future<void> _pickImage() async {
+  Future<void> pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -140,7 +140,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     }
   }
 
-  Future<void> _pickImageDetail() async {
+  Future<void> pickImageDetail() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -171,7 +171,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     }
   }
 
-  void _showUpdateProductForm(BuildContext context, Product product) {
+  void showUpdateProductForm(BuildContext context, Product product) {
     List<String> _categories =
         categories.map((category) => category.categoryname).toList();
     _editIdController.text = product.productid;
@@ -242,12 +242,12 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                 SizedBox(height: 10),
                 ImagePickerWidget(
                   imagePath: _imagePath,
-                  onPressed: _pickImage,
+                  onPressed: pickImage,
                   label: 'Hình ảnh sản phẩm',
                 ),
                 ImagePickerWidget(
                   imagePath: _imageDetailPath,
-                  onPressed: _pickImageDetail,
+                  onPressed: pickImageDetail,
                   label: 'Hình ảnh chi tiết sản phẩm',
                 ),
                 SizedBox(height: 15.0),
@@ -518,7 +518,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                             color: blue,
                           ),
                           onPressed: () async {
-                            _showUpdateProductForm(context, product);
+                            showUpdateProductForm(context, product);
                           },
                         ),
                       )

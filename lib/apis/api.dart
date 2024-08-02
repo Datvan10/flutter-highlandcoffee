@@ -346,6 +346,25 @@ class SystemApi {
     }
   }
 
+  Future<void> updateCarousel(Carousel carousel) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$carouselUrl/${carousel.carouselid}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(carousel.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Carousel updated successfully');
+      } else {
+        throw Exception('Failed to update carousel: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update carousel: $e');
+    }
+  }
+
   Future<void> cancelCarousel(String carouselid) async {
     try {
       final response = await http.put(
