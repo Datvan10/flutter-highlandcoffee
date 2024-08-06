@@ -458,7 +458,7 @@ class Carousel {
   Carousel({
     required this.carouselid,
     required this.image,
-     this.status = 1,
+    this.status = 1,
   });
 
   factory Carousel.fromJson(Map<String, dynamic> json) {
@@ -473,6 +473,29 @@ class Carousel {
         'carouselid': carouselid,
         'image': image,
         'status': status,
+      };
+}
+
+//
+class CarouselNumber {
+  final String settingid;
+  int numberofcarousel;
+
+  CarouselNumber({
+    required this.settingid,
+    required this.numberofcarousel,
+  });
+
+  factory CarouselNumber.fromJson(Map<String, dynamic> json) {
+    return CarouselNumber(
+      settingid: json['settingid'],
+      numberofcarousel: json['numberofcarousel'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'settingid': settingid,
+        'numberofcarousel': numberofcarousel,
       };
 }
 

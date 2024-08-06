@@ -71,7 +71,7 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
       showCustomAlertDialog(
         context,
         'Thông báo',
-        'Cập nhật sản phẩm thành công.',
+        'Cập nhật băng chuyền thành công.',
       );
       setState(() {
         fetchCarousels();
@@ -80,9 +80,9 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
       showCustomAlertDialog(
         context,
         'Lỗi',
-        'Cập nhật sản phẩm thất bại. Vui lòng thử lại.',
+        'Cập nhật băng chuyền thất bại. Vui lòng thử lại.',
       );
-      print('Error updating product: $e');
+      print('Error updating carousel: $e');
     }
   }
 
