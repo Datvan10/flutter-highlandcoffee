@@ -16,15 +16,19 @@ class ActiveAndCancelCarouselPage extends StatefulWidget {
   const ActiveAndCancelCarouselPage({super.key});
 
   @override
-  State<ActiveAndCancelCarouselPage> createState() => _ActiveAndCancelCarouselPageState();
+  State<ActiveAndCancelCarouselPage> createState() =>
+      _ActiveAndCancelCarouselPageState();
 }
 
-class _ActiveAndCancelCarouselPageState extends State<ActiveAndCancelCarouselPage> {
+class _ActiveAndCancelCarouselPageState
+    extends State<ActiveAndCancelCarouselPage> {
   final SystemApi systemApi = SystemApi();
   List<Carousel> carousels = [];
+  List<CarouselNumber> carouselnumbers = [];
   List<bool> selectedCarousels = [];
   int displayCount = 0;
   File? imageController;
+  String? settingid;
 
   @override
   void initState() {
@@ -34,10 +38,12 @@ class _ActiveAndCancelCarouselPageState extends State<ActiveAndCancelCarouselPag
 
   Future<void> fetchNumberOfCarousels() async {
     try {
-      int fetchedNumber = await systemApi.getNumberOfCarousels();
-      setState(() {
-        displayCount = fetchedNumber;
-      });
+      carouselnumbers = await systemApi.getCarouselNumbers();
+      if (carouselnumbers.isNotEmpty) {
+        settingid = carouselnumbers[0].settingid;
+        displayCount = carouselnumbers[0].numberofcarousel;
+      }
+      setState(() {});
       fetchCarousels();
     } catch (e) {
       print('Failed to load number of carousels: $e');
@@ -68,8 +74,31 @@ class _ActiveAndCancelCarouselPageState extends State<ActiveAndCancelCarouselPag
     }
   }
 
+  // Future<void> updateCarouselNumber(CarouselNumber carouselnumber) async {
+  //   try {
+  //     if (displayCount != 0) {
+  //       carouselnumber.numberofcarousel = displayCount;
+  //     }
+  //     await systemApi.updateCarouselNumber(carouselnumber);
+  //   } catch (e) {
+  //     showCustomAlertDialog(
+  //       context,
+  //       'Lỗi',
+  //       'Cập nhật số lương băng chuyền thất bại. Vui lòng thử lại.',
+  //     );
+  //     print('Error updating number carousel: $e');
+  //   }
+  // }
+
   Future<void> activeAndCancelCarousel() async {
     try {
+      if (settingid != null) {
+        CarouselNumber updatedCarouselNumber = CarouselNumber(
+          settingid: settingid!,
+          numberofcarousel: displayCount,
+        );
+        await systemApi.updateCarouselNumber(updatedCarouselNumber);
+      }
       for (int i = 0; i < carousels.length; i++) {
         if (selectedCarousels[i]) {
           await systemApi.activateCarousel(carousels[i].carouselid);
@@ -77,6 +106,7 @@ class _ActiveAndCancelCarouselPageState extends State<ActiveAndCancelCarouselPag
           await systemApi.cancelCarousel(carousels[i].carouselid);
         }
       }
+
       showCustomAlertDialog(context, 'Thông báo',
           'Cập nhật băng chuyền vào cơ sở dữ liệu thành công.');
       setState(() {

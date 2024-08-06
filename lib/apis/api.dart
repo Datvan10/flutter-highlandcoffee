@@ -420,6 +420,41 @@ class SystemApi {
     }
   }
 
+  Future<List<CarouselNumber>> getCarouselNumbers() async {
+    try {
+      final response = await http.get(Uri.parse(settingCarouselUrl));
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        List<CarouselNumber> carouselnumbers =
+            body.map((dynamic item) => CarouselNumber.fromJson(item)).toList();
+        return carouselnumbers;
+      } else {
+        throw Exception('Failed to load Carousel Numbers');
+      }
+    } catch (e) {
+      throw Exception('Failed to load Carousel Numbers');
+    }
+  }
+
+  Future<void> updateCarouselNumber(CarouselNumber carouselnumber) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$settingCarouselUrl/${carouselnumber.settingid}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(carouselnumber.toJson()),
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Carousel updated successfully');
+      } else {
+        throw Exception('Failed to update carousel number: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update carousel number: $e');
+    }
+  }
 
   // Add staff for admin
   Future<void> addStaff(Staff staff) async {
@@ -1482,7 +1517,7 @@ class SystemApi {
     try {
       final response =
           await http.get(Uri.parse('$orderUrl/customer/$customerid'));
-      print(response.body);
+      // print(response.body);
       // print(response.statusCode);
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
