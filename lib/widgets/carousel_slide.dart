@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
@@ -23,11 +22,21 @@ class _CarouselSlideState extends State<CarouselSlide> {
   final controller = CarouselController();
   final SystemApi systemApi = SystemApi();
   List<Uint8List> carouselImages = [];
+  int numberOfCarousels = 0;
 
   @override
   void initState() {
     super.initState();
-    fetchCarousels();
+    fetchNumberOfCarousels();
+  }
+
+  Future<void> fetchNumberOfCarousels() async {
+    try {
+      numberOfCarousels = await systemApi.getNumberOfCarousels();
+      fetchCarousels();
+    } catch (e) {
+      print('Failed to load number of carousels: $e');
+    }
   }
 
   Future<void> fetchCarousels() async {
@@ -36,6 +45,7 @@ class _CarouselSlideState extends State<CarouselSlide> {
       List<Uint8List> images = fetchedCarousels
           .where((carousel) => carousel.status == 1)
           .map((carousel) => base64Decode(carousel.image))
+          .take(numberOfCarousels)
           .toList();
       setState(() {
         carouselImages = images;

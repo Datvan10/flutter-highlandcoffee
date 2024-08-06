@@ -133,7 +133,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         ),
         actions: [
           Container(
-            margin: EdgeInsets.only(right: 8),
+            margin: const EdgeInsets.only(right: 8),
             child: IconButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -185,7 +185,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -197,7 +197,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -211,9 +211,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 15.0),
-                        Divider(),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 15.0),
+                        const Divider(),
+                        const SizedBox(height: 10.0),
                         Container(
                           height: orderDetails.length == 1
                               ? 110.0
@@ -307,8 +307,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             },
                           ),
                         ),
-                        SizedBox(height: 10.0),
-                        Divider(),
+                        const SizedBox(height: 10.0),
+                        const Divider(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -321,8 +321,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             ),
                           ],
                         ),
-                        Divider(),
-                        SizedBox(height: 15.0),
+                        const Divider(),
+                        const SizedBox(height: 15.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -336,7 +336,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -351,7 +351,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 5.0),
+                                  const SizedBox(height: 5.0),
                                   Text(
                                     orderDetails[0].paymentmethod ?? '',
                                     style: GoogleFonts.roboto(
@@ -361,7 +361,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 ],
                               ),
                             ),
-                            SizedBox(width: 20),
+                            const SizedBox(width: 20),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,7 +373,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 5.0),
+                                  const SizedBox(height: 5.0),
                                   Text(
                                     'Tên khách hàng: ${orderDetails[0].customername ?? ''}',
                                     style: GoogleFonts.roboto(
@@ -386,7 +386,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       fontSize: 15,
                                     ),
                                   ),
-                                  SizedBox(height: 5.0),
+                                  const SizedBox(height: 5.0),
                                   Text(
                                     'Địa chỉ: ${orderDetails[0].address ?? ''}',
                                     style: GoogleFonts.roboto(
@@ -398,7 +398,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           children: [
                             Text(
@@ -409,7 +409,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                 color: black,
                               ),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Row(
                               children: [
                                 Container(
@@ -426,7 +426,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                     shape: BoxShape.circle,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                     width:
                                         8),
                                 Text(

@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
-import 'package:highlandcoffeeapp/widgets/login_with_more.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
-import 'package:highlandcoffeeapp/widgets/my_text_form_field.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_email.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/text_form_field_password.dart';
@@ -109,7 +107,7 @@ class _ForgotPasswordAdminPageState
               controller: emailController,
               iconColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //form password
@@ -132,7 +130,7 @@ class _ForgotPasswordAdminPageState
               obscureText: !isObsecure,
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //edit password
@@ -149,7 +147,7 @@ class _ForgotPasswordAdminPageState
             //     )
             //   ],
             // ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //button login

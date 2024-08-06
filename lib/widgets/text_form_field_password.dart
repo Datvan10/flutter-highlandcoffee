@@ -11,7 +11,7 @@ class TextFormFieldPassword extends StatefulWidget {
   final Color iconColor;
   final TextEditingController controller;
   final bool obscureText;
-  final List<TextInputFormatter>? inputFormatters; // Thêm tham số inputFormatters
+  final List<TextInputFormatter>? inputFormatters;
 
   const TextFormFieldPassword({
     Key? key,

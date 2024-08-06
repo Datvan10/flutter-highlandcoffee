@@ -47,7 +47,7 @@ class _TextFormFieldEmailState extends State<TextFormFieldEmail> {
           },
           decoration: InputDecoration(
             hintText: widget.hintText,
-            contentPadding: EdgeInsets.all(15),
+            contentPadding: const EdgeInsets.all(15),
             filled: true,
             fillColor: Colors.white,
             prefixIcon: Icon(
