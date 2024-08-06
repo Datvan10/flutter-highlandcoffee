@@ -50,7 +50,7 @@ class ProductForm extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 3,
                     ),
                     Text(

@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/screens/admin/access_and_cancel_role_staff_page.dart';
@@ -24,7 +22,6 @@ import 'package:highlandcoffeeapp/screens/admin/update_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_staff_account_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-import 'package:highlandcoffeeapp/widgets/notification.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -34,133 +31,129 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  void handleLogout() {
-    print('Logout');
-    showConfirmExit(context);
-  }
 
-  Widget _selectedItem = DashboardPage();
+  Widget _selectedItem = const DashboardPage();
 
   void screenSlector(item) {
     switch (item.route) {
       case DashboardPage.routeName:
         setState(() {
-          _selectedItem = DashboardPage();
+          _selectedItem = const DashboardPage();
         });
 
         break;
 
       case TopProductPage.routeName:
         setState(() {
-          _selectedItem = TopProductPage();
+          _selectedItem = const TopProductPage();
         });
 
         break;
 
       case AddStaffAccountPage.routeName:
         setState(() {
-          _selectedItem = AddStaffAccountPage();
+          _selectedItem = const AddStaffAccountPage();
         });
 
         break;
 
       case DeleteStaffAccountPage.routeName:
         setState(() {
-          _selectedItem = DeleteStaffAccountPage();
+          _selectedItem = const DeleteStaffAccountPage();
         });
 
         break;
 
       case UpdateStaffAccountPage.routeName:
         setState(() {
-          _selectedItem = UpdateStaffAccountPage();
+          _selectedItem = const UpdateStaffAccountPage();
         });
 
         break;
 
       case ActiveAndBlockAccountCustomerPage.routeName:
         setState(() {
-          _selectedItem = ActiveAndBlockAccountCustomerPage();
+          _selectedItem = const ActiveAndBlockAccountCustomerPage();
         });
 
         break;
 
       case AddCarouselPage.routeName:
         setState(() {
-          _selectedItem = AddCarouselPage();
+          _selectedItem = const AddCarouselPage();
         });
 
         break;
 
       case ActiveAndCancelCarouselPage.routeName:
         setState(() {
-          _selectedItem = ActiveAndCancelCarouselPage();
+          _selectedItem = const ActiveAndCancelCarouselPage();
         });
 
         break;
 
       case UpdateCarouselPage.routeName:
         setState(() {
-          _selectedItem = UpdateCarouselPage();
+          _selectedItem = const UpdateCarouselPage();
         });
 
         break;
 
       case AddCategoryPage.routeName:
         setState(() {
-          _selectedItem = AddCategoryPage();
+          _selectedItem = const AddCategoryPage();
         });
 
         break;
 
       case DeleteCategoryPage.routeName:
         setState(() {
-          _selectedItem = DeleteCategoryPage();
+          _selectedItem = const DeleteCategoryPage();
         });
 
         break;
 
       case UpdateCategoryPage.routeName:
         setState(() {
-          _selectedItem = UpdateCategoryPage();
+          _selectedItem = const UpdateCategoryPage();
         });
 
         break;
 
       case AddProductPage.routeName:
         setState(() {
-          _selectedItem = AddProductPage();
+          _selectedItem = const AddProductPage();
         });
 
         break;
 
       case DeleteProductPage.routeName:
         setState(() {
-          _selectedItem = DeleteProductPage();
+          _selectedItem = const DeleteProductPage();
         });
 
         break;
 
       case UpdateProductPage.routeName:
         setState(() {
-          _selectedItem = UpdateProductPage();
+          _selectedItem = const UpdateProductPage();
         });
 
       case ListOrderPage.routeName:
         setState(() {
-          _selectedItem = ListOrderPage();
+          _selectedItem = const ListOrderPage();
         });
 
         break;
 
       case AccessAndCancelRoleStaffPage.routeName:
         setState(() {
-          _selectedItem = AccessAndCancelRoleStaffPage();
+          _selectedItem = const AccessAndCancelRoleStaffPage();
         });
 
       case PublishAndCancelCommentPage.routeName:
         setState(() {
-          _selectedItem = PublishAndCancelCommentPage();
+          _selectedItem = const PublishAndCancelCommentPage();
         });
 
         break;
@@ -243,7 +236,7 @@ class _AdminPageState extends State<AdminPage> {
         sideBar: SideBar(
           iconColor: primaryColors,
           activeIconColor: blue,
-          items: [
+          items: const [
             AdminMenuItem(
                 title: 'Tổng quan',
                 icon: Icons.dashboard,

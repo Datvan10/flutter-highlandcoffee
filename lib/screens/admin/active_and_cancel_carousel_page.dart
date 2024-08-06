@@ -29,7 +29,19 @@ class _ActiveAndCancelCarouselPageState extends State<ActiveAndCancelCarouselPag
   @override
   void initState() {
     super.initState();
-    fetchCarousels();
+    fetchNumberOfCarousels();
+  }
+
+  Future<void> fetchNumberOfCarousels() async {
+    try {
+      int fetchedNumber = await systemApi.getNumberOfCarousels();
+      setState(() {
+        displayCount = fetchedNumber;
+      });
+      fetchCarousels();
+    } catch (e) {
+      print('Failed to load number of carousels: $e');
+    }
   }
 
   Future<void> fetchCarousels() async {
@@ -38,8 +50,6 @@ class _ActiveAndCancelCarouselPageState extends State<ActiveAndCancelCarouselPag
       setState(() {
         carousels = fetchedCarousels;
         selectedCarousels = carousels.map((carousel) {
-          // print(
-          //     'Carousel ID: ${carousel.carouselid}, Status: ${carousel.status}');
           return carousel.status == 1;
         }).toList();
       });
@@ -60,27 +70,19 @@ class _ActiveAndCancelCarouselPageState extends State<ActiveAndCancelCarouselPag
 
   Future<void> activeAndCancelCarousel() async {
     try {
-      // print('Starting to update carousel...');
-
       for (int i = 0; i < carousels.length; i++) {
         if (selectedCarousels[i]) {
-          // print('Activating carousel ${carousels[i].carouselid}');
           await systemApi.activateCarousel(carousels[i].carouselid);
         } else {
-          // print('Cancelling carousel ${carousels[i].carouselid}');
           await systemApi.cancelCarousel(carousels[i].carouselid);
         }
       }
-
-      // print('Carousel update completed successfully.');
       showCustomAlertDialog(context, 'Thông báo',
           'Cập nhật băng chuyền vào cơ sở dữ liệu thành công.');
-
       setState(() {
         imageController = null;
       });
     } catch (e) {
-      // print('Error updating carousel in Database: $e');
       showCustomAlertDialog(context, 'Thông báo',
           'Không thể cập nhật băng chuyền, vui lòng thử lại.');
     }
@@ -226,7 +228,6 @@ class _ActiveAndCancelCarouselPageState extends State<ActiveAndCancelCarouselPag
                 SizedBox(height: 15),
                 Row(
                   children: [
-                    // Chua xu ly setting show carousel theo so luong
                     Text('Hiển thị số lượng băng chuyền',
                         style: GoogleFonts.roboto(color: black, fontSize: 16)),
                     Spacer(),

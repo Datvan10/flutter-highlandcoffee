@@ -23,7 +23,7 @@ class LabeledTextField extends StatelessWidget {
           Container(
             width: 150,
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: Text(
               label,
               style: GoogleFonts.roboto(
@@ -40,7 +40,7 @@ class LabeledTextField extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   vertical: 10,
                   horizontal: 10,
                 ),

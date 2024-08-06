@@ -22,7 +22,7 @@ class EditTextFormField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
-        contentPadding: EdgeInsets.all(15),
+        contentPadding: const EdgeInsets.all(15),
         filled: true,
         fillColor: white,
         prefixIcon: Icon(
@@ -42,11 +42,11 @@ class EditTextFormField extends StatelessWidget {
             : null,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.white),
+          borderSide: const BorderSide(color: Colors.white),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.white),
+          borderSide: const BorderSide(color: Colors.white),
         ),
       ),
     );

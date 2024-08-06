@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
@@ -54,7 +53,7 @@ class _AddProductPageState extends State<AddProductPage> {
             listCategories.isNotEmpty ? listCategories[0] : '';
       });
     } catch (e) {
-      print('Error fetching categories: $e');
+      // print('Error fetching categories: $e');
       setState(() {
         listCategories = ['Coffee', 'Freeze', 'Trà', 'Đồ ăn', 'Khác'];
         selectedCategoryController = 'Coffee';
@@ -81,28 +80,6 @@ class _AddProductPageState extends State<AddProductPage> {
       });
     }
   }
-
-  // Future<String> uploadImage(File? imageFile) async {
-  //   if (imageFile == null)
-  //     return '';
-
-  //   Completer<String> completer = Completer();
-  //   await Future(() async {
-  //     try {
-  //       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-  //       Reference ref =
-  //           FirebaseStorage.instance.ref().child('images/$fileName.jpg');
-  //       await ref.putFile(imageFile);
-  //       String downloadURL = await ref.getDownloadURL();
-  //       completer.complete(downloadURL);
-  //     } catch (e) {
-  //       print('Error uploading image: $e');
-  //       completer.complete('');
-  //     }
-  //   });
-
-  //   return completer.future;
-  // }
 
   Future<void> addProduct() async {
     try {
@@ -190,7 +167,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     fontSize: 30, fontWeight: FontWeight.bold, color: brown),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CategoryDropdown(
               backGroundColor: background,
               categories: listCategories,
@@ -209,7 +186,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 label: 'Size (S-M-L)', controller: sizeController),
             LabeledTextField(label: 'Giá', controller: priceController),
             LabeledTextField(label: 'Đơn vị tính', controller: unitController),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ImagePickerWidget(
               imagePath: imageController,
               onPressed: pickImage,
@@ -220,7 +197,7 @@ class _AddProductPageState extends State<AddProductPage> {
               onPressed: pickImageDetail,
               label: 'Hình ảnh chi tiết sản phẩm',
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -234,7 +211,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     style: GoogleFonts.roboto(fontSize: 18, color: white),
                   ),
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 ElevatedButton(
                   onPressed: () {
                     addProduct();

@@ -12,6 +12,7 @@ class SystemApi {
   final String staffUrl = "http://localhost:5194/api/staffs";
   final String customerUrl = "http://localhost:5194/api/customers";
   final String carouselUrl = "http://localhost:5194/api/carousels";
+  final String settingCarouselUrl = "http://localhost:5194/api/carouselnumbers";
   final String productUrl = "http://localhost:5194/api/products";
   final String categoryUrl = "http://localhost:5194/api/categories";
   final String orderUrl = "http://localhost:5194/api/orders";
@@ -404,6 +405,21 @@ class SystemApi {
       throw Exception('Failed to activate carousel: $e');
     }
   }
+
+  Future<int> getNumberOfCarousels() async {
+    final response = await http.get(Uri.parse("$settingCarouselUrl"));
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      if (data.isNotEmpty) {
+        return data[0]['numberofcarousel'];
+      } else {
+        throw Exception("No carousel number found");
+      }
+    } else {
+      throw Exception("Failed to load carousel number");
+    }
+  }
+
 
   // Add staff for admin
   Future<void> addStaff(Staff staff) async {
