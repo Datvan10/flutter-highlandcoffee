@@ -12,7 +12,7 @@ import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 import 'package:intl/intl.dart';
 
-enum UserRole { customer, staff , admin}
+enum UserRole { customer, staff, admin }
 
 late UserRole currentUserRole;
 
@@ -46,11 +46,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             ? UserRole.staff
             : AuthManager().loggedInAdmin != null
                 ? UserRole.admin
-            : UserRole.customer;
+                : UserRole.customer;
   }
 
   String formatDate(DateTime isoDate) {
-    return DateFormat('dd - MM - yyyy').format(isoDate);
+    return DateFormat('dd/MM/yyyy').format(isoDate);
   }
 
   void confirmOrder(String orderid, String staffid) async {
@@ -145,7 +145,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                 );
               },
-              icon: Icon(Icons.payments, color: primaryColors),
+              icon: Icon(Icons.receipt, color: primaryColors),
             ),
           )
         ],
@@ -159,11 +159,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         future: futureOrderDetails,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Không tìm thấy chi tiết đơn hàng'));
+            return const Center(child: Text('Không tìm thấy chi tiết đơn hàng'));
           } else {
             List<OrderDetail> orderDetails = snapshot.data!;
             return Padding(
@@ -215,9 +215,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         const Divider(),
                         const SizedBox(height: 10.0),
                         Container(
-                          height: orderDetails.length == 1
-                              ? 110.0
-                              : 220.0,
+                          height: orderDetails.length == 1 ? 110.0 : 220.0,
                           child: ListView.builder(
                             itemCount: orderDetails.length,
                             itemBuilder: (context, index) {
@@ -253,7 +251,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                           ],
                                         ),
                                       ),
-                                      SizedBox(width: 16.0),
+                                      const SizedBox(width: 16.0),
                                       Expanded(
                                         flex: 3,
                                         child: Column(
@@ -276,7 +274,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                           ],
                                         ),
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       Expanded(
                                         flex: 2,
                                         child: Column(
@@ -301,7 +299,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 15.0),
+                                  const SizedBox(height: 15.0),
                                 ],
                               );
                             },
@@ -412,23 +410,22 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             const Spacer(),
                             Row(
                               children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
+                                Icon(
+                                    orderDetails[0].status == 0
+                                        ? Icons.swipe_right
+                                        : orderDetails[0].status == 1
+                                            ? Icons.local_shipping
+                                            : orderDetails[0].status == 2
+                                                ? Icons.receipt
+                                                : Icons.local_shipping,
                                     color: orderDetails[0].status == 0
                                         ? red
                                         : orderDetails[0].status == 1
                                             ? blue
                                             : orderDetails[0].status == 2
                                                 ? green
-                                                : light_yellow,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                const SizedBox(
-                                    width:
-                                        8),
+                                                : light_yellow),
+                                const SizedBox(width: 8),
                                 Text(
                                   orderDetails[0].status == 0
                                       ? 'Đang chờ xác nhận'
@@ -468,18 +465,18 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           buttonColor: green,
                           isDisabled: orderDetails[0].status != 0,
                         )
-                        // : currentUserRole == UserRole.admin
-                        // ? MyButton(
-                        //   text: 'Xác nhận đơn hàng',
-                        //   onTap: orderDetails[0].status == 0
-                        //       ? () {
-                        //           confirmOrder(orderDetails[0].orderid,
-                        //               loggedInAdmin!.adminid);
-                        //         }
-                        //       : null,
-                        //   buttonColor: green,
-                        //   isDisabled: orderDetails[0].status != 0,
-                        // )
+                      // : currentUserRole == UserRole.admin
+                      // ? MyButton(
+                      //   text: 'Xác nhận đơn hàng',
+                      //   onTap: orderDetails[0].status == 0
+                      //       ? () {
+                      //           confirmOrder(orderDetails[0].orderid,
+                      //               loggedInAdmin!.adminid);
+                      //         }
+                      //       : null,
+                      //   buttonColor: green,
+                      //   isDisabled: orderDetails[0].status != 0,
+                      // )
                       : MyButton(
                           text: 'Hủy đơn hàng',
                           onTap: orderDetails[0].status == 0

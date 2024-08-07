@@ -2,5 +2,6 @@
     "cSpell.words": [
         "highlandcoffeeapp"
     ],
-    "background.enabled": true
+    "background.enabled": true,
+    "cmake.sourceDirectory": "D:/sources/Project Flutter/highlandcoffeeapp/linux"
 }

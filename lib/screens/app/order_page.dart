@@ -204,7 +204,7 @@ class _OrderPageState extends State<OrderPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Phương thức',
-                              style: GoogleFonts.roboto(
+                              style: GoogleFonts.arsenal(
                                   fontSize: 18.0,
                                   color: primaryColors,
                                   fontWeight: FontWeight.bold)),
@@ -228,7 +228,7 @@ class _OrderPageState extends State<OrderPage> {
                                   color: primaryColors,
                                   fontWeight: FontWeight.bold)),
                           Text('0đ',
-                              style: GoogleFonts.arsenal(
+                              style: GoogleFonts.roboto(
                                   color: primaryColors, fontSize: 16))
                         ],
                       )
@@ -247,7 +247,7 @@ class _OrderPageState extends State<OrderPage> {
                               color: primaryColors,
                               fontWeight: FontWeight.bold)),
                       Text('${totalPrice.toStringAsFixed(3)}đ',
-                          style: GoogleFonts.arsenal(
+                          style: GoogleFonts.roboto(
                               fontSize: 21.0,
                               color: primaryColors,
                               fontWeight: FontWeight.bold))

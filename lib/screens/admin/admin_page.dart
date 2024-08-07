@@ -322,7 +322,7 @@ class _AdminPageState extends State<AdminPage> {
             //manager product
             AdminMenuItem(
               title: 'Quản lý sản phẩm',
-              icon: Icons.restaurant_menu_outlined,
+              icon: Icons.fastfood,
               children: [
                 AdminMenuItem(
                     title: 'Thêm sản phẩm',

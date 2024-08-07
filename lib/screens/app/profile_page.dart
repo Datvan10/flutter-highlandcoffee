@@ -206,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 120,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: Image(
+                      child: const Image(
                           image: AssetImage(
                               'assets/images/profile/customer-default.jpeg'))),
                 ),
@@ -234,7 +234,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             //name
@@ -245,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   loggedInCustomer?.name ?? loggedInStaff?.name ?? '',
                   style: GoogleFonts.roboto(color: black, fontSize: 20),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5.0,
                 ),
                 Icon(
@@ -255,7 +255,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             //email
@@ -264,7 +264,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     loggedInStaff?.phonenumber ??
                     '',
                 style: GoogleFonts.roboto(color: black, fontSize: 16)),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //
@@ -324,7 +324,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CustomerOrderPage(),
+                          builder: (context) => const CustomerOrderPage(),
                         ),
                       );
                     },
@@ -336,7 +336,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ListOrderPage(),
+                          builder: (context) => const ListOrderPage(),
                         ),
                       );
                     },
@@ -349,7 +349,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RateCommentPage(),
+                          builder: (context) => const RateCommentPage(),
                         ),
                       );
                     },
@@ -362,7 +362,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AddCategoryPage(),
+                                builder: (context) => const AddCategoryPage(),
                               ),
                             );
                           }

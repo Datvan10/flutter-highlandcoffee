@@ -220,7 +220,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 150),
+              const SizedBox(height: 150),
             ],
           ),
           Positioned(
@@ -233,7 +233,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               decoration: BoxDecoration(
                 color: white,
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 10,
@@ -245,7 +245,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),
                 child: Column(
                   children: [
-                    SizedBox(height: 15.0,),
+                    const SizedBox(height: 15.0,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -270,7 +270,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             ))
                       ],
                     ),
-                    SizedBox(height: 10.0,),
+                    const SizedBox(height: 10.0,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -294,7 +294,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     //product size
@@ -340,7 +340,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     //product quantity
@@ -398,7 +398,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     //product price
@@ -411,7 +411,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               fontWeight: FontWeight.bold,
                               color: black),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 50,
                         ),
                         Text(
@@ -423,7 +423,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Row(
@@ -444,7 +444,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
                     //button add to cart and buy now

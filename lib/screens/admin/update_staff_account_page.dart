@@ -60,15 +60,14 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
 
   //update product
   void _showUpdateStaffForm(BuildContext context, Staff staff) {
-    // Điền các giá trị hiện tại của  thông tin nhân viên vào các trường nhập liệu
     _editNameController.text = staff.name;
     _editPhoneNumberController.text = staff.phonenumber;
     _editSlaryController.text = staff.salary.toString();
     _editPassWordController.text = staff.password;
     showModalBottomSheet(
         context: context,
-        isScrollControlled: true, // Chiều dài có thể được cuộn
-        shape: RoundedRectangleBorder(
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
         ),
         builder: (BuildContext context) {
@@ -99,9 +98,8 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                   LabeledTextField(
                       label: 'Mật khẩu mới',
                       controller: _editPassWordController),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    height: 15.0,
+                  const SizedBox(
+                    height: 25.0,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -183,7 +181,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
     return Column(
       children: [
         SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.only(
                 left: 18.0, top: 18.0, right: 18.0, bottom: 10),
@@ -200,7 +198,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextField(
                   controller: _textSearchStaffController,
                   onChanged: (value) {
@@ -247,7 +245,7 @@ class _UpdateStaffAccountPageState extends State<UpdateStaffAccountPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(

@@ -24,7 +24,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
         ),
       ),
       body: Container(
-        child: Padding(
+        child: const Padding(
           padding: EdgeInsets.all(18.0),
           child: Column(
             children: [
