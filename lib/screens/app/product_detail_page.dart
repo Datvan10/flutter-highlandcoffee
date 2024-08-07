@@ -15,6 +15,7 @@ import 'package:highlandcoffeeapp/screens/app/cart_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/size_product.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final List<Map<String, dynamic>> productSizes;
@@ -176,8 +177,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
+  void showImageProduct(BuildContext context, Uint8List image) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor:
+            Colors.transparent,
+        child: Container(
+          width: 300,
+          height: 350,
+          child: PhotoView(
+            backgroundDecoration: BoxDecoration(
+                color: Colors.transparent),
+            imageProvider: MemoryImage(image),
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 2,
+            initialScale: PhotoViewComputedScale.contained,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Uint8List image = base64Decode(widget.product.image);
     return Scaffold(
       body: Stack(
         children: [
@@ -224,8 +248,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ],
           ),
           Positioned(
-            top:
-                415,
+            top: 415,
             left: 0,
             right: 0,
             bottom: 0,
@@ -245,7 +268,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 padding: const EdgeInsets.only(left: 18.0, right: 18.0),
                 child: Column(
                   children: [
-                    const SizedBox(height: 15.0,),
+                    const SizedBox(
+                      height: 15.0,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -264,21 +289,35 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               _showConfirmationDialog();
                             },
                             icon: Icon(
-                              isFavorite ? Icons.favorite : Icons.favorite_border,
+                              isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
                               color: primaryColors,
                               size: 30,
                             ))
                       ],
                     ),
-                    const SizedBox(height: 10.0,),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Image.memory(
-                          base64Decode(widget.product.image),
-                          width: 85,
-                          height: 85,
-                          fit: BoxFit.cover,
+                        GestureDetector(
+                          onTap: () => showImageProduct(
+                              context, image), // Xử lý bấm vào ảnh
+                          onDoubleTap: () => showImageProduct(
+                              context, image), // Xử lý double click vào ảnh
+                          child: MouseRegion(
+                            onEnter: (_) => showImageProduct(
+                                context, image), // Xử lý hover qua ảnh
+                            child: Image.memory(
+                              image,
+                              width: 85,
+                              height: 85,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                         Expanded(
                           child: SizedBox(
