@@ -210,10 +210,10 @@ class _ActiveAndBlockAccountCustomerPageState
               itemBuilder: (context, index) {
                 final customer = filteredCustomers[index];
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.all(15),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: white,
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                   child: Row(
@@ -245,6 +245,22 @@ class _ActiveAndBlockAccountCustomerPageState
                                 fontSize: 16,
                                 color: brown,
                               ),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  customer.point.toString(),
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16,
+                                    color: red,
+                                  ),
+                                ),
+                                SizedBox(width: 5.0,),
+                                Text('điểm thưởng', style: GoogleFonts.roboto(
+                                    fontSize: 16,
+                                    color: black,
+                                  ),)
+                              ],
                             ),
                             Row(
                               children: [
