@@ -49,7 +49,7 @@ class _OrderPageState extends State<OrderPage> {
   //
   Future<void> getTotalQuantity() async {
     int total = 0;
-    
+
     widget.cartItems.forEach((CartItem cartItem) {
       total += cartItem.quantity;
     });
@@ -386,23 +386,22 @@ class _OrderPageState extends State<OrderPage> {
 
   //
   void onPayment() {
-  final paymentUrl = VNPAYFlutter.instance.generatePaymentUrl(
-    url: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
-    version: '2.0.1',
-    tmnCode: 'QHAKQR32',
-    txnRef: DateTime.now().millisecondsSinceEpoch.toString(),
-    orderInfo: 'Thanh toán đơn hàng',
-    amount: totalPrice * 100,
-    returnUrl: 'https://yourwebsite.com/return',
-    ipAdress: '172.28.0.1',
-    vnpayHashKey: '26SSODTEW1KR2VF2TP935ZBSSYUM5BTF',
-    vnPayHashType: VNPayHashType.HMACSHA512,
-  );
-  Navigator.of(context).push(MaterialPageRoute(
-    builder: (context) => PaymentPage(paymentUrl: paymentUrl),
-  ));
-}
-
+    final paymentUrl = VNPAYFlutter.instance.generatePaymentUrl(
+      url: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+      version: '2.0.1',
+      tmnCode: 'QHAKQR32',
+      txnRef: DateTime.now().millisecondsSinceEpoch.toString(),
+      orderInfo: 'Thanh toán đơn hàng',
+      amount: totalPrice * 100,
+      returnUrl: 'https://yourwebsite.com/return',
+      ipAdress: '172.28.0.1',
+      vnpayHashKey: '26SSODTEW1KR2VF2TP935ZBSSYUM5BTF',
+      vnPayHashType: VNPayHashType.HMACSHA512,
+    );
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => PaymentPage(paymentUrl: paymentUrl),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -635,13 +634,13 @@ class _EditCustomerInfoFormState extends State<EditCustomerInfoForm> {
                       fontWeight: FontWeight.bold),
                   hintStyle: GoogleFonts.roboto()),
               keyboardType: TextInputType.phone,
-              inputFormatters : <TextInputFormatter>[
+              inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               ],
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Vui lòng nhập số điện thoại';
-                }else if(value.length < 10 || value.length > 10){
+                } else if (value.length < 10 || value.length > 10) {
                   return 'Số điện thoại phải có 10 số';
                 }
                 return null;
