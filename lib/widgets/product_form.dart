@@ -16,7 +16,7 @@ class ProductForm extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
           color: white,
           borderRadius: BorderRadius.circular(15.0),
@@ -62,15 +62,16 @@ class ProductForm extends StatelessWidget {
                     ),
                   ],
                 ),
-                Container(
-                  // padding: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                      color: primaryColors, shape: BoxShape.circle),
-                  child: Icon(
-                    Icons.add,
-                    color: white,
-                  ),
-                )
+                Icon(Icons.add_shopping_cart, color: primaryColors,)
+                // Container(
+                //   // padding: EdgeInsets.all(4),
+                //   decoration: BoxDecoration(
+                //       color: primaryColors, shape: BoxShape.circle),
+                //   child: Icon(
+                //     Icons.add,
+                //     color: white,
+                //   ),
+                // )
               ],
             )
           ],

@@ -70,7 +70,7 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
         future: productsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
@@ -84,9 +84,9 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
           } else {
             List<Favorite> favorite = snapshot.data ?? [];
             return Padding(
-              padding: EdgeInsets.only(left: 18.0, top: 18.0, right: 18.0),
+              padding: const EdgeInsets.only(left: 18.0, top: 18.0, right: 18.0),
               child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 18.0,
                   mainAxisSpacing: 18.0,

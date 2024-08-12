@@ -187,7 +187,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           width: 300,
           height: 350,
           child: PhotoView(
-            backgroundDecoration: BoxDecoration(
+            backgroundDecoration: const BoxDecoration(
                 color: Colors.transparent),
             imageProvider: MemoryImage(image),
             minScale: PhotoViewComputedScale.contained,
@@ -237,7 +237,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => CartPage(),
+                          builder: (context) => const CartPage(),
                         ));
                       },
                     ),
@@ -284,11 +284,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const SizedBox(
                           width: 10,
                         ),
-                        IconButton(
-                            onPressed: () {
+                        GestureDetector(
+                            onTap: () {
                               _showConfirmationDialog();
                             },
-                            icon: Icon(
+                            child: Icon(
                               isFavorite
                                   ? Icons.favorite
                                   : Icons.favorite_border,
@@ -305,12 +305,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       children: [
                         GestureDetector(
                           onTap: () => showImageProduct(
-                              context, image), // Xử lý bấm vào ảnh
+                              context, image),
                           onDoubleTap: () => showImageProduct(
-                              context, image), // Xử lý double click vào ảnh
+                              context, image),
                           child: MouseRegion(
                             onEnter: (_) => showImageProduct(
-                                context, image), // Xử lý hover qua ảnh
+                                context, image),
                             child: Image.memory(
                               image,
                               width: 85,

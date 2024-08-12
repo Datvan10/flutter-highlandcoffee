@@ -107,7 +107,6 @@ class _FavoriteProductFormState extends State<FavoriteProductForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Show image
             Image.memory(
               base64Decode(widget.favorite.image),
             ),
@@ -146,12 +145,12 @@ class _FavoriteProductFormState extends State<FavoriteProductForm> {
                     ),
                   ],
                 ),
-                IconButton(
-                    onPressed: () {
+                GestureDetector(
+                    onTap: () {
                       _showConfirmationDialog();
                     },
-                    icon: Icon(
-                      Icons.delete_forever,
+                    child: Icon(
+                      Icons.delete_rounded,
                       color: red,
                     ))
               ],
