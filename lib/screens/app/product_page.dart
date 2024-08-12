@@ -83,7 +83,7 @@ class _ProductPageState extends State<ProductPage> {
             icon: Icons.shopping_cart,
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CartPage(),
+                builder: (context) => const CartPage(),
               ));
             },
           ),
@@ -93,7 +93,7 @@ class _ProductPageState extends State<ProductPage> {
         future: productsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
@@ -103,7 +103,7 @@ class _ProductPageState extends State<ProductPage> {
           } else {
             List<Product> products = snapshot.data ?? [];
             return Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
