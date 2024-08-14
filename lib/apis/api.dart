@@ -545,6 +545,26 @@ class SystemApi {
     }
   }
 
+  // function Get point customer for feature discount
+  Future<int?> getCustomerPoint(String customerid) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$customerUrl/points/$customerid'),
+      );
+
+      if (response.statusCode == 200) {
+        // Parse response body to integer
+        return int.parse(response.body);
+      } else {
+        print('Failed to get customer points: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error getting customer points: $e');
+      return null;
+    }
+  }
+
   // function active account customer
   Future<void> activateAccountCustomer(String customerid) async {
     try {
@@ -559,7 +579,6 @@ class SystemApi {
       }
     } catch (e) {
       print('Error activating account: $e');
-      // Xử lý lỗi nếu cần thiết
     }
   }
 
@@ -577,7 +596,6 @@ class SystemApi {
       }
     } catch (e) {
       print('Error blocking account: $e');
-      // Xử lý lỗi nếu cần thiết
     }
   }
 
@@ -734,7 +752,6 @@ class SystemApi {
       }
     } catch (e) {
       print('Error publish comment: $e');
-      // Xử lý lỗi nếu cần thiết
     }
   }
 
