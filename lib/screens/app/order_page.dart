@@ -31,11 +31,13 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   Future<String> categoryNameFuture = Future.value('Đặt hàng');
   int totalQuantity = 0;
-  late int totalPrice = 0;
+  late double totalPrice = 0.0;
   Customer? loggedCustomer = AuthManager().loggedInCustomer;
   SystemApi systemApi = SystemApi();
   String selectedPaymentMethod = '';
   String responseCode = '';
+  int? customerPoints;
+
   //
   final _textDiscountCodeController = TextEditingController();
 
@@ -44,6 +46,7 @@ class _OrderPageState extends State<OrderPage> {
     super.initState();
     getTotalQuantity();
     fetchTotalPrice();
+    fetchCustomerPoints();
   }
 
   //
@@ -61,15 +64,30 @@ class _OrderPageState extends State<OrderPage> {
 
   //
   Future<void> fetchTotalPrice() async {
-    int total = 0;
+    double total = 0.0;
 
     widget.cartItems.forEach((CartItem cartItem) {
       total += cartItem.totalprice;
     });
 
+    if (customerPoints != null && customerPoints! >= 100) {
+      // Kiểm tra điểm
+      total *= 0.8; // Giảm 20%
+    }
+
     setState(() {
       totalPrice = total;
     });
+  }
+
+  Future<void> fetchCustomerPoints() async {
+    if (loggedCustomer != null && loggedCustomer!.customerid != null) {
+      customerPoints =
+          await systemApi.getCustomerPoint(loggedCustomer!.customerid!);
+           print('Điểm khách hàng: $customerPoints');
+      setState(() {}); // Cập nhật giao diện với điểm mới
+      fetchTotalPrice(); // Cập nhật lại giá trị tổng sau khi có điểm
+    }
   }
 
   Future<void> addOrder() async {
@@ -125,7 +143,7 @@ class _OrderPageState extends State<OrderPage> {
     Tickets(
         imagePath: 'assets/images/ticket/discount_code_tea_freeze.jpg',
         name: 'TEAFREEZEAJX01',
-        description: 'Ưu đãi 30% cho Trà & Freeze',
+        description: 'Ưu đãi 20% cho Trà & Freeze',
         date: 'Đến hết ngày 30/12/2023',
         titleUse: 'Áp Dụng'),
     Tickets(
@@ -227,9 +245,13 @@ class _OrderPageState extends State<OrderPage> {
                                   fontSize: 18.0,
                                   color: primaryColors,
                                   fontWeight: FontWeight.bold)),
-                          Text('0đ',
-                              style: GoogleFonts.roboto(
-                                  color: primaryColors, fontSize: 16))
+                          Text(
+                            customerPoints != null && customerPoints! >= 100
+                                ? '20%'
+                                : '0%',
+                            style: GoogleFonts.roboto(
+                                color: primaryColors, fontSize: 16),
+                          ),
                         ],
                       )
                     ],
