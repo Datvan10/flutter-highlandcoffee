@@ -181,14 +181,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        backgroundColor:
-            Colors.transparent,
+        backgroundColor: Colors.transparent,
         child: Container(
           width: 300,
           height: 350,
           child: PhotoView(
-            backgroundDecoration: const BoxDecoration(
-                color: Colors.transparent),
+            backgroundDecoration:
+                const BoxDecoration(color: Colors.transparent),
             imageProvider: MemoryImage(image),
             minScale: PhotoViewComputedScale.contained,
             maxScale: PhotoViewComputedScale.covered * 2,
@@ -304,13 +303,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
-                          onTap: () => showImageProduct(
-                              context, image),
-                          onDoubleTap: () => showImageProduct(
-                              context, image),
+                          onTap: () => showImageProduct(context, image),
+                          onDoubleTap: () => showImageProduct(context, image),
                           child: MouseRegion(
-                            onEnter: (_) => showImageProduct(
-                                context, image),
+                            onEnter: (_) => showImageProduct(context, image),
                             child: Image.memory(
                               image,
                               width: 85,
@@ -454,11 +450,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           width: 50,
                         ),
                         Text(
-                          totalPrice.toStringAsFixed(3) + 'đ',
+                          totalPrice == 0
+                              ? 'Chưa có giá'
+                              : totalPrice.toStringAsFixed(3) + 'đ',
                           style: GoogleFonts.roboto(
-                              fontSize: 19,
-                              fontWeight: FontWeight.bold,
-                              color: primaryColors),
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                            color: primaryColors,
+                          ),
                         )
                       ],
                     ),
