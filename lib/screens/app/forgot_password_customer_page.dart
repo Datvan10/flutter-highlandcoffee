@@ -55,16 +55,16 @@ class _ForgotPasswordCustomerPageState
           children: [
             //title email
             Text(
-              'Quên mật khẩu?',
+              'Cấp lại mật khẩu',
               style: GoogleFonts.arsenal(
                   fontSize: 30.0, fontWeight: FontWeight.bold, color: brown),
             ),
-            SizedBox(
+            const SizedBox(
               height: 190.0,
             ),
             //form email
             MyTextFormField(
-              hintText: 'Nhập email hoặc số điện thoại',
+              hintText: 'Nhập số điện thoại đăng ký tài khoản',
               prefixIconData: Icons.person,
               suffixIcon: IconButton(
                   onPressed: () {
@@ -79,7 +79,7 @@ class _ForgotPasswordCustomerPageState
               controller: identifierController,
               iconColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //form password
@@ -102,7 +102,7 @@ class _ForgotPasswordCustomerPageState
               obscureText: !isObsecure,
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //edit password
@@ -124,7 +124,7 @@ class _ForgotPasswordCustomerPageState
             ),
             //button login
             MyButton(
-              text: 'Câp nhật mật khẩu',
+              text: 'Tiếp tục',
               onTap: resetPasswordCustomer,
               buttonColor: primaryColors,
             ),

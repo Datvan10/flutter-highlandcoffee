@@ -174,15 +174,15 @@ class _ActiveAndBlockAccountCustomerPageState
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28.0),
-                      borderSide: BorderSide(color: Colors.white),
+                      borderSide: const BorderSide(color: Colors.white),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28.0),
-                      borderSide: BorderSide(color: Colors.white),
+                      borderSide: const BorderSide(color: Colors.white),
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -194,7 +194,7 @@ class _ActiveAndBlockAccountCustomerPageState
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
               ],
             ),
           ),
@@ -204,7 +204,7 @@ class _ActiveAndBlockAccountCustomerPageState
             padding:
                 const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 25.0),
             child: ListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: filteredCustomers.length,
               itemBuilder: (context, index) {
@@ -255,7 +255,7 @@ class _ActiveAndBlockAccountCustomerPageState
                                     color: red,
                                   ),
                                 ),
-                                SizedBox(width: 5.0,),
+                                const SizedBox(width: 5.0,),
                                 Text('điểm thưởng', style: GoogleFonts.roboto(
                                     fontSize: 16,
                                     color: black,
@@ -272,7 +272,7 @@ class _ActiveAndBlockAccountCustomerPageState
                                     shape: BoxShape.circle,
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Text(
                                   customer.status == 0
                                       ? 'Đang hoạt động'

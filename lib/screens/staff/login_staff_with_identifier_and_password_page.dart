@@ -48,15 +48,16 @@ class _LoginStaffWithIdentifierAndPasswordPageState
       showCustomAlertDialog(context, 'Thông báo',
           'Số điện thoại không hợp lệ, phải có 10 chữ số');
     } else if (password.length < 6) {
-      showCustomAlertDialog(
-          context, 'Thông báo', 'Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
+      showCustomAlertDialog(context, 'Thông báo',
+          'Mật khẩu không hợp lệ, phải chứa ít nhất 6 ký tự');
     } else {
       try {
         bool isAuthenticated =
             await systemApi.authenticateAccountStaffs(identifier, password);
 
         if (isAuthenticated) {
-          Staff loggedInStaff = await systemApi.getStaffByIdentifier(identifier);
+          Staff loggedInStaff =
+              await systemApi.getStaffByIdentifier(identifier);
           AuthManager().setLoggedInStaff(loggedInStaff);
           Navigator.pushReplacementNamed(context, '/home_page');
           showCustomAlertDialog(context, 'Thông báo', 'Đăng nhập thành công');
@@ -66,8 +67,8 @@ class _LoginStaffWithIdentifierAndPasswordPageState
         }
       } catch (e) {
         print("Authentication Error: $e");
-        showCustomAlertDialog(
-            context, 'Thông báo', 'Không thể xác thực tài khoản, vui lòng thử lại');
+        showCustomAlertDialog(context, 'Thông báo',
+            'Không thể xác thực tài khoản, vui lòng thử lại');
       }
     }
   }
@@ -81,7 +82,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             //title email
@@ -90,7 +91,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
               style: GoogleFonts.arsenal(
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
-            SizedBox(
+            const SizedBox(
               height: 140.0,
             ),
             //form email
@@ -111,7 +112,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
               controller: _identifierController,
               iconColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //form password
@@ -134,7 +135,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
               obscureText: !isObsecure,
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //edit password
@@ -148,12 +149,12 @@ class _LoginStaffWithIdentifierAndPasswordPageState
                   child: Text(
                     'Quên mật khẩu?',
                     style: GoogleFonts.roboto(
-                        color: blue, decoration: TextDecoration.underline),
+                        color: blue),
                   ),
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //button login
@@ -162,7 +163,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
               onTap: loginStaff,
               buttonColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 40.0,
             ),
             //or continue with
@@ -186,14 +187,14 @@ class _LoginStaffWithIdentifierAndPasswordPageState
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 40.0,
             ),
             //or login with facebook, email, google,...
             Center(
                 child: Text('ĐĂNG NHẬP BẰNG',
                     style: GoogleFonts.roboto(color: grey))),
-            SizedBox(
+            const SizedBox(
               height: 25.0,
             ),
             Row(
@@ -213,7 +214,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             //text tip
@@ -228,8 +229,7 @@ class _LoginStaffWithIdentifierAndPasswordPageState
                     'Đăng ký ngay!',
                     style: GoogleFonts.roboto(
                         color: blue,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline),
+                        fontWeight: FontWeight.bold),
                   ),
                 )
               ],
