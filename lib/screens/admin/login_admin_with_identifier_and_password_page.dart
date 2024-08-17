@@ -67,7 +67,7 @@ class _LoginAdminWithIdentifierAndPassWordPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             //title identifier
@@ -76,7 +76,7 @@ class _LoginAdminWithIdentifierAndPassWordPageState
               style: GoogleFonts.arsenal(
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
-            SizedBox(
+            const SizedBox(
               height: 190.0,
             ),
             //form identifier
@@ -95,7 +95,7 @@ class _LoginAdminWithIdentifierAndPassWordPageState
               controller: identifierController,
               iconColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //form password
@@ -117,7 +117,7 @@ class _LoginAdminWithIdentifierAndPassWordPageState
               iconColor: primaryColors,
               obscureText: !isObsecure,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //edit password
@@ -131,12 +131,12 @@ class _LoginAdminWithIdentifierAndPassWordPageState
                   child: Text(
                     'Quên mật khẩu?',
                     style: GoogleFonts.roboto(
-                        color: blue, decoration: TextDecoration.underline),
+                        color: blue),
                   ),
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //button login
@@ -145,7 +145,7 @@ class _LoginAdminWithIdentifierAndPassWordPageState
               onTap: loginAdminWithIdentifierAndPassword,
               buttonColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 50.0,
             ),
             //or continue with
@@ -169,14 +169,14 @@ class _LoginAdminWithIdentifierAndPassWordPageState
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 40.0,
             ),
             //or login with facebook, email, google,...
             Center(
                 child: Text('ĐĂNG NHẬP BẰNG',
                     style: GoogleFonts.roboto(color: grey))),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             Row(
@@ -194,7 +194,7 @@ class _LoginAdminWithIdentifierAndPassWordPageState
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             //text tip
@@ -209,8 +209,7 @@ class _LoginAdminWithIdentifierAndPassWordPageState
                     'Đăng ký ngay!',
                     style: GoogleFonts.roboto(
                         color: blue,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline),
+                        fontWeight: FontWeight.bold,),
                   ),
                 )
               ],

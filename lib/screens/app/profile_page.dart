@@ -256,16 +256,23 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             const SizedBox(
-              height: 10.0,
+              height: 5.0,
             ),
-            //email
             Text(
                 loggedInCustomer?.phonenumber ??
                     loggedInStaff?.phonenumber ??
                     '',
                 style: GoogleFonts.roboto(color: black, fontSize: 16)),
+            Text(
+              loggedInCustomer?.point != null
+                  ? '${loggedInCustomer!.point.toString()} điểm thưởng'
+                  : loggedInStaff?.salary != null
+                      ? '${loggedInStaff!.salary.toString()} triệu'
+                      : '',
+              style: GoogleFonts.roboto(color: red, fontSize: 16),
+            ),
             const SizedBox(
-              height: 20.0,
+              height: 10.0,
             ),
             //
             SizedBox(
@@ -305,11 +312,11 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             //
             SizedBox(
-              height: 20.0,
+              height: 15.0,
             ),
             Divider(),
             SizedBox(
-              height: 30.0,
+              height: 15.0,
             ),
             ProfileMenu(
                 title: 'Cài đặt',

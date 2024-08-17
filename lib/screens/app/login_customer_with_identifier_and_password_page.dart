@@ -85,7 +85,7 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             //title email
@@ -94,7 +94,7 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
               style: GoogleFonts.arsenal(
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
-            SizedBox(
+            const SizedBox(
               height: 190.0,
             ),
             //form email
@@ -115,7 +115,7 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
               controller: _identifierController,
               iconColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //form password
@@ -138,7 +138,7 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
               obscureText: !isObsecure,
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //edit password
@@ -152,7 +152,7 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
                   child: Text(
                     'Quên mật khẩu?',
                     style: GoogleFonts.roboto(
-                        color: blue, decoration: TextDecoration.underline),
+                        color: blue),
                   ),
                 )
               ],
@@ -166,7 +166,7 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
               onTap: loginCustomer,
               buttonColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 40.0,
             ),
             //or continue with
@@ -190,14 +190,14 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 40.0,
             ),
             //or login with facebook, email, google,...
             Center(
                 child: Text('ĐĂNG NHẬP BẰNG',
                     style: GoogleFonts.roboto(color: grey))),
-            SizedBox(
+            const SizedBox(
               height: 25.0,
             ),
             Row(
@@ -217,7 +217,7 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             //text tip
@@ -232,8 +232,7 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
                     'Đăng ký ngay!',
                     style: GoogleFonts.roboto(
                         color: blue,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline),
+                        fontWeight: FontWeight.bold),
                   ),
                 )
               ],
