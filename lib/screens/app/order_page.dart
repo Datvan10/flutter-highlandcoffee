@@ -110,6 +110,7 @@ class _OrderPageState extends State<OrderPage> {
         image: '',
         intomoney: 0,
         totalprice: 0,
+        discountamount: 0,
         date: DateTime.now(),
         paymentmethod: selectedPaymentMethod,
         cartid:

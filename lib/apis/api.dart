@@ -1601,13 +1601,11 @@ class SystemApi {
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
 
-        // Kiểm tra xem có dữ liệu được trả về không
         if (jsonData.isNotEmpty) {
           List<OrderDetail> orderDetails =
               jsonData.map((item) => OrderDetail.fromJson(item)).toList();
           return orderDetails;
         } else {
-          // Nếu không có dữ liệu, trả về một danh sách trống
           return [];
         }
       } else if (response.statusCode == 404) {

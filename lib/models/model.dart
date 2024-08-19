@@ -233,6 +233,7 @@ class OrderDetail {
   final String customername;
   final String address;
   final String phonenumber;
+  final int discountamount;
 
   OrderDetail({
     required this.orderdetailid,
@@ -247,6 +248,7 @@ class OrderDetail {
     required this.image,
     required this.intomoney,
     required this.totalprice,
+    required this.discountamount,
     required this.date,
     required this.paymentmethod,
     required this.status,
@@ -269,6 +271,7 @@ class OrderDetail {
       image: json['image'] ?? '',
       intomoney: json['intomoney'] ?? 0,
       totalprice: json['totalprice'] ?? 0,
+      discountamount : json['discountamount'] ?? 0,
       date: DateTime.parse(json['date'] ?? DateTime.now().toString()),
       paymentmethod: json['paymentmethod'] ?? '',
       status: json['status'] ?? 0,
@@ -291,6 +294,7 @@ class OrderDetail {
         'image': image,
         'intomoney': intomoney,
         'totalprice': totalprice,
+        'discountamount' : discountamount,
         'date': date.toIso8601String(),
         'paymentmethod': paymentmethod,
         'status': status,

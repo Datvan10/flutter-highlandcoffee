@@ -106,7 +106,7 @@ class _CartPageState extends State<CartPage> {
           children: [
             Center(
               child: Text(
-                'Miễn phí vận chuyển với đơn hàng trên 500.000đ',
+                'Giảm giá 20% cho những khách hàng có 100 điểm',
                 style: GoogleFonts.roboto(
                   color: grey,
                   fontSize: 17,
