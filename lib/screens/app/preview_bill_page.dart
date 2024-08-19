@@ -109,7 +109,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                 )
               ]
             : [],
-        title: Text('Preview hóa đơn',
+        title: Text('Hóa đơn xem trước',
             style: GoogleFonts.arsenal(
               color: primaryColors,
               fontWeight: FontWeight.bold,
@@ -334,7 +334,34 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '0',
+                                '${((orderDetails.fold(0, (sum, item) => sum + item.discountamount) / orderDetails.fold(0, (sum, item) => sum + item.intomoney)) * 100).toInt()}%',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(flex: 3, child: Text('')),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                'Số tiền giảm:',
+                                style: GoogleFonts.arsenal(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                '${orderDetails.fold(0, (sum, item) => sum + item.discountamount).toStringAsFixed(3)}',
                                 style: GoogleFonts.roboto(
                                   fontSize: 16,
                                 ),
@@ -361,7 +388,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '${orderDetails.fold(0, (sum, item) => sum + item.intomoney).toStringAsFixed(3)}',
+                                '${(orderDetails.fold(0, (sum, item) => sum + item.intomoney) - orderDetails.fold(0, (sum, item) => sum + item.discountamount)).toStringAsFixed(3)}',
                                 style: GoogleFonts.roboto(
                                   fontSize: 16,
                                 ),
