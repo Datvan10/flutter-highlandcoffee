@@ -351,6 +351,33 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             Expanded(
                               flex: 3,
                               child: Text(
+                                'VAT:',
+                                style: GoogleFonts.arsenal(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                '0%',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(flex: 3, child: Text('')),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
                                 'Số tiền giảm:',
                                 style: GoogleFonts.arsenal(
                                   fontSize: 16,
@@ -398,64 +425,72 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                           ],
                         ),
                         SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(flex: 3, child: Text('')),
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                'Tiền khách đưa:',
-                                style: GoogleFonts.arsenal(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        Visibility(
+                          visible: loggedInStaff != null,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Expanded(flex: 3, child: Text('')),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                      'Tiền khách đưa:',
+                                      style: GoogleFonts.arsenal(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      '0',
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                '0',
-                                style: GoogleFonts.roboto(
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
+                              SizedBox(height: 10.0),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Expanded(flex: 3, child: Text('')),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                      'Tiền thừa:',
+                                      style: GoogleFonts.arsenal(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      '0',
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(flex: 3, child: Text('')),
-                            Expanded(
-                              flex: 3,
-                              child: Text(
-                                'Tiền thừa:',
-                                style: GoogleFonts.arsenal(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                '0',
-                                style: GoogleFonts.roboto(
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  if (loggedInStaff != null)
-                    MyButton(
+                  Visibility(
+                    visible: loggedInStaff != null,
+                    child: MyButton(
                       text: 'Lập hóa đơn',
                       onTap: () {
                         addBill();
@@ -466,19 +501,23 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                       },
                       buttonColor: primaryColors,
                       isDisabled: orderDetails[0].status != 1,
-                    )
-                  else if (loggedInCustomer != null)
-                    MyButton(
-                        text: 'Hoàn thành',
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ),
-                          );
-                        },
-                        buttonColor: primaryColors),
+                    ),
+                  ),
+                  Visibility(
+                    visible: loggedInCustomer != null,
+                    child: MyButton(
+                      text: 'Hoàn thành',
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(),
+                          ),
+                        );
+                      },
+                      buttonColor: primaryColors,
+                    ),
+                  ),
                 ],
               ),
             );

@@ -286,9 +286,8 @@ class _BillDetailPageState extends State<BillDetailPage> {
                               flex: 2,
                               child: Text(
                                 '${bill.totalprice.toStringAsFixed(3)}',
-                                style: GoogleFonts.arsenal(
+                                style: GoogleFonts.roboto(
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.right,
                               ),
@@ -296,7 +295,6 @@ class _BillDetailPageState extends State<BillDetailPage> {
                           ],
                         ),
                         const SizedBox(height: 10.0),
-                        // Chiết khấu
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -314,10 +312,64 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '${bill.discountcode.toString()}',
+                                '${((orderDetails.fold(0, (sum, item) => sum + item.discountamount) / orderDetails.fold(0, (sum, item) => sum + item.intomoney)) * 100).toInt()}%',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(flex: 3, child: Text('')),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                'VAT:',
                                 style: GoogleFonts.arsenal(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              // Cần handle chỗ này
+                              child: Text(
+                                '0%',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(flex: 3, child: Text('')),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                'Số tiền giảm:',
+                                style: GoogleFonts.arsenal(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                '${bill.discountcode.toStringAsFixed(3)}',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
                                 ),
                                 textAlign: TextAlign.right,
                               ),
@@ -343,9 +395,62 @@ class _BillDetailPageState extends State<BillDetailPage> {
                               flex: 2,
                               child: Text(
                                 '${bill.totalprice.toStringAsFixed(3)}',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(flex: 3, child: Text('')),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                'Tiền khách đưa:',
                                 style: GoogleFonts.arsenal(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                '0',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(flex: 3, child: Text('')),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                'Tiền thừa:',
+                                style: GoogleFonts.arsenal(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                '0',
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
                                 ),
                                 textAlign: TextAlign.right,
                               ),
@@ -355,24 +460,31 @@ class _BillDetailPageState extends State<BillDetailPage> {
                       ],
                     ),
                   ),
-                  if (loggedInStaff != null)
-                    Positioned(
+                  Visibility(
+                    visible: loggedInStaff != null,
+                    child: Positioned(
                       bottom: 16,
                       left: 16,
                       right: 16,
                       child: MyButton(
-                          text: 'In hóa đơn',
-                          onTap: () {
-                            printBill(widget.orderid, loggedInStaff!.staffid);
-                          },
-                          buttonColor: green,
-                          isDisabled: bill.status == 2),
-                    )
-                  else if (loggedInCustomer != null)
-                    MyButton(
-                        text: 'Hoàn thành',
-                        onTap: () {},
-                        buttonColor: primaryColors),
+                        text: 'In hóa đơn',
+                        onTap: () {
+                          printBill(widget.orderid, loggedInStaff!.staffid);
+                        },
+                        buttonColor: green,
+                        isDisabled: bill.status == 2,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible:
+                        loggedInCustomer != null,
+                    child: MyButton(
+                      text: 'Hoàn thành',
+                      onTap: () {},
+                      buttonColor: primaryColors,
+                    ),
+                  ),
                 ],
               ),
             );
