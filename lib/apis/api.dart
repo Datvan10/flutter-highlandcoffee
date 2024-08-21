@@ -553,7 +553,6 @@ class SystemApi {
       );
 
       if (response.statusCode == 200) {
-        // Parse response body to integer
         return int.parse(response.body);
       } else {
         print('Failed to get customer points: ${response.statusCode}');

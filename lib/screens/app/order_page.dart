@@ -71,8 +71,7 @@ class _OrderPageState extends State<OrderPage> {
     });
 
     if (customerPoints != null && customerPoints! >= 100) {
-      // Kiểm tra điểm
-      total *= 0.8; // Giảm 20%
+      total *= 0.8;
     }
 
     setState(() {
@@ -84,9 +83,9 @@ class _OrderPageState extends State<OrderPage> {
     if (loggedCustomer != null && loggedCustomer!.customerid != null) {
       customerPoints =
           await systemApi.getCustomerPoint(loggedCustomer!.customerid!);
-           print('Điểm khách hàng: $customerPoints');
-      setState(() {}); // Cập nhật giao diện với điểm mới
-      fetchTotalPrice(); // Cập nhật lại giá trị tổng sau khi có điểm
+          //  print('Điểm khách hàng: $customerPoints');
+      setState(() {});
+      fetchTotalPrice();
     }
   }
 
@@ -171,8 +170,8 @@ class _OrderPageState extends State<OrderPage> {
   void _showPayForm(BuildContext context) {
     showModalBottomSheet(
         context: context,
-        isScrollControlled: true, // Chiều dài có thể được cuộn
-        shape: RoundedRectangleBorder(
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
         ),
         builder: (BuildContext context) {
@@ -192,7 +191,7 @@ class _OrderPageState extends State<OrderPage> {
                         fontWeight: FontWeight.bold,
                         color: primaryColors),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 70,
                   ),
                   //
@@ -215,7 +214,7 @@ class _OrderPageState extends State<OrderPage> {
                                   color: primaryColors, fontSize: 16))
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       //
@@ -234,7 +233,7 @@ class _OrderPageState extends State<OrderPage> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       //
@@ -257,7 +256,7 @@ class _OrderPageState extends State<OrderPage> {
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   //
@@ -276,7 +275,7 @@ class _OrderPageState extends State<OrderPage> {
                               fontWeight: FontWeight.bold))
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
                   //
@@ -315,7 +314,7 @@ class _OrderPageState extends State<OrderPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
@@ -334,7 +333,7 @@ class _OrderPageState extends State<OrderPage> {
                     fontWeight: FontWeight.bold,
                     color: primaryColors),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               //
@@ -379,7 +378,7 @@ class _OrderPageState extends State<OrderPage> {
                         borderRadius: BorderRadius.circular(28.0),
                         borderSide: BorderSide(color: Colors.white))),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 35,
               ),
               //
@@ -459,13 +458,13 @@ class _OrderPageState extends State<OrderPage> {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           //
           InformationCustomerForm(loggedInUser: loggedCustomer),
 
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           //
@@ -476,7 +475,7 @@ class _OrderPageState extends State<OrderPage> {
                 color: primaryColors,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           //
@@ -487,7 +486,7 @@ class _OrderPageState extends State<OrderPage> {
               });
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           //
@@ -512,7 +511,7 @@ class _OrderPageState extends State<OrderPage> {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Row(
@@ -527,7 +526,7 @@ class _OrderPageState extends State<OrderPage> {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 150,
           ),
           //
@@ -601,7 +600,7 @@ class _EditCustomerInfoFormState extends State<EditCustomerInfoForm> {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          EdgeInsets.only(top: 18.0, bottom: 25.0, right: 18.0, left: 18.0),
+         const EdgeInsets.only(top: 18.0, bottom: 25.0, right: 18.0, left: 18.0),
       child: Form(
         key: _formKey,
         child: Column(

@@ -12,6 +12,7 @@ import 'package:highlandcoffeeapp/screens/admin/dashboard_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/delete_staff_account_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/list_bill_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/publish_and_cancel_comment_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/list_order_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/top_product_page.dart';
@@ -146,10 +147,19 @@ class _AdminPageState extends State<AdminPage> {
 
         break;
 
+      case ListBillPage.routeName:
+        setState(() {
+          _selectedItem = const ListBillPage();
+        });
+
+        break;
+
       case AccessAndCancelRoleStaffPage.routeName:
         setState(() {
           _selectedItem = const AccessAndCancelRoleStaffPage();
         });
+
+        break;
 
       case PublishAndCancelCommentPage.routeName:
         setState(() {
@@ -347,6 +357,16 @@ class _AdminPageState extends State<AdminPage> {
                       title: 'Danh sách đơn hàng',
                       route: ListOrderPage.routeName,
                       icon: Icons.format_list_bulleted_outlined)
+                ]),
+            //
+            AdminMenuItem(
+                title: 'Quản lý hóa đơn',
+                icon: Icons.receipt,
+                children: [
+                  AdminMenuItem(
+                      title: 'Danh sách hóa đơn',
+                      route: ListBillPage.routeName,
+                      icon: Icons.receipt_long)
                 ]),
             //
             AdminMenuItem(
