@@ -13,7 +13,6 @@ import 'package:highlandcoffeeapp/screens/staff/add_categoty_page.dart';
 import 'package:highlandcoffeeapp/screens/staff/add_product_page.dart';
 import 'package:highlandcoffeeapp/screens/staff/list_order_page.dart';
 import 'package:highlandcoffeeapp/widgets/custom_bottom_navigation_bar.dart';
-import 'package:highlandcoffeeapp/widgets/notification.dart';
 import 'package:highlandcoffeeapp/widgets/profile_menu.dart';
 import 'package:highlandcoffeeapp/screens/client/customer_order_page.dart';
 import 'package:highlandcoffeeapp/screens/client/payment_method_page.dart';
