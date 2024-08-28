@@ -16,7 +16,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
     return Stack(
       children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image:
                   AssetImage('assets/images/welcome-logo/background_login.jpg'),
@@ -37,7 +37,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                     fontSize: 50.0,
                     decoration: TextDecoration.none),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 220,
               ),
               ElevatedButton(
@@ -65,7 +65,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                       ],
                     )),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -90,7 +90,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                       ],
                     )),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -115,7 +115,7 @@ class _ChooseLoginTypePageState extends State<ChooseLoginTypePage> {
                       ],
                     )),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 100,
               ),
               Row(

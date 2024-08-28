@@ -94,7 +94,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
             )),
         actions: [
           Container(
-              margin: EdgeInsets.only(right: 8),
+              margin: const EdgeInsets.only(right: 8),
               child: IconButton(
                 onPressed: () {
                   Get.toNamed('/home_page');
@@ -131,19 +131,19 @@ class _RateCommentPageState extends State<RateCommentPage> {
                     )
                   ],
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 LabeledTextField(
                     label: 'Tiêu đề', controller: _titleCommentController),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 LabeledTextField(
                     label: 'Nội dung', controller: _contentCommentController),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 ImagePickerWidget(
                   imagePath: _imageController,
                   onPressed: _pickImage,
                   label: 'Hình ảnh sản phẩm',
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -176,7 +176,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
                     //     style: GoogleFonts.roboto(fontSize: 18, color: white),
                     //   ),
                     // ),
-                    SizedBox(width: 15),
+                    const SizedBox(width: 15),
                     ElevatedButton(
                       onPressed: () {
                         addComment();
@@ -189,7 +189,7 @@ class _RateCommentPageState extends State<RateCommentPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
               ],
             )),
             MyButton(

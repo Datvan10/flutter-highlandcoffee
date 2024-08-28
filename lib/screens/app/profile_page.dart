@@ -268,7 +268,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   : loggedInStaff?.salary != null
                       ? '${loggedInStaff!.salary.toString()} triệu'
                       : '',
-              style: GoogleFonts.roboto(color: red, fontSize: 16),
+              style: GoogleFonts.roboto(color: white_green, fontSize: 16),
             ),
             const SizedBox(
               height: 10.0,
