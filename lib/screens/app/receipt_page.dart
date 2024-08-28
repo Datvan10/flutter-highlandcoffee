@@ -23,156 +23,150 @@ class ReceiptPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Receipt'),
-        backgroundColor: Colors.green,
+        title: Text('Biên lai'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: Container(
-        margin: EdgeInsets.all(16.0),
-        padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(0),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.5),
+            ),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  ClipPath(
+                    clipper: ReceiptClipper(),
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          topRight: Radius.circular(20.0),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: 40), // Dành chỗ cho biểu tượng dấu tích
+                          Text(
+                            'Biên Lai',
+                            style: GoogleFonts.roboto(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Mã biên lai: $receiptId',
+                            style: GoogleFonts.roboto(fontSize: 18),
+                          ),
+                          Text(
+                            'Khách hàng: $customerName',
+                            style: GoogleFonts.roboto(fontSize: 18),
+                          ),
+                          Text(
+                            'Ngày: $date',
+                            style: GoogleFonts.roboto(fontSize: 18),
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Tổng cộng: ${totalAmount.toStringAsFixed(2)}',
+                            style: GoogleFonts.roboto(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'VAT: ${vat.toStringAsFixed(2)}',
+                            style: GoogleFonts.roboto(fontSize: 18),
+                          ),
+                          Text(
+                            'Chiết khấu: ${discount.toStringAsFixed(2)}',
+                            style: GoogleFonts.roboto(fontSize: 18),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Tổng thanh toán: ${(totalAmount + vat - discount).toStringAsFixed(2)}',
+                            style: GoogleFonts.roboto(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Divider(color: Colors.grey),
+                          Text(
+                            'Số tiền đã trả: ${amountPaid.toStringAsFixed(2)}',
+                            style: GoogleFonts.roboto(fontSize: 18),
+                          ),
+                          Text(
+                            'Tiền thừa: ${(amountPaid - (totalAmount + vat - discount)).toStringAsFixed(2)}',
+                            style: GoogleFonts.roboto(fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: -40,
+                    left: 0,
+                    right: 0,
+                    child: CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.green,
+                      child: Icon(
+                        Icons.check,
+                        size: 40,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-          border: Border(
-            top: BorderSide(
-              color: Colors.black,
-              width: 2.0,
-            ),
-            left: BorderSide(
-              color: Colors.black,
-              width: 2.0,
-            ),
-            right: BorderSide(
-              color: Colors.black,
-              width: 2.0,
-            ),
-            bottom: BorderSide.none,
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Biên Lai',
-              style: GoogleFonts.roboto(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Mã biên lai: $receiptId',
-              style: GoogleFonts.roboto(fontSize: 18),
-            ),
-            Text(
-              'Khách hàng: $customerName',
-              style: GoogleFonts.roboto(fontSize: 18),
-            ),
-            Text(
-              'Ngày: $date',
-              style: GoogleFonts.roboto(fontSize: 18),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Tổng cộng: ${totalAmount.toStringAsFixed(2)}',
-              style: GoogleFonts.roboto(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'VAT: ${vat.toStringAsFixed(2)}',
-              style: GoogleFonts.roboto(fontSize: 18),
-            ),
-            Text(
-              'Chiết khấu: ${discount.toStringAsFixed(2)}',
-              style: GoogleFonts.roboto(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Tổng thanh toán: ${(totalAmount + vat - discount).toStringAsFixed(2)}',
-              style: GoogleFonts.roboto(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20),
-            Divider(color: Colors.grey),
-            Text(
-              'Số tiền đã trả: ${amountPaid.toStringAsFixed(2)}',
-              style: GoogleFonts.roboto(fontSize: 18),
-            ),
-            Text(
-              'Tiền thừa: ${(amountPaid - (totalAmount + vat - discount)).toStringAsFixed(2)}',
-              style: GoogleFonts.roboto(fontSize: 18),
-            ),
-            Spacer(),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Quay lại'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: CustomPaint(
-        painter: ReceiptBorderPainter(),
-        child: Container(
-          height: 50,
-        ),
+        ],
       ),
     );
   }
 }
 
-class ReceiptBorderPainter extends CustomPainter {
+class ReceiptClipper extends CustomClipper<Path> {
   @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
+  Path getClip(Size size) {
+    final path = Path();
+
+    path.moveTo(0, 0);
+    path.lineTo(size.width, 0);
+    path.lineTo(size.width, size.height - 20);
 
     double radius = 10;
-    double centerX = radius;
-
-    while (centerX < size.width) {
-      canvas.drawArc(
-        Rect.fromCircle(center: Offset(centerX, 0), radius: radius),
-        3.14,
-        3.14,
-        false,
-        paint,
+    double centerX = size.width;
+    while (centerX > 0) {
+      path.arcToPoint(
+        Offset(centerX - 20, size.height - 20),
+        radius: Radius.circular(radius),
+        clockwise: false,
       );
-
-      canvas.drawLine(
-        Offset(centerX - radius, size.height),
-        Offset(centerX + radius, size.height),
-        paint,
-      );
-
-      centerX += radius * 2;
+      centerX -= 20;
     }
+    path.lineTo(0, size.height - 20);
+    path.close();
+
+    return path;
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
     return false;
   }
 }
