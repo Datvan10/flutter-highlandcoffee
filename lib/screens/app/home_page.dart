@@ -134,14 +134,14 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CarouselSlide(
+              const CarouselSlide(
                 height: 180,
               ),
-              SizedBox(height: 15),
-              ProductCategory(),
-              SizedBox(height: 15),
-              ProductPopularItem(),
-              SizedBox(
+              const SizedBox(height: 15),
+              const ProductCategory(),
+              const SizedBox(height: 15),
+              const ProductPopularItem(),
+              const SizedBox(
                 height: 5.0,
               ),
               Row(

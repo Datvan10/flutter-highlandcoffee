@@ -89,7 +89,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       onPressed: () {
                         addCategory();
                       },
-                      style: ElevatedButton.styleFrom(backgroundColor: green),
+                      style: ElevatedButton.styleFrom(backgroundColor: white_green),
                       child: Text(
                         'Thêm',
                         style: TextStyle(color: white),

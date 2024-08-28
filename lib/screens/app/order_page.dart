@@ -669,7 +669,7 @@ class _EditCustomerInfoFormState extends State<EditCustomerInfoForm> {
               },
             ),
             SizedBox(height: 20),
-            MyButton(text: 'Lưu', onTap: saveChangeInfor, buttonColor: green)
+            MyButton(text: 'Lưu', onTap: saveChangeInfor, buttonColor: white_green)
           ],
         ),
       ),

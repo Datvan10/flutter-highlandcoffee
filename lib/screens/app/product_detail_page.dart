@@ -170,6 +170,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       await systemApi.addCart(newCart);
       showCustomAlertDialog(
           context, 'Thành công', 'Đã thêm sản phẩm vào giỏ hàng');
+          // fix lại khi thêm sản phẩm thành công vào giỏ hàng nhấn Ok sẽ navigate qua trang Giỏ hàng
     } catch (e) {
       print(e);
       showCustomAlertDialog(
@@ -473,7 +474,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               fontWeight: FontWeight.bold,
                               color: black),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 30,
                         ),
                         Text(

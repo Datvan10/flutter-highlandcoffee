@@ -41,6 +41,7 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
   }
 
   void _navigateToProductDetails(int index, List<Favorite> products) {
+    // handle chuyen qua trang product detail
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(
@@ -60,7 +61,7 @@ class _FavoriteProductPageState extends State<FavoriteProductPage> {
             icon: Icons.shopping_cart,
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CartPage(),
+                builder: (context) => const CartPage(),
               ));
             },
           ),
