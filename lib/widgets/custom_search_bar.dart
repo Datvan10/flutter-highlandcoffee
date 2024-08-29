@@ -72,7 +72,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: white_grey,
+                      color: whiteGrey,
                       shape: BoxShape.circle,
                     ),
                     child: Center(

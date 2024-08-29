@@ -396,7 +396,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                    color: light_grey, shape: BoxShape.circle),
+                                    color: lightGrey, shape: BoxShape.circle),
                                 child: GestureDetector(
                                   onTap: decrementQuantity,
                                   child: Icon(
@@ -498,7 +498,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             },
                           ),
                           VerticalDivider(
-                            color: light_brown,
+                            color: lightBrown,
                             thickness: 1,
                           ),
                           ButtonBuyNow(

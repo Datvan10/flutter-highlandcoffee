@@ -155,7 +155,7 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
                                                               : order.status ==
                                                                       2
                                                                   ? green
-                                                                  : light_yellow,
+                                                                  : lightYellow,
                                                       shape: BoxShape.circle,
                                                     ),
                                                   ),
@@ -177,7 +177,7 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
                                                               : order.status ==
                                                                       2
                                                                   ? green
-                                                                  : light_yellow,
+                                                                  : lightYellow,
                                                     ),
                                                   ),
                                                 ],

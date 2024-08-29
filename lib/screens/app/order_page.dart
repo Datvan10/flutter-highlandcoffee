@@ -453,7 +453,7 @@ class _OrderPageState extends State<OrderPage> {
                 },
                 child: Text(
                   'Thay đổi',
-                  style: GoogleFonts.roboto(color: light_blue, fontSize: 16),
+                  style: GoogleFonts.roboto(color: lightBlue, fontSize: 16),
                 ),
               )
             ],
@@ -506,7 +506,7 @@ class _OrderPageState extends State<OrderPage> {
                 },
                 child: Text(
                   'Chọn khuyến mãi',
-                  style: GoogleFonts.roboto(color: light_blue, fontSize: 16),
+                  style: GoogleFonts.roboto(color: lightBlue, fontSize: 16),
                 ),
               )
             ],
@@ -669,7 +669,7 @@ class _EditCustomerInfoFormState extends State<EditCustomerInfoForm> {
               },
             ),
             SizedBox(height: 20),
-            MyButton(text: 'Lưu', onTap: saveChangeInfor, buttonColor: white_green)
+            MyButton(text: 'Lưu', onTap: saveChangeInfor, buttonColor: whiteGreen)
           ],
         ),
       ),

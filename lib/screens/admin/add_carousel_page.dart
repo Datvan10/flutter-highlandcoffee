@@ -121,7 +121,7 @@ class _AddCarouselPageState extends State<AddCarouselPage> {
                       onPressed: () {
                         addCarousel();
                       },
-                      style: ElevatedButton.styleFrom(backgroundColor: white_green),
+                      style: ElevatedButton.styleFrom(backgroundColor: whiteGreen),
                       child: Text(
                         'Thêm',
                         style: TextStyle(color: white),

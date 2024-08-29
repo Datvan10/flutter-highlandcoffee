@@ -197,7 +197,7 @@ class _UpdateCategoryPageState extends State<UpdateCategoryPage> {
                         width: 20,
                         height: 20,
                         decoration: BoxDecoration(
-                            color: white_grey, shape: BoxShape.circle),
+                            color: whiteGrey, shape: BoxShape.circle),
                         child: Center(
                           child: IconButton(
                             icon: const Icon(

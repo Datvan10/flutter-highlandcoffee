@@ -222,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 35,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
-                          color: white_grey),
+                          color: whiteGrey),
                       child: Icon(
                         LineAwesomeIcons.camera,
                         size: 20,
@@ -268,7 +268,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   : loggedInStaff?.salary != null
                       ? '${loggedInStaff!.salary.toString()} triệu'
                       : '',
-              style: GoogleFonts.roboto(color: white_green, fontSize: 16),
+              style: GoogleFonts.roboto(color: whiteGreen, fontSize: 16),
             ),
             const SizedBox(
               height: 10.0,
@@ -374,7 +374,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           }
                         : null,
                     textColor: grey,
-                    titleColor: role == '0' ? black : light_grey,
+                    titleColor: role == '0' ? black : lightGrey,
                   ),
             loggedInCustomer != null
                 ? ProfileMenu(
@@ -403,7 +403,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           }
                         : null,
                     textColor: grey,
-                    titleColor: role == '0' ? black : light_grey,
+                    titleColor: role == '0' ? black : lightGrey,
                   ),
             ProfileMenu(
                 title: 'Về chúng tôi',
