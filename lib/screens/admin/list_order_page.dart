@@ -156,7 +156,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                           width: 20,
                           height: 20,
                           decoration: BoxDecoration(
-                              color: white_grey, shape: BoxShape.circle),
+                              color: whiteGrey, shape: BoxShape.circle),
                           child: Center(
                             child: IconButton(
                               icon: const Icon(
@@ -264,7 +264,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                                               : order.status ==
                                                                       2
                                                                   ? green
-                                                                  : light_yellow,
+                                                                  : lightYellow,
                                                       shape: BoxShape.circle,
                                                     ),
                                                   ),
@@ -286,7 +286,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                                               : order.status ==
                                                                       2
                                                                   ? green
-                                                                  : light_yellow,
+                                                                  : lightYellow,
                                                     ),
                                                   ),
                                                 ],

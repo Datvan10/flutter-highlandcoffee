@@ -25,7 +25,7 @@ class MyButton extends StatelessWidget {
         width: double.infinity,
         child: Container(
           decoration: BoxDecoration(
-            color: isDisabled ? light_grey : buttonColor,
+            color: isDisabled ? lightGrey : buttonColor,
             borderRadius: BorderRadius.circular(40),
           ),
           child: Center(

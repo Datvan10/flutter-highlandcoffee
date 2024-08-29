@@ -4,6 +4,7 @@ import 'package:highlandcoffeeapp/apis/api.dart';
 import 'package:highlandcoffeeapp/auth/auth_manage.dart';
 import 'package:highlandcoffeeapp/models/model.dart';
 import 'package:highlandcoffeeapp/screens/app/home_page.dart';
+import 'package:highlandcoffeeapp/screens/app/receipt_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/custom_alert_dialog.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
@@ -38,14 +39,52 @@ class _BillDetailPageState extends State<BillDetailPage> {
 
   void printBill(String orderid, String staffid) async {
     await systemApi.printBill(orderid, staffid);
+
+    final billDetailsList = await systemApi.getBillByOrderId(orderid);
+
+    if (billDetailsList.isNotEmpty) {
+      final billDetails = billDetailsList.first;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ReceiptPage(
+              billid: billDetails.billid,
+              customername: billDetails.customername,
+              date: formatDate(billDetails.date),
+              totalprice: billDetails.totalprice,
+              paymentmethod: billDetails.paymentmethod),
+        ),
+      );
+      showCustomAlertDialog(
+        context,
+        'Thông báo',
+        'Thanh toán hóa đơn thành công.',
+      );
+    } else {
+      showCustomAlertDialog(
+        context,
+        'Lỗi',
+        'Không thể lấy thông tin hóa đơn. Vui lòng thử lại.',
+      );
+    }
+
     setState(() {
       futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
       futureBillDetails = systemApi.getBillByOrderId(widget.orderid);
     });
-
-    showCustomAlertDialog(
-        context, 'Thông báo', 'Thanh toán hóa đơn thành công.');
   }
+
+  // void printBill(String orderid, String staffid) async {
+  //   await systemApi.printBill(orderid, staffid);
+  //   setState(() {
+  //     futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
+  //     futureBillDetails = systemApi.getBillByOrderId(widget.orderid);
+  //   });
+
+  //   showCustomAlertDialog(
+  //       context, 'Thông báo', 'Thanh toán hóa đơn thành công.');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -477,8 +516,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                     ),
                   ),
                   Visibility(
-                    visible:
-                        loggedInCustomer != null,
+                    visible: loggedInCustomer != null,
                     child: MyButton(
                       text: 'Hoàn thành',
                       onTap: () {},

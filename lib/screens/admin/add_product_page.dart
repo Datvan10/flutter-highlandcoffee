@@ -216,7 +216,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   onPressed: () {
                     addProduct();
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: white_green),
+                  style: ElevatedButton.styleFrom(backgroundColor: whiteGreen),
                   child: Text(
                     'Thêm',
                     style: GoogleFonts.roboto(fontSize: 18, color: white),

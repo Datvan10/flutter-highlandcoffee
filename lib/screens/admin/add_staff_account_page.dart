@@ -143,7 +143,7 @@ class _AddStaffAccountPageState extends State<AddStaffAccountPage> {
                       onPressed: () {
                         addStaff();
                       },
-                      style: ElevatedButton.styleFrom(backgroundColor: white_green),
+                      style: ElevatedButton.styleFrom(backgroundColor: whiteGreen),
                       child: Text(
                         'Thêm',
                         style: TextStyle(color: white),

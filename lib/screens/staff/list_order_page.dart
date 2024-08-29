@@ -150,7 +150,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                                               : order.status ==
                                                                       2
                                                                   ? green
-                                                                  : light_yellow,
+                                                                  : lightYellow,
                                                       shape: BoxShape.circle,
                                                     ),
                                                   ),
@@ -174,7 +174,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                                               : order.status ==
                                                                       2
                                                                   ? green
-                                                                  : light_yellow,
+                                                                  : lightYellow,
                                                     ),
                                                   ),
                                                 ],

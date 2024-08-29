@@ -231,7 +231,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                             Container(
                                               decoration: BoxDecoration(
                                                 border: Border.all(
-                                                    color: white_grey,
+                                                    color: whiteGrey,
                                                     width: 1.0),
                                                 borderRadius:
                                                     BorderRadius.circular(10.0),
@@ -424,7 +424,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                             ? blue
                                             : orderDetails[0].status == 2
                                                 ? green
-                                                : light_yellow),
+                                                : lightYellow),
                                 const SizedBox(width: 8),
                                 Text(
                                   orderDetails[0].status == 0
@@ -443,7 +443,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                             ? blue
                                             : orderDetails[0].status == 2
                                                 ? green
-                                                : light_yellow,
+                                                : lightYellow,
                                   ),
                                 ),
                               ],

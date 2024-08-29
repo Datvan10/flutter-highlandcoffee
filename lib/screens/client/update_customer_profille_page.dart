@@ -127,7 +127,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.only(left: 18.0, top: 50.0, right: 18.0),
+          padding: const EdgeInsets.only(left: 18.0, top: 50.0, right: 18.0),
           child: Column(
             children: [
               //
@@ -138,7 +138,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                     width: 120,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: Image(
+                        child: const Image(
                             image: AssetImage(
                                 'assets/images/profile/customer-default.jpeg'))),
                   ),
@@ -155,7 +155,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                         height: 40,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            color: white_grey),
+                            color: whiteGrey),
                         child: Icon(
                           LineAwesomeIcons.camera,
                           size: 20,
@@ -167,14 +167,14 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                 ],
               ),
               //
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               Text(
                 'Cập nhật thông tin cá nhân',
-                style: GoogleFonts.roboto(color: brown, fontSize : 25),
+                style: GoogleFonts.roboto(color: brown, fontSize: 25),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               //
@@ -197,7 +197,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                           )),
                       controller: _editPhoneNumberController,
                       iconColor: grey),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   //
@@ -216,7 +216,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                           )),
                       controller: _editUserNameController,
                       iconColor: grey),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   //adress
@@ -235,7 +235,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                           )),
                       controller: _editAdressController,
                       iconColor: grey),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   //password
@@ -257,7 +257,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                     iconColor: grey,
                     obscureText: !isObsecure,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 175,
                   ),
                 ],
@@ -266,18 +266,22 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                   text: 'Cập nhật hồ sơ',
                   onTap: () {
                     Customer updateNewCustomer = Customer(
-                        customerid: loggedInUser!.customerid,
-                        name: _editUserNameController.text,
-                        address: _editAdressController.text,
-                        point: loggedInUser!.point,
-                        phonenumber: _editPhoneNumberController.text,
-                        password: _editPasswordController.text,
-                        status: 0,
-                        );
-                        if(_editUserNameController.text.isEmpty || _editAdressController.text.isEmpty || _editPhoneNumberController.text.isEmpty || _editPasswordController.text.isEmpty){
-                          showCustomAlertDialog(context, 'Thông báo', 'Vui lòng nhập đầy đủ thông tin.');
-                          return;
-                        }
+                      customerid: loggedInUser!.customerid,
+                      name: _editUserNameController.text,
+                      address: _editAdressController.text,
+                      point: loggedInUser!.point,
+                      phonenumber: _editPhoneNumberController.text,
+                      password: _editPasswordController.text,
+                      status: 0,
+                    );
+                    if (_editUserNameController.text.isEmpty ||
+                        _editAdressController.text.isEmpty ||
+                        _editPhoneNumberController.text.isEmpty ||
+                        _editPasswordController.text.isEmpty) {
+                      showCustomAlertDialog(context, 'Thông báo',
+                          'Vui lòng nhập đầy đủ thông tin.');
+                      return;
+                    }
                     updateCustomer(updateNewCustomer);
                   },
                   buttonColor: green)

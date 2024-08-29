@@ -5,22 +5,24 @@ import 'package:highlandcoffeeapp/themes/theme.dart';
 import 'package:highlandcoffeeapp/widgets/my_button.dart';
 
 class ReceiptPage extends StatelessWidget {
-  final String receiptId;
-  final String customerName;
+  final String billid;
+  final String customername;
   final String date;
-  final double totalAmount;
-  final double vat;
-  final double discount;
-  final double amountPaid;
+  final int totalprice;
+  final String paymentmethod;
+  // final double vat;
+  // final double discount;
+  // final double amountPaid;
 
   ReceiptPage({
-    required this.receiptId,
-    required this.customerName,
+    required this.billid,
+    required this.customername,
     required this.date,
-    required this.totalAmount,
-    required this.vat,
-    required this.discount,
-    required this.amountPaid,
+    required this.totalprice,
+    required this.paymentmethod,
+    // required this.vat,
+    // required this.discount,
+    // required this.amountPaid,
   });
 
   @override
@@ -49,7 +51,7 @@ class ReceiptPage extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: light_grey, width: 1),
+                            border: Border.all(color: borderColor, width: 1),
                           ),
                           child: IconButton(
                             icon: Icon(Icons.close, size: 25, color: black),
@@ -61,12 +63,11 @@ class ReceiptPage extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: light_grey, width: 1),
+                            border: Border.all(color: borderColor, width: 1),
                           ),
                           child: IconButton(
                             icon: Icon(Icons.ios_share, size: 25, color: black),
-                            onPressed: () {
-                            },
+                            onPressed: () {},
                           ),
                         ),
                       ],
@@ -127,9 +128,10 @@ class ReceiptPage extends StatelessWidget {
                                         style: GoogleFonts.roboto(fontSize: 18),
                                       ),
                                       Text(
-                                        '1.000.000đ',
+                                        '${totalprice.toStringAsFixed(3)}',
+                                        // '${totalprice.toStringAsFixed(3) + 'đ'}',
                                         style: GoogleFonts.roboto(
-                                          fontSize: 25,
+                                          fontSize: 30,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -152,7 +154,7 @@ class ReceiptPage extends StatelessWidget {
                                           padding: const EdgeInsets.all(10.0),
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                                color: light_grey, width: 0.5),
+                                                color: lightGrey, width: 0.5),
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
                                           ),
@@ -168,7 +170,7 @@ class ReceiptPage extends StatelessWidget {
                                               ),
                                               const SizedBox(height: 5),
                                               Text(
-                                                customerName,
+                                                billid,
                                                 style: GoogleFonts.roboto(
                                                     fontSize: 16,
                                                     fontWeight:
@@ -186,7 +188,7 @@ class ReceiptPage extends StatelessWidget {
                                           padding: const EdgeInsets.all(10.0),
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                                color: light_grey, width: 0.5),
+                                                color: lightGrey, width: 0.5),
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
                                           ),
@@ -227,7 +229,7 @@ class ReceiptPage extends StatelessWidget {
                                           padding: const EdgeInsets.all(10.0),
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                                color: light_grey, width: 0.5),
+                                                color: lightGrey, width: 0.5),
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
                                           ),
@@ -243,7 +245,7 @@ class ReceiptPage extends StatelessWidget {
                                               ),
                                               SizedBox(height: 5),
                                               Text(
-                                                '${totalAmount.toStringAsFixed(2)}',
+                                                '${paymentmethod}',
                                                 style: GoogleFonts.roboto(
                                                     fontSize: 16,
                                                     fontWeight:
@@ -252,7 +254,6 @@ class ReceiptPage extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        // Hộp hình chữ nhật 4
                                         Container(
                                           width: (MediaQuery.of(context)
                                                       .size
@@ -262,7 +263,7 @@ class ReceiptPage extends StatelessWidget {
                                           padding: const EdgeInsets.all(10.0),
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                                color: light_grey, width: 0.5),
+                                                color: lightGrey, width: 0.5),
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
                                           ),
@@ -271,14 +272,14 @@ class ReceiptPage extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'Nhân viên',
+                                                'Khách hàng',
                                                 style: GoogleFonts.roboto(
                                                   fontSize: 16,
                                                 ),
                                               ),
                                               const SizedBox(height: 5),
                                               Text(
-                                                '${discount.toStringAsFixed(2)}',
+                                                '${customername}',
                                                 style: GoogleFonts.roboto(
                                                     fontSize: 16,
                                                     fontWeight:
@@ -288,6 +289,23 @@ class ReceiptPage extends StatelessWidget {
                                           ),
                                         ),
                                       ],
+                                    ),
+                                    const SizedBox(height: 30),
+                                    GestureDetector(
+                                      onTap: (){},
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(Icons.download),
+                                          const SizedBox(width: 5.0,),
+                                          Text(
+                                            'Get PDF Receipt',
+                                            style:
+                                                GoogleFonts.roboto(fontSize: 18),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -321,7 +339,7 @@ class ReceiptPage extends StatelessWidget {
                                   height: 35,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: white_green,
+                                    color: whiteGreen,
                                   ),
                                   child: Icon(
                                     Icons.check,
@@ -335,7 +353,7 @@ class ReceiptPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 90),
                     // MyButton(
                     //   text: 'Tải xuống biên lai PDF',
                     //   onTap: () {
@@ -354,7 +372,7 @@ class ReceiptPage extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>const HomePage(),
+                            builder: (context) => const HomePage(),
                           ),
                         );
                       },
