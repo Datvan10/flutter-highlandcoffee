@@ -128,7 +128,7 @@ class ReceiptPage extends StatelessWidget {
                                         style: GoogleFonts.roboto(fontSize: 18),
                                       ),
                                       Text(
-                                        '${totalprice.toStringAsFixed(3)}',
+                                        'VND ${totalprice.toStringAsFixed(3)}',
                                         // '${totalprice.toStringAsFixed(3) + 'đ'}',
                                         style: GoogleFonts.roboto(
                                           fontSize: 30,
