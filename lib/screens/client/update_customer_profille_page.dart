@@ -284,7 +284,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                     }
                     updateCustomer(updateNewCustomer);
                   },
-                  buttonColor: green)
+                  buttonColor: whiteGreen)
             ],
           ),
         ),

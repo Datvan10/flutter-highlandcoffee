@@ -14,7 +14,7 @@ class ReceiptPage extends StatelessWidget {
   // final double discount;
   // final double amountPaid;
 
-  ReceiptPage({
+  const ReceiptPage({
     required this.billid,
     required this.customername,
     required this.date,
@@ -292,17 +292,20 @@ class ReceiptPage extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 30),
                                     GestureDetector(
-                                      onTap: (){},
+                                      // Handle phần download receipt xuống với format PDF
+                                      onTap: () {},
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           const Icon(Icons.download),
-                                          const SizedBox(width: 5.0,),
+                                          const SizedBox(
+                                            width: 5.0,
+                                          ),
                                           Text(
                                             'Get PDF Receipt',
-                                            style:
-                                                GoogleFonts.roboto(fontSize: 18),
+                                            style: GoogleFonts.roboto(
+                                                fontSize: 18),
                                           ),
                                         ],
                                       ),

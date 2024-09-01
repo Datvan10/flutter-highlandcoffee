@@ -3,43 +3,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:highlandcoffeeapp/routes/route.dart';
-import 'package:highlandcoffeeapp/screens/app/receipt_page.dart';
 import 'package:highlandcoffeeapp/screens/app/welcome_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.ios
-//   );
-//   runApp(
-//     DevicePreview(
-//       builder: (context) => MyApp(),
-//     ),
-//   );
-// }
 
 void main() => runApp(
       DevicePreview(
         enabled: !kReleaseMode,
-        builder: (context) => const MyApp(), // Wrap your app
+        builder: (context) => const MyApp(),
       ),
     );
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.ios
-//   );
-//   runApp(
-//     const MyApp()
-//     );
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -47,12 +23,6 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       home: const WelcomePage(),
-      // home: ReceiptPage(
-      //         billid: '063111324161',
-      //         customername: 'User 14',
-      //         date: '30 August 2024',
-      //         totalprice: 999,
-      //         paymentmethod: 'Bank Transfer'),
       getPages: getPages,
       theme: ThemeData(
         primaryColor: primaryColors,
