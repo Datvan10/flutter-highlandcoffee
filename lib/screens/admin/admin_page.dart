@@ -276,7 +276,7 @@ class _AdminPageState extends State<AdminPage> {
                     icon: Icons.person_search),
               ],
             ),
-            // mânge account customer
+            // manager account customer
             AdminMenuItem(
               title: 'Quản lý tài khoản khách hàng',
               icon: Icons.supervisor_account,
@@ -348,7 +348,7 @@ class _AdminPageState extends State<AdminPage> {
                     icon: Icons.edit),
               ],
             ),
-            //
+            // manager order
             AdminMenuItem(
                 title: 'Quản lý đơn hàng',
                 icon: CupertinoIcons.cart_fill,
@@ -358,7 +358,7 @@ class _AdminPageState extends State<AdminPage> {
                       route: ListOrderPage.routeName,
                       icon: Icons.format_list_bulleted_outlined)
                 ]),
-            //
+            // manager bill
             AdminMenuItem(
                 title: 'Quản lý hóa đơn',
                 icon: Icons.receipt,
@@ -368,7 +368,7 @@ class _AdminPageState extends State<AdminPage> {
                       route: ListBillPage.routeName,
                       icon: Icons.receipt_long)
                 ]),
-            //
+            // manager comment
             AdminMenuItem(
                 title: 'Quản lý đánh giá, bình luận',
                 icon: Icons.notifications_active_outlined,
