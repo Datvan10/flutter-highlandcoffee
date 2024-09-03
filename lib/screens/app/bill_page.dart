@@ -388,7 +388,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -442,7 +442,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -469,7 +469,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
