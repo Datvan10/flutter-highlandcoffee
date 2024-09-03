@@ -15,6 +15,7 @@ import 'package:highlandcoffeeapp/screens/admin/delete_staff_account_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/list_bill_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/publish_and_cancel_comment_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/list_order_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/store_information_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/top_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/active_and_block_account_customer_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/active_and_cancel_carousel_page.dart';
@@ -47,6 +48,12 @@ class _AdminPageState extends State<AdminPage> {
       case TopProductPage.routeName:
         setState(() {
           _selectedItem = const TopProductPage();
+        });
+
+        break;
+      case StoreInformationPage.routeName:
+        setState(() {
+          _selectedItem = const StoreInformationPage();
         });
 
         break;
@@ -257,6 +264,17 @@ class _AdminPageState extends State<AdminPage> {
                       icon: Icons.trending_up,
                       route: TopProductPage.routeName)
                 ]),
+            // manage store information
+            AdminMenuItem(
+              title: 'Quản lý thông tin cửa hàng.',
+              icon: Icons.storefront,
+              children: [
+                AdminMenuItem(
+                    title: 'Quản lý thông tin trên hóa đơn',
+                    route: StoreInformationPage.routeName,
+                    icon: Icons.description),
+              ],
+            ),
             // manage account
             AdminMenuItem(
               title: 'Quản lý nhân sự',

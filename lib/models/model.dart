@@ -656,3 +656,38 @@ class DailyRevenue {
 
   DailyRevenue({required this.date, required this.revenue});
 }
+
+// Models Store
+class Store {
+  final String storeid;
+  String storelogo;
+  final String storename;
+  final String storeaddress;
+  final String storephonenumber;
+
+  Store({
+    required this.storeid,
+    required this.storelogo,
+    required this.storename,
+    required this.storeaddress,
+    required this.storephonenumber,
+  });
+
+  factory Store.fromJson(Map<String, dynamic> json) {
+    return Store(
+      storeid: json['storeid'],
+      storelogo: json['storelogo'],
+      storename: json['storename'],
+      storeaddress: json['storeaddress'],
+      storephonenumber: json['storephonenumber'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'storeid': storeid,
+        'storelogo': storelogo,
+        'storename': storename,
+        'storeaddress': storeaddress,
+        'storephonenumber': storephonenumber,
+      };
+}

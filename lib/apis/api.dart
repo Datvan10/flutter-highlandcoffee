@@ -14,6 +14,7 @@ class SystemApi {
   final String carouselUrl = "http://localhost:5194/api/carousels";
   final String settingCarouselUrl = "http://localhost:5194/api/carouselnumbers";
   final String productUrl = "http://localhost:5194/api/products";
+  final String storeUrl = "http://localhost:5194/api/stores";
   final String categoryUrl = "http://localhost:5194/api/categories";
   final String orderUrl = "http://localhost:5194/api/orders";
   final String getProductUrl = 'http://localhost:5194/api/products/category';
@@ -453,6 +454,27 @@ class SystemApi {
       }
     } catch (e) {
       throw Exception('Failed to update carousel number: $e');
+    }
+  }
+
+  // Add store information for admin
+  Future<void> addStoreInformation(Store store) async {
+    try {
+      final response = await http.post(
+        Uri.parse(storeUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(store.toJson()),
+      );
+      // print(response.statusCode);
+      if (response.statusCode == 200) {
+        print('Store information added successfully');
+      } else {
+        throw Exception('Failed to add store information: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add store information: $e');
     }
   }
 
