@@ -212,7 +212,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                                       fontSize: 16,
                                     )),
                                 Text(
-                                  'Ngày: ${formatDate(orderDetail.date)}',
+                                  'Ngày đặt hàng: ${formatDate(orderDetail.date)}',
                                   style: GoogleFonts.roboto(
                                     fontSize: 16,
                                   ),

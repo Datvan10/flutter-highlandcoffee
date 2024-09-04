@@ -27,7 +27,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int _selectedIndexBottomBar = 4;
+  int selectedIndexBottomBar = 4;
   final SystemApi systemApi = SystemApi();
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
@@ -49,9 +49,9 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  void _selectedBottomBar(int index) {
+  void selectedBottomBar(int index) {
     setState(() {
-      _selectedIndexBottomBar = index;
+      selectedIndexBottomBar = index;
     });
   }
 
@@ -81,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   //
-  void _showCameraModal(BuildContext context) {
+  void showCameraModal(BuildContext context) {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -215,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   right: 0,
                   child: GestureDetector(
                     onTap: () {
-                      _showCameraModal(context);
+                      showCameraModal(context);
                     },
                     child: Container(
                       width: 35,
@@ -429,8 +429,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndexBottomBar,
-        onTap: _selectedBottomBar,
+        selectedIndex: selectedIndexBottomBar,
+        onTap: selectedBottomBar,
       ),
     );
   }

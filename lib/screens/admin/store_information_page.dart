@@ -66,7 +66,8 @@ class _StoreInformationPageState extends State<StoreInformationPage> {
         storelogo: base64Image,
         storename: storeNameController.text,
         storeaddress: storeAddressController.text,
-        storephonenumber: storePhoneNumberController.text
+        storephonenumber: storePhoneNumberController.text,
+        status: 1
       );
 
       await systemApi.addStoreInformation(newStoreInformation);
@@ -83,7 +84,7 @@ class _StoreInformationPageState extends State<StoreInformationPage> {
     } catch (e) {
       print('Error adding store information to Database: $e');
       showCustomAlertDialog(
-          context, 'Thông báo', 'thương hiệu cửa hàng đã tồn tại, vui lòng thử lại.');
+          context, 'Thông báo', 'Thương hiệu cửa hàng đã tồn tại, vui lòng thử lại.');
     }
   }
 

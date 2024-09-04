@@ -664,6 +664,7 @@ class Store {
   final String storename;
   final String storeaddress;
   final String storephonenumber;
+  final int status;
 
   Store({
     required this.storeid,
@@ -671,6 +672,7 @@ class Store {
     required this.storename,
     required this.storeaddress,
     required this.storephonenumber,
+    required this.status,
   });
 
   factory Store.fromJson(Map<String, dynamic> json) {
@@ -680,6 +682,7 @@ class Store {
       storename: json['storename'],
       storeaddress: json['storeaddress'],
       storephonenumber: json['storephonenumber'],
+      status: json['status'],
     );
   }
 
@@ -689,5 +692,6 @@ class Store {
         'storename': storename,
         'storeaddress': storeaddress,
         'storephonenumber': storephonenumber,
+        'status': status,
       };
 }
