@@ -478,6 +478,22 @@ class SystemApi {
     }
   }
 
+  Future<List<Store>> getStores() async {
+    try {
+      final response = await http.get(Uri.parse(storeUrl));
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        List<Store> stores =
+            body.map((dynamic item) => Store.fromJson(item)).toList();
+        return stores;
+      } else {
+        throw Exception('Failed to load Store information');
+      }
+    } catch (e) {
+      throw Exception('Failed to load Store information');
+    }
+  }
+
   // Add staff for admin
   Future<void> addStaff(Staff staff) async {
     final uri = Uri.parse(staffUrl);

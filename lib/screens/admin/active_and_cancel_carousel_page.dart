@@ -207,12 +207,12 @@ class _ActiveAndCancelCarouselPageState
                         color: brown),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
-                  '*Tip : hiển thị, ẩn và xóa băng chuyền bằng cách chọn hoặc bỏ chọn vào ô checkbox sau đó nhấn nút "Cập nhật" hoặc nhấn vào Icon Xóa',
+                  '*Hướng dẫn : để hiển thị, ẩn và xóa băng chuyền bằng cách chọn hoặc bỏ chọn vào ô checkbox sau đó nhấn nút "Cập nhật" hoặc nhấn vào Icon Xóa',
                   style: GoogleFonts.roboto(fontSize: 17, color: grey),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
                     itemCount: carousels.length,
@@ -240,7 +240,7 @@ class _ActiveAndCancelCarouselPageState
                                 width: 120,
                               ),
                             ),
-                            SizedBox(width: 15.0),
+                            const SizedBox(width: 15.0),
                             IconButton(
                               icon:
                                   Icon(Icons.delete_sweep_rounded, color: red),
@@ -255,14 +255,14 @@ class _ActiveAndCancelCarouselPageState
                     },
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   children: [
                     Text('Hiển thị số lượng băng chuyền',
                         style: GoogleFonts.roboto(color: black, fontSize: 16)),
-                    Spacer(),
+                    const Spacer(),
                     IconButton(
-                      icon: Icon(Icons.remove),
+                      icon: const Icon(Icons.remove),
                       onPressed: () {
                         if (displayCount > 0) {
                           updateDisplayCount(displayCount - 1);
@@ -272,14 +272,14 @@ class _ActiveAndCancelCarouselPageState
                     Text('$displayCount',
                         style: GoogleFonts.roboto(color: black, fontSize: 16)),
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add),
                       onPressed: () {
                         updateDisplayCount(displayCount + 1);
                       },
                     ),
                   ],
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -293,7 +293,7 @@ class _ActiveAndCancelCarouselPageState
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
               ],

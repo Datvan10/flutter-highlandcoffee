@@ -23,16 +23,16 @@ class UpdateProductPage extends StatefulWidget {
 }
 
 class _UpdateProductPageState extends State<UpdateProductPage> {
-  final _textSearchProductController = TextEditingController();
-  TextEditingController _editIdController = TextEditingController();
-  TextEditingController _editNameController = TextEditingController();
-  TextEditingController _editDescriptionController = TextEditingController();
-  TextEditingController _editPriceController = TextEditingController();
-  TextEditingController _editSizeController = TextEditingController();
-  TextEditingController _editUnitController = TextEditingController();
+  final textSearchProductController = TextEditingController();
+  TextEditingController editIdController = TextEditingController();
+  TextEditingController editNameController = TextEditingController();
+  TextEditingController editDescriptionController = TextEditingController();
+  TextEditingController editPriceController = TextEditingController();
+  TextEditingController editSizeController = TextEditingController();
+  TextEditingController editUnitController = TextEditingController();
 
-  File? _imagePath;
-  File? _imageDetailPath;
+  File? imagePath;
+  File? imageDetailPath;
 
   final SystemApi systemApi = SystemApi();
   List<Category> categories = [];
@@ -44,13 +44,13 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
   @override
   void initState() {
     super.initState();
-    _fetchCategories();
-    _textSearchProductController.addListener(() {
-      performSearch(_textSearchProductController.text);
+    fetchCategories();
+    textSearchProductController.addListener(() {
+      performSearch(textSearchProductController.text);
     });
   }
 
-  Future<void> _fetchCategories() async {
+  Future<void> fetchCategories() async {
     try {
       categories = await systemApi.getCategories();
       setState(() {
@@ -61,7 +61,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
         }
       });
     } catch (e) {
-      print('Error fetching categories: $e');
+      // print('Error fetching categories: $e');
       showCustomAlertDialog(
         context,
         'Lỗi',
@@ -135,7 +135,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _imagePath = File(pickedFile.path);
+        imagePath = File(pickedFile.path);
       });
     }
   }
@@ -145,7 +145,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _imageDetailPath = File(pickedFile.path);
+        imageDetailPath = File(pickedFile.path);
       });
     }
   }
@@ -174,12 +174,12 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
   void showUpdateProductForm(BuildContext context, Product product) {
     List<String> _categories =
         categories.map((category) => category.categoryname).toList();
-    _editIdController.text = product.productid;
-    _editNameController.text = product.productname;
-    _editDescriptionController.text = product.description;
-    _editPriceController.text = product.price.toString();
-    _editSizeController.text = product.size;
-    _editUnitController.text = product.unit;
+    editIdController.text = product.productid;
+    editNameController.text = product.productname;
+    editDescriptionController.text = product.description;
+    editPriceController.text = product.price.toString();
+    editSizeController.text = product.size;
+    editUnitController.text = product.unit;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -221,32 +221,32 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                 ),
                 LabeledTextField(
                   label: 'Tên sản phẩm',
-                  controller: _editNameController,
+                  controller: editNameController,
                 ),
                 LabeledTextField(
                   label: 'Mô tả sản phẩm',
-                  controller: _editDescriptionController,
+                  controller: editDescriptionController,
                 ),
                 LabeledTextField(
                   label: 'Giá',
-                  controller: _editPriceController,
+                  controller: editPriceController,
                 ),
                 LabeledTextField(
                   label: 'Size',
-                  controller: _editSizeController,
+                  controller: editSizeController,
                 ),
                 LabeledTextField(
                   label: 'Đơn vị tính',
-                  controller: _editUnitController,
+                  controller: editUnitController,
                 ),
                 SizedBox(height: 10),
                 ImagePickerWidget(
-                  imagePath: _imagePath,
+                  imagePath: imagePath,
                   onPressed: pickImage,
                   label: 'Hình ảnh sản phẩm',
                 ),
                 ImagePickerWidget(
-                  imagePath: _imageDetailPath,
+                  imagePath: imageDetailPath,
                   onPressed: pickImageDetail,
                   label: 'Hình ảnh chi tiết sản phẩm',
                 ),
@@ -257,21 +257,21 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                     ElevatedButton(
                       onPressed: () async {
                         Product updateNewProduct = Product(
-                          productid: _editIdController.text,
+                          productid: editIdController.text,
                           categoryid: product.categoryid,
-                          productname: _editNameController.text,
-                          description: _editDescriptionController.text,
-                          size: _editSizeController.text,
-                          price: int.tryParse(_editPriceController.text) ?? 0,
-                          unit: _editUnitController.text,
-                          image: _imagePath != null
+                          productname: editNameController.text,
+                          description: editDescriptionController.text,
+                          size: editSizeController.text,
+                          price: int.tryParse(editPriceController.text) ?? 0,
+                          unit: editUnitController.text,
+                          image: imagePath != null
                               ? base64Encode(
-                                  _imagePath!.readAsBytesSync(),
+                                  imagePath!.readAsBytesSync(),
                                 )
                               : product.image,
-                          imagedetail: _imageDetailPath != null
+                          imagedetail: imageDetailPath != null
                               ? base64Encode(
-                                  _imageDetailPath!.readAsBytesSync(),
+                                  imageDetailPath!.readAsBytesSync(),
                                 )
                               : product.imagedetail,
                         );
@@ -350,7 +350,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                 ),
                 SizedBox(height: 15),
                 TextField(
-                  controller: _textSearchProductController,
+                  controller: textSearchProductController,
                   decoration: InputDecoration(
                     hintText: 'Tìm kiếm sản phẩm',
                     contentPadding: EdgeInsets.symmetric(),
@@ -375,7 +375,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                               size: 15,
                             ),
                             onPressed: () {
-                              _textSearchProductController.clear();
+                              textSearchProductController.clear();
                               setState(() {
                                 searchResults.clear();
                               });

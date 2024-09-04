@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -27,11 +28,28 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
   late Future<List<OrderDetail>> futureOrderDetails;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
+  List<Store> stores = [];
+  List<bool> selectedStoreInformations = [];
 
   @override
   void initState() {
     super.initState();
     futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
+    fetchStoreInformations();
+  }
+
+  Future<void> fetchStoreInformations() async {
+    try {
+      List<Store> fetchedStoreInformations = await systemApi.getStores();
+      setState(() {
+        stores = fetchedStoreInformations;
+        selectedStoreInformations = stores.map((store) {
+          return store.status == 1;
+        }).toList();
+      });
+    } catch (e) {
+      print('Failed to load store information: $e');
+    }
   }
 
   String formatDate(DateTime isoDate) {
@@ -93,7 +111,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
         actions: loggedInStaff != null
             ? [
                 Container(
-                  margin: EdgeInsets.only(right: 8),
+                  margin: const EdgeInsets.only(right: 8),
                   child: IconButton(
                     onPressed: () {
                       Navigator.pushReplacement(
@@ -119,7 +137,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
         future: futureOrderDetails,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -140,40 +158,65 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
                               children: [
-                                Image.asset(
-                                  'assets/images/welcome-logo/Highlands_Coffee_logo.png',
-                                  width: 120,
-                                  height: 120,
-                                ),
+                                stores.isNotEmpty && stores[0].storelogo != null
+                                    ? Image.memory(
+                                        base64Decode(stores[0].storelogo!),
+                                        width: 120,
+                                        height: 120,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/welcome-logo/Highlands_Coffee_logo.png',
+                                        width: 120,
+                                        height: 120,
+                                      ),
                               ],
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text('Highland Coffee',
+                            const SizedBox(width: 15.0,),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    stores.isNotEmpty
+                                        ? stores[0].storename
+                                        : 'Highland Coffee',
                                     style: GoogleFonts.arsenal(
                                       fontSize: 28,
                                       fontWeight: FontWeight.bold,
                                       color: brown,
-                                    )),
-                                Text(
-                                    'Địa chỉ: 504 Đại lộ Bình Dương - Phường\n Hiệp Thành 3 - TP. Thủ Dầu Một',
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                      height: 5),
+                                  Text(
+                                    stores.isNotEmpty
+                                        ? 'Địa chỉ: ${stores[0].storeaddress}'
+                                        : 'Địa chỉ: 504 Đại lộ Bình Dương - Phường Hiệp Thành 3 - TP. Thủ Dầu Một',
                                     style: GoogleFonts.roboto(
                                       fontSize: 14,
-                                    )),
-                                Text('SĐT: 0352775476',
+                                    ),
+                                    softWrap: true,
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    stores.isNotEmpty
+                                        ? 'Số điện thoại: ${stores[0].storephonenumber}'
+                                        : 'Số điện thoại: 0352775476',
                                     style: GoogleFonts.roboto(
                                       fontSize: 14,
-                                    )),
-                              ],
-                            )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                        Divider(),
+                        const Divider(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -192,7 +235,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                       fontSize: 16,
                                     )),
                                 Text(
-                                  'Ngày: ${formatDate(orderDetails[0].date)}',
+                                  'Ngày đặt hàng: ${formatDate(orderDetails[0].date)}',
                                   style: GoogleFonts.roboto(
                                     fontSize: 16,
                                   ),
@@ -201,8 +244,8 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             )
                           ],
                         ),
-                        SizedBox(height: 10.0),
-                        Divider(),
+                        const SizedBox(height: 10.0),
+                        const Divider(),
                         Row(
                           children: [
                             Expanded(
@@ -239,12 +282,12 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             ),
                           ],
                         ),
-                        Divider(),
+                        const Divider(),
                         LimitedBox(
                           maxHeight: 300,
                           child: ListView.builder(
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: min(orderDetails.length, 5),
                             itemBuilder: (context, index) {
                               var orderDetail = orderDetails[index];
@@ -289,11 +332,11 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             },
                           ),
                         ),
-                        Divider(),
+                        const Divider(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -316,11 +359,11 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -343,11 +386,11 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -370,11 +413,11 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -397,11 +440,11 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -424,7 +467,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Visibility(
                           visible: loggedInStaff != null,
                           child: Column(
@@ -432,7 +475,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Expanded(flex: 3, child: Text('')),
+                                  const Expanded(flex: 3, child: Text('')),
                                   Expanded(
                                     flex: 3,
                                     child: Text(
@@ -455,11 +498,11 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 10.0),
+                              const SizedBox(height: 10.0),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Expanded(flex: 3, child: Text('')),
+                                  const Expanded(flex: 3, child: Text('')),
                                   Expanded(
                                     flex: 3,
                                     child: Text(
@@ -511,7 +554,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomePage(),
+                            builder: (context) => const HomePage(),
                           ),
                         );
                       },
