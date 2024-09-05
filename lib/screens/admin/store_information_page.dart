@@ -70,6 +70,11 @@ class _StoreInformationPageState extends State<StoreInformationPage> {
         status: 1
       );
 
+      if (storePhoneNumberController.text.length < 10 || storePhoneNumberController.text.length > 10){
+        showCustomAlertDialog(context, 'Thông báo', 'Số điện thoại không hợp lệ, phải có 10 chữ số.');
+        return;
+      }
+
       await systemApi.addStoreInformation(newStoreInformation);
 
       showCustomAlertDialog(
@@ -98,7 +103,7 @@ class _StoreInformationPageState extends State<StoreInformationPage> {
             Container(
               alignment: Alignment.topLeft,
               child: Text(
-                'Thông tin cửa hàng trên hóa đơn',
+                'Thêm thông tin cửa hàng trên hóa đơn',
                 style: GoogleFonts.arsenal(
                     fontSize: 30, fontWeight: FontWeight.bold, color: brown),
               ),

@@ -23,6 +23,7 @@ import 'package:highlandcoffeeapp/screens/admin/update_carousel_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_category_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_product_page.dart';
 import 'package:highlandcoffeeapp/screens/admin/update_staff_account_page.dart';
+import 'package:highlandcoffeeapp/screens/admin/update_store_information_page.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
 class AdminPage extends StatefulWidget {
@@ -51,9 +52,17 @@ class _AdminPageState extends State<AdminPage> {
         });
 
         break;
+
       case StoreInformationPage.routeName:
         setState(() {
           _selectedItem = const StoreInformationPage();
+        });
+
+        break;
+
+      case UpdateStoreInformationPage.routeName:
+        setState(() {
+          _selectedItem = const UpdateStoreInformationPage();
         });
 
         break;
@@ -273,6 +282,10 @@ class _AdminPageState extends State<AdminPage> {
                     title: 'Quản lý thông tin trên hóa đơn',
                     route: StoreInformationPage.routeName,
                     icon: Icons.description),
+                AdminMenuItem(
+                    title: 'Cập nhật thông tin trên hóa đơn',
+                    route: UpdateStoreInformationPage.routeName,
+                    icon: Icons.edit_note),
               ],
             ),
             // manage account

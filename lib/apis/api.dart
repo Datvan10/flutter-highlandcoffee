@@ -478,6 +478,27 @@ class SystemApi {
     }
   }
 
+  // Update product for admin
+  Future<void> updateStoreInformation(Store store) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$storeUrl/${store.storeid}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(store.toJson()),
+      );
+      if (response.statusCode == 200) {
+        print('Store information updated successfully');
+      } else {
+        throw Exception('Failed to update store information: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update store information: $e');
+    }
+  }
+
+  //
   Future<List<Store>> getStores() async {
     try {
       final response = await http.get(Uri.parse(storeUrl));

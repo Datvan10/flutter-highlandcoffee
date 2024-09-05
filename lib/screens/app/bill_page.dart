@@ -28,22 +28,22 @@ class _BillDetailPageState extends State<BillDetailPage> {
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
   List<Store> stores = [];
-  List<bool> selectedStoreInformations = [];
+  List<bool> selectedStoreInformation = [];
 
   @override
   void initState() {
     super.initState();
     futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
     futureBillDetails = systemApi.getBillByOrderId(widget.orderid);
-    fetchStoreInformations();
+    fetchStoreInformation();
   }
 
-  Future<void> fetchStoreInformations() async {
+  Future<void> fetchStoreInformation() async {
     try {
-      List<Store> fetchedStoreInformations = await systemApi.getStores();
+      List<Store> fetchedStoreInformation = await systemApi.getStores();
       setState(() {
-        stores = fetchedStoreInformations;
-        selectedStoreInformations = stores.map((store) {
+        stores = fetchedStoreInformation;
+        selectedStoreInformation = stores.map((store) {
           return store.status == 1;
         }).toList();
       });
