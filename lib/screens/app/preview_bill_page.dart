@@ -183,7 +183,8 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                   Text(
                                     stores.isNotEmpty
                                         ? stores[0].storename
-                                        : 'Highland Coffee',
+                                        : 'Không có data trả về',
+                                        // : 'Highland Coffee',
                                     style: GoogleFonts.arsenal(
                                       fontSize: 28,
                                       fontWeight: FontWeight.bold,
@@ -195,7 +196,8 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                   Text(
                                     stores.isNotEmpty
                                         ? 'Địa chỉ: ${stores[0].storeaddress}'
-                                        : 'Địa chỉ: 504 Đại lộ Bình Dương - Phường Hiệp Thành 3 - TP. Thủ Dầu Một',
+                                        : 'Không có data trả về',
+                                        // : 'Địa chỉ: 504 Đại lộ Bình Dương - Phường Hiệp Thành 3 - TP. Thủ Dầu Một',
                                     style: GoogleFonts.roboto(
                                       fontSize: 14,
                                     ),
@@ -206,7 +208,8 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                   Text(
                                     stores.isNotEmpty
                                         ? 'Số điện thoại: ${stores[0].storephonenumber}'
-                                        : 'Số điện thoại: 0352775476',
+                                        : 'Không có data trả về',
+                                        // : 'Số điện thoại: 0352775476',
                                     style: GoogleFonts.roboto(
                                       fontSize: 14,
                                     ),

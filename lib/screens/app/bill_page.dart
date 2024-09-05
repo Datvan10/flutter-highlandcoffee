@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/apis/api.dart';
@@ -25,12 +27,29 @@ class _BillDetailPageState extends State<BillDetailPage> {
   late Future<List<Bill>> futureBillDetails;
   Customer? loggedInCustomer = AuthManager().loggedInCustomer;
   Staff? loggedInStaff = AuthManager().loggedInStaff;
+  List<Store> stores = [];
+  List<bool> selectedStoreInformations = [];
 
   @override
   void initState() {
     super.initState();
     futureOrderDetails = systemApi.fetchOrderDetail(widget.orderid);
     futureBillDetails = systemApi.getBillByOrderId(widget.orderid);
+    fetchStoreInformations();
+  }
+
+  Future<void> fetchStoreInformations() async {
+    try {
+      List<Store> fetchedStoreInformations = await systemApi.getStores();
+      setState(() {
+        stores = fetchedStoreInformations;
+        selectedStoreInformations = stores.map((store) {
+          return store.status == 1;
+        }).toList();
+      });
+    } catch (e) {
+      print('Failed to load store information: $e');
+    }
   }
 
   String formatDate(DateTime isoDate) {
@@ -100,7 +119,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
         ),
         actions: [
           Container(
-            margin: EdgeInsets.only(right: 8),
+            margin: const EdgeInsets.only(right: 8),
             child: IconButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -128,7 +147,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return Center(child: Text('Không có dữ liệu'));
+            return const Center(child: Text('Không có dữ liệu'));
           } else {
             List<OrderDetail> orderDetails = snapshot.data![0];
             List<Bill> billDetails = snapshot.data![1];
@@ -154,37 +173,66 @@ class _BillDetailPageState extends State<BillDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
                               children: [
-                                Image.asset(
-                                  'assets/images/welcome-logo/Highlands_Coffee_logo.png',
-                                  width: 120,
-                                  height: 120,
-                                ),
+                                stores.isNotEmpty && stores[0].storelogo != null
+                                    ? Image.memory(
+                                        base64Decode(stores[0].storelogo!),
+                                        width: 120,
+                                        height: 120,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/welcome-logo/Highlands_Coffee_logo.png',
+                                        width: 120,
+                                        height: 120,
+                                      ),
                               ],
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text('Highland Coffee',
+                            const SizedBox(
+                              width: 15.0,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    stores.isNotEmpty
+                                        ? stores[0].storename
+                                        : 'Không có data trả về',
+                                        // : 'Highland Coffee',
                                     style: GoogleFonts.arsenal(
                                       fontSize: 28,
                                       fontWeight: FontWeight.bold,
                                       color: brown,
-                                    )),
-                                Text(
-                                    'Địa chỉ: 504 Đại lộ Bình Dương - Phường\n Hiệp Thành, TP.Thủ Dầu Một',
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    stores.isNotEmpty
+                                        ? 'Địa chỉ: ${stores[0].storeaddress}'
+                                        : 'Không có data trả về',
+                                        // : 'Địa chỉ: 504 Đại lộ Bình Dương - Phường Hiệp Thành 3 - TP. Thủ Dầu Một',
                                     style: GoogleFonts.roboto(
                                       fontSize: 14,
-                                    )),
-                                Text('SĐT: 0352775476',
+                                    ),
+                                    softWrap: true,
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    stores.isNotEmpty
+                                        ? 'Số điện thoại: ${stores[0].storephonenumber}'
+                                        : 'Không có data trả về',
+                                        // : 'Số điện thoại: 0352775476',
                                     style: GoogleFonts.roboto(
                                       fontSize: 14,
-                                    )),
-                              ],
-                            )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                         const Divider(),
