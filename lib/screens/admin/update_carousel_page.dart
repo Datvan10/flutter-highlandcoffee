@@ -90,7 +90,7 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
@@ -114,13 +114,13 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                     color: primaryColors,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 ImagePickerWidget(
                   imagePath: _imagePath,
                   onPressed: _pickImage,
                   label: 'Hình ảnh băng chuyền',
                 ),
-                SizedBox(height: 15.0),
+                const SizedBox(height: 15.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -179,7 +179,7 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                         color: brown),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
                     itemCount: carousels.length,
@@ -197,7 +197,7 @@ class _UpdateCarouselPageState extends State<UpdateCarouselPage> {
                                 width: 120,
                               ),
                             ),
-                            SizedBox(width: 5.0),
+                           const SizedBox(width: 5.0),
                             IconButton(
                               icon: Icon(Icons.mode_edit_outlined, color: blue),
                               onPressed: () {

@@ -26,18 +26,19 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
   final SystemApi systemApi = SystemApi();
   Customer? loggedInUser = AuthManager().loggedInCustomer;
   // final _editEmailController = TextEditingController();
-  final _editPhoneNumberController = TextEditingController();
-  final _editUserNameController = TextEditingController();
-  final _editAdressController = TextEditingController();
-  final _editPasswordController = TextEditingController();
+  final editPhoneNumberController = TextEditingController();
+  final editUserNameController = TextEditingController();
+  final editAddressController = TextEditingController();
+  final editPasswordController = TextEditingController();
 
   //
+  @override
   initState() {
     super.initState();
-    _editPhoneNumberController.text = loggedInUser!.phonenumber.toString();
-    _editUserNameController.text = loggedInUser!.name;
-    _editAdressController.text = loggedInUser!.address;
-    _editPasswordController.text = loggedInUser!.password;
+    editPhoneNumberController.text = loggedInUser!.phonenumber.toString();
+    editUserNameController.text = loggedInUser!.name;
+    editAddressController.text = loggedInUser!.address;
+    editPasswordController.text = loggedInUser!.password;
   }
 
   Future<void> updateCustomer(Customer customer) async {
@@ -53,7 +54,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
     }
   }
 
-  void _showCameraModal(BuildContext context) {
+  void showCameraModal(BuildContext context) {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -148,7 +149,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                     right: 0,
                     child: GestureDetector(
                       onTap: () {
-                        _showCameraModal(context);
+                        showCameraModal(context);
                       },
                       child: Container(
                         width: 40,
@@ -188,14 +189,14 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                       suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
-                              _editPhoneNumberController.clear();
+                              editPhoneNumberController.clear();
                             });
                           },
                           icon: Icon(
                             Icons.clear,
                             color: grey,
                           )),
-                      controller: _editPhoneNumberController,
+                      controller: editPhoneNumberController,
                       iconColor: grey),
                   const SizedBox(
                     height: 20,
@@ -207,14 +208,14 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                       suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
-                              _editUserNameController.clear();
+                              editUserNameController.clear();
                             });
                           },
                           icon: Icon(
                             Icons.clear,
                             color: grey,
                           )),
-                      controller: _editUserNameController,
+                      controller: editUserNameController,
                       iconColor: grey),
                   const SizedBox(
                     height: 20,
@@ -226,14 +227,14 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                       suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
-                              _editAdressController.clear();
+                              editAddressController.clear();
                             });
                           },
                           icon: Icon(
                             Icons.clear,
                             color: grey,
                           )),
-                      controller: _editAdressController,
+                      controller: editAddressController,
                       iconColor: grey),
                   const SizedBox(
                     height: 20,
@@ -253,7 +254,7 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                         });
                       },
                     ),
-                    controller: _editPasswordController,
+                    controller: editPasswordController,
                     iconColor: grey,
                     obscureText: !isObsecure,
                   ),
@@ -267,19 +268,30 @@ class _UpdateCustomerProfilePageState extends State<UpdateCustomerProfilePage> {
                   onTap: () {
                     Customer updateNewCustomer = Customer(
                       customerid: loggedInUser!.customerid,
-                      name: _editUserNameController.text,
-                      address: _editAdressController.text,
+                      name: editUserNameController.text,
+                      address: editAddressController.text,
                       point: loggedInUser!.point,
-                      phonenumber: _editPhoneNumberController.text,
-                      password: _editPasswordController.text,
+                      phonenumber: editPhoneNumberController.text,
+                      password: editPasswordController.text,
                       status: 0,
                     );
-                    if (_editUserNameController.text.isEmpty ||
-                        _editAdressController.text.isEmpty ||
-                        _editPhoneNumberController.text.isEmpty ||
-                        _editPasswordController.text.isEmpty) {
+                    if (editUserNameController.text.isEmpty ||
+                        editAddressController.text.isEmpty ||
+                        editPhoneNumberController.text.isEmpty ||
+                        editPasswordController.text.isEmpty) {
                       showCustomAlertDialog(context, 'Thông báo',
                           'Vui lòng nhập đầy đủ thông tin.');
+                      return;
+                    }
+                    if (editPhoneNumberController.text.length < 10 ||
+                        editPhoneNumberController.text.length > 10) {
+                      showCustomAlertDialog(context, 'Thông báo',
+                          'Số điện thoại không hợp lệ, phải có 10 chữ số.');
+                      return;
+                    }
+                    if (editPasswordController.text.length < 6) {
+                      showCustomAlertDialog(context, 'Thông báo',
+                          'Mật khẩu không hợp lệ, phải có ít nhất 6 ký tự');
                       return;
                     }
                     updateCustomer(updateNewCustomer);

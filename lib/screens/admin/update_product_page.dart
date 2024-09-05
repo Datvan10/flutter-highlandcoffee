@@ -183,7 +183,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
@@ -208,7 +208,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                     color: primaryColors,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CategoryDropdown(
                   // backGroundColor: white,
                   categories: _categories,
@@ -239,7 +239,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                   label: 'Đơn vị tính',
                   controller: editUnitController,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 ImagePickerWidget(
                   imagePath: imagePath,
                   onPressed: pickImage,
@@ -327,7 +327,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
     return Column(
       children: [
         SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.only(
               left: 18.0,
@@ -348,7 +348,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextField(
                   controller: textSearchProductController,
                   decoration: InputDecoration(
@@ -394,7 +394,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -406,7 +406,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -449,8 +449,8 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
               itemBuilder: (context, index) {
                 Product product = productsToDisplay[index];
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.all(5),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18.0),
@@ -466,7 +466,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
                           width: 80,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Expanded(

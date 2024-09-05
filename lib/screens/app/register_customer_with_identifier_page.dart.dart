@@ -23,11 +23,11 @@ class _RegisterCustomerWithIdentifierPageState
     extends State<RegisterCustomerWithIdentifierPage> {
   final SystemApi systemApi = SystemApi();
   // final TextEditingController emailController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  // final TextEditingController confirm__passwordController =
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  // final TextEditingController confirm_passwordController =
   //     TextEditingController();
 
   bool isObsecureName = false;
@@ -36,17 +36,17 @@ class _RegisterCustomerWithIdentifierPageState
 
   // Register user
   Future<void> registerCustomer() async {
-    if (_phoneNumberController.text.length < 10 ||
-        _phoneNumberController.text.length > 10) {
+    if (phoneNumberController.text.length < 10 ||
+        phoneNumberController.text.length > 10) {
       showCustomAlertDialog(
           context, 'Thông báo', 'Số điện thoại không hợp lệ, phải có 10 chữ số.');
       return;
     }
-    String phonenumber = _phoneNumberController.text.trim();
-    String address = _addressController.text.trim();
-    String name = _nameController.text.trim();
-    String password = _passwordController.text.trim();
-    // String confirm_password = confirm__passwordController.text.trim();
+    String phonenumber = phoneNumberController.text.trim();
+    String address = addressController.text.trim();
+    String name = nameController.text.trim();
+    String password = passwordController.text.trim();
+    // String confirm_password = confirm_passwordController.text.trim();
 
     // Validate input fields
     if (phonenumber.isEmpty ||
@@ -89,12 +89,12 @@ class _RegisterCustomerWithIdentifierPageState
       showCustomAlertDialog(
           context, 'Thông báo', 'Đăng ký thành công, đăng nhập ngay');
           
-      _nameController.clear();
+      nameController.clear();
       // emailController.clear();
-      _phoneNumberController.clear();
-      _addressController.clear();
-      _passwordController.clear();
-      // confirm__passwordController.clear();
+      phoneNumberController.clear();
+      addressController.clear();
+      passwordController.clear();
+      // confirm_passwordController.clear();
     } catch (e) {
       // print("Error adding customer: $e");
       showCustomAlertDialog(context, 'Thông báo',
@@ -112,7 +112,7 @@ class _RegisterCustomerWithIdentifierPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             //title email
@@ -121,7 +121,7 @@ class _RegisterCustomerWithIdentifierPageState
               style: GoogleFonts.arsenal(
                   fontSize: 35.0, fontWeight: FontWeight.bold, color: brown),
             ),
-            SizedBox(
+            const SizedBox(
               height: 100.0,
             ),
             //form email
@@ -151,21 +151,21 @@ class _RegisterCustomerWithIdentifierPageState
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _phoneNumberController.clear();
+                      phoneNumberController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: _phoneNumberController,
+              controller: phoneNumberController,
               iconColor: primaryColors,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               ],
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //form address
@@ -175,17 +175,17 @@ class _RegisterCustomerWithIdentifierPageState
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _addressController.clear();
+                      addressController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: _addressController,
+              controller: addressController,
               iconColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             //form name
@@ -195,17 +195,17 @@ class _RegisterCustomerWithIdentifierPageState
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _nameController.clear();
+                      nameController.clear();
                     });
                   },
                   icon: Icon(
                     Icons.clear,
                     color: primaryColors,
                   )),
-              controller: _nameController,
+              controller: nameController,
               iconColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15.0,
             ),
             //form password
@@ -223,11 +223,11 @@ class _RegisterCustomerWithIdentifierPageState
                   });
                 },
               ),
-              controller: _passwordController,
+              controller: passwordController,
               iconColor: primaryColors,
               obscureText: !isObsecurePassword,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             // //form confirm password
@@ -247,11 +247,11 @@ class _RegisterCustomerWithIdentifierPageState
             //       });
             //     },
             //   ),
-            //   controller: confirm__passwordController,
+            //   controller: confirm_passwordController,
             //   iconColor: primaryColors,
             //   obscureText: !isObsecureConfirmPassword,
             // ),
-            SizedBox(
+            const SizedBox(
               height: 30.0,
             ),
             //button signinup
@@ -260,7 +260,7 @@ class _RegisterCustomerWithIdentifierPageState
               onTap: registerCustomer,
               buttonColor: primaryColors,
             ),
-            SizedBox(
+            const SizedBox(
               height: 30.0,
             ),
             //or continue with
@@ -284,14 +284,14 @@ class _RegisterCustomerWithIdentifierPageState
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 30.0,
             ),
             //or login with
             Center(
                 child: Text('ĐĂNG NHẬP BẰNG',
                     style: GoogleFonts.roboto(color: grey))),
-            SizedBox(
+            const SizedBox(
               height: 30.0,
             ),
             Row(
@@ -311,7 +311,7 @@ class _RegisterCustomerWithIdentifierPageState
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             //text tip

@@ -221,7 +221,7 @@ class _ActiveAndCancelCarouselPageState
                       return ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: Checkbox(
-                          activeColor: primaryColors,
+                          activeColor: green,
                           checkColor: white,
                           value: selectedCarousels[index],
                           onChanged: (bool? value) {
@@ -243,7 +243,7 @@ class _ActiveAndCancelCarouselPageState
                             const SizedBox(width: 15.0),
                             IconButton(
                               icon:
-                                  Icon(Icons.delete_sweep_rounded, color: red),
+                                  Icon(Icons.delete, color: primaryColors),
                               //Xu ly delete carousel
                               onPressed: () {
                                 deleteCarousel(context, index);
@@ -285,7 +285,7 @@ class _ActiveAndCancelCarouselPageState
                   children: [
                     ElevatedButton(
                       onPressed: activeAndCancelCarousel,
-                      style: ElevatedButton.styleFrom(backgroundColor: green),
+                      style: ElevatedButton.styleFrom(backgroundColor: whiteGreen),
                       child: Text(
                         'Cập nhật',
                         style: TextStyle(color: white),
