@@ -20,7 +20,7 @@ class BuildStarRating extends StatelessWidget {
         return IconButton(
           icon: Icon(
             index < currentRating ? Icons.star_rounded : Icons.star_rounded,
-            color: index < currentRating ? Colors.yellow : lightGrey,
+            color: index < currentRating ? yellow : lightGrey,
             size: 30,
           ),
           onPressed: () {

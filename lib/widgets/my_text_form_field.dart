@@ -44,7 +44,7 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: GoogleFonts.roboto(color: grey, fontSize : 17),
-        contentPadding: EdgeInsets.all(15),
+        contentPadding: const EdgeInsets.all(15),
         filled: true,
         fillColor: white,
         prefixIcon: Icon(
@@ -63,11 +63,11 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
             : null,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(40),
-          borderSide: BorderSide(color: Colors.white),
+          borderSide: const BorderSide(color: Colors.white),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(40),
-          borderSide: BorderSide(color: Colors.white),
+          borderSide: const BorderSide(color: Colors.white),
         ),
       ),
     );

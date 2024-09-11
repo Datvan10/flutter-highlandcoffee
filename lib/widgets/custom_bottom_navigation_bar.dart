@@ -11,7 +11,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onTap;
 
-  CustomBottomNavigationBar({this.selectedIndex = 0, required this.onTap});
+  const CustomBottomNavigationBar({super.key, this.selectedIndex = 0, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 ),
               );
             },
-            child: Icon(Icons.home),
+            child: const Icon(Icons.home),
           ),
           label: 'Trang chủ',
         ),
@@ -43,11 +43,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ListProductPage(),
+                  builder: (context) => const ListProductPage(),
                 ),
               );
             },
-            child: Icon(Icons.local_dining),
+            child: const Icon(Icons.local_dining),
           ),
           label: 'Sản phẩm',
         ),
@@ -57,11 +57,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => FavoriteProductPage(),
+                  builder: (context) => const FavoriteProductPage(),
                 ),
               );
             },
-            child: Icon(Icons.favorite),
+            child: const Icon(Icons.favorite),
           ),
           label: 'Yêu thích',
         ),
@@ -71,11 +71,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CartPage(),
+                  builder: (context) => const CartPage(),
                 ),
               );
             },
-            child: Icon(Icons.shopping_cart),
+            child: const Icon(Icons.shopping_cart),
           ),
           label: 'Giỏ hàng',
         ),
@@ -89,7 +89,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 ),
               );
             },
-            child: Icon(Icons.person),
+            child: const Icon(Icons.person),
           ),
           label: 'Hồ sơ',
         ),

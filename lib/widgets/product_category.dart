@@ -20,12 +20,11 @@ class _ProductCategoryState extends State<ProductCategory> {
   @override
   void initState() {
     super.initState();
-    fetchCategories(); // Fetch categories when widget initializes
+    fetchCategories();
   }
 
   Future<void> fetchCategories() async {
     try {
-      // Call your API function to get categories
       List<Category> fetchedCategories = await systemApi.getCategories();
       setState(() {
         categories = fetchedCategories.take(5).toList();
@@ -33,14 +32,13 @@ class _ProductCategoryState extends State<ProductCategory> {
       });
     } catch (e) {
       print('Failed to load categories: $e');
-      // Handle error if needed
     }
   }
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Row(

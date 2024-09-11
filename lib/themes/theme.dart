@@ -7,6 +7,7 @@ Color black = const Color(0xFF1A051D);
 Color brown = const Color(0xFFB57628);
 Color lightBrown = const Color.fromARGB(255, 190, 180, 167);
 Color lightYellow = const Color(0xFFFFD685);
+Color yellow = const Color(0xFFFFB400);
 Color blue = const Color(0xFF4286C5);
 Color lightBlue = const Color.fromARGB(255, 32, 136, 233);
 Color green = const Color(0xFF42A342);
@@ -16,6 +17,6 @@ Color lightGrey = const Color(0xFFC4C4C4);
 Color whiteGrey = const Color.fromRGBO(239, 238, 241, 1);
 Color white = const Color(0xFFFFFFFF);
 Color customPurple = const Color.fromRGBO(59, 22, 167, 1);
-Color borderColor = Color.fromRGBO(240, 240, 240, 1);
-Color backgroundReceipt = Color.fromRGBO(255, 255, 255, 1);
+Color borderColor = const Color.fromRGBO(240, 240, 240, 1);
+Color backgroundReceipt = const Color.fromRGBO(255, 255, 255, 1);
 

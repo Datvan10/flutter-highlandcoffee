@@ -123,7 +123,7 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
     return Column(
       children: [
         SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.only(
                 left: 18.0, top: 18.0, right: 18.0, bottom: 10),
@@ -140,7 +140,7 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextField(
                   controller: _textSearchStaffController,
                   onChanged: (value) {
@@ -148,7 +148,7 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
                   },
                   decoration: InputDecoration(
                     hintText: 'Tìm kiếm nhân viên',
-                    contentPadding: EdgeInsets.symmetric(),
+                    contentPadding: const EdgeInsets.symmetric(),
                     alignLabelWithHint: true,
                     filled: true,
                     fillColor: white,
@@ -179,15 +179,15 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28.0),
-                      borderSide: BorderSide(color: Colors.white),
+                      borderSide: const BorderSide(color: Colors.white),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28.0),
-                      borderSide: BorderSide(color: Colors.white),
+                      borderSide: const BorderSide(color: Colors.white),
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -199,7 +199,7 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
               ],
             ),
           ),
@@ -209,15 +209,15 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
             padding:
                 const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 25.0),
             child: ListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: filteredStaffs.length,
               itemBuilder: (context, index) {
                 final staff = filteredStaffs[index];
                 final role = staffRoles[staff.staffid];
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.all(15),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18.0),
@@ -262,7 +262,7 @@ class _AccessAndCancelRoleStaffPageState extends State<AccessAndCancelRoleStaffP
                                     shape: BoxShape.circle,
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Text(
                                   role == '0'
                                       ? 'Đang cấp quyền'

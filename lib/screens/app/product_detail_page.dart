@@ -389,7 +389,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               fontWeight: FontWeight.bold,
                               color: black),
                         ),
-                        SizedBox(width: 50),
+                        const SizedBox(width: 50),
                         Row(
                           children: [
                             Container(

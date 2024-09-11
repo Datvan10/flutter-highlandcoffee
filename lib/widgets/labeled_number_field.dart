@@ -8,7 +8,7 @@ class LabeledNumberField extends StatelessWidget {
   final TextInputType inputType;
   final List<TextInputFormatter>? inputFormatters;
 
-  const LabeledNumberField({
+  const LabeledNumberField({super.key, 
     required this.label,
     required this.controller,
     this.inputType = TextInputType.text,
@@ -25,7 +25,7 @@ class LabeledNumberField extends StatelessWidget {
           Container(
             width: 150,
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: Text(
               label,
               style: GoogleFonts.roboto(
@@ -43,7 +43,7 @@ class LabeledNumberField extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   vertical: 10,
                   horizontal: 10,
                 ),
