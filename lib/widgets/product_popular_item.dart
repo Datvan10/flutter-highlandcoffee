@@ -48,13 +48,13 @@ class _ProductPopularItemState extends State<ProductPopularItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300, // Set a fixed height for GridView
+      height: 300,
       child: FutureBuilder<List<Product>>(
         future: productsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: const CircularProgressIndicator(),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
             return Center(

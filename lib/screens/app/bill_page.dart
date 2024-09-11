@@ -48,7 +48,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
         }).toList();
       });
     } catch (e) {
-      print('Failed to load store information: $e');
+      Exception('Failed to load store information: $e');
     }
   }
 
@@ -143,7 +143,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
         future: Future.wait([futureOrderDetails, futureBillDetails]),
         builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
@@ -310,7 +310,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                         const Divider(),
                         ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: orderDetails.length,
                           itemBuilder: (context, index) {
                             var orderDetail = orderDetails[index];
@@ -358,7 +358,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -385,7 +385,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -412,7 +412,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -440,7 +440,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -494,7 +494,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(
@@ -521,7 +521,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(flex: 3, child: Text('')),
+                            const Expanded(flex: 3, child: Text('')),
                             Expanded(
                               flex: 3,
                               child: Text(

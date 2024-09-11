@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _refreshData() async {
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed( const Duration(seconds: 5));
 
     setState(() {});
   }
@@ -163,10 +163,10 @@ class _HomePageState extends State<HomePage> {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: primaryColors)),
-              SizedBox(
+              const SizedBox(
                 height: 5.0,
               ),
-              Expanded(
+              const Expanded(
                 child: BestSaleProductItem(),
               ),
             ],

@@ -99,7 +99,7 @@ class _FavoriteProductFormState extends State<FavoriteProductForm> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        padding: EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
           color: white,
           borderRadius: BorderRadius.circular(15.0),
@@ -133,7 +133,7 @@ class _FavoriteProductFormState extends State<FavoriteProductForm> {
                         fontSize: 15,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 3,
                     ),
                     Text(

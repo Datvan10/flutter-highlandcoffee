@@ -52,16 +52,16 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         decoration: InputDecoration(
           hintText: 'Tìm kiếm sản phẩm',
           hintStyle: GoogleFonts.roboto(color: black, fontSize: 17),
-          contentPadding: EdgeInsets.symmetric(),
+          contentPadding: const EdgeInsets.symmetric(),
           alignLabelWithHint: true,
           filled: true,
           fillColor: Colors.white,
           prefixIcon: widget.showBackButton
               ? IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                   onPressed: widget.onBackButtonPressed,
                 )
-              : Icon(
+              : const Icon(
                   Icons.search,
                   size: 20,
                 ),
@@ -81,7 +81,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                         widget.textSearchController.clear();
                         setState(() {});
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.close,
                         size: 10,
                       ),
@@ -93,18 +93,18 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     widget.startListening();
                     setState(() {});
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.mic,
                     size: 20,
                   ),
                 ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
           ),
         ),
       ),

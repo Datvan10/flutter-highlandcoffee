@@ -9,7 +9,7 @@ class ImagePickerWidget extends StatelessWidget {
   final File? imagePath;
   final VoidCallback onPressed;
 
-  const ImagePickerWidget({
+  const ImagePickerWidget({super.key, 
     required this.label,
     required this.imagePath,
     required this.onPressed,
@@ -25,7 +25,7 @@ class ImagePickerWidget extends StatelessWidget {
             Container(
               width: 150,
               alignment: Alignment.centerRight,
-              padding: EdgeInsets.only(right: 10),
+              padding: const EdgeInsets.only(right: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -33,7 +33,7 @@ class ImagePickerWidget extends StatelessWidget {
                     label,
                     style: GoogleFonts.roboto(fontSize: 20, color : black),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: onPressed,
                     child: Row(
@@ -70,8 +70,7 @@ class ImagePickerWidget extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 20),
-
+        const SizedBox(height: 20),
       ],
     );
   }
