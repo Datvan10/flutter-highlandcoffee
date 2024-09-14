@@ -63,12 +63,12 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                         color: brown),
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 LabeledTextField(
                     label: 'Tên danh mục', controller: _categoryNameController),
                 LabeledTextField(
                     label: 'Mô tả', controller: _descriptionController),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -82,7 +82,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                         style: TextStyle(color: white),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 15,
                     ),
                     ElevatedButton(

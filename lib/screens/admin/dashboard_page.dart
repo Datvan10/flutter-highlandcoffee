@@ -78,7 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       backgroundColor: background,
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.only(
                   top: 18.0, left: 18.0, right: 18.0, bottom: 25.0),
@@ -92,7 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         fontWeight: FontWeight.bold,
                         color: brown),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -132,7 +132,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Expanded(
                     child: BarChart(
                       BarChartData(
@@ -232,7 +232,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Center(
                     child: Text(
                       'Biểu đồ doanh thu từ $startDateStr đến $endDateStr',
