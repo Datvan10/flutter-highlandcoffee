@@ -113,7 +113,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
         future: futureOrders,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
                 child: Text('Không có đơn hàng nào cần xử lý',
@@ -137,7 +137,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   TextField(
                     controller: _textSearchOrderController,
                     decoration: InputDecoration(
@@ -183,7 +183,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Expanded(
                     child: ListView.builder(
                       itemCount: snapshot.data!.length,
@@ -268,7 +268,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                                       shape: BoxShape.circle,
                                                     ),
                                                   ),
-                                                  SizedBox(width: 8),
+                                                  const SizedBox(width: 8),
                                                   Text(
                                                     order.status == 0
                                                         ? '[Chưa xử lý]'

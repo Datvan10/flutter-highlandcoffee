@@ -85,7 +85,7 @@ class _AddCarouselPageState extends State<AddCarouselPage> {
                         color: brown),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 SizedBox(
                   child: Text(
                     '* Bạn nên chọn hình ảnh với kích cỡ 2000 x 878 pixels để tương xứng với giao diện',
@@ -94,13 +94,13 @@ class _AddCarouselPageState extends State<AddCarouselPage> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ImagePickerWidget(
                   imagePath: imageController,
                   onPressed: pickImage,
                   label: 'Hình ảnh băng chuyền',
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -114,7 +114,7 @@ class _AddCarouselPageState extends State<AddCarouselPage> {
                         style: TextStyle(color: white),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 15,
                     ),
                     ElevatedButton(

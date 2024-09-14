@@ -122,7 +122,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextField(
                   controller: _textSearchStaffController,
                   onChanged: (value) {
@@ -161,15 +161,15 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28.0),
-                      borderSide: BorderSide(color: Colors.white),
+                      borderSide: const BorderSide(color: Colors.white),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28.0),
-                      borderSide: BorderSide(color: Colors.white),
+                      borderSide: const BorderSide(color: Colors.white),
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Container(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -181,7 +181,7 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
               ],
             ),
           ),
@@ -191,14 +191,14 @@ class _DeleteStaffAccountPageState extends State<DeleteStaffAccountPage> {
             padding:
                 const EdgeInsets.only(left: 18.0, right: 18.0, bottom: 25.0),
             child: ListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: filteredStaffs.length,
               itemBuilder: (context, index) {
                 final staff = filteredStaffs[index];
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.all(15),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18.0),

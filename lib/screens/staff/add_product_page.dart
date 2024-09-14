@@ -192,7 +192,7 @@ class _AddProductPageState extends State<AddProductPage> {
         ),
         actions: [
           Container(
-            margin: EdgeInsets.only(right: 8),
+            margin: const EdgeInsets.only(right: 8),
             child: IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/home_page');
@@ -217,7 +217,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       fontSize: 30, fontWeight: FontWeight.bold, color: brown),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               CategoryDropdown(
                 backGroundColor: background,
                 categories: _categories,
@@ -248,7 +248,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 onPressed: _pickImageDetail,
                 label: 'Hình ảnh chi tiết sản phẩm',
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -262,7 +262,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       style: GoogleFonts.roboto(fontSize: 18, color: white),
                     ),
                   ),
-                  SizedBox(width: 15),
+                  const SizedBox(width: 15),
                   ElevatedButton(
                     onPressed: () {
                       addProduct();
