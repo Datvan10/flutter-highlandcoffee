@@ -243,14 +243,24 @@ class ReceiptPage extends StatelessWidget {
                                                   fontSize: 16,
                                                 ),
                                               ),
-                                              SizedBox(height: 5),
-                                              Text(
-                                                '${paymentmethod}',
-                                                style: GoogleFonts.roboto(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
+                                              const SizedBox(height: 5),
+
+                                              paymentmethod == 'Thanh toán khi nhận hàng'
+                                                ? Text(
+                                                    'Tiền mặt',
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  )
+                                                : const SizedBox.shrink(),
+                                              // Text(
+                                              //   '${paymentmethod}',
+                                              //   style: GoogleFonts.roboto(
+                                              //       fontSize: 16,
+                                              //       fontWeight:
+                                              //           FontWeight.bold),
+                                              // ),
                                             ],
                                           ),
                                         ),
@@ -379,7 +389,8 @@ class ReceiptPage extends StatelessWidget {
                           ),
                         );
                       },
-                      buttonColor: customPurple,
+                      buttonColor: primaryColors,
+                      // buttonColor: customPurple,
                     ),
                   ],
                 ),
