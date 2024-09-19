@@ -310,11 +310,11 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             //
-            SizedBox(
+            const SizedBox(
               height: 15.0,
             ),
-            Divider(),
-            SizedBox(
+            const Divider(),
+            const SizedBox(
               height: 15.0,
             ),
             ProfileMenu(
