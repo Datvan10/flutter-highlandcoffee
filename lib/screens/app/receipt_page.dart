@@ -389,8 +389,8 @@ class ReceiptPage extends StatelessWidget {
                           ),
                         );
                       },
-                      buttonColor: primaryColors,
-                      // buttonColor: customPurple,
+                      // buttonColor: primaryColors,
+                      buttonColor: customPurple,
                     ),
                   ],
                 ),
