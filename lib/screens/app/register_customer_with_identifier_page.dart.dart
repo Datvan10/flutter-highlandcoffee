@@ -326,8 +326,7 @@ class _RegisterCustomerWithIdentifierPageState
                     'Đăng nhập ngay!',
                     style: GoogleFonts.roboto(
                         color: blue,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline),
+                        fontWeight: FontWeight.bold),
                   ),
                 )
               ],
