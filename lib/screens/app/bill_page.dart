@@ -558,7 +558,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                         onTap: () {
                           printBill(widget.orderid, loggedInStaff!.staffid);
                         },
-                        buttonColor: green,
+                        buttonColor: whiteGreen,
                         isDisabled: bill.status == 2,
                       ),
                     ),
