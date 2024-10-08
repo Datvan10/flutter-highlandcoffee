@@ -36,7 +36,6 @@ class _LoginCustomerWithIdentifierAndPassWordPageState
     });
   }
 
-  // Function login customer with indentifier and password
   void loginCustomer() async {
     String identifier = _identifierController.text.trim();
     String password = _passWordController.text.trim();

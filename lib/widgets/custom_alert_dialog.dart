@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:highlandcoffeeapp/themes/theme.dart';
 
-// Định nghĩa widget CustomAlertDialog
 class CustomAlertDialog extends StatelessWidget {
   final String title;
   final String message;
@@ -38,7 +37,6 @@ class CustomAlertDialog extends StatelessWidget {
   }
 }
 
-// Hàm để hiển thị CustomAlertDialog
 void showCustomAlertDialog(BuildContext context, String title, String message) {
   showDialog(
     context: context,
