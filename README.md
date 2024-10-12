@@ -5,9 +5,9 @@ Highland coffee app
 
 ## Project introduction
 
-This Highland coffee app(Front-End) project is built with Flutter framework.
+This Highland coffee app(Front-End) project is built with Flutter framework. The app runs with the Dart package. The Device Preview Model is the iPhone 13 Promax.
 
-The project is built around 4 actors: Administrators, Salespeople, Guest and Customers.
+The project is built around 4 actors: Administrators, Salespeople, Guests and Customers.
 
 And many use cases such as: Register, Login, Product management, Category management, Carousel management, Human resource management, Customer account management, Product search, Order management, Invoice management, Management Management of reviews and comments, statistics and revenue reports,...
 
