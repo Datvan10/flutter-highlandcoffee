@@ -179,7 +179,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              'Mã đơn hàng: ${orderDetails[0].orderid}',
+                              'Mã đơn hàng: ${orderDetails[0].orderid.toUpperCase()}',
                               style: GoogleFonts.arsenal(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),

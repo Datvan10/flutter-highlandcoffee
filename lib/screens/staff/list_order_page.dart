@@ -39,7 +39,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
         ),
         actions: [
           Container(
-            margin: EdgeInsets.only(right: 8),
+            margin: const EdgeInsets.only(right: 8),
             child: IconButton(
               onPressed: () {
                 Get.toNamed('/list_product_page');
@@ -58,7 +58,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
         future: futureOrders,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('Không có đơn hàng nào cần xử lý',style: GoogleFonts.roboto(fontSize: 17)));
           } else if (snapshot.hasError) {
@@ -89,7 +89,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                               );
                             },
                             child: Container(
-                              margin: EdgeInsets.only(bottom: 15.0),
+                              margin: const EdgeInsets.only(bottom: 15.0),
                               height: 130,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.0),
@@ -121,7 +121,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                             ),
                                           ),
                                           Text(
-                                            'Mã đơn hàng : ${order.orderid} ',
+                                            'Mã đơn hàng : ${order.orderid.toUpperCase()} ',
                                             style: GoogleFonts.roboto(
                                                 fontSize: 16),
                                           ),
@@ -154,7 +154,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                                       shape: BoxShape.circle,
                                                     ),
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                       width:
                                                           8),
                                                   Text(

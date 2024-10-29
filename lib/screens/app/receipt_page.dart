@@ -170,7 +170,7 @@ class ReceiptPage extends StatelessWidget {
                                               ),
                                               const SizedBox(height: 5),
                                               Text(
-                                                billid,
+                                                billid.toUpperCase(),
                                                 style: GoogleFonts.roboto(
                                                     fontSize: 16,
                                                     fontWeight:

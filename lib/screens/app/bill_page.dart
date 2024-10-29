@@ -255,7 +255,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                                   ),
                                 ),
                                 Text(
-                                    'Hóa đơn số: ${bill.billid} - [Đơn hàng online]',
+                                    'Hóa đơn số: ${bill.billid.toUpperCase()} - [Đơn hàng online]',
                                     style: GoogleFonts.roboto(
                                       fontSize: 16,
                                     )),

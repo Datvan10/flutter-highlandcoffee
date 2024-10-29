@@ -204,7 +204,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                               );
                             },
                             child: Container(
-                              margin: EdgeInsets.only(bottom: 15.0),
+                              margin: const EdgeInsets.only(bottom: 15.0),
                               height: 130,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.0),
@@ -236,7 +236,7 @@ class _ListOrderPageState extends State<ListOrderPage> {
                                             ),
                                           ),
                                           Text(
-                                            'Mã đơn hàng : ${order.orderid} ',
+                                            'Mã đơn hàng : ${order.orderid.toUpperCase()} ',
                                             style: GoogleFonts.roboto(
                                                 fontSize: 16),
                                           ),

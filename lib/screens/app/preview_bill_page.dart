@@ -175,7 +175,9 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                       ),
                               ],
                             ),
-                            const SizedBox(width: 15.0,),
+                            const SizedBox(
+                              width: 15.0,
+                            ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -184,20 +186,19 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                     stores.isNotEmpty
                                         ? stores[0].storename
                                         : 'Không có data trả về',
-                                        // : 'Highland Coffee',
+                                    // : 'Highland Coffee',
                                     style: GoogleFonts.arsenal(
                                       fontSize: 28,
                                       fontWeight: FontWeight.bold,
                                       color: brown,
                                     ),
                                   ),
-                                  const SizedBox(
-                                      height: 5),
+                                  const SizedBox(height: 5),
                                   Text(
                                     stores.isNotEmpty
                                         ? 'Địa chỉ: ${stores[0].storeaddress}'
                                         : 'Không có data trả về',
-                                        // : 'Địa chỉ: 504 Đại lộ Bình Dương - Phường Hiệp Thành 3 - TP. Thủ Dầu Một',
+                                    // : 'Địa chỉ: 504 Đại lộ Bình Dương - Phường Hiệp Thành 3 - TP. Thủ Dầu Một',
                                     style: GoogleFonts.roboto(
                                       fontSize: 14,
                                     ),
@@ -209,7 +210,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                     stores.isNotEmpty
                                         ? 'Số điện thoại: ${stores[0].storephonenumber}'
                                         : 'Không có data trả về',
-                                        // : 'Số điện thoại: 0352775476',
+                                    // : 'Số điện thoại: 0352775476',
                                     style: GoogleFonts.roboto(
                                       fontSize: 14,
                                     ),
@@ -233,7 +234,7 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                                   ),
                                 ),
                                 Text(
-                                    'Số đơn hàng: ${widget.orderid} - [Đơn hàng online]',
+                                    'Số đơn hàng: ${widget.orderid.toUpperCase()} - [Đơn hàng online]',
                                     style: GoogleFonts.roboto(
                                       fontSize: 16,
                                     )),
@@ -534,36 +535,57 @@ class _PreviewBillPageState extends State<PreviewBillPage> {
                       ],
                     ),
                   ),
-                  Visibility(
-                    visible: loggedInStaff != null,
-                    child: MyButton(
+                  if (loggedInStaff != null)
+                    MyButton(
                       text: 'Lập hóa đơn',
                       onTap: () {
                         addBill();
-                        setState(() {
-                          futureOrderDetails =
-                              systemApi.fetchOrderDetail(widget.orderid);
-                        });
                       },
                       buttonColor: primaryColors,
                       isDisabled: orderDetails[0].status != 1,
-                    ),
-                  ),
-                  Visibility(
-                    visible: loggedInCustomer != null,
-                    child: MyButton(
-                      text: 'Hoàn thành',
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ),
-                        );
-                      },
-                      buttonColor: primaryColors,
-                    ),
-                  ),
+                    )
+                  else if (loggedInCustomer != null)
+                    MyButton(
+                        text: 'Hoàn thành',
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ),
+                          );
+                        },
+                        buttonColor: primaryColors),
+                  // Visibility(
+                  //   visible: loggedInStaff != null,
+                  //   child: MyButton(
+                  //     text: 'Lập hóa đơn',
+                  //     onTap: () {
+                  //       addBill();
+                  //       setState(() {
+                  //         futureOrderDetails =
+                  //             systemApi.fetchOrderDetail(widget.orderid);
+                  //       });
+                  //     },
+                  //     buttonColor: primaryColors,
+                  //     isDisabled: orderDetails[0].status != 1,
+                  //   ),
+                  // ),
+                  // Visibility(
+                  //   visible: loggedInCustomer != null,
+                  //   child: MyButton(
+                  //     text: 'Hoàn thành',
+                  //     onTap: () {
+                  //       Navigator.pushReplacement(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const HomePage(),
+                  //         ),
+                  //       );
+                  //     },
+                  //     buttonColor: primaryColors,
+                  //   ),
+                  // ),
                 ],
               ),
             );

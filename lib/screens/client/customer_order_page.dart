@@ -41,7 +41,7 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
         ),
         actions: [
           Container(
-            margin: EdgeInsets.only(right: 8),
+            margin: const EdgeInsets.only(right: 8),
             child: IconButton(
               onPressed: () {
                 Get.toNamed('/list_product_page');
@@ -60,7 +60,7 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
         future: futureOrders,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
                 child: Text(
@@ -95,7 +95,7 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
                               );
                             },
                             child: Container(
-                              margin: EdgeInsets.only(bottom: 15.0),
+                              margin: const EdgeInsets.only(bottom: 15.0),
                               height: 130,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18.0),
@@ -127,7 +127,7 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
                                             ),
                                           ),
                                           Text(
-                                            'Mã đơn hàng : ${order.orderid} ',
+                                            'Mã đơn hàng : ${order.orderid.toUpperCase()} ',
                                             style: GoogleFonts.roboto(
                                                 fontSize: 16),
                                           ),
@@ -159,7 +159,7 @@ class _CustomerOrderPageState extends State<CustomerOrderPage> {
                                                       shape: BoxShape.circle,
                                                     ),
                                                   ),
-                                                  SizedBox(width: 8),
+                                                  const SizedBox(width: 8),
                                                   Text(
                                                     order.status == 0
                                                         ? '[Đang chờ xác nhận]'
